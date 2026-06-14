@@ -12,6 +12,7 @@ export const ViveFonts = {
   medium: 'Poppins_500Medium',
   semibold: 'Poppins_600SemiBold',
   bold: 'Poppins_700Bold',
+  frauncesSerif: 'Fraunces_700Bold',
 };
 
 // Expo Router tab navigation colors

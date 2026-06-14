@@ -1,23 +1,47 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useRef, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 
 export default function OnboardingScreen1() {
   const router = useRouter();
+  const logoAnim = useRef(new Animated.Value(0)).current;
+  const subtitleAnim = useRef(new Animated.Value(0)).current;
+  const buttonAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.stagger(220, [
+      Animated.timing(logoAnim, { toValue: 1, duration: 560, useNativeDriver: true }),
+      Animated.timing(subtitleAnim, { toValue: 1, duration: 460, useNativeDriver: true }),
+      Animated.timing(buttonAnim, { toValue: 1, duration: 420, useNativeDriver: true }),
+    ]).start();
+  }, []);
+
+  const fadeUp = (anim: Animated.Value) => ({
+    opacity: anim,
+    transform: [{ translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [28, 0] }) }],
+  });
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.logo}>vive</Text>
-        <Text style={styles.subtitle}>Tu camino empieza acá</Text>
+        <Animated.View style={[styles.logoRow, fadeUp(logoAnim)]}>
+          <Text style={styles.logo}>v</Text>
+          <MaterialCommunityIcons name="sprout" size={68} color={ViveColors.primary} style={styles.logoIcon} />
+          <Text style={styles.logo}>ve</Text>
+        </Animated.View>
+        <Animated.Text style={[styles.subtitle, fadeUp(subtitleAnim)]}>
+          Tu camino empieza acá
+        </Animated.Text>
       </View>
 
-      <View style={styles.footer}>
+      <Animated.View style={[styles.footer, fadeUp(buttonAnim)]}>
         <TouchableOpacity style={styles.button} activeOpacity={0.85} onPress={() => router.push('/onboarding2')}>
           <Text style={styles.buttonText}>¿Empezamos?</Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     </SafeAreaView>
   );
 }
@@ -34,11 +58,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 20,
   },
+  logoRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   logo: {
-    fontFamily: ViveFonts.bold,
+    fontFamily: ViveFonts.frauncesSerif,
     fontSize: 80,
     color: ViveColors.primary,
     letterSpacing: -3,
+    lineHeight: 90,
+  },
+  logoIcon: {
+    marginTop: 3,
   },
   subtitle: {
     fontFamily: ViveFonts.regular,

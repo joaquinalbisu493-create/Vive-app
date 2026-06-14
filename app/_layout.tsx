@@ -6,6 +6,7 @@ import {
   Poppins_600SemiBold,
   Poppins_700Bold,
 } from '@expo-google-fonts/poppins';
+import { Fraunces_700Bold } from '@expo-google-fonts/fraunces';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -24,6 +25,7 @@ export default function RootLayout() {
     Poppins_500Medium,
     Poppins_600SemiBold,
     Poppins_700Bold,
+    Fraunces_700Bold,
   });
 
   useEffect(() => {
@@ -41,6 +43,9 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="onboarding2" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding3" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding4" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding5" options={{ headerShown: false }} />
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="profesional" options={{ headerShown: false }} />
         <Stack.Screen name="booking-calendar" options={{ headerShown: false }} />

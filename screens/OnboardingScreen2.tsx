@@ -15,7 +15,16 @@ const OPTIONS: { id: OptionId; label: string; log: string }[] = [
 export default function OnboardingScreen2() {
   const router = useRouter();
   const [selected, setSelected] = useState<OptionId | null>(null);
+  const titleAnim = useRef(new Animated.Value(0)).current;
+  const cardsAnim = useRef(new Animated.Value(0)).current;
   const buttonAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.stagger(180, [
+      Animated.timing(titleAnim, { toValue: 1, duration: 480, useNativeDriver: true }),
+      Animated.timing(cardsAnim, { toValue: 1, duration: 460, useNativeDriver: true }),
+    ]).start();
+  }, []);
 
   useEffect(() => {
     Animated.timing(buttonAnim, {
@@ -25,10 +34,19 @@ export default function OnboardingScreen2() {
     }).start();
   }, [selected]);
 
+  const fadeUp = (anim: Animated.Value) => ({
+    opacity: anim,
+    transform: [{ translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }],
+  });
+
   function handleContinue() {
     if (!selected) return;
     if (selected === 'explore') {
       router.replace('/(tabs)/');
+      return;
+    }
+    if (selected === 'guide') {
+      router.push('/onboarding3');
       return;
     }
     const option = OPTIONS.find((o) => o.id === selected)!;
@@ -38,11 +56,11 @@ export default function OnboardingScreen2() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.title}>¿Cómo querés empezar?</Text>
-        </View>
+        <Animated.View style={[styles.header, fadeUp(titleAnim)]}>
+          <Text style={styles.title}>¿Cómo te gustaría empezar?</Text>
+        </Animated.View>
 
-        <View style={styles.cards}>
+        <Animated.View style={[styles.cards, fadeUp(cardsAnim)]}>
           {OPTIONS.map((option) => {
             const isSelected = selected === option.id;
             return (
@@ -56,7 +74,7 @@ export default function OnboardingScreen2() {
               </TouchableOpacity>
             );
           })}
-        </View>
+        </Animated.View>
       </View>
 
       <Animated.View style={[styles.footer, { opacity: buttonAnim }]}>
@@ -93,13 +111,6 @@ const styles = StyleSheet.create({
     color: ViveColors.text,
     letterSpacing: -0.5,
     lineHeight: 38,
-  },
-  microcopy: {
-    fontFamily: ViveFonts.regular,
-    fontSize: 15,
-    color: ViveColors.text,
-    opacity: 0.6,
-    lineHeight: 22,
   },
   cards: {
     gap: 14,
