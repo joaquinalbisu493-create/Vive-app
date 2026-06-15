@@ -12,11 +12,31 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
+import * as Notifications from 'expo-notifications';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { registerForPushNotifications } from '@/lib/notifications';
 
 const ONBOARDING_SCREENS = new Set(['index', 'onboarding2', 'onboarding3', 'onboarding4', 'onboarding5', 'login', 'register']);
+
+function NotificationSetup() {
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!user) return;
+    registerForPushNotifications(user.id);
+  }, [user?.id]);
+
+  useEffect(() => {
+    const sub = Notifications.addNotificationReceivedListener(notification => {
+      console.log('[Notifs] Recibida en foreground:', notification.request.content.title);
+    });
+    return () => sub.remove();
+  }, []);
+
+  return null;
+}
 
 function AuthRedirect() {
   const { user, loading } = useAuth();
@@ -90,6 +110,7 @@ export default function RootLayout() {
           <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
         </Stack>
         <AuthRedirect />
+        <NotificationSetup />
         <StatusBar style="auto" />
       </AuthProvider>
     </ThemeProvider>

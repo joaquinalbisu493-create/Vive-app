@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   ScrollView,
   NativeSyntheticEvent,
   NativeScrollEvent,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -16,6 +17,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { FirstTimeTooltip } from '@/components/FirstTimeTooltip';
 import { ScaleCard } from '@/components/ScaleCard';
+import { supabase } from '@/lib/supabase';
 
 // ─── Paleta suave ────────────────────────────────────────────────────────────
 const TERRACOTA_SOFT = '#FDF0E8';
@@ -43,12 +45,12 @@ const TOPICS: { id: string; icon: MIcon; label: string }[] = [
   { id: '9', icon: 'fitness-center', label: 'Salud y\nbienestar'     },
 ];
 
-const COACHES = [
-  { id: '1', name: 'Laura Méndez',   specialty: 'Coach de vida',   priceFrom: 4500, rating: 4.9, reviews: 127 },
-  { id: '2', name: 'Martín Fuentes', specialty: 'Psicólogo',       priceFrom: 6000, rating: 4.8, reviews:  89 },
-  { id: '3', name: 'Valentina Ríos', specialty: 'Coach ejecutiva', priceFrom: 5200, rating: 4.9, reviews: 204 },
-  { id: '4', name: 'Diego Sánchez',  specialty: 'Nutricionista',   priceFrom: 3800, rating: 4.7, reviews:  63 },
-];
+type CoachItem = {
+  profileId: string;
+  name: string;
+  specialty: string;
+  priceFrom: number;
+};
 
 // ─── Constantes de diseño ─────────────────────────────────────────────────
 const TOPIC_W   = 88;
@@ -59,7 +61,6 @@ const TOPIC_DOTS = Math.ceil(TOPICS.length / 3);
 const COACH_W   = 126;
 const COACH_GAP = 12;
 const COACH_PAGE = (COACH_W + COACH_GAP) * 2;
-const COACH_DOTS = Math.ceil(COACHES.length / 2);
 
 const VENN_C = 26;
 const VENN_O = 8;
@@ -91,24 +92,46 @@ export default function ConexionesScreen() {
   const [favs, setFavs] = useState<Set<string>>(new Set());
   const [topicDot, setTopicDot] = useState(0);
   const [coachDot, setCoachDot] = useState(0);
+  const [coaches, setCoaches] = useState<CoachItem[]>([]);
+  const [loadingCoaches, setLoadingCoaches] = useState(true);
 
-  function goToPerfil(coach: typeof COACHES[0]) {
+  const coachDots = Math.max(1, Math.ceil(coaches.length / 2));
+
+  useEffect(() => {
+    supabase
+      .from('coaches')
+      .select('specialty, price_per_session, profiles!inner(id, name)')
+      .eq('verified', true)
+      .limit(5)
+      .then(({ data, error }) => {
+        if (error) { console.error('[Conexiones] coaches fetch:', error.message); }
+        const rows = (data ?? []).map((c: any) => ({
+          profileId: c.profiles.id as string,
+          name: c.profiles.name as string,
+          specialty: c.specialty as string,
+          priceFrom: c.price_per_session as number,
+        }));
+        setCoaches(rows);
+        setLoadingCoaches(false);
+      });
+  }, []);
+
+  function goToPerfil(coach: CoachItem) {
     router.push({
       pathname: '/profesional',
       params: {
+        profileId: coach.profileId,
         name: coach.name,
         specialty: coach.specialty,
-        rating: String(coach.rating),
-        reviewCount: String(coach.reviews),
         priceFrom: String(coach.priceFrom),
       },
     });
   }
 
-  function toggleFav(id: string) {
+  function toggleFav(profileId: string) {
     setFavs(prev => {
       const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
+      next.has(profileId) ? next.delete(profileId) : next.add(profileId);
       return next;
     });
   }
@@ -120,7 +143,7 @@ export default function ConexionesScreen() {
 
   function handleCoachScroll(e: NativeSyntheticEvent<NativeScrollEvent>) {
     const x = e.nativeEvent.contentOffset.x;
-    setCoachDot(Math.min(Math.round(x / COACH_PAGE), COACH_DOTS - 1));
+    setCoachDot(Math.min(Math.round(x / COACH_PAGE), coachDots - 1));
   }
 
   return (
@@ -174,7 +197,13 @@ export default function ConexionesScreen() {
             {TOPICS.map((t, i) => {
               const pal = PALETTE[i % PALETTE.length];
               return (
-                <ScaleCard key={t.id} style={s.topicCard}>
+                <ScaleCard
+                  key={t.id}
+                  style={s.topicCard}
+                  onPress={() => router.push({
+                    pathname: '/search3',
+                    params: { topic: t.label.replace('\n', ' ') },
+                  })}>
                   <View style={[s.topicCircle, { backgroundColor: pal.bg }]}>
                     <MaterialIcons name={t.icon} size={22} color={pal.fg} />
                   </View>
@@ -202,20 +231,26 @@ export default function ConexionesScreen() {
             contentContainerStyle={s.coachesRow}
             onScroll={handleCoachScroll}
             scrollEventThrottle={16}>
-            {COACHES.map(coach => (
-              <ScaleCard key={coach.id} style={s.coachCard} onPress={() => goToPerfil(coach)}>
+            {loadingCoaches ? (
+              <ActivityIndicator
+                size="small"
+                color={ViveColors.primary}
+                style={{ marginLeft: 20, marginTop: 20 }}
+              />
+            ) : coaches.map(coach => (
+              <ScaleCard key={coach.profileId} style={s.coachCard} onPress={() => goToPerfil(coach)}>
                 {/* Foto placeholder */}
                 <View style={s.coachPhoto}>
                   <MaterialIcons name="person" size={42} color="#C0BAB4" />
                   <TouchableOpacity
                     style={s.favBtn}
-                    onPress={() => toggleFav(coach.id)}
+                    onPress={() => toggleFav(coach.profileId)}
                     hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
                     activeOpacity={0.7}>
                     <MaterialIcons
-                      name={favs.has(coach.id) ? 'star' : 'star-border'}
+                      name={favs.has(coach.profileId) ? 'star' : 'star-border'}
                       size={20}
-                      color={favs.has(coach.id) ? ViveColors.primary : '#FFFFFF'}
+                      color={favs.has(coach.profileId) ? ViveColors.primary : '#FFFFFF'}
                     />
                   </TouchableOpacity>
                 </View>
@@ -224,16 +259,12 @@ export default function ConexionesScreen() {
                   <Text style={s.coachName} numberOfLines={1}>{coach.name}</Text>
                   <Text style={s.coachSpecialty} numberOfLines={1}>{coach.specialty}</Text>
                   <Text style={s.coachPrice}>Desde ${coach.priceFrom.toLocaleString('es-AR')}</Text>
-                  <View style={s.ratingRow}>
-                    <MaterialIcons name="star" size={12} color="#E8C547" />
-                    <Text style={s.ratingText}>{coach.rating} ({coach.reviews} reseñas)</Text>
-                  </View>
                 </View>
               </ScaleCard>
             ))}
           </ScrollView>
 
-          <Dots count={COACH_DOTS} active={coachDot} />
+          <Dots count={coachDots} active={coachDot} />
         </View>
 
         {/* ── Tarjeta Sofía ────────────────────────────────────────────── */}

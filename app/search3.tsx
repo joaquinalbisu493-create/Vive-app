@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -17,8 +17,17 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { ViveColors, ViveFonts } from '@/constants/theme';
-import { PROFESSIONALS, NATIONALITIES, MAX_PRICE } from '@/constants/searchData';
+import { NATIONALITIES, MAX_PRICE } from '@/constants/searchData';
 import { ScaleCard } from '@/components/ScaleCard';
+import { supabase } from '@/lib/supabase';
+
+type CoachResult = {
+  id: string;       // profiles.id
+  name: string;
+  specialty: string;
+  priceFrom: number;
+  nationality: string;
+};
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 type SexFilter     = 'Todos' | 'Mujer' | 'Hombre';
@@ -105,8 +114,46 @@ export default function SearchScreen3() {
   const [filters, setFilters]     = useState<Filters>(DEFAULT_FILTERS);
   const [draftFilters, setDraft]  = useState<Filters>(DEFAULT_FILTERS);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [rawCoaches, setRawCoaches] = useState<CoachResult[]>([]);
+  const [loadingCoaches, setLoadingCoaches] = useState(true);
 
   const slideAnim = useRef(new Animated.Value(700)).current;
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoadingCoaches(true);
+    supabase
+      .from('coaches')
+      .select('specialty, price_per_session, nationality, profiles!inner(id, name)')
+      .eq('verified', true)
+      .limit(50)
+      .then(({ data, error }) => {
+        if (cancelled) return;
+        if (error) console.error('[Search3] coaches fetch:', error.message);
+        const topicStr = Array.isArray(topic) ? topic[0] : topic;
+        const queryStr = Array.isArray(query) ? query[0] : query;
+        const all: CoachResult[] = (data ?? []).map((c: any) => ({
+          id: c.profiles.id as string,
+          name: c.profiles.name as string,
+          specialty: c.specialty as string,
+          priceFrom: c.price_per_session as number,
+          nationality: (c.nationality ?? '') as string,
+        }));
+        const filtered = all.filter(c => {
+          if (topicStr) {
+            return c.specialty.toLowerCase().includes(topicStr.toLowerCase());
+          }
+          if (queryStr) {
+            const q = queryStr.toLowerCase();
+            return c.name.toLowerCase().includes(q) || c.specialty.toLowerCase().includes(q);
+          }
+          return true;
+        });
+        setRawCoaches(filtered);
+        setLoadingCoaches(false);
+      });
+    return () => { cancelled = true; };
+  }, [topic, query]);
 
   function openSheet() {
     setDraft(filters);
@@ -123,19 +170,10 @@ export default function SearchScreen3() {
     closeSheet();
   }
 
-  // Filter logic
-  const results = PROFESSIONALS.filter(p => {
-    if (topic && !p.topics.some(t => t.toLowerCase() === topic.toLowerCase())) return false;
-    if (query) {
-      const q = query.toLowerCase();
-      if (!p.name.toLowerCase().includes(q) && !p.specialty.toLowerCase().includes(q) && !p.topics.some(t => t.toLowerCase().includes(q))) return false;
-    }
-    if (p.rating < filters.minRating)  return false;
-    if (p.priceFrom > filters.maxPrice) return false;
-    if (filters.sex === 'Mujer'  && p.sex !== 'F') return false;
-    if (filters.sex === 'Hombre' && p.sex !== 'M') return false;
+  // Apply client-side filters (only maxPrice and nationality have real data)
+  const results = rawCoaches.filter(p => {
+    if (filters.maxPrice < MAX_PRICE && p.priceFrom > filters.maxPrice) return false;
     if (filters.nationality !== 'Todas' && p.nationality !== filters.nationality) return false;
-    if (filters.type !== 'Todos' && p.type !== filters.type) return false;
     return true;
   });
 
@@ -169,7 +207,9 @@ export default function SearchScreen3() {
         </TouchableOpacity>
       </View>
 
-      <Text style={s.resultCount}>{results.length} profesional{results.length !== 1 ? 'es' : ''} encontrado{results.length !== 1 ? 's' : ''}</Text>
+      <Text style={s.resultCount}>
+        {loadingCoaches ? 'Buscando...' : `${results.length} profesional${results.length !== 1 ? 'es' : ''} encontrado${results.length !== 1 ? 's' : ''}`}
+      </Text>
 
       {/* ── Lista ────────────────────────────────────────────────────── */}
       <FlatList
@@ -189,7 +229,12 @@ export default function SearchScreen3() {
             style={s.card}
             onPress={() => router.push({
               pathname: '/profesional',
-              params: { name: p.name, specialty: p.specialty, rating: String(p.rating), reviewCount: String(p.reviews), priceFrom: String(p.priceFrom) },
+              params: {
+                profileId: p.id,
+                name: p.name,
+                specialty: p.specialty,
+                priceFrom: String(p.priceFrom),
+              },
             })}>
             {/* Foto */}
             <View style={s.avatar}>
@@ -199,19 +244,13 @@ export default function SearchScreen3() {
             <View style={s.cardInfo}>
               <View style={s.cardTop}>
                 <Text style={s.cardName}>{p.name}</Text>
-                <View style={s.ratingRow}>
-                  <MaterialIcons name="star" size={13} color="#E8C547" />
-                  <Text style={s.ratingText}>{p.rating}</Text>
-                </View>
               </View>
               <Text style={s.cardSpecialty}>{p.specialty}</Text>
-              <Text style={s.cardPrice}>Desde ${p.priceFrom.toLocaleString('es-AR')} · {p.reviews} reseñas</Text>
+              <Text style={s.cardPrice}>Desde ${p.priceFrom.toLocaleString('es-AR')}</Text>
               <View style={s.tagsRow}>
-                {p.topics.slice(0, 3).map(t => (
-                  <View key={t} style={[s.tag, topic === t && s.tagActive]}>
-                    <Text style={[s.tagText, topic === t && s.tagTextActive]}>{t}</Text>
-                  </View>
-                ))}
+                <View style={[s.tag, s.tagActive]}>
+                  <Text style={[s.tagText, s.tagTextActive]}>{p.specialty}</Text>
+                </View>
               </View>
             </View>
             <MaterialIcons name="chevron-right" size={20} color={`${ViveColors.text}55`} />

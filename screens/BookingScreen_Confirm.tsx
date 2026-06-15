@@ -15,6 +15,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { sendPushNotification } from '@/lib/notifications';
 
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTH_NAMES = [
@@ -98,6 +99,22 @@ export default function BookingScreen_Confirm() {
         });
 
       if (bookingError) throw new Error('No se pudo guardar la reserva. Intentalo de nuevo.');
+
+      // Notificar al coach
+      const { data: coachProfile } = await supabase
+        .from('profiles')
+        .select('push_token, name')
+        .eq('id', coachId)
+        .maybeSingle();
+
+      if (coachProfile?.push_token) {
+        const userName = user.user_metadata?.name ?? 'Un usuario';
+        await sendPushNotification(
+          coachProfile.push_token,
+          'Nueva solicitud de sesión 📅',
+          `${userName} quiere reservar una sesión el ${formatDate(dateStr)} a las ${time} hs`,
+        );
+      }
 
       router.replace({
         pathname: '/booking-success',

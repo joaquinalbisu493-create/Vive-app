@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,17 +7,27 @@ import {
   ScrollView,
   Platform,
   Animated,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/lib/supabase';
 
-const mockProfesionales = [
-  { id: '1', name: 'María González', specialty: 'Psicóloga', initials: 'MG' },
-  { id: '2', name: 'Carlos Méndez', specialty: 'Coach de vida', initials: 'CM' },
-];
+type Profesional = {
+  id: string;
+  name: string;
+  specialty: string;
+  initials: string;
+};
+
+type ActivityData = {
+  sesiones: number;
+  recursos: number;
+  racha: number;
+};
 
 type ConfigItem = {
   id: string;
@@ -31,9 +41,98 @@ export default function ProfileOwnScreen() {
   const router = useRouter();
   const { user, switchRole, signOut } = useAuth();
 
+  const [activity, setActivity] = useState<ActivityData>({ sesiones: 0, recursos: 0, racha: 0 });
+  const [profesionales, setProfesionales] = useState<Profesional[]>([]);
+  const [loadingData, setLoadingData] = useState(true);
+
   const displayName = user?.user_metadata?.name ?? user?.email?.split('@')[0] ?? 'Usuario';
   const displayEmail = user?.email ?? '';
-  const displayInitial = displayName[0]?.toUpperCase() ?? 'U';
+  const displayInitials = displayName
+    .split(' ')
+    .slice(0, 2)
+    .map((w: string) => w[0]?.toUpperCase() ?? '')
+    .join('');
+
+  useEffect(() => {
+    if (!user) return;
+    loadProfileData();
+  }, [user?.id]);
+
+  async function loadProfileData() {
+    setLoadingData(true);
+    try {
+      await Promise.all([loadActivity(), loadProfesionales()]);
+    } finally {
+      setLoadingData(false);
+    }
+  }
+
+  async function loadActivity() {
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+    const [bookingsResult, resourcesResult, journalResult] = await Promise.all([
+      supabase
+        .from('bookings')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user!.id)
+        .eq('status', 'confirmed'),
+      supabase
+        .from('saved_resources')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user!.id),
+      supabase
+        .from('journal_entries')
+        .select('created_at')
+        .eq('user_id', user!.id)
+        .gte('created_at', sevenDaysAgo),
+    ]);
+
+    const dias = new Set(
+      (journalResult.data ?? []).map((e) => new Date(e.created_at).toDateString())
+    );
+
+    setActivity({
+      sesiones: bookingsResult.count ?? 0,
+      recursos: resourcesResult.count ?? 0,
+      racha: dias.size,
+    });
+  }
+
+  async function loadProfesionales() {
+    const { data: bookings } = await supabase
+      .from('bookings')
+      .select('coach_id')
+      .eq('user_id', user!.id);
+
+    if (!bookings || bookings.length === 0) {
+      setProfesionales([]);
+      return;
+    }
+
+    const coachIds = [...new Set(bookings.map((b) => b.coach_id))];
+
+    const [profilesResult, coachesResult] = await Promise.all([
+      supabase.from('profiles').select('id, name').in('id', coachIds),
+      supabase.from('coaches').select('profile_id, specialty').in('profile_id', coachIds),
+    ]);
+
+    const specialtyMap: Record<string, string> = Object.fromEntries(
+      (coachesResult.data ?? []).map((c) => [c.profile_id, c.specialty])
+    );
+
+    const profs: Profesional[] = (profilesResult.data ?? []).map((p) => ({
+      id: p.id,
+      name: p.name,
+      specialty: specialtyMap[p.id] ?? 'Profesional',
+      initials: p.name
+        .split(' ')
+        .slice(0, 2)
+        .map((w: string) => w[0]?.toUpperCase() ?? '')
+        .join(''),
+    }));
+
+    setProfesionales(profs);
+  }
 
   async function handleSignOut() {
     await signOut();
@@ -156,11 +255,15 @@ export default function ProfileOwnScreen() {
           {/* Identidad */}
           <Animated.View style={[styles.identitySection, fadeUp(identityAnim)]}>
             <View style={styles.avatarLarge}>
-              <Text style={styles.avatarLargeText}>{displayInitial}</Text>
+              <Text style={styles.avatarLargeText}>{displayInitials || 'U'}</Text>
             </View>
             <Text style={styles.userName}>{displayName}</Text>
             <Text style={styles.userEmail}>{displayEmail}</Text>
-            <TouchableOpacity style={styles.editBtn} activeOpacity={0.75}>
+            <TouchableOpacity
+              style={styles.editBtn}
+              activeOpacity={0.75}
+              onPress={() => router.push('/edit-profile')}
+            >
               <Text style={styles.editBtnText}>Editar perfil</Text>
             </TouchableOpacity>
           </Animated.View>
@@ -168,35 +271,80 @@ export default function ProfileOwnScreen() {
           {/* Mi actividad */}
           <Animated.View style={fadeUp(activityAnim)}>
             <Text style={styles.sectionTitle}>Mi actividad</Text>
-            <View style={styles.metricsRow}>
-              <MetricCard emoji="🗓️" value="3 sesiones" label="Completadas" />
-              <MetricCard emoji="📚" value="5 recursos" label="Guardados" />
-              <MetricCard emoji="🔥" value="7 días" label="Racha activa" />
-            </View>
+            {loadingData ? (
+              <View style={styles.metricsRow}>
+                <View style={[styles.metricCard, styles.metricCardLoading]}>
+                  <ActivityIndicator size="small" color={`${ViveColors.primary}60`} />
+                </View>
+                <View style={[styles.metricCard, styles.metricCardLoading]}>
+                  <ActivityIndicator size="small" color={`${ViveColors.primary}60`} />
+                </View>
+                <View style={[styles.metricCard, styles.metricCardLoading]}>
+                  <ActivityIndicator size="small" color={`${ViveColors.primary}60`} />
+                </View>
+              </View>
+            ) : (
+              <View style={styles.metricsRow}>
+                <MetricCard
+                  emoji="🗓️"
+                  value={activity.sesiones === 1 ? '1 sesión' : `${activity.sesiones} sesiones`}
+                  label="Completadas"
+                />
+                <MetricCard
+                  emoji="📚"
+                  value={activity.recursos === 1 ? '1 recurso' : `${activity.recursos} recursos`}
+                  label="Guardados"
+                />
+                <MetricCard
+                  emoji="🔥"
+                  value={activity.racha === 1 ? '1 día' : `${activity.racha} días`}
+                  label="Racha activa"
+                />
+              </View>
+            )}
           </Animated.View>
 
           {/* Mis profesionales */}
           <Animated.View style={fadeUp(profAnim)}>
             <Text style={[styles.sectionTitle, styles.sectionTitleSpaced]}>Mis profesionales</Text>
-            <View style={styles.profList}>
-              {mockProfesionales.map((p, i) => (
+            {loadingData ? (
+              <View style={[styles.profList, styles.profListLoading]}>
+                <ActivityIndicator size="small" color={`${ViveColors.primary}60`} />
+              </View>
+            ) : profesionales.length === 0 ? (
+              <View style={styles.profEmptyCard}>
+                <Text style={styles.profEmptyText}>
+                  Todavía no reservaste ninguna sesión. ¿Empezamos?
+                </Text>
                 <TouchableOpacity
-                  key={p.id}
-                  style={[styles.profRow, i < mockProfesionales.length - 1 && styles.profRowDivider]}
-                  onPress={() => router.push({ pathname: '/sala', params: { coach_id: p.id } })}
-                  activeOpacity={0.72}
+                  style={styles.profEmptyBtn}
+                  onPress={() => router.push('/(tabs)/conexiones')}
+                  activeOpacity={0.8}
                 >
-                  <View style={styles.profAvatar}>
-                    <Text style={styles.profAvatarText}>{p.initials}</Text>
-                  </View>
-                  <View style={styles.profInfo}>
-                    <Text style={styles.profName}>{p.name}</Text>
-                    <Text style={styles.profSpecialty}>{p.specialty}</Text>
-                  </View>
-                  <MaterialCommunityIcons name="chevron-right" size={20} color={`${ViveColors.text}40`} />
+                  <Text style={styles.profEmptyBtnText}>Explorar profesionales</Text>
                 </TouchableOpacity>
-              ))}
-            </View>
+              </View>
+            ) : (
+              <View style={styles.profList}>
+                {profesionales.map((p, i) => (
+                  <TouchableOpacity
+                    key={p.id}
+                    style={[styles.profRow, i < profesionales.length - 1 && styles.profRowDivider]}
+                    onPress={() => router.push({ pathname: '/sala', params: { coach_id: p.id } })}
+                    activeOpacity={0.72}
+                  >
+                    <View style={styles.profAvatar}>
+                      <Text style={styles.profAvatarText}>{p.initials}</Text>
+                    </View>
+                    <View style={styles.profInfo}>
+                      <Text style={styles.profName}>{p.name}</Text>
+                      <Text style={styles.profSpecialty}>{p.specialty}</Text>
+                    </View>
+                    <MaterialCommunityIcons name="chevron-right" size={20} color={`${ViveColors.text}40`} />
+                  </TouchableOpacity>
+                ))}
+              </View>
+            )}
           </Animated.View>
 
           {/* Configuración */}
@@ -442,6 +590,11 @@ const styles = StyleSheet.create({
     gap: 4,
     ...cardShadow,
   },
+  metricCardLoading: {
+    paddingVertical: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   metricEmoji: { fontSize: 20 },
   metricValue: {
     fontFamily: ViveFonts.semibold,
@@ -464,6 +617,41 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     overflow: 'hidden',
     ...cardShadow,
+  },
+  profListLoading: {
+    paddingVertical: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  profEmptyCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    paddingVertical: 24,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    gap: 14,
+    ...cardShadow,
+  },
+  profEmptyText: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 14,
+    color: ViveColors.text,
+    opacity: 0.65,
+    textAlign: 'center',
+    lineHeight: 21,
+  },
+  profEmptyBtn: {
+    backgroundColor: ViveColors.primary,
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  profEmptyBtnText: {
+    fontFamily: ViveFonts.semibold,
+    fontSize: 13,
+    color: '#FFFFFF',
   },
   profRow: {
     flexDirection: 'row',

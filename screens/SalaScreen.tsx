@@ -20,6 +20,7 @@ import { FirstTimeTooltip } from '@/components/FirstTimeTooltip';
 import { encryptMessage, decryptMessage } from '@/lib/encryption';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { sendPushNotification } from '@/lib/notifications';
 
 type Message = {
   id: string;
@@ -69,6 +70,7 @@ export default function SalaScreen() {
   const [inputText, setInputText] = useState('');
   const [mockState, setMockState] = useState<SessionState>('locked');
   const [salaId, setSalaId] = useState<string | null>(null);
+  const [recipientId, setRecipientId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -104,21 +106,27 @@ export default function SalaScreen() {
 
       const { data: existing } = await supabase
         .from('salas')
-        .select('id')
+        .select('id, user_id')
         .eq('user_id', user!.id)
         .eq('coach_id', coach_id)
         .maybeSingle();
 
+      let salaUserId: string = user!.id;
+
       if (existing) {
         id = existing.id as string;
+        salaUserId = (existing as { id: string; user_id: string }).user_id;
       } else {
         const { data: created, error } = await supabase
           .from('salas')
           .insert({ user_id: user!.id, coach_id })
-          .select('id')
+          .select('id, user_id')
           .single();
         if (error) console.error('[Sala] Error creando sala:', error.message);
-        if (created) id = (created as { id: string }).id;
+        if (created) {
+          id = (created as { id: string; user_id: string }).id;
+          salaUserId = (created as { id: string; user_id: string }).user_id;
+        }
       }
 
       if (!mounted || !id) {
@@ -127,6 +135,8 @@ export default function SalaScreen() {
       }
 
       setSalaId(id);
+      // Recipient is whoever is NOT the current user in this sala
+      setRecipientId(user!.id === salaUserId ? coach_id as string : salaUserId);
 
       const { data: msgs, error: msgsError } = await supabase
         .from('messages')
@@ -216,6 +226,23 @@ export default function SalaScreen() {
     if (error) {
       setMessages(prev => prev.filter(m => m.id !== optimisticId));
       Alert.alert('Error', 'No se pudo enviar el mensaje.');
+      return;
+    }
+
+    if (recipientId) {
+      const { data: recipientProfile } = await supabase
+        .from('profiles')
+        .select('push_token')
+        .eq('id', recipientId)
+        .maybeSingle();
+
+      if (recipientProfile?.push_token) {
+        await sendPushNotification(
+          recipientProfile.push_token,
+          'Nuevo mensaje',
+          text.slice(0, 50),
+        );
+      }
     }
   }
 

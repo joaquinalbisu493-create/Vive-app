@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/lib/supabase';
 import {
   View,
   Text,
@@ -84,8 +85,29 @@ export default function ProfesionalScreen() {
     reviewCount?: string;
     priceFrom?: string;
     coachId?: string;
+    profileId?: string;
   }>();
   const [saved, setSaved] = useState(false);
+  const [fetchedData, setFetchedData] = useState<Partial<typeof DEFAULT_PROFESIONAL> | null>(null);
+
+  useEffect(() => {
+    const pid = Array.isArray(params.profileId) ? params.profileId[0] : params.profileId;
+    if (!pid) return;
+    supabase
+      .from('coaches')
+      .select('specialty, price_per_session, nationality, profiles!inner(name)')
+      .eq('profile_id', pid)
+      .single()
+      .then(({ data, error }) => {
+        if (error || !data) return;
+        setFetchedData({
+          name: (data as any).profiles.name,
+          specialty: (data as any).specialty,
+          nationality: (data as any).nationality ?? DEFAULT_PROFESIONAL.nationality,
+          priceFrom: (data as any).price_per_session,
+        });
+      });
+  }, [params.profileId]);
 
   const prof = {
     ...DEFAULT_PROFESIONAL,
@@ -94,6 +116,7 @@ export default function ProfesionalScreen() {
     ...(params.rating && { rating: parseFloat(params.rating) }),
     ...(params.reviewCount && { reviewCount: parseInt(params.reviewCount, 10) }),
     ...(params.priceFrom && { priceFrom: parseInt(params.priceFrom, 10) }),
+    ...fetchedData,
   };
 
   return (
@@ -216,7 +239,7 @@ export default function ProfesionalScreen() {
                     name: prof.name,
                     specialty: prof.specialty,
                     priceFrom: String(prof.priceFrom),
-                    coachId: params.coachId ?? '',
+                    coachId: params.coachId ?? params.profileId ?? '',
                   },
                 });
               }}>

@@ -16,6 +16,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { sendPushNotification } from '@/lib/notifications';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type ReservationStatus = 'pending' | 'confirmed' | 'rejected';
@@ -158,8 +159,23 @@ export default function CoachReservasScreen() {
 
   async function accept(id: string) {
     await supabase.from('bookings').update({ status: 'confirmed' }).eq('id', id);
-    // La actualización llega por Realtime, pero actualizamos el estado local también para feedback inmediato
     setBookings(prev => prev.map(b => b.id === id ? { ...b, status: 'confirmed' } : b));
+
+    const booking = bookings.find(b => b.id === id);
+    if (booking && user) {
+      const [{ data: userProfile }, { data: coachProfile }] = await Promise.all([
+        supabase.from('profiles').select('push_token').eq('id', booking.user_id).maybeSingle(),
+        supabase.from('profiles').select('name').eq('id', user.id).maybeSingle(),
+      ]);
+
+      if (userProfile?.push_token) {
+        await sendPushNotification(
+          userProfile.push_token,
+          '¡Tu sesión fue confirmada! ✅',
+          `Tu sesión con ${coachProfile?.name ?? 'tu coach'} el ${formatBookingDate(booking.date)} está confirmada`,
+        );
+      }
+    }
   }
 
   function openReject(id: string) {
@@ -169,9 +185,27 @@ export default function CoachReservasScreen() {
 
   async function confirmReject() {
     if (!rejectModal.id) return;
+
+    const booking = bookings.find(b => b.id === rejectModal.id);
+
     await supabase.from('bookings').update({ status: 'rejected' }).eq('id', rejectModal.id);
     setBookings(prev => prev.filter(b => b.id !== rejectModal.id));
     setRejectModal({ visible: false, id: null });
+
+    if (booking && user) {
+      const [{ data: userProfile }, { data: coachProfile }] = await Promise.all([
+        supabase.from('profiles').select('push_token').eq('id', booking.user_id).maybeSingle(),
+        supabase.from('profiles').select('name').eq('id', user.id).maybeSingle(),
+      ]);
+
+      if (userProfile?.push_token) {
+        await sendPushNotification(
+          userProfile.push_token,
+          'Sesión no disponible',
+          `${coachProfile?.name ?? 'Tu coach'} no pudo aceptar tu sesión. Buscá otro profesional.`,
+        );
+      }
+    }
   }
 
   console.log('[CoachReservas] render bookings:', bookings);
