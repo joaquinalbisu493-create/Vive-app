@@ -94,6 +94,11 @@ export default function InicioScreen() {
         showsVerticalScrollIndicator={false}
       >
 
+        {/* ── Logo ── */}
+        <Animated.View style={[styles.logoBar, fadeUp(logoAnim)]}>
+          <Text style={styles.logo}>vita</Text>
+        </Animated.View>
+
         {/* ── 1. HEADER ── */}
         <Animated.View style={[styles.header, fadeUp(headerAnim)]}>
           <View style={styles.headerLeft}>
@@ -113,11 +118,6 @@ export default function InicioScreen() {
           <TouchableOpacity style={styles.searchBtn} activeOpacity={0.7}>
             <MaterialCommunityIcons name="magnify" size={20} color={ViveColors.text} />
           </TouchableOpacity>
-        </Animated.View>
-
-        {/* ── Logo ── */}
-        <Animated.View style={[styles.logoBar, fadeUp(logoAnim)]}>
-          <Text style={styles.logo}>vita</Text>
         </Animated.View>
 
         {/* ── 2. QUOTE CARD ── */}
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 18,
+    paddingTop: 4,
     paddingBottom: 4,
   },
   headerLeft: {
@@ -287,7 +287,8 @@ const styles = StyleSheet.create({
   // Logo bar
   logoBar: {
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingTop: 18,
+    paddingBottom: 10,
   },
   logo: {
     fontFamily: ViveFonts.frauncesSerif,
