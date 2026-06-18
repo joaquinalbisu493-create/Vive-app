@@ -1,175 +1,327 @@
-import { useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { useEffect } from 'react';
+import { View, Pressable, StyleSheet, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { ViveColors, ViveFonts } from '@/constants/theme';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  useAnimatedProps,
+  useFrameCallback,
+  withTiming,
+  runOnJS,
+  type SharedValue,
+} from 'react-native-reanimated';
+import Svg, {
+  Defs,
+  RadialGradient,
+  Stop,
+  Circle as SvgCircle,
+  Filter,
+  FeGaussianBlur,
+} from 'react-native-svg';
 
-// ── Venn geometry ─────────────────────────────────────────────────────────────
-// R = circle radius, D = center-to-center distance (equilateral triangle side)
-// H ≈ D × √3/2 = height of the triangle
-const R  = 84;
-const D  = 82;
-const H  = 71;   // Math.round(D * Math.sqrt(3) / 2)
-const CW = 250;  // container width
-const CH = R * 2 + H;  // container height = 239
+// ── Config ────────────────────────────────────────────────────────────────────
 
-// Absolute top-left positions of each circle inside the container
-const CIRCLES = [
-  { left: CW / 2 - R,           top: 0 },  // top  – Cuerpo
-  { left: CW / 2 - D / 2 - R,  top: H },  // bottom-left  – Mente
-  { left: CW / 2 + D / 2 - R,  top: H },  // bottom-right – Alma
+const HOLD_MS  = 1300;
+const GLOW_R   = 92;
+const BLUR_STD = 20;
+
+// Three warm orange tones — close enough to read as one light when merged
+const COLORS = ['#FF9A52', '#FFB36B', '#FFC98C'] as const;
+
+// Venn triangle positions relative to centroid (equilateral, D = 78)
+const VENN = [
+  { x:   0, y: -45 },   // top
+  { x: -39, y:  22 },   // bottom-left
+  { x:  39, y:  22 },   // bottom-right
 ] as const;
 
-// ── Animation helpers ─────────────────────────────────────────────────────────
-function circleIn(anim: Animated.Value) {
-  return {
-    opacity: anim,
-    transform: [{ scale: anim.interpolate({ inputRange: [0, 1], outputRange: [0.72, 1] }) }],
-  };
+// Orbital start: same constellation rotated ~60° CW
+// Each circle travels its own arc to land in Venn position
+const ORBT = [
+  { x: -39, y: -22 },
+  { x:  39, y: -22 },
+  { x:   0, y:  45 },
+] as const;
+
+// ── Worklet helpers ───────────────────────────────────────────────────────────
+
+function lerp(a: number, b: number, t: number): number {
+  'worklet';
+  return a + (b - a) * t;
 }
 
-function fadeUp(anim: Animated.Value, dy = 18) {
-  return {
-    opacity: anim,
-    transform: [{ translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [dy, 0] }) }],
-  };
+// easeInOutQuint
+function eioq(t: number): number {
+  'worklet';
+  return t < 0.5
+    ? 16 * t * t * t * t * t
+    : 1 - Math.pow(-2 * t + 2, 5) / 2;
 }
+
+// easeInOutQuad
+function eiod(t: number): number {
+  'worklet';
+  return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+}
+
+// ── Animated props for one glow circle ───────────────────────────────────────
+// Calling useAnimatedProps 3× with explicit idx avoids hook-in-loop issues.
+
+function useCircleAnimProps(
+  sx: number, sy: number,   // orbital start (absolute in SVG)
+  vx: number, vy: number,   // venn rest (absolute in SVG)
+  cx: number, cy: number,   // canvas centroid (merge target)
+  entryP:  SharedValue<number>,
+  holdP:   SharedValue<number>,
+  revealP: SharedValue<number>,
+) {
+  return useAnimatedProps(() => {
+    const eEntry = eioq(entryP.value);   // 0→1 smooth orbit-in
+    const eHold  = eiod(holdP.value);    // 0→1 smooth merge
+
+    // Entry path: orbital start → Venn rest
+    const restX = lerp(sx, vx, eEntry);
+    const restY = lerp(sy, vy, eEntry);
+
+    // Hold path: current rest position → centroid
+    const px = lerp(restX, cx, eHold);
+    const py = lerp(restY, cy, eHold);
+
+    // Radius grows 20% during hold for visual intensity
+    const r = lerp(GLOW_R, GLOW_R * 1.2, eHold);
+
+    const opacity = 1 - revealP.value;
+
+    return { cx: px, cy: py, r, opacity };
+  });
+}
+
+const AnimatedCircle = Animated.createAnimatedComponent(SvgCircle);
+
+// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function OnboardingScreen1() {
   const router = useRouter();
+  const { width } = useWindowDimensions();
 
-  const c0 = useRef(new Animated.Value(0)).current;
-  const c1 = useRef(new Animated.Value(0)).current;
-  const c2 = useRef(new Animated.Value(0)).current;
-  const viveAnim     = useRef(new Animated.Value(0)).current;
-  const subtitleAnim = useRef(new Animated.Value(0)).current;
-  const buttonAnim   = useRef(new Animated.Value(0)).current;
+  // Canvas dimensions
+  const SVG_W = Math.min(width, 420);
+  const SVG_H = 270;
+  const CX    = SVG_W / 2;
+  const CY    = SVG_H / 2 + 8; // centroid slightly below SVG center
+
+  // Absolute SVG positions derived from centroid
+  const orbt = ORBT.map((p) => ({ x: CX + p.x, y: CY + p.y }));
+  const venn = VENN.map((p) => ({ x: CX + p.x, y: CY + p.y }));
+
+  // ── Shared values ─────────────────────────────────────────────────────────
+
+  const entryProgress  = useSharedValue(0); // 0→1 on mount (circles orbit in)
+  const holdProgress   = useSharedValue(0); // 0→1 while pressing (reversible)
+  const revealProgress = useSharedValue(0); // 0→1 on completion (fade out)
+  const viveOpacity    = useSharedValue(0); // "vive" fades in on mount
+  const hintOpacity    = useSharedValue(0); // hint appears after entry settles
+  const isHolding      = useSharedValue(false);
+  const hasRevealed    = useSharedValue(false);
+
+  // ── Mount ─────────────────────────────────────────────────────────────────
 
   useEffect(() => {
-    Animated.sequence([
-      // Phase 1 – circles appear one by one
-      Animated.stagger(300, [
-        Animated.timing(c0, { toValue: 1, duration: 520, useNativeDriver: true }),
-        Animated.timing(c1, { toValue: 1, duration: 520, useNativeDriver: true }),
-        Animated.timing(c2, { toValue: 1, duration: 520, useNativeDriver: true }),
-      ]),
-      // Phase 2 – wordmark emerges
-      Animated.delay(160),
-      Animated.timing(viveAnim, { toValue: 1, duration: 540, useNativeDriver: true }),
-      // Phase 3 – subtitle
-      Animated.delay(80),
-      Animated.timing(subtitleAnim, { toValue: 1, duration: 400, useNativeDriver: true }),
-      // Phase 4 – button
-      Animated.delay(80),
-      Animated.timing(buttonAnim, { toValue: 1, duration: 380, useNativeDriver: true }),
-    ]).start();
+    // "vive" appears quickly at the top
+    viveOpacity.value = withTiming(1, { duration: 480 });
+
+    // Circles orbit from start positions to Venn (easing handled in worklet)
+    entryProgress.value = withTiming(1, { duration: 1500 }, (finished) => {
+      if (finished) {
+        hintOpacity.value = withTiming(1, { duration: 600 });
+      }
+    });
   }, []);
 
+  // ── Hold frame callback (UI thread) ──────────────────────────────────────
+
+  function navigateHome() {
+    router.replace('/(tabs)');
+  }
+
+  useFrameCallback((frame) => {
+    if (hasRevealed.value) return;
+    const dt = frame.timeSincePreviousFrame ?? 16;
+
+    if (isHolding.value) {
+      const next = Math.min(1, holdProgress.value + dt / HOLD_MS);
+      holdProgress.value = next;
+      if (next >= 1) {
+        hasRevealed.value = true;
+        revealProgress.value = withTiming(
+          1,
+          { duration: 680 },
+          (done) => { if (done) runOnJS(navigateHome)(); },
+        );
+      }
+    } else {
+      // Release: reverse at 1.6× speed for snappy but smooth return
+      holdProgress.value = Math.max(0, holdProgress.value - dt / (HOLD_MS * 0.62));
+    }
+  });
+
+  // ── Animated props (3 circles — hooks called in fixed order) ─────────────
+
+  const p0 = useCircleAnimProps(
+    orbt[0].x, orbt[0].y,
+    venn[0].x, venn[0].y,
+    CX, CY,
+    entryProgress, holdProgress, revealProgress,
+  );
+  const p1 = useCircleAnimProps(
+    orbt[1].x, orbt[1].y,
+    venn[1].x, venn[1].y,
+    CX, CY,
+    entryProgress, holdProgress, revealProgress,
+  );
+  const p2 = useCircleAnimProps(
+    orbt[2].x, orbt[2].y,
+    venn[2].x, venn[2].y,
+    CX, CY,
+    entryProgress, holdProgress, revealProgress,
+  );
+
+  // ── Animated styles ───────────────────────────────────────────────────────
+
+  // "vive" slides down toward the diagram center during hold
+  const viveStyle = useAnimatedStyle(() => {
+    const eHold = eiod(holdProgress.value);
+    return {
+      opacity: viveOpacity.value * (1 - revealProgress.value),
+      transform: [{ translateY: lerp(0, 24, eHold) }],
+    };
+  });
+
+  // hint disappears as soon as hold starts
+  const hintStyle = useAnimatedStyle(() => ({
+    opacity: hintOpacity.value * Math.max(0, 1 - holdProgress.value * 5),
+  }));
+
+  // white overlay fades in during reveal to "clear" the background
+  const overlayStyle = useAnimatedStyle(() => ({
+    opacity: revealProgress.value,
+  }));
+
+  // ── Render ────────────────────────────────────────────────────────────────
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.content}>
+    <View style={styles.root}>
+      {/* Warm cream gradient background */}
+      <LinearGradient
+        colors={['#FBF3E7', '#F4E2C8']}
+        style={StyleSheet.absoluteFill}
+      />
 
-        {/* ── Venn diagram ─────────────────────────────── */}
-        <View style={styles.venn}>
-          {([c0, c1, c2] as Animated.Value[]).map((anim, i) => (
-            <Animated.View
-              key={i}
-              style={[
-                styles.circle,
-                { left: CIRCLES[i].left, top: CIRCLES[i].top },
-                circleIn(anim),
-              ]}
-            />
-          ))}
-        </View>
+      {/* Reveal overlay — cream solid that fades in over the gradient */}
+      <Animated.View
+        style={[StyleSheet.absoluteFill, styles.revealOverlay, overlayStyle]}
+        pointerEvents="none"
+      />
 
-        {/* ── Wordmark ─────────────────────────────────── */}
-        <Animated.Text style={[styles.vive, fadeUp(viveAnim)]}>
-          vive
-        </Animated.Text>
-
-        {/* ── Subtitle ─────────────────────────────────── */}
-        <Animated.Text style={[styles.subtitle, fadeUp(subtitleAnim)]}>
-          Tu camino empieza acá
-        </Animated.Text>
-
-      </View>
-
-      {/* ── CTA ──────────────────────────────────────── */}
-      <Animated.View style={[styles.footer, fadeUp(buttonAnim)]}>
-        <TouchableOpacity
-          style={styles.button}
-          activeOpacity={0.85}
-          onPress={() => router.push('/onboarding2')}
+      <SafeAreaView style={styles.safe}>
+        {/* The whole screen is the hold target */}
+        <Pressable
+          style={styles.pressable}
+          onPressIn={() => {
+            isHolding.value = true;
+          }}
+          onPressOut={() => {
+            isHolding.value = false;
+          }}
         >
-          <Text style={styles.buttonText}>¿Empezamos?</Text>
-        </TouchableOpacity>
-      </Animated.View>
-    </SafeAreaView>
+          {/* Wordmark — visible from the first frame */}
+          <Animated.Text style={[styles.vive, viveStyle]}>vive</Animated.Text>
+
+          {/* Glow diagram */}
+          <Svg
+            width={SVG_W}
+            height={SVG_H}
+            viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+          >
+            <Defs>
+              {/* One radial gradient per circle so colors stay distinct */}
+              {COLORS.map((color, i) => (
+                <RadialGradient
+                  key={i}
+                  id={`vg${i}`}
+                  cx="50%"
+                  cy="50%"
+                  r="50%"
+                  fx="50%"
+                  fy="50%"
+                >
+                  <Stop offset="0%"   stopColor={color} stopOpacity="0.95" />
+                  <Stop offset="50%"  stopColor={color} stopOpacity="0.55" />
+                  <Stop offset="100%" stopColor={color} stopOpacity="0"    />
+                </RadialGradient>
+              ))}
+
+              {/* Single shared blur — one pass, all circles share it */}
+              <Filter
+                id="glow"
+                x="-100%"
+                y="-100%"
+                width="300%"
+                height="300%"
+              >
+                <FeGaussianBlur stdDeviation={String(BLUR_STD)} />
+              </Filter>
+            </Defs>
+
+            {/* Circles rendered back-to-front for natural overlap */}
+            <AnimatedCircle animatedProps={p0} fill="url(#vg0)" filter="url(#glow)" />
+            <AnimatedCircle animatedProps={p1} fill="url(#vg1)" filter="url(#glow)" />
+            <AnimatedCircle animatedProps={p2} fill="url(#vg2)" filter="url(#glow)" />
+          </Svg>
+
+          {/* Hold hint — appears after circles settle, disappears on press */}
+          <Animated.Text style={[styles.hint, hintStyle]}>
+            Mantené presionado
+          </Animated.Text>
+        </Pressable>
+      </SafeAreaView>
+    </View>
   );
 }
 
+// ── Styles ────────────────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
-    backgroundColor: ViveColors.background,
-    paddingHorizontal: 32,
   },
-  content: {
+  safe: {
     flex: 1,
+  },
+  pressable: {
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    gap: 28,
+    gap: 0,
   },
-
-  // Venn
-  venn: {
-    width: CW,
-    height: CH,
-    position: 'relative',
-  },
-  circle: {
-    position: 'absolute',
-    width: R * 2,
-    height: R * 2,
-    borderRadius: R,
-    borderWidth: 1.5,
-    borderColor: ViveColors.text,
-    backgroundColor: 'transparent',
-  },
-
-  // Wordmark — Fraunces, no sprout icon
   vive: {
-    fontFamily: ViveFonts.frauncesSerif,
-    fontSize: 76,
-    color: ViveColors.text,
-    letterSpacing: -2,
-    lineHeight: 82,
+    fontFamily: 'SpaceGrotesk_600SemiBold',
+    fontSize: 84,
+    color: '#3A1E06',
+    letterSpacing: -3.5,
+    lineHeight: 90,
+    marginBottom: 8,
   },
-
-  // Subtitle — color carries opacity so animated opacity can go 0→1 cleanly
-  subtitle: {
-    fontFamily: ViveFonts.regular,
-    fontSize: 17,
-    color: `${ViveColors.text}A6`,
-    textAlign: 'center',
-    letterSpacing: 0.2,
+  hint: {
+    fontFamily: 'SpaceGrotesk_400Regular',
+    fontSize: 13,
+    color: '#9A7455',
+    letterSpacing: 0.4,
+    marginTop: 20,
   },
-
-  // Footer
-  footer: {
-    paddingBottom: 16,
-  },
-  button: {
-    backgroundColor: ViveColors.primary,
-    borderRadius: 16,
-    paddingVertical: 18,
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontFamily: ViveFonts.semibold,
-    fontSize: 17,
-    color: '#FFFFFF',
-    letterSpacing: 0.3,
+  revealOverlay: {
+    backgroundColor: '#FBF3E7',
   },
 });
