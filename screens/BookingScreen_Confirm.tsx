@@ -266,6 +266,13 @@ export default function BookingScreen_Confirm() {
 
       <SafeAreaView style={s.footerSafe} edges={['bottom']}>
         <View style={s.footer}>
+          {error ? (
+            <View style={s.errorBox}>
+              <MaterialIcons name="error-outline" size={15} color="#D94F4F" />
+              <Text style={s.errorText}>{error}</Text>
+            </View>
+          ) : null}
+
           <TouchableOpacity
             style={[s.btn, loading && s.btnLoading]}
             onPress={onConfirm}
@@ -563,7 +570,15 @@ const s = StyleSheet.create({
     color: '#FFFFFF',
     letterSpacing: 0.2,
   },
-
+  errorBox: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    backgroundColor: '#FFF0F0',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 4,
+  },
   guaranteeRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',

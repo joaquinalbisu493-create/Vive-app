@@ -89,36 +89,26 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AuthProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="onboarding2" options={{ headerShown: false }} />
-          <Stack.Screen name="onboarding3" options={{ headerShown: false }} />
-          <Stack.Screen name="onboarding4" options={{ headerShown: false }} />
-          <Stack.Screen name="onboarding5" options={{ headerShown: false }} />
-          <Stack.Screen name="sala" options={{ headerShown: false }} />
-          <Stack.Screen name="login" options={{ headerShown: false }} />
-          <Stack.Screen name="register" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false, gestureEnabled: false }} />
-          <Stack.Screen name="profesional" options={{ headerShown: false }} />
-          <Stack.Screen name="booking-calendar" options={{ headerShown: false }} />
-          <Stack.Screen name="booking-time" options={{ headerShown: false }} />
-          <Stack.Screen name="booking-confirm" options={{ headerShown: false }} />
-          <Stack.Screen name="sessions" options={{ headerShown: false }} />
-          <Stack.Screen name="diario" options={{ headerShown: false }} />
-          <Stack.Screen name="gratitud" options={{ headerShown: false }} />
-          <Stack.Screen name="profile-own" options={{ headerShown: false }} />
-          <Stack.Screen name="search1" options={{ headerShown: false }} />
-          <Stack.Screen name="search2" options={{ headerShown: false }} />
-          <Stack.Screen name="search3" options={{ headerShown: false }} />
-          <Stack.Screen name="(coach)" options={{ headerShown: false, gestureEnabled: false }} />
-          <Stack.Screen name="coach-reservas" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-        </Stack>
-        <AuthRedirect />
-        <NotificationSetup />
-        <StatusBar style="auto" />
-      </AuthProvider>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding2" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding3" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding4" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding5" options={{ headerShown: false }} />
+        <Stack.Screen name="sala" options={{ headerShown: false }} />
+        <Stack.Screen name="login" options={{ headerShown: false }} />
+        <Stack.Screen name="register" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="profesional" options={{ headerShown: false }} />
+        <Stack.Screen name="booking-calendar" options={{ headerShown: false }} />
+        <Stack.Screen name="booking-time" options={{ headerShown: false }} />
+        <Stack.Screen name="booking-confirm" options={{ headerShown: false }} />
+        <Stack.Screen name="booking-success" options={{ headerShown: false }} />
+        <Stack.Screen name="diario" options={{ headerShown: false }} />
+        <Stack.Screen name="gratitud" options={{ headerShown: false }} />
+        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+      </Stack>
+      <StatusBar style="auto" />
     </ThemeProvider>
   );
 }

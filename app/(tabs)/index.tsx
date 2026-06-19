@@ -21,11 +21,11 @@ import { supabase } from '@/lib/supabase';
 
 const dailyPhrase = 'Cada día es una nueva oportunidad de crecer.';
 
-type Resource = { id: string; title: string | null; icon: string | null; pinned: boolean };
+type Resource = { id: string; title: string | null; icon: string | null; pinned: boolean; route?: string };
 
 const pinnedResources: Resource[] = [
   { id: '1', title: 'Respiración\n4-7-8', icon: 'weather-windy', pinned: true },
-  { id: '2', title: 'Diario de\ngratitud', icon: 'notebook-outline', pinned: true },
+  { id: '2', title: 'Diario de\ngratitud', icon: 'notebook-outline', pinned: true, route: '/gratitud' },
   { id: '3', title: null, icon: null, pinned: false },
   { id: '4', title: null, icon: null, pinned: false },
 ];
@@ -204,7 +204,11 @@ export default function InicioScreen() {
             {pinnedResources.map((r, i) => {
               if (r.pinned && r.icon) {
                 return (
-                  <ScaleCard key={r.id} style={styles.resourceCard}>
+                  <ScaleCard
+                    key={r.id}
+                    style={styles.resourceCard}
+                    onPress={r.route ? () => router.push(r.route as any) : undefined}
+                  >
                     <View style={[styles.resourceIconBubble, { backgroundColor: RESOURCE_BUBBLE_BG[i] }]}>
                       <MaterialCommunityIcons name={r.icon as any} size={22} color={RESOURCE_ICON_COLOR[i]} />
                     </View>
