@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Platform,
   Animated,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -30,6 +31,8 @@ type Params = {
   specialty?: string;
   date?: string;
   time?: string;
+  roomUrl?: string;
+  bookingId?: string;
 };
 
 export default function BookingScreen_Success() {
@@ -40,9 +43,16 @@ export default function BookingScreen_Success() {
   const specialty = params.specialty ?? 'Coach de vida';
   const dateStr = params.date ?? '';
   const time = params.time ?? '';
+  const roomUrl = params.roomUrl ?? '';
 
   const firstName = coachName.split(' ')[0];
   const formattedDate = formatDate(dateStr);
+
+  async function openRoom() {
+    if (!roomUrl) return;
+    const canOpen = await Linking.canOpenURL(roomUrl);
+    if (canOpen) await Linking.openURL(roomUrl);
+  }
 
   // Animations
   const checkScale = useRef(new Animated.Value(0)).current;
@@ -113,11 +123,15 @@ export default function BookingScreen_Success() {
         {/* Botones */}
         <Animated.View style={[s.footer, { opacity: contentOpacity }]}>
           <TouchableOpacity
-            style={s.btnPrimary}
-            onPress={() => console.log('ir a la sala')}
+            style={[s.btnPrimary, !roomUrl && s.btnDisabled]}
+            onPress={openRoom}
+            disabled={!roomUrl}
             activeOpacity={0.85}>
             <Text style={s.btnPrimaryText}>Ver mi sala</Text>
           </TouchableOpacity>
+          {roomUrl ? (
+            <Text style={s.roomNote} numberOfLines={1}>{roomUrl}</Text>
+          ) : null}
 
           <TouchableOpacity
             style={s.btnSecondary}
@@ -274,6 +288,9 @@ const s = StyleSheet.create({
     color: '#FFFFFF',
     letterSpacing: 0.2,
   },
+  btnDisabled: {
+    opacity: 0.4,
+  },
   btnSecondary: {
     borderRadius: 14,
     borderWidth: 1.5,
@@ -286,5 +303,12 @@ const s = StyleSheet.create({
     fontSize: 16,
     color: ViveColors.primary,
     letterSpacing: 0.2,
+  },
+  roomNote: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 11,
+    color: `${ViveColors.text}55`,
+    textAlign: 'center',
+    marginTop: -4,
   },
 });

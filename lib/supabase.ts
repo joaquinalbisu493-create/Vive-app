@@ -28,3 +28,15 @@ export async function ensureAnonSession(): Promise<string> {
   if (!data.user?.id) throw new Error('No user returned from anonymous sign-in');
   return data.user.id;
 }
+
+export async function registrarEvento(
+  eventName: string,
+  properties: Record<string, unknown> = {},
+): Promise<void> {
+  const { data: { session } } = await supabase.auth.getSession();
+  await supabase.from('analytics_events').insert({
+    user_id: session?.user?.id ?? null,
+    event_name: eventName,
+    properties,
+  });
+}

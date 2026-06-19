@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,11 +6,14 @@ import {
   StyleSheet,
   Platform,
   ScrollView,
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
+import { supabase, ensureAnonSession, registrarEvento } from '@/lib/supabase';
 
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTH_NAMES = [
@@ -43,11 +46,73 @@ export default function BookingScreen_Confirm() {
   const dateStr = params.date ?? '';
   const time = params.time ?? '';
 
-  function onConfirm() {
-    router.replace({
-      pathname: '/booking-success',
-      params: { name: coachName, specialty, date: dateStr, time },
-    });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function onConfirm() {
+    if (loading) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const userId = await ensureAnonSession();
+
+      // Best-effort: look up coach_id by specialty
+      const { data: coachRow } = await supabase
+        .from('coaches')
+        .select('id')
+        .eq('specialty', specialty)
+        .limit(1)
+        .maybeSingle();
+      const coachId: string | null = coachRow?.id ?? null;
+
+      await registrarEvento('reserva_iniciada', {
+        professional_id: coachId ?? coachName,
+        monto: priceFrom,
+        user_id: userId,
+      });
+
+      const { data: booking, error: insertErr } = await supabase
+        .from('bookings')
+        .insert({
+          user_id: userId,
+          coach_id: coachId,
+          coach_name: coachName,
+          coach_specialty: specialty,
+          scheduled_date: dateStr,
+          scheduled_time: time,
+          amount: priceFrom,
+          status: 'pendiente',
+        })
+        .select('id, room_url')
+        .single();
+
+      if (insertErr) throw new Error(insertErr.message);
+
+      await registrarEvento('reserva_confirmada', {
+        professional_id: coachId ?? coachName,
+        monto: priceFrom,
+        booking_id: booking.id,
+        user_id: userId,
+      });
+
+      router.replace({
+        pathname: '/booking-success',
+        params: {
+          name: coachName,
+          specialty,
+          date: dateStr,
+          time,
+          bookingId: booking.id,
+          roomUrl: booking.room_url ?? '',
+        },
+      });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Error al confirmar la reserva';
+      setError(msg);
+      Alert.alert('No pudimos guardar tu reserva', msg + '\n\nReintentá en un momento.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -163,11 +228,23 @@ export default function BookingScreen_Confirm() {
 
       <SafeAreaView style={s.footerSafe} edges={['bottom']}>
         <View style={s.footer}>
+          {error ? (
+            <View style={s.errorBox}>
+              <MaterialIcons name="error-outline" size={15} color="#D94F4F" />
+              <Text style={s.errorText}>{error}</Text>
+            </View>
+          ) : null}
+
           <TouchableOpacity
-            style={s.btn}
+            style={[s.btn, loading && s.btnLoading]}
             onPress={onConfirm}
+            disabled={loading}
             activeOpacity={0.85}>
-            <Text style={s.btnText}>Confirmar reserva</Text>
+            {loading ? (
+              <ActivityIndicator color="#FFFFFF" size="small" />
+            ) : (
+              <Text style={s.btnText}>Confirmar reserva</Text>
+            )}
           </TouchableOpacity>
 
           <View style={s.guaranteeRow}>
@@ -387,11 +464,30 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  btnLoading: {
+    opacity: 0.7,
+  },
   btnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
     color: '#FFFFFF',
     letterSpacing: 0.2,
+  },
+  errorBox: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    backgroundColor: '#FFF0F0',
+    borderRadius: 10,
+    padding: 12,
+    marginBottom: 4,
+  },
+  errorText: {
+    flex: 1,
+    fontFamily: ViveFonts.regular,
+    fontSize: 13,
+    color: '#D94F4F',
+    lineHeight: 19,
   },
 
   guaranteeRow: {
