@@ -11,7 +11,7 @@ import {
   SpaceGrotesk_400Regular,
   SpaceGrotesk_600SemiBold,
 } from '@expo-google-fonts/space-grotesk';
-import { Stack } from 'expo-router';
+import { Stack, useSegments, useRouter } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
@@ -88,27 +88,31 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="onboarding2" options={{ headerShown: false }} />
-        <Stack.Screen name="onboarding3" options={{ headerShown: false }} />
-        <Stack.Screen name="onboarding4" options={{ headerShown: false }} />
-        <Stack.Screen name="onboarding5" options={{ headerShown: false }} />
-        <Stack.Screen name="sala" options={{ headerShown: false }} />
-        <Stack.Screen name="login" options={{ headerShown: false }} />
-        <Stack.Screen name="register" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="profesional" options={{ headerShown: false }} />
-        <Stack.Screen name="booking-calendar" options={{ headerShown: false }} />
-        <Stack.Screen name="booking-time" options={{ headerShown: false }} />
-        <Stack.Screen name="booking-confirm" options={{ headerShown: false }} />
-        <Stack.Screen name="booking-success" options={{ headerShown: false }} />
-        <Stack.Screen name="diario" options={{ headerShown: false }} />
-        <Stack.Screen name="gratitud" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <AuthProvider>
+      <AuthRedirect />
+      <NotificationSetup />
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding2" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding3" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding4" options={{ headerShown: false }} />
+          <Stack.Screen name="onboarding5" options={{ headerShown: false }} />
+          <Stack.Screen name="sala" options={{ headerShown: false }} />
+          <Stack.Screen name="login" options={{ headerShown: false }} />
+          <Stack.Screen name="register" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="profesional" options={{ headerShown: false }} />
+          <Stack.Screen name="booking-calendar" options={{ headerShown: false }} />
+          <Stack.Screen name="booking-time" options={{ headerShown: false }} />
+          <Stack.Screen name="booking-confirm" options={{ headerShown: false }} />
+          <Stack.Screen name="booking-success" options={{ headerShown: false }} />
+          <Stack.Screen name="diario" options={{ headerShown: false }} />
+          <Stack.Screen name="gratitud" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+        </Stack>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }

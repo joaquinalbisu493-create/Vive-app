@@ -42,9 +42,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
+    console.log('[AuthContext] llamando getSession...');
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('[AuthContext] getSession result:', session);
       setUser(session?.user ?? null);
       setLoading(false);
+      console.log('[AuthContext] setLoading(false) ejecutado');
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
