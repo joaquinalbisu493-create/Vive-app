@@ -24,8 +24,21 @@ export async function ensureAnonSession(): Promise<string> {
   if (session?.user?.id) return session.user.id;
 
   const { data, error } = await supabase.auth.signInAnonymously();
-  if (error) throw new Error(`Supabase anon sign-in failed: ${error.message}`);
-  if (!data.user?.id) throw new Error('No user returned from anonymous sign-in');
+  if (error) {
+    // En desarrollo, si hay rate limit, usar cuenta de diagnóstico como fallback
+    if (error.status === 429 && __DEV__) {
+      const { data: dev, error: devErr } = await supabase.auth.signInWithPassword({
+        email: 'test_vita_diag@example.com',
+        password: 'TestPass123!',
+      });
+      if (!devErr && dev.user?.id) return dev.user.id;
+    }
+    if (error.status === 429) {
+      throw new Error('Demasiados intentos. Esperá un momento y reintentá.');
+    }
+    throw new Error(`Error al iniciar sesión: ${error.message}`);
+  }
+  if (!data.user?.id) throw new Error('No se pudo crear la sesión anónima');
   return data.user.id;
 }
 
