@@ -17,6 +17,8 @@
 - Sin cambios estructurales: mensajes y datos del coach siguen hardcodeados — la integración
   completa de mensajes reales es trabajo de Andre en su rama.
 
+**Estado:** botón de video probado end-to-end con sala real (UUID `25e048d3`). Abre Jitsi correctamente.
+
 **Pendiente (coordinar con Andre):**
 - Nada navega todavía a `/sala` con un `sala_id` real desde el flujo de usuario. Andre tiene
   que conectarlo desde la lista de chats del coach o desde otro punto de entrada.
