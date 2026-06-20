@@ -5,6 +5,26 @@
 
 ---
 
+## 2026-06-20 — Joaquín (sesión 5)
+
+**Tocado:** `screens/SalaScreen.tsx`
+
+**Resumen:**
+- Botón de video en SalaScreen conectado a Supabase: acepta `sala_id` por params de navegación,
+  fetcha `room_url` de la tabla `salas`, y lo abre con `Linking.openURL()`.
+- Botón deshabilitado visualmente (color tenue, sin onPress activo) cuando no hay `sala_id`
+  o la sala no tiene `room_url` todavía.
+- Sin cambios estructurales: mensajes y datos del coach siguen hardcodeados — la integración
+  completa de mensajes reales es trabajo de Andre en su rama.
+
+**Pendiente (coordinar con Andre):**
+- Nada navega todavía a `/sala` con un `sala_id` real desde el flujo de usuario. Andre tiene
+  que conectarlo desde la lista de chats del coach o desde otro punto de entrada.
+- Cuando Andre mergee su versión más completa de SalaScreen (con `init()`, `coach_id` fallback,
+  `handleVideoPress`), verificar que `room_url` también se pasa al estado `roomUrl` en esos paths.
+
+---
+
 ## 2026-06-20 — Joaquín (sesión 4)
 
 **Tocado:** `SCHEMA.md`, `screens/BookingScreen_Confirm.tsx`

@@ -9,12 +9,14 @@ import {
   KeyboardAvoidingView,
   Platform,
   Animated,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { FirstTimeTooltip } from '@/components/FirstTimeTooltip';
+import { supabase } from '@/lib/supabase';
 
 type Message = {
   id: string;
@@ -42,9 +44,23 @@ function nowTime() {
 
 export default function SalaScreen() {
   const router = useRouter();
+  const { sala_id } = useLocalSearchParams<{ sala_id?: string }>();
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
   const [inputText, setInputText] = useState('');
+  const [roomUrl, setRoomUrl] = useState<string | null>(null);
   const scrollRef = useRef<ScrollView>(null);
+
+  useEffect(() => {
+    if (!sala_id) return;
+    supabase
+      .from('salas')
+      .select('room_url')
+      .eq('id', sala_id)
+      .single()
+      .then(({ data }) => {
+        if (data?.room_url) setRoomUrl(data.room_url);
+      });
+  }, [sala_id]);
 
   // Per-message fade+slide animation
   const messageAnims = useRef<Record<string, Animated.Value>>({});
@@ -139,8 +155,18 @@ export default function SalaScreen() {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.videoBtn} activeOpacity={0.7} hitSlop={8}>
-          <MaterialCommunityIcons name="video-outline" size={24} color={ViveColors.primary} />
+        <TouchableOpacity
+          style={[styles.videoBtn, !roomUrl && styles.videoBtnDisabled]}
+          activeOpacity={roomUrl ? 0.7 : 1}
+          hitSlop={8}
+          onPress={() => roomUrl && Linking.openURL(roomUrl)}
+          disabled={!roomUrl}
+        >
+          <MaterialCommunityIcons
+            name="video-outline"
+            size={24}
+            color={roomUrl ? ViveColors.primary : `${ViveColors.primary}44`}
+          />
         </TouchableOpacity>
       </Animated.View>
 
@@ -311,6 +337,9 @@ const styles = StyleSheet.create({
     backgroundColor: `${ViveColors.primary}15`,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  videoBtnDisabled: {
+    backgroundColor: `${ViveColors.text}0A`,
   },
   headerDivider: {
     height: 1,
