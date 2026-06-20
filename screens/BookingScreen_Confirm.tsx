@@ -13,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
-import { supabase, ensureAnonSession, registrarEvento } from '@/lib/supabase';
+import { supabase, registrarEvento } from '@/lib/supabase';
 
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTH_NAMES = [
@@ -54,7 +54,12 @@ export default function BookingScreen_Confirm() {
     setLoading(true);
     setError(null);
     try {
-      const userId = await ensureAnonSession();
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user?.id) {
+        router.replace('/login');
+        return;
+      }
+      const userId = session.user.id;
 
       // 1. Buscar coach: necesitamos coaches.id (para bookings) y profile_id (para salas)
       const { data: coachRow } = await supabase

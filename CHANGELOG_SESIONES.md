@@ -5,6 +5,35 @@
 
 ---
 
+## 2026-06-20 — Joaquín (sesión 3)
+
+**Tocado:** `scripts/add-salas-room-url.sql` (nuevo), `screens/BookingScreen_Confirm.tsx`, `CHANGELOG_SESIONES.md`
+
+**Resumen:**
+- Creado `scripts/add-salas-room-url.sql` — script idempotente para que Andre revise antes de correr. Agrega `salas.room_url` y el trigger Jitsi. NO fue ejecutado.
+- Removido `ensureAnonSession` de `BookingScreen_Confirm` (regla de producto: booking requiere sesión real). Reemplazado con `supabase.auth.getSession()` + redirect a `/login` si no hay sesión.
+
+**Revisión de commits post-merge — qué está y qué falta:**
+
+✅ Ya aplicado y correcto en main:
+- Loading/error states + Alert en BookingScreen_Confirm
+- `registrarEvento('reserva_iniciada' | 'reserva_confirmada')`
+- Lookup coach por specialty → `coaches.id` + `coaches.profile_id` (para salas)
+- Crear/buscar sala por `user_id + coach_id (profile_id)`
+- INSERT booking con `sala_id`
+- `roomUrl` (de la sala) pasado a BookingScreen_Success
+- `Linking.openURL(roomUrl)` en BookingScreen_Success
+
+✅ Aplicado en esta sesión:
+- Booking requiere sesión real (no anónima) — redirect a /login si no hay sesión
+
+⏳ Pendiente de coordinación con Andre:
+- `SalaScreen.tsx` botón de video → abrir `salas.room_url` real en vez del link hardcodeado. La lógica está clara pero Andre define cómo se comparte el link (solo usuario, ambos, notificación).
+- Revisar si `ensureAnonSession` dev-fallback con email hardcodeado debe removerse de `lib/supabase.ts` (Diario y Gratitud lo siguen usando — decisión de producto).
+- Confirmar con Andre que `scripts/add-salas-room-url.sql` refleja el estado real de la base antes de correrlo.
+
+---
+
 ## 2026-06-20 — Joaquín (sesión 2)
 
 **Tocado:** `SCHEMA.md`, `CHANGELOG_SESIONES.md` (trigger Jitsi en `salas`)
