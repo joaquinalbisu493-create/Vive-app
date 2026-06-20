@@ -21,8 +21,8 @@
 - `id` (uuid, PK)
 - `user_id` (uuid, FK → `profiles.id`)
 - `coach_id` (uuid, FK → `profiles.id`) — es `coaches.profile_id`, NO `coaches.id`
+- `room_url` (text) — generado automáticamente por trigger al insertar: `https://meet.jit.si/vita-<16hex>`
 - `created_at`
-- ⏳ `room_url` — pendiente: se agrega con `scripts/add-salas-room-url.sql` (revisar con Andre antes de correr)
 
 ### `messages`
 - `id` (uuid, PK)
@@ -61,6 +61,6 @@
 1. **`coaches.id` ≠ `profiles.id`** — son valores distintos. El dato que conecta es `coaches.profile_id`.
 2. **`salas.coach_id` y `bookings.coach_id` usan `profiles.id`**, no `coaches.id`. Siempre usar `coaches.profile_id`.
 3. **`messages.content` está encriptado** — nunca guardar texto plano en esa columna.
-4. **`room_url` no existe en ninguna tabla todavía** — está pendiente de `scripts/add-salas-room-url.sql` con Andre.
+4. **`room_url` vive en `salas`**, generado por trigger al hacer INSERT. Leerlo siempre desde la sala, no desde bookings.
 5. **Scripts SQL en `/scripts` pueden no estar corridos** — este archivo es la verdad sobre qué existe HOY.
 6. **Cualquier cambio estructural se revisa y corre con Andre** — hay datos reales de testing en salas, messages y bookings.
