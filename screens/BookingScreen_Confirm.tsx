@@ -13,7 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
-import { supabase } from '@/lib/supabase';
+import { supabase, registrarEvento } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { sendPushNotification } from '@/lib/notifications';
 
@@ -52,60 +52,98 @@ export default function BookingScreen_Confirm() {
   const priceFrom = params.priceFrom ? parseInt(params.priceFrom, 10) : 4500;
   const dateStr = params.date ?? '';
   const time = params.time ?? '';
-  const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  const rawCoachId = params.coachId ?? '';
-  console.log('[BookingConfirm] params.coachId:', params.coachId, '| rawCoachId:', rawCoachId);
-  const coachId = UUID_RE.test(rawCoachId) ? rawCoachId : '8b16e5b7-e0e3-4988-9ccc-f8ba447fcb8c';
+  // coachId que llega por params es profiles.id (= coaches.profile_id), NO coaches.id
+  const coachProfileIdParam = Array.isArray(params.coachId) ? params.coachId[0] : params.coachId;
 
   async function onConfirm() {
     if (!isLoggedIn || !user) { requestAuth(); return; }
+    if (!coachProfileIdParam) {
+      setError('No encontramos el profesional. Volvé y elegí de nuevo.');
+      return;
+    }
 
     setLoading(true);
     setError(null);
 
     try {
-      // Buscar o crear sala para este par user + coach
+      // 1. Buscar el coach por su profile_id real (no por specialty — evita reservar con el coach equivocado)
+      //    salas.coach_id    → coaches.profile_id (FK a profiles.id)
+      //    bookings.coach_id → coaches.id          (FK a coaches.id)
+      const { data: coachRow, error: coachErr } = await supabase
+        .from('coaches')
+        .select('id, profile_id')
+        .eq('profile_id', coachProfileIdParam)
+        .maybeSingle();
+
+      if (coachErr || !coachRow) {
+        throw new Error('No encontramos el profesional. Volvé y elegí de nuevo.');
+      }
+
+      const coachId = coachRow.id;              // coaches.id — para bookings.coach_id
+      const coachProfileId = coachRow.profile_id; // profiles.id — para salas.coach_id
+
+      await registrarEvento('reserva_iniciada', {
+        professional_id: coachId,
+        user_id: user.id,
+      });
+
+      // 2. Buscar sala existente o crear una nueva
       let salaId: string;
+      let roomUrl = '';
 
       const { data: existingSala } = await supabase
         .from('salas')
-        .select('id')
+        .select('id, room_url')
         .eq('user_id', user.id)
-        .eq('coach_id', coachId)
+        .eq('coach_id', coachProfileId)
         .maybeSingle();
 
       if (existingSala) {
         salaId = existingSala.id;
+        roomUrl = existingSala.room_url ?? '';
       } else {
-        const { data: newSala, error: salaError } = await supabase
+        const { data: newSala, error: salaErr } = await supabase
           .from('salas')
-          .insert({ user_id: user.id, coach_id: coachId })
-          .select('id')
+          .insert({ user_id: user.id, coach_id: coachProfileId })
+          .select('id, room_url')
           .single();
-        if (salaError || !newSala) throw new Error('No se pudo crear la sala de comunicación.');
+        if (salaErr || !newSala) throw new Error('No se pudo crear la sala de comunicación.');
         salaId = newSala.id;
+        roomUrl = newSala.room_url ?? ''; // null hasta que corra el trigger / si la columna recién se agregó
       }
 
-      // Insertar la reserva
-      const { error: bookingError } = await supabase
+      // 3. Insertar booking — columnas reales verificadas en la base (SCHEMA.md)
+      const { data: booking, error: bookingError } = await supabase
         .from('bookings')
         .insert({
           user_id: user.id,
           coach_id: coachId,
           sala_id: salaId,
-          date: dateStr,
-          time,
-          status: 'pending',
+          coach_name: coachName,
+          coach_specialty: specialty,
+          scheduled_date: dateStr,
+          scheduled_time: time,
+          amount: priceFrom,
+          status: 'pendiente',
           ...(userMessage.trim() ? { user_message: userMessage.trim() } : {}),
-        });
+        })
+        .select('id')
+        .single();
 
-      if (bookingError) throw new Error('No se pudo guardar la reserva. Intentalo de nuevo.');
+      if (bookingError || !booking) throw new Error('No se pudo guardar la reserva. Intentalo de nuevo.');
 
-      // Notificar al coach
+      await registrarEvento('reserva_confirmada', {
+        professional_id: coachId,
+        booking_id: booking.id,
+        sala_id: salaId,
+        user_id: user.id,
+      });
+
+      // Notificar al coach (push token vive en profiles, vía coachProfileId)
       const { data: coachProfile } = await supabase
         .from('profiles')
         .select('push_token, name')
-        .eq('id', coachId)
+        .eq('id', coachProfileId)
         .maybeSingle();
 
       if (coachProfile?.push_token) {
@@ -119,7 +157,14 @@ export default function BookingScreen_Confirm() {
 
       router.replace({
         pathname: '/booking-success',
-        params: { name: coachName, specialty, date: dateStr, time, coachId },
+        params: {
+          name: coachName,
+          specialty,
+          date: dateStr,
+          time,
+          bookingId: booking.id,
+          roomUrl,
+        },
       });
     } catch (e: any) {
       setError(e.message ?? 'Algo salió mal. Intentalo de nuevo.');

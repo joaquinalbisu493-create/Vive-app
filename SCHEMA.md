@@ -1,52 +1,69 @@
 # SCHEMA.md — Esquema real de base de datos (Supabase)
 
-> ⚠️ Este archivo describe lo que está REALMENTE corrido en Supabase hoy.
-> No es un diseño aspiracional ni un plan — si algo cambia en la base, este archivo se actualiza el mismo día.
-> Última actualización: 19 de junio 2026
+> ⚠️ Este archivo describe lo que está REALMENTE en Supabase hoy.
+> No es un diseño aspiracional — si algo cambia en la base, este archivo se actualiza el mismo día.
+> Última actualización: 20 de junio 2026 — confirmado por Andre con information_schema
 
 ## Tablas y relaciones
 
 ### `profiles`
 - `id` (uuid, PK) — coincide con `auth.users.id`
+- `email`, `name`, `role` (coach | user), `avatar_url`, `birth_date`, `gender`, `nationality`
+- `accepted_terms` (bool), `push_token`, `created_at`
 - Usuarios y coaches viven en la misma tabla, diferenciados por `role`
 
 ### `coaches`
-- `id` (uuid, PK)
-- `profile_id` (uuid, FK → `profiles.id`) ⚠️ — NO es lo mismo que `coaches.id`
-- `specialty` (text)
-- `bio` (text)
-- `price_per_session` (numeric)
-- `nationality` (text)
-- `verified` (boolean)
-- `created_at` (timestamptz)
+- `id` (uuid, PK) ⚠️ — **NO es lo mismo que `profiles.id`**
+- `profile_id` (uuid, FK → `profiles.id`) — el dato que conecta con el resto del sistema
+- `specialty`, `bio`, `price_per_session`, `nationality`, `verified`, `created_at`
 
 ### `salas`
 - `id` (uuid, PK)
 - `user_id` (uuid, FK → `profiles.id`)
-- `coach_id` (uuid, FK → `profiles.id`) ⚠️ — apunta a `profiles.id`, NO a `coaches.id`
-- `created_at` (timestamptz)
-- Una sala por par usuario-coach (buscar antes de crear, no duplicar)
-
-### `bookings`
-- Columnas reales: `user_id`, `coach_id`, `sala_id`, `date`, `time`, `status`, `user_message` (opcional)
-- `sala_id` (uuid, FK → `salas.id`)
-- ⚠️ NO tiene: `room_url`, `coach_name`, `coach_specialty`, `scheduled_date`, `scheduled_time`, `amount` — esas columnas existen solo en un script SQL que nunca se corrió (`scripts/supabase-bookings-setup.sql`, propuesta de Joaquín, NO aplicada)
+- `coach_id` (uuid, FK → `profiles.id`) — es `coaches.profile_id`, NO `coaches.id`
+- `room_url` (text) — generado automáticamente por trigger al insertar: `https://meet.jit.si/vita-<16hex>`
+- `created_at`
 
 ### `messages`
 - `id` (uuid, PK)
 - `sala_id` (uuid, FK → `salas.id`)
 - `sender_id` (uuid, FK → `profiles.id`)
 - `content` (text) — encriptado con XOR+base64 antes de guardar (ver `lib/encryption.ts`)
-- `created_at` (timestamptz)
+- `created_at`
 
-### `saved_resources`, `journal_entries`, `gratitude_entries`
-- (completar cuando se confirme su esquema exacto — no verificado todavía)
+### `bookings`
+- `id` (uuid, PK)
+- `user_id` (uuid, FK → `auth.users.id`)
+- `coach_id` (uuid, FK → `coaches.id`) ⚠️ — a diferencia de `salas.coach_id`, acá es el PK de `coaches`
+- `sala_id` (uuid, FK → `salas.id`)
+- `coach_name` (text)
+- `coach_specialty` (text)
+- `scheduled_date` (date)
+- `scheduled_time` (text)
+- `amount` (integer)
+- `status` (text)
+- `room_url` (text, nullable) — redundante, el room_url canónico está en `salas`
+- `created_at`
 
-## Reglas importantes para no repetir bugs
+### `analytics_events`
+- `id` (uuid, PK)
+- `user_id` (uuid, FK → `auth.users.id`, nullable)
+- `event_name` (text), `properties` (jsonb), `created_at`
 
-1. **`coaches.id` ≠ `profiles.id`** — siempre usar `profiles.id` (a veces llamado `profileId` en el código) cuando se referencia un coach desde `salas` o `bookings`.
-2. **Antes de escribir un nuevo script SQL**, confirmar con el otro si ya hay datos reales en las tablas que tocaría — no correr scripts destructivos sin avisar.
-3. **Scripts SQL en `/scripts`** pueden no estar corridos — este archivo es la verdad sobre qué existe HOY en la base real, los scripts son historial/propuestas.
+### `journal_entries`
+- `id` (uuid, PK), `user_id`, `content` (text), `mood` (text), `created_at`
 
-## Pendiente de implementar (no confundir con lo ya existente)
-- `room_url` en `salas` (no en `bookings`) — trigger de Jitsi Meet, propuesto, no aplicado aún. Ver detalle en Notion → Decisiones estratégicas.
+### `gratitude_entries`
+- `id` (uuid, PK), `user_id`, `content` (text), `created_at`
+
+### `saved_resources`
+- Existe en la base, columnas exactas pendientes de verificar
+
+## Reglas críticas
+
+1. **`coaches.id` ≠ `profiles.id`** — son valores distintos. El dato que conecta es `coaches.profile_id`.
+2. **`salas.coach_id` → `profiles.id`** (= `coaches.profile_id`). **`bookings.coach_id` → `coaches.id`**. Son FKs distintas — mismo nombre de columna, tablas distintas. No asumir que se puede usar el mismo valor para ambas.
+3. **`messages.content` está encriptado** — nunca guardar texto plano en esa columna.
+4. **`room_url` vive en `salas`**, generado por trigger al hacer INSERT. Leerlo siempre desde la sala, no desde `bookings` (la columna en `bookings` es redundante).
+5. **Scripts SQL en `/scripts` pueden no estar corridos** — este archivo es la verdad sobre qué existe HOY. Confirmado contra `information_schema` el 20/06/2026.
+6. **Cualquier cambio estructural se revisa y corre entre Andre y Joaquín** — hay datos reales de testing en `salas`, `messages` y `bookings`.
