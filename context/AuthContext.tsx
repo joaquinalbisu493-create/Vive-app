@@ -32,7 +32,7 @@ const AuthContext = createContext<AuthContextType>({
   signUpWithEmail: async () => null,
   signInWithGoogle: async () => null,
   signOut: async () => {},
-  switchRole: () => {},
+  switchRole: () => {},  // kept for backwards compat, no-op when role comes from DB
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -41,17 +41,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [role, setRole] = useState<UserRole>('user');
   const [modalVisible, setModalVisible] = useState(false);
 
+  async function fetchRole(userId: string): Promise<UserRole> {
+    const { data } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', userId)
+      .single();
+    return (data?.role as UserRole) ?? 'user';
+  }
+
   useEffect(() => {
-    console.log('[AuthContext] llamando getSession...');
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('[AuthContext] getSession result:', session);
-      setUser(session?.user ?? null);
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) setRole(await fetchRole(u.id));
       setLoading(false);
-      console.log('[AuthContext] setLoading(false) ejecutado');
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      const u = session?.user ?? null;
+      setUser(u);
+      if (u) setRole(await fetchRole(u.id));
+      else setRole('user');
     });
 
     return () => subscription.unsubscribe();

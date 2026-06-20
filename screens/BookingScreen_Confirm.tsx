@@ -130,7 +130,10 @@ export default function BookingScreen_Confirm() {
         .select('id')
         .single();
 
-      if (bookingError || !booking) throw new Error('No se pudo guardar la reserva. Intentalo de nuevo.');
+      if (bookingError || !booking) {
+        console.log('[BookingConfirm] bookingError:', bookingError);
+        throw new Error('No se pudo guardar la reserva. Intentalo de nuevo.');
+      }
 
       await registrarEvento('reserva_confirmada', {
         professional_id: coachId,
@@ -167,6 +170,7 @@ export default function BookingScreen_Confirm() {
         },
       });
     } catch (e: any) {
+      console.log('[BookingConfirm] Error real:', e);
       setError(e.message ?? 'Algo salió mal. Intentalo de nuevo.');
     } finally {
       setLoading(false);

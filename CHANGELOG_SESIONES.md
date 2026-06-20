@@ -5,6 +5,91 @@
 
 ---
 
+## 2026-06-20 — Joaquín (sesión 2)
+
+**Tocado:**
+- `context/AuthContext.tsx` — `role` ahora viene de `profiles.role` en Supabase
+- `app/_layout.tsx` — `AuthRedirect` bifurca a `/(coach)` o `/(tabs)` según el rol real
+- `app/index.tsx` — redirect inicial respeta el rol
+- `screens/CoachLoginScreen.tsx` — agrega `validateAndNavigate()` con chequeo de rol cruzado
+- `screens/RegisterScreen.tsx` — agrega chequeo de coach antes de `signUpWithEmail`
+
+**Resumen:**
+- Implementado routing basado en `profiles.role`: al hacer login, `AuthContext` hace `SELECT role FROM profiles` y `AuthRedirect` redirige a `/(coach)` o `/(tabs)` según corresponda. Antes todo el mundo iba a `/(tabs)`.
+- Validaciones cruzadas para impedir que un mismo mail tenga rol de usuario y coach al mismo tiempo: `CoachLoginScreen` bloquea usuarios normales con mensaje claro; `RegisterScreen` bloquea emails que ya tienen fila en `coaches`. Si un coach con `verified=true` llega a `coach-login`, se lo redirige a `/(coach)` con un Alert.
+
+**Pendiente para la próxima sesión:**
+- Correr en Supabase si no se corrió: `ALTER TABLE coaches ADD COLUMN application_video_url text;`
+- Probar el flujo completo en Expo Go: usuario normal intenta entrar a coach-login (debe ser bloqueado), coach verificado en coach-login (debe redirigir a /(coach)), registro normal con mail de coach (debe ser bloqueado)
+- Definir qué ve un coach en `/(coach)` una vez aprobado — el grupo existe pero puede estar vacío
+
+---
+
+## 2026-06-20 — Joaquín
+
+**Tocado:**
+- `screens/OnboardingBifurcacion.tsx` (nuevo)
+- `screens/CoachLoginScreen.tsx` (nuevo)
+- `screens/CoachApplicationScreen.tsx` (nuevo)
+- `app/onboarding-bifurcacion.tsx` (nuevo)
+- `app/coach-login.tsx` (nuevo)
+- `app/coach-application.tsx` (nuevo)
+- `screens/OnboardingScreen1.tsx` — cambia navegación post-splash
+- `app/_layout.tsx` — registra nuevas rutas y ONBOARDING_SCREENS
+- `SCHEMA.md` — documenta columna nueva `coaches.application_video_url`
+
+**Resumen:**
+- Nuevo flujo de aplicación de coaches: pantalla de bifurcación "¿Cómo llegás a VIVE?" inserta entre el splash (index) y el onboarding de usuario (onboarding2). La opción "Quiero acompañar" lleva a coach-login → coach-application.
+- `CoachLoginScreen` intenta signIn primero; si falla prueba signUp con nombre derivado del email. Navega a coach-application al autenticarse.
+- `CoachApplicationScreen` inserta en `coaches` con `verified: false` y muestra confirmación inline. Maneja el caso de inserción duplicada (code 23505).
+- `application_video_url` no existía en `coaches` — hay que correr el ALTER TABLE antes de probar el formulario (ver SCHEMA.md).
+
+**Pendiente para la próxima sesión:**
+- Correr en Supabase: `ALTER TABLE coaches ADD COLUMN application_video_url text;`
+- Probar el flujo completo en Expo Go (bifurcación → coach-login → coach-application → confirmación)
+- Definir qué ve un coach en `/(tabs)` una vez aprobado (`verified: true`) — hoy cae al mismo home de usuario
+
+---
+
+## 2026-06-20 — Andre
+
+**Tocado:** `bookings` (esquema), `SCHEMA.md`
+
+**Resumen:**
+- Se agregó la columna `user_message` (text, nullable) a `bookings` vía
+  `ALTER TABLE` — necesaria para guardar el mensaje opcional que el usuario le
+  escribe al coach antes de reservar (la UI ya existía en
+  BookingScreen_Confirm.tsx, pero la columna no estaba en el esquema
+  actualizado, causando el error "Could not find the 'user_message' column").
+- Cambio no destructivo (agrega columna nullable, no afecta filas existentes),
+  corrido directamente sin bloquear en avisar a Joaquín dado el bajo riesgo.
+
+**Pendiente para la próxima sesión:**
+- Confirmar que el flujo completo de reserva funciona de punta a punta con
+  esta columna agregada.
+
+---
+
+## 2026-06-20 — Andre
+
+**Tocado:** `SCHEMA.md`, `screens/BookingScreen_Confirm.tsx`
+
+**Resumen:**
+- Resuelto merge con cambios de Joaquín (commit relacionado a `beae3d88`). La base de datos real cambió desde la última verificación — confirmado con `information_schema` que `bookings` ya tiene `coach_name`, `coach_specialty`, `scheduled_date`, `scheduled_time`, `amount`, `room_url` (Joaquín los agregó). `SCHEMA.md` actualizado con el estado real y confirmado.
+- Confirmado con SQL: `bookings.coach_id` → `coaches.id`, mientras que `salas.coach_id` → `profiles.id` (= `coaches.profile_id`). Son dos FKs distintas con el mismo nombre de columna — quedó documentado en SCHEMA.md como regla crítica para no repetir el bug.
+- `salas.room_url` ya existe en la base — el trigger de Jitsi Meet que charlamos con Joaquín ya está corrido y activo.
+- En `BookingScreen_Confirm.tsx`: se corrigió que el código buscaba el coach por `specialty` en vez de por su ID real — esto podía reservar con el coach equivocado si dos coaches compartían especialidad. Ahora busca por `coachId`/`profileId` que llega desde la navegación, resolviendo `coaches.id` y `coaches.profile_id` en una sola query.
+- Se mantuvo en la versión final: notificación push al coach, mensaje opcional del usuario, y se sumó el `roomUrl` de la sala para pasarlo a `booking-success`.
+
+**Pendiente para la próxima sesión:**
+- Resolver `CLAUDE.md` (1 conflicto) y confirmar que el protocolo de cierre de sesión quedó bien definido para ambos.
+- Probar el flujo completo de reserva de punta a punta con esta versión corregida — todavía no se confirmó en el dispositivo que el bug de coachId esté resuelto.
+- Sacar el selector "Test:" (locked/soon/live) de `SalaScreen.tsx` antes de producción.
+- Confirmar si `AuthRedirect` (`segments[0] === '(coach)'`) funciona como se espera en expo-router — sospecha sin confirmar de sesión anterior.
+- Conectar el botón de video de `SalaScreen.tsx` al `room_url` real (ya tiene el dato disponible, falta el `Linking.openURL` y sacar el `MEET_LINK` hardcodeado).
+
+---
+
 ## 2026-06-20 — Joaquín (sesión 4)
 
 **Tocado:** `SCHEMA.md`, `screens/BookingScreen_Confirm.tsx`

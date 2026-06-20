@@ -16,6 +16,7 @@
 - `id` (uuid, PK) ⚠️ — **NO es lo mismo que `profiles.id`**
 - `profile_id` (uuid, FK → `profiles.id`) — el dato que conecta con el resto del sistema
 - `specialty`, `bio`, `price_per_session`, `nationality`, `verified`, `created_at`
+- `application_video_url` (text, nullable) — link al video de presentación; columna agregada para el flujo de aplicación de coaches (correr: `ALTER TABLE coaches ADD COLUMN application_video_url text;`)
 
 ### `salas`
 - `id` (uuid, PK)
@@ -43,6 +44,7 @@
 - `amount` (integer)
 - `status` (text)
 - `room_url` (text, nullable) — redundante, el room_url canónico está en `salas`
+- `user_message` (text, nullable) — mensaje opcional que el usuario le escribe al coach antes de reservar
 - `created_at`
 
 ### `analytics_events`

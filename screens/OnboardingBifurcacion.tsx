@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { ScaleCard } from '@/components/ScaleCard';
 
-type OptionId = 'explore' | 'search' | 'guide';
+type OptionId = 'crecer' | 'acompañar';
 
 const OPTIONS: {
   id: OptionId;
@@ -17,26 +17,18 @@ const OPTIONS: {
   accentLight: string;
 }[] = [
   {
-    id: 'explore',
-    title: 'Quiero explorar la app',
-    desc: 'Ver todo lo que ofrece VIVE',
-    icon: 'map-outline',
-    accent: '#E8743B',
-    accentLight: 'rgba(232, 116, 59, 0.10)',
+    id: 'crecer',
+    title: 'Quiero crecer',
+    desc: 'Busco apoyo para mi bienestar personal',
+    icon: 'leaf-circle-outline',
+    accent: '#6BBF8A',
+    accentLight: 'rgba(107, 191, 138, 0.10)',
   },
   {
-    id: 'search',
-    title: 'Sé qué necesito',
-    desc: 'Busco el profesional indicado',
-    icon: 'compass-outline',
-    accent: '#5B8DB8',
-    accentLight: 'rgba(91, 141, 184, 0.10)',
-  },
-  {
-    id: 'guide',
-    title: 'No sé por dónde empezar',
-    desc: 'Necesito que me orienten',
-    icon: 'shimmer',
+    id: 'acompañar',
+    title: 'Quiero acompañar',
+    desc: 'Soy profesional y quiero ofrecer sesiones',
+    icon: 'account-heart-outline',
     accent: '#9B7FD4',
     accentLight: 'rgba(155, 127, 212, 0.10)',
   },
@@ -47,24 +39,24 @@ const fadeUp = (anim: Animated.Value) => ({
   transform: [{ translateY: anim.interpolate({ inputRange: [0, 1], outputRange: [24, 0] }) }],
 });
 
-export default function OnboardingScreen2() {
+export default function OnboardingBifurcacion() {
   const router = useRouter();
   const [selected, setSelected] = useState<OptionId | null>(null);
 
   const titleAnim = useRef(new Animated.Value(0)).current;
+  const subtitleAnim = useRef(new Animated.Value(0)).current;
   const card0Anim = useRef(new Animated.Value(0)).current;
   const card1Anim = useRef(new Animated.Value(0)).current;
-  const card2Anim = useRef(new Animated.Value(0)).current;
   const buttonAnim = useRef(new Animated.Value(0)).current;
 
-  const cardAnims = [card0Anim, card1Anim, card2Anim];
+  const cardAnims = [card0Anim, card1Anim];
 
   useEffect(() => {
     Animated.stagger(110, [
       Animated.timing(titleAnim, { toValue: 1, duration: 420, useNativeDriver: true }),
+      Animated.timing(subtitleAnim, { toValue: 1, duration: 380, useNativeDriver: true }),
       Animated.timing(card0Anim, { toValue: 1, duration: 400, useNativeDriver: true }),
       Animated.timing(card1Anim, { toValue: 1, duration: 400, useNativeDriver: true }),
-      Animated.timing(card2Anim, { toValue: 1, duration: 400, useNativeDriver: true }),
     ]).start();
   }, []);
 
@@ -78,23 +70,25 @@ export default function OnboardingScreen2() {
 
   function handleContinue() {
     if (!selected) return;
-    if (selected === 'explore') { router.replace('/register'); return; }
-    if (selected === 'search') { router.replace('/register'); return; }
-    if (selected === 'guide') { router.push('/onboarding3'); return; }
+    if (selected === 'crecer') { router.push('/onboarding2'); return; }
+    if (selected === 'acompañar') { router.push('/coach-login'); return; }
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => { console.log('[vita back] onboarding2 → back'); router.back(); }} style={styles.backBtn} hitSlop={8}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
           <MaterialCommunityIcons name="arrow-left" size={20} color={ViveColors.text} />
           <Text style={styles.backText}>Atrás</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.content}>
-        <Animated.View style={fadeUp(titleAnim)}>
-          <Text style={styles.title}>¿Cómo te gustaría empezar?</Text>
+        <Animated.View style={[styles.titleArea, fadeUp(titleAnim)]}>
+          <Text style={styles.title}>¿Cómo llegás a VIVE?</Text>
+          <Animated.Text style={[styles.subtitle, fadeUp(subtitleAnim)]}>
+            Esto nos ayuda a mostrarte lo que necesitás
+          </Animated.Text>
         </Animated.View>
 
         <View style={styles.cards}>
@@ -174,12 +168,23 @@ const styles = StyleSheet.create({
     paddingBottom: 12,
     gap: 32,
   },
+  titleArea: {
+    gap: 8,
+  },
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 34,
     color: ViveColors.text,
     letterSpacing: -0.5,
     lineHeight: 42,
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 15,
+    color: ViveColors.text,
+    opacity: 0.55,
+    lineHeight: 22,
     textAlign: 'center',
   },
   cards: {

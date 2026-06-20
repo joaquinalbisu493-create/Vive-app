@@ -21,3 +21,15 @@ supabase.from('profiles').select('count').limit(1).then(({ error }) => {
     console.log('[Supabase] Conexión exitosa ✓')
   }
 })
+
+export async function registrarEvento(
+  eventName: string,
+  properties: Record<string, unknown> = {},
+): Promise<void> {
+  const { data: { session } } = await supabase.auth.getSession();
+  await supabase.from('analytics_events').insert({
+    user_id: session?.user?.id ?? null,
+    event_name: eventName,
+    properties,
+  });
+}

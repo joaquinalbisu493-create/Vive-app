@@ -20,6 +20,7 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/lib/supabase';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
@@ -91,6 +92,19 @@ export default function RegisterScreen() {
     if (Object.values(newErrors).some(Boolean)) return;
 
     setLoading(true);
+
+    const { data: existingProfile } = await supabase
+      .from('profiles').select('id').eq('email', email.trim().toLowerCase()).maybeSingle();
+    if (existingProfile) {
+      const { data: coachRow } = await supabase
+        .from('coaches').select('id').eq('profile_id', existingProfile.id).maybeSingle();
+      if (coachRow) {
+        setLoading(false);
+        setServerError('Esta cuenta ya está registrada como coach. No podés crear una cuenta de usuario con el mismo mail.');
+        return;
+      }
+    }
+
     const error = await signUpWithEmail(email.trim(), password, name.trim(), acceptedTerms);
     setLoading(false);
 
@@ -125,8 +139,8 @@ export default function RegisterScreen() {
           showsVerticalScrollIndicator={false}
         >
           {/* Logo */}
-          <Animated.View style={[styles.logoRow, fadeUp(logoAnim)]}>
-            <Text style={styles.logo}>vita</Text>
+          <Animated.View style={[s.logoWrap, fadeUp(logoAnim)]}>
+            <Text style={s.logo}>vita</Text>
           </Animated.View>
 
           {/* ── Heading ──────────────────────────────────────────── */}

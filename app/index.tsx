@@ -7,15 +7,15 @@ import { ViveColors, ViveFonts } from '@/constants/theme';
 import OnboardingScreen1 from '@/screens/OnboardingScreen1';
 
 export default function Index() {
-  const { user, loading } = useAuth();
+  const { user, loading, role } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (loading) return;
     if (user) {
-      router.replace('/(tabs)');
+      router.replace(role === 'coach' ? '/(coach)' : '/(tabs)' as any);
     }
-  }, [user, loading]);
+  }, [user, loading, role]);
 
   if (loading) {
     return (
