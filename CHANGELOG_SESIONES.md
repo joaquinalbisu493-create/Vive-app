@@ -87,6 +87,40 @@
 - Sacar el selector "Test:" (locked/soon/live) de `SalaScreen.tsx` antes de producción.
 - Confirmar si `AuthRedirect` (`segments[0] === '(coach)'`) funciona como se espera en expo-router — sospecha sin confirmar de sesión anterior.
 - Conectar el botón de video de `SalaScreen.tsx` al `room_url` real (ya tiene el dato disponible, falta el `Linking.openURL` y sacar el `MEET_LINK` hardcodeado).
+## 2026-06-20 — Joaquín (sesión 6)
+
+**Tocado:** `screens/SalaScreen.tsx`, `CLAUDE.md`, `CHANGELOG_SESIONES.md`
+
+**Resumen:**
+- Tarea 4 completada y verificada: botón de video en SalaScreen ahora fetcha `room_url` real de `salas` por `sala_id` param y lo abre con `Linking.openURL()`. Probado end-to-end con sala real.
+- Botón deshabilitado visualmente cuando no hay `room_url` (sala sin trigger corrido o sin `sala_id` en params).
+- Agregado protocolo de cierre de sesión automático a `CLAUDE.md` — Claude actualiza el CHANGELOG sin que haya que pedirlo.
+
+**Pendiente para la próxima sesión:**
+- Andre tiene que conectar la navegación a `/sala?sala_id=<uuid>` desde algún punto del flujo real (lista de chats del coach, post-booking, etc.).
+- Al mergear la versión completa de Andre de SalaScreen (con `init()` y `coach_id` fallback), verificar que `room_url` también se setea en esos paths.
+
+---
+
+## 2026-06-20 — Joaquín (sesión 5)
+
+**Tocado:** `screens/SalaScreen.tsx`
+
+**Resumen:**
+- Botón de video en SalaScreen conectado a Supabase: acepta `sala_id` por params de navegación,
+  fetcha `room_url` de la tabla `salas`, y lo abre con `Linking.openURL()`.
+- Botón deshabilitado visualmente (color tenue, sin onPress activo) cuando no hay `sala_id`
+  o la sala no tiene `room_url` todavía.
+- Sin cambios estructurales: mensajes y datos del coach siguen hardcodeados — la integración
+  completa de mensajes reales es trabajo de Andre en su rama.
+
+**Estado:** botón de video probado end-to-end con sala real (UUID `25e048d3`). Abre Jitsi correctamente.
+
+**Pendiente (coordinar con Andre):**
+- Nada navega todavía a `/sala` con un `sala_id` real desde el flujo de usuario. Andre tiene
+  que conectarlo desde la lista de chats del coach o desde otro punto de entrada.
+- Cuando Andre mergee su versión más completa de SalaScreen (con `init()`, `coach_id` fallback,
+  `handleVideoPress`), verificar que `room_url` también se pasa al estado `roomUrl` en esos paths.
 
 ---
 

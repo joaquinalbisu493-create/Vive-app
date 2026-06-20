@@ -12,6 +12,7 @@ Antes de terminar cualquier sesión de trabajo donde se hicieron cambios de cód
 schema de base de datos, o decisiones de arquitectura — actualizá CHANGELOG_SESIONES.md
 SIN que el usuario tenga que pedirlo explícitamente. Hacelo cuando:
 
+Actualizá CHANGELOG_SESIONES.md SIN que el usuario lo pida explícitamente cuando:
 - Se resuelve un bug importante o un merge con conflictos
 - Se cambia algo en la base de datos (tablas, columnas, triggers)
 - El usuario indica que va a cerrar la sesión ("listo por hoy", "corto aquí", etc.)

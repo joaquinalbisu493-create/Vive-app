@@ -11,6 +11,7 @@ import {
   Animated,
   Alert,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -29,9 +30,6 @@ type Message = {
   time: string;
 };
 
-// 'locked' = >5 min before | 'soon' = ≤5 min before | 'live' = session time
-type SessionState = 'locked' | 'soon' | 'live';
-
 const COACH = {
   name: 'María González',
   specialty: 'Psicóloga',
@@ -43,7 +41,6 @@ const COACH = {
 };
 
 const SESSION_LABEL = 'Lunes 16 de junio · 11:00 hs';
-const MEET_LINK = 'https://meet.google.com/xxx-xxxx-xxx';
 
 function nowTime() {
   return new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
@@ -70,9 +67,9 @@ export default function SalaScreen() {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
-  const [mockState, setMockState] = useState<SessionState>('locked');
   const [salaId, setSalaId] = useState<string | null>(null);
   const [recipientId, setRecipientId] = useState<string | null>(null);
+  const [roomUrl, setRoomUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -105,24 +102,26 @@ export default function SalaScreen() {
       let id: string | null = null;
       let salaUserId: string | null = null;
       let salaCoachId: string | null = null;
+      let salaRoomUrl: string | null = null;
 
       if (salaIdParam) {
         // Fast path: sala already known — just load its user_id/coach_id for recipient resolution
         const { data: sala } = await supabase
           .from('salas')
-          .select('id, user_id, coach_id')
+          .select('id, user_id, coach_id, room_url')
           .eq('id', salaIdParam)
           .single();
         if (sala) {
           id = sala.id as string;
           salaUserId = sala.user_id as string;
           salaCoachId = sala.coach_id as string;
+          salaRoomUrl = sala.room_url as string | null;
         }
       } else {
         // Fallback: first contact from coach profile page — current user is always the patient
         const { data: existing } = await supabase
           .from('salas')
-          .select('id, user_id, coach_id')
+          .select('id, user_id, coach_id, room_url')
           .eq('user_id', user!.id)
           .eq('coach_id', coach_id!)
           .maybeSingle();
@@ -131,17 +130,19 @@ export default function SalaScreen() {
           id = existing.id as string;
           salaUserId = existing.user_id as string;
           salaCoachId = existing.coach_id as string;
+          salaRoomUrl = existing.room_url as string | null;
         } else {
           const { data: created, error } = await supabase
             .from('salas')
             .insert({ user_id: user!.id, coach_id: coach_id! })
-            .select('id, user_id, coach_id')
+            .select('id, user_id, coach_id, room_url')
             .single();
           if (error) console.error('[Sala] Error creando sala:', error.message);
           if (created) {
             id = (created as any).id;
             salaUserId = (created as any).user_id;
             salaCoachId = (created as any).coach_id;
+            salaRoomUrl = (created as any).room_url;
           }
         }
       }
@@ -152,6 +153,7 @@ export default function SalaScreen() {
       }
 
       setSalaId(id);
+      setRoomUrl(salaRoomUrl);
       // Recipient is the other person in the sala, regardless of who is calling
       setRecipientId(user!.id === salaUserId ? salaCoachId : salaUserId);
 
@@ -211,15 +213,7 @@ export default function SalaScreen() {
   }, [salaId, user?.id]);
 
   function handleVideoPress() {
-    if (mockState === 'locked') {
-      Alert.alert(
-        'Videollamada no disponible',
-        'La videollamada se habilita 5 minutos antes de tu sesión.',
-        [{ text: 'Entendido' }]
-      );
-    } else {
-      console.log('Abrir Google Meet:', MEET_LINK);
-    }
+    if (roomUrl) Linking.openURL(roomUrl);
   }
 
   async function sendMessage() {
@@ -264,7 +258,6 @@ export default function SalaScreen() {
   }
 
   const canSend = inputText.trim().length > 0 && !!salaId && !!user;
-  const videoEnabled = mockState !== 'locked';
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -321,15 +314,16 @@ export default function SalaScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.videoBtn, videoEnabled && styles.videoBtnEnabled]}
-          activeOpacity={videoEnabled ? 0.7 : 1}
+          style={[styles.videoBtn, !roomUrl && styles.videoBtnDisabled]}
+          activeOpacity={roomUrl ? 0.7 : 1}
           onPress={handleVideoPress}
           hitSlop={8}
+          disabled={!roomUrl}
         >
           <MaterialCommunityIcons
             name="video-outline"
             size={24}
-            color={videoEnabled ? ViveColors.primary : `${ViveColors.text}44`}
+            color={roomUrl ? ViveColors.primary : `${ViveColors.text}44`}
           />
         </TouchableOpacity>
       </Animated.View>
@@ -337,41 +331,11 @@ export default function SalaScreen() {
       <View style={styles.headerDivider} />
 
       {/* Session Banner */}
-      <View style={[styles.banner, mockState !== 'locked' ? styles.bannerActive : styles.bannerDefault]}>
-        {mockState === 'locked' ? (
-          <Text style={styles.bannerText}>
-            Tu próxima sesión:{' '}
-            <Text style={styles.bannerBold}>{SESSION_LABEL}</Text>
-          </Text>
-        ) : (
-          <View style={styles.bannerRow}>
-            <Text style={styles.bannerTextActive}>
-              {mockState === 'soon'
-                ? '¡Tu sesión empieza en 5 minutos! ¿Entramos?'
-                : '¡Tu sesión está en curso ahora!'}
-            </Text>
-            <TouchableOpacity style={styles.joinBtn} onPress={handleVideoPress} activeOpacity={0.8}>
-              <Text style={styles.joinBtnText}>Unirse</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
-
-      {/* Mock state selector */}
-      <View style={styles.mockSelector}>
-        <Text style={styles.mockLabel}>Test:</Text>
-        {(['locked', 'soon', 'live'] as SessionState[]).map((s) => (
-          <TouchableOpacity
-            key={s}
-            style={[styles.mockChip, mockState === s && styles.mockChipActive]}
-            onPress={() => setMockState(s)}
-            activeOpacity={0.7}
-          >
-            <Text style={[styles.mockChipText, mockState === s && styles.mockChipTextActive]}>
-              {s === 'locked' ? '> 5 min' : s === 'soon' ? '5 min' : 'Ahora'}
-            </Text>
-          </TouchableOpacity>
-        ))}
+      <View style={styles.bannerDefault}>
+        <Text style={styles.bannerText}>
+          Tu próxima sesión:{' '}
+          <Text style={styles.bannerBold}>{SESSION_LABEL}</Text>
+        </Text>
       </View>
 
       <KeyboardAvoidingView
@@ -469,8 +433,6 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-
-  // ── Header ──────────────────────────────────────────────
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -546,24 +508,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  videoBtnEnabled: {
-    backgroundColor: `${ViveColors.primary}18`,
+  videoBtnDisabled: {
+    backgroundColor: `${ViveColors.text}0A`,
   },
   headerDivider: {
     height: 1,
     backgroundColor: `${ViveColors.text}0D`,
   },
-
-  // ── Session Banner ───────────────────────────────────────
-  banner: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-  },
   bannerDefault: {
     backgroundColor: `${ViveColors.accent}28`,
-  },
-  bannerActive: {
-    backgroundColor: `${ViveColors.primary}15`,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
   },
   bannerText: {
     fontFamily: ViveFonts.medium,
@@ -574,76 +529,6 @@ const styles = StyleSheet.create({
   bannerBold: {
     fontFamily: ViveFonts.semibold,
   },
-  bannerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  bannerTextActive: {
-    fontFamily: ViveFonts.medium,
-    fontSize: 13,
-    color: ViveColors.text,
-    flex: 1,
-    lineHeight: 18,
-  },
-  joinBtn: {
-    backgroundColor: ViveColors.primary,
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 7,
-    flexShrink: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: ViveColors.primary,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-      },
-      android: { elevation: 3 },
-    }),
-  },
-  joinBtnText: {
-    fontFamily: ViveFonts.semibold,
-    fontSize: 13,
-    color: '#FFFFFF',
-  },
-
-  // ── Mock State Selector ──────────────────────────────────
-  mockSelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    backgroundColor: ViveColors.background,
-    borderBottomWidth: 1,
-    borderBottomColor: `${ViveColors.text}0D`,
-  },
-  mockLabel: {
-    fontFamily: ViveFonts.regular,
-    fontSize: 10,
-    color: `${ViveColors.text}55`,
-    marginRight: 2,
-  },
-  mockChip: {
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    borderRadius: 10,
-    backgroundColor: `${ViveColors.text}10`,
-  },
-  mockChipActive: {
-    backgroundColor: ViveColors.text,
-  },
-  mockChipText: {
-    fontFamily: ViveFonts.medium,
-    fontSize: 10,
-    color: ViveColors.text,
-  },
-  mockChipTextActive: {
-    color: '#FFFFFF',
-  },
-
-  // ── Messages ─────────────────────────────────────────────
   scroll: {
     flex: 1,
   },
@@ -744,8 +629,6 @@ const styles = StyleSheet.create({
   bubbleTimeCoach: {
     color: `${ViveColors.text}55`,
   },
-
-  // ── Input ────────────────────────────────────────────────
   inputArea: {
     flexDirection: 'row',
     alignItems: 'flex-end',
