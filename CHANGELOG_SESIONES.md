@@ -5,6 +5,22 @@
 
 ---
 
+## 2026-06-20 — Joaquín (sesión 2)
+
+**Tocado:** `SCHEMA.md`, `CHANGELOG_SESIONES.md` (trigger Jitsi en `salas`)
+
+**Resumen:**
+- Adaptado el trigger de Jitsi Meet para correr sobre `salas` en vez de `bookings`, siguiendo la arquitectura de Andre.
+- `ALTER TABLE salas ADD COLUMN room_url text` + trigger `fn_salas_room_url` corrido y verificado.
+- Cada nueva sala generada automáticamente recibe `https://meet.jit.si/vita-<16hex>`.
+- Decisión arquitectural confirmada: `salas` es la fuente del `room_url`, no `bookings`.
+
+**Pendiente:**
+- Reconectar el flujo de reserva en la app (BookingScreen_Confirm) a la arquitectura de Andre: crear/buscar sala primero, luego booking con `sala_id`.
+- El `bookings` actual en prod todavía tiene nuestro schema viejo (room_url, coach_name, etc.) — decidir si migrar o limpiar.
+
+---
+
 ## 2026-06-20 — Joaquín
 
 **Tocado:** `lib/supabase.ts`, `screens/BookingScreen_Confirm.tsx`, `screens/BookingScreen_Success.tsx`, `scripts/supabase-bookings-setup.sql`, `scripts/supabase-bookings-setup.sql` (trigger Jitsi), `SCHEMA.md`, `CHANGELOG_SESIONES.md`, `CLAUDE.md`

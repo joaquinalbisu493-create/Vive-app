@@ -2,7 +2,7 @@
 
 > ⚠️ Este archivo describe lo que está REALMENTE en Supabase hoy.
 > No es un diseño aspiracional — si algo cambia en la base, este archivo se actualiza el mismo día.
-> Última actualización: 20 de junio 2026
+> Última actualización: 20 de junio 2026 (sesión 2)
 
 ## Tablas y relaciones
 
@@ -21,6 +21,7 @@
 - `id` (uuid, PK)
 - `user_id` (uuid, FK → `profiles.id`) ⚠️ apunta a `profiles.id`, NO a `coaches.id`
 - `coach_id` (uuid, FK → `profiles.id`) ⚠️ idem — es el `profile_id` del coach, no su `coaches.id`
+- `room_url` (text) — generado automáticamente por trigger al insertar: `https://meet.jit.si/vita-<16hex>`
 - `created_at`
 
 ### `messages`
