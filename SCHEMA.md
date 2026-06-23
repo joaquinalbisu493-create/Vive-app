@@ -2,7 +2,7 @@
 
 > ⚠️ Este archivo describe lo que está REALMENTE en Supabase hoy.
 > No es un diseño aspiracional — si algo cambia en la base, este archivo se actualiza el mismo día.
-> Última actualización: 23 de junio 2026 — CHECK constraint de messages.sender_type extendido vía ALTER TABLE; cancelled_by y cancelled_late ya disponibles en bookings (migrations corridas); RLS policy users_cancel_own_booking agregada en bookings.
+> Última actualización: 23 de junio 2026 — tabla `reviews` creada; función `complete_confirmed_sessions()` + cron job pg_cron cada 5 minutos; CHECK constraint de `notifications.type` extendido con `'invitacion_review'`; CHECK constraint de `messages.sender_type` extendido; `cancelled_by` y `cancelled_late` en bookings; RLS `users_cancel_own_booking`.
 
 ## Tablas y relaciones
 
@@ -72,10 +72,35 @@
 - RLS: SELECT abierto (anyone_can_view_pattern) · ALL solo para el coach dueño (coaches_manage_own_pattern, WITH CHECK `coach_id IN (SELECT id FROM coaches WHERE profile_id = auth.uid())`)
 - Generación: `lib/availabilityGenerator.ts → generateWeeklySlots()` pobla `coach_availability` para los próximos 56 días con upsert ignorando duplicados
 
+### `reviews`
+- `id` (uuid, PK)
+- `booking_id` (uuid, FK → `bookings.id`) — booking que originó la review; queda fijo en la creación aunque la review se edite en sesiones futuras (auditoría)
+- `reviewer_id` (uuid, FK → `profiles.id`) — quien escribe la review
+- `reviewed_id` (uuid, FK → `profiles.id`) — quien recibe la review
+- `rating` (int, NOT NULL) — CHECK BETWEEN 1 AND 5
+- `comment` (text, nullable) — comentario público por default
+- `is_private` (boolean, NOT NULL DEFAULT false) — si true, solo visible para autor y destinatario
+- `created_at` (timestamptz, NOT NULL DEFAULT now())
+- `updated_at` (timestamptz, NOT NULL DEFAULT now()) — actualizado automáticamente por trigger
+- UNIQUE(`reviewer_id`, `reviewed_id`) — una sola review por par, editable pero NO borrable
+- Trigger `reviews_before_update` (BEFORE UPDATE): rechaza cambios en `reviewer_id`, `reviewed_id` y `booking_id` (inmutables); actualiza `updated_at`. Se usó trigger y no RLS porque `WITH CHECK` no tiene acceso a `OLD`.
+- RLS: SELECT público para `is_private=false`; privadas solo visibles para autor o destinatario. INSERT solo si `reviewer_id = auth.uid()`. UPDATE solo si `reviewer_id = auth.uid()`. Sin política de DELETE → borrado bloqueado por RLS.
+
+**Diseño:** bidireccional (usuario reviewea coach Y coach reviewea usuario, misma tabla). `reviewed_id` apunta siempre a `profiles.id` — para coaches: es `coaches.profile_id`, NO `coaches.id`. Una review por par: el UNIQUE sobre `(reviewer_id, reviewed_id)` permite editar pero no crear una segunda. `updated_at` deja rastro de ediciones — un coach no puede pedirle a un usuario que *borre* una review negativa (imposible por RLS), solo que la edite, lo cual queda registrado.
+
 ### `analytics_events`
 - `id` (uuid, PK)
 - `user_id` (uuid, FK → `auth.users.id`, nullable)
 - `event_name` (text), `properties` (jsonb), `created_at`
+
+### `notifications`
+- `id` (uuid, PK)
+- `recipient_id` (uuid, FK → `profiles.id`)
+- `type` (text) — CHECK constraint activo. Valores válidos: `'reserva_nueva'` | `'reserva_confirmada'` | `'reserva_rechazada'` | `'reserva_cancelada'` | `'recordatorio_sesion'` | `'invitacion_review'`. `'invitacion_review'` se inserta automáticamente por `complete_confirmed_sessions()` cuando un booking pasa a `'completada'`.
+- `booking_id` (uuid, nullable)
+- `title` (text), `body` (text)
+- `read` (boolean, DEFAULT false)
+- `created_at` (timestamptz)
 
 ### `journal_entries`
 - `id` (uuid, PK), `user_id`, `content` (text), `mood` (text), `created_at`
@@ -97,3 +122,4 @@
 7. **RLS en `coaches`**: existe la política `coaches_insert_own` (FOR INSERT, WITH CHECK `profile_id = auth.uid()`) — permite que un usuario autenticado cree su propia fila de coach al postularse. Sin políticas de INSERT, la tabla bloqueaba todo insert por RLS activado sin excepciones.
 8. **Cancelación automática de horarios conflictivos**: cuando un coach acepta una reserva, todas las demás reservas 'pendiente' para el mismo `coach_id` + `scheduled_date` + `scheduled_time` se cancelan automáticamente (`status='cancelada'`), con notificación al usuario afectado. Esta lógica vive en `CoachReservasScreen.tsx`, función `accept()`.
 9. **Sistema de disponibilidad real**: `coach_availability` almacena slots puntuales por coach+fecha. Un día aparece disponible en el calendario si tiene al menos un slot sin reserva confirmada en `bookings` para ese coach+fecha+horario. La gestión (agregar/eliminar slots) vive en `CoachAvailabilityScreen`, la lectura en `BookingScreen_Calendar` y `BookingScreen_Time`.
+10. **`bookings.status = 'completada'` es automático, nunca manual.** La función `complete_confirmed_sessions()` (pg_cron, cada 5 minutos) marca como completado cualquier booking `'confirmada'` cuyo `scheduled_date + scheduled_time` haya superado 20 minutos (timezone `America/Argentina/Buenos_Aires`). Se descartó deliberadamente un botón manual del coach: si pudiera marcar sesiones como completadas, tendría incentivo para omitir las que salieron mal y así evitar la invitación a review. El umbral de 20 minutos es corto a propósito — invitar a reviewear mientras la sesión está fresca.

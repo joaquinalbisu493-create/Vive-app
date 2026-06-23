@@ -5,6 +5,45 @@
 
 ---
 
+## 2026-06-23 — Claude (10ª entrada)
+
+**Tocado:** `SCHEMA.md` (tabla nueva `reviews`, extensión de `notifications.type`,
+regla nueva de auto-completado), SQL corrido en Supabase por Andre (no hay archivos
+de código modificados en esta sesión).
+
+**Resumen:**
+- Sistema de reviews diseñado y schema corrido en Supabase. Bidireccional (usuario
+  reviewea coach y viceversa), misma tabla para ambas direcciones. Una sola review por
+  par `(reviewer_id, reviewed_id)`, editable pero no borrable. `reviewer_id` y
+  `reviewed_id` apuntan siempre a `profiles.id` (para coaches: es `coaches.profile_id`,
+  no `coaches.id`). Campo `is_private` para reviews que solo ve el destinatario.
+- Trigger `reviews_before_update`: protege `reviewer_id`, `reviewed_id` y `booking_id`
+  como inmutables (no puede reasignarse la review a otra persona) y actualiza
+  `updated_at` en cada edición. Se usó trigger y no RLS porque `WITH CHECK` no tiene
+  acceso a `OLD` para comparar valores anteriores.
+- Mecanismo de auto-completado de sesiones: función `complete_confirmed_sessions()`
+  + cron job pg_cron cada 5 minutos. Cualquier booking en `status='confirmada'` con
+  `scheduled_date + scheduled_time + 20 minutos` ya pasado (en timezone
+  `America/Argentina/Buenos_Aires`) se actualiza automáticamente a `'completada'` y
+  genera notificaciones `'invitacion_review'` para ambas partes.
+- Se descartó explícitamente la opción de botón manual del coach para marcar sesiones
+  como completadas: incentivo perverso — podría omitir marcar las sesiones que salieron
+  mal para evitar la invitación a review.
+- CHECK constraint de `notifications.type` extendido para incluir `'invitacion_review'`
+  (mismo patrón preventivo que el bug de `messages.sender_type` de sesiones anteriores —
+  sin esta extensión, los inserts de la función habrían fallado silenciosamente).
+
+**Pendiente para la próxima sesión:**
+- UI del flujo de review: pantalla para crear/editar review cuando llega la
+  notificación `'invitacion_review'`, y display de rating promedio en ProfesionalScreen
+  (hoy usa datos mock hardcodeados).
+- Decidir si el coach ve las reviews que recibió en algún panel propio (CoachProfileScreen
+  tiene un placeholder para esto).
+- Verificar en producción que el cron job efectivamente dispara después de 20 minutos
+  de una sesión confirmada (testear con un booking de prueba cuya hora ya pasó).
+
+---
+
 ## 2026-06-23 — Claude (9ª entrada)
 
 **Tocado:** `screens/SalaScreen.tsx`, `screens/CoachReservasScreen.tsx`,
