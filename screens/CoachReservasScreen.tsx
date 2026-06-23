@@ -8,6 +8,7 @@ import {
   Platform,
   ScrollView,
   Modal,
+  Alert,
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
@@ -19,6 +20,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { sendPushNotification } from '@/lib/notifications';
 import { encryptMessage } from '@/lib/encryption';
+import { isCancelLate } from '@/lib/bookingHelpers';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type ReservationStatus = 'pendiente' | 'confirmada' | 'cancelada';
@@ -88,6 +90,7 @@ export default function CoachReservasScreen() {
   const [rejectReason, setRejectReason] = useState('');
   const [coachId, setCoachId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
 
   const pending   = bookings.filter(b => b.status === 'pendiente');
   const confirmed = bookings.filter(b => b.status === 'confirmada');
@@ -187,12 +190,12 @@ export default function CoachReservasScreen() {
       .from('bookings')
       .update({ status: 'confirmada' })
       .eq('id', id)
-      .select();
+      .select('id, user_id, coach_id, sala_id, scheduled_date, scheduled_time, user_message');
     console.log('[CoachReservas] accept update → data:', data, '| error:', error);
 
-    if (error) return;
+    if (error || !data?.[0]) return;
 
-    const booking = bookings.find(b => b.id === id);
+    const booking = data[0];
     if (booking && user) {
       const [{ data: userProfile }, { data: coachProfile }, { data: conflicting }] = await Promise.all([
         supabase.from('profiles').select('push_token').eq('id', booking.user_id).maybeSingle(),
@@ -223,13 +226,21 @@ export default function CoachReservasScreen() {
           : Promise.resolve(),
       ]);
 
+      console.log('[accept] booking.sala_id:', booking.sala_id);
       if (booking.sala_id) {
-        await supabase.from('messages').insert({
+        const confirmDateStr = formatBookingDate(booking.scheduled_date);
+        const confirmTimeStr = booking.scheduled_time.slice(0, 5);
+        const confirmLine1 = `Sesión reservada · ${confirmDateStr} · ${confirmTimeStr} hs`;
+        const confirmMsg = booking.user_message
+          ? `${confirmLine1}\n${booking.user_message}`
+          : confirmLine1;
+        const { error: msgError } = await supabase.from('messages').insert({
           sala_id: booking.sala_id,
           sender_id: user.id,
-          sender_type: 'system',
-          content: encryptMessage(booking.user_message ?? 'Sesión confirmada'),
+          sender_type: 'system_confirmed',
+          content: encryptMessage(confirmMsg),
         });
+        console.log('[accept] message insert error:', msgError ?? 'none');
       }
 
       if (conflicting && conflicting.length > 0) {
@@ -244,7 +255,9 @@ export default function CoachReservasScreen() {
 
         const cancelTitle = 'Horario no disponible';
         const cancelBody = 'Ese horario ya no está disponible. Podés elegir otro horario con tu coach.';
-        const cancelSystemMsg = 'Esta solicitud fue cancelada — el horario ya no está disponible.';
+        const cancelDateStr = formatBookingDate(booking.scheduled_date);
+        const cancelTimeStr = booking.scheduled_time.slice(0, 5);
+        const cancelSystemMsg = `Solicitud cancelada automáticamente\n${cancelDateStr} · ${cancelTimeStr} hs`;
 
         await Promise.all(
           conflicting.map((cb) => {
@@ -263,7 +276,7 @@ export default function CoachReservasScreen() {
                 supabase.from('messages').insert({
                   sala_id: cb.sala_id,
                   sender_id: user.id,
-                  sender_type: 'system',
+                  sender_type: 'system_cancelled',
                   content: encryptMessage(cancelSystemMsg),
                 })
               );
@@ -323,6 +336,67 @@ export default function CoachReservasScreen() {
           : Promise.resolve(),
       ]);
     }
+  }
+
+  function cancelConfirmed(booking: Booking) {
+    Alert.alert(
+      '¿Cancelar sesión confirmada?',
+      '¿Seguro que querés cancelar esta sesión confirmada?',
+      [
+        { text: 'No', style: 'cancel' },
+        {
+          text: 'Sí, cancelar',
+          style: 'destructive',
+          onPress: async () => {
+            setCancellingId(booking.id);
+            try {
+              const { error } = await supabase
+                .from('bookings')
+                .update({ status: 'cancelada', cancelled_by: 'coach', cancelled_late: isCancelLate(booking.scheduled_date, booking.scheduled_time) })
+                .eq('id', booking.id);
+
+              if (error) return;
+
+              if (booking.sala_id && user) {
+                const cancelDateStr = formatBookingDate(booking.scheduled_date);
+                const cancelTimeStr = booking.scheduled_time.slice(0, 5);
+                await supabase.from('messages').insert({
+                  sala_id: booking.sala_id,
+                  sender_id: user.id,
+                  sender_type: 'system_cancelled',
+                  content: encryptMessage(`El coach canceló la sesión\n${cancelDateStr} · ${cancelTimeStr} hs`),
+                });
+              }
+
+              const [{ data: userProfile }, { data: coachProfile }] = await Promise.all([
+                supabase.from('profiles').select('push_token').eq('id', booking.user_id).maybeSingle(),
+                supabase.from('profiles').select('name').eq('id', user!.id).maybeSingle(),
+              ]);
+
+              const notifTitle = 'Sesión cancelada';
+              const notifBody = `${coachProfile?.name ?? 'Tu coach'} canceló la sesión del ${formatBookingDate(booking.scheduled_date)}.`;
+
+              await Promise.all([
+                supabase.from('notifications').insert({
+                  recipient_id: booking.user_id,
+                  type: 'reserva_cancelada',
+                  booking_id: booking.id,
+                  title: notifTitle,
+                  body: notifBody,
+                }),
+                userProfile?.push_token
+                  ? sendPushNotification(userProfile.push_token, notifTitle, notifBody)
+                  : Promise.resolve(),
+              ]);
+
+              await loadBookings();
+            } finally {
+              setCancellingId(null);
+            }
+          },
+        },
+      ],
+    );
   }
 
   const handleRefresh = useCallback(async () => {
@@ -444,9 +518,19 @@ export default function CoachReservasScreen() {
                   <Text style={s.cardName}>{b.userName}</Text>
                   <Text style={s.cardDate}>{formatBookingDate(b.scheduled_date)} · {b.scheduled_time} hs</Text>
                 </View>
-                <View style={s.confirmedBadge}>
-                  <MaterialCommunityIcons name="check" size={13} color={ViveColors.accent} />
-                  <Text style={s.confirmedBadgeText}>Confirmada</Text>
+                <View style={s.confirmedCardRight}>
+                  <View style={s.confirmedBadge}>
+                    <MaterialCommunityIcons name="check" size={13} color={ViveColors.accent} />
+                    <Text style={s.confirmedBadgeText}>Confirmada</Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => cancelConfirmed(b)}
+                    disabled={cancellingId === b.id}
+                    activeOpacity={0.7}>
+                    <Text style={[s.cancelConfirmedText, cancellingId === b.id && { opacity: 0.4 }]}>
+                      {cancellingId === b.id ? 'Cancelando...' : 'Cancelar'}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             ))
@@ -660,6 +744,16 @@ const s = StyleSheet.create({
     marginBottom: 10,
     gap: 12,
     ...cardShadow,
+  },
+  confirmedCardRight: {
+    alignItems: 'flex-end',
+    gap: 6,
+    flexShrink: 0,
+  },
+  cancelConfirmedText: {
+    fontFamily: ViveFonts.medium,
+    fontSize: 11,
+    color: '#E05252',
   },
   confirmedBadge: {
     flexDirection: 'row',

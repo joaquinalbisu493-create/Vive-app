@@ -2,7 +2,7 @@
 
 > ⚠️ Este archivo describe lo que está REALMENTE en Supabase hoy.
 > No es un diseño aspiracional — si algo cambia en la base, este archivo se actualiza el mismo día.
-> Última actualización: 20 de junio 2026 — confirmado por Andre con information_schema
+> Última actualización: 23 de junio 2026 — CHECK constraint de messages.sender_type extendido vía ALTER TABLE; cancelled_by y cancelled_late ya disponibles en bookings (migrations corridas); RLS policy users_cancel_own_booking agregada en bookings.
 
 ## Tablas y relaciones
 
@@ -30,7 +30,7 @@
 - `sala_id` (uuid, FK → `salas.id`)
 - `sender_id` (uuid, FK → `profiles.id`)
 - `content` (text) — encriptado con XOR+base64 antes de guardar (ver `lib/encryption.ts`)
-- `sender_type` (text, default 'user') — valores: 'user' | 'coach' | 'system'. Los mensajes system se insertan automáticamente al aceptar una reserva (contiene el motivo del usuario) o al cancelar por conflicto de horario. `sender_id` sigue siendo NOT NULL incluso en mensajes de sistema — queda el id de quien disparó la acción. Lo que determina el render es `sender_type`, no `sender_id`.
+- `sender_type` (text, default 'user') — CHECK constraint extendido vía ALTER TABLE (23/06/2026). Valores válidos: 'user' | 'coach' | 'system' | 'system_confirmed' | 'system_cancelled'. `system_confirmed` se inserta al confirmar una reserva (fecha, hora y motivo del usuario en segunda línea). `system_cancelled` se inserta al cancelar desde SalaScreen o CoachReservasScreen, y al cancelar conflictos automáticamente. 'system' es fallback para mensajes anteriores al 22/06/2026 (render gris cursiva, sin pill). `sender_id` es NOT NULL incluso en mensajes de sistema — queda el id de quien disparó la acción. El render (pill o texto plano) lo determina `sender_type`, no el contenido.
 - `created_at`
 
 ### `bookings`
@@ -46,6 +46,9 @@
 - `status` (text)
 - `room_url` (text, nullable) — redundante, el room_url canónico está en `salas`
 - `user_message` (text, nullable) — mensaje opcional que el usuario le escribe al coach antes de reservar
+- `cancelled_by` (text, nullable) — quién canceló: `'usuario'` | `'coach'`. Null si no se canceló.
+- `cancelled_late` (boolean, nullable) — `true` si el coach canceló con <24hs de anticipación; `false` si ≥24hs; `null` si canceló el usuario (no aplica) o si no se canceló.
+- RLS para usuario: policy `users_cancel_own_booking` — permite UPDATE solo si `user_id = auth.uid()` y solo hacia `status='cancelada'`. Los coaches actualizan vía `coaches_can_update_own_bookings` (política preexistente).
 - `created_at`
 
 ### `coach_availability`
@@ -53,6 +56,7 @@
 - `coach_id` (uuid, FK → `coaches.id`) ⚠️ — usa el PK de `coaches`, no `profile_id`
 - `date` (date) — fecha puntual para la que el coach habilita horarios
 - `time` (text) — horario en formato "9:00", "10:00", etc.
+- `blocked` (boolean, NOT NULL DEFAULT false) — si es `true`, el slot no aparece para usuarios aunque exista; el coach puede reactivarlo desde CoachAvailabilityScreen (ícono de candado naranja).
 - `created_at` (timestamptz)
 - UNIQUE(coach_id, date, time) — un coach no puede tener el mismo slot dos veces
 - RLS: SELECT abierto (anyone_can_view_availability) · ALL solo para el coach dueño (coaches_manage_own_availability, WITH CHECK `coach_id IN (SELECT id FROM coaches WHERE profile_id = auth.uid())`)

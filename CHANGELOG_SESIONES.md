@@ -5,6 +5,147 @@
 
 ---
 
+## 2026-06-23 — Claude (9ª entrada)
+
+**Tocado:** `screens/SalaScreen.tsx`, `screens/CoachReservasScreen.tsx`,
+`lib/bookingHelpers.ts`, `SCHEMA.md`
+
+**Resumen:**
+- Cancelación por usuario en SalaScreen: `status='pendiente'` cancela siempre sin
+  restricción; `status='confirmada'` solo con ≥24hs de anticipación. El botón en el
+  banner de "Próxima sesión" se deshabilita con mensaje explicativo cuando no se cumple
+  la condición. RLS `users_cancel_own_booking` aplicada en Supabase (UPDATE solo si
+  `user_id = auth.uid()` y solo hacia `status='cancelada'`).
+- Cancelación por coach sin restricción de tiempo. El UPDATE guarda `cancelled_by`
+  ('coach'|'usuario') y `cancelled_late` (bool). Helper `isCancelLate()` extraído a
+  `lib/bookingHelpers.ts` e importado en ambos screens (eliminada la copia local en
+  CoachReservasScreen).
+- Mensajes de sistema rediseñados: `sender_type` extendido a 5 valores (user, coach,
+  system, system_confirmed, system_cancelled). Pills compactas con ícono (calendar-check /
+  calendar-remove), fondo verde (`ViveColors.accent` al 28%) o rojo (`#E0525218`), título
+  semibold + segunda línea tenue opcional. Contenido incluye fecha, hora y motivo de la
+  sesión. Implementado en 5 puntos de inserción en CoachReservasScreen (confirmación,
+  cancelación de conflicto, cancelación desde panel) y SalaScreen (cancelación por
+  usuario, cancelación por coach desde la Sala). El fallback `sender_type='system'`
+  conserva el render anterior (texto gris cursiva) para mensajes anteriores.
+- Migraciones SQL corridas: (1) ALTER TABLE messages: extendió CHECK constraint de
+  sender_type para incluir 'system_confirmed' y 'system_cancelled'; (2) ALTER TABLE
+  bookings: columnas cancelled_by y cancelled_late; (3) RLS policy users_cancel_own_booking.
+
+**Bugs encontrados y resueltos:**
+1. **CHECK constraint en messages.sender_type**: los inserts con los valores nuevos
+   fallaban silenciosamente — el error no era visible en el flujo normal, solo
+   loggeando explícitamente el resultado del insert. Fix: ALTER TABLE extendió el
+   constraint para aceptar los 5 valores.
+2. **Race condition en accept() (CoachReservasScreen)**: la función leía `booking`
+   del estado React (`bookings.find(b => b.id === id)`) después del UPDATE; el
+   realtime subscription podía disparar `loadBookings()` en paralelo y reemplazar
+   ese estado con datos de otra sala. Causó que el mensaje `system_confirmed` se
+   insertara en el `sala_id` equivocado. Fix: leer desde el `.select()` del propio
+   UPDATE en vez del estado local.
+3. **Layout bug en pills (SalaScreen)**: `systemPillContent` tenía `flex: 1` dentro
+   de un padre con `maxWidth` pero sin `width` explícito — el hijo flex colapsaba a
+   0px de ancho. El ícono y el fondo verde eran visibles pero el texto era invisible.
+   Fix: `flexShrink: 1` en vez de `flex: 1`.
+
+**Pendiente para la próxima sesión:**
+- Probar en dispositivo el flujo completo: confirmar reserva (pill verde con texto) →
+  cancelar como usuario con >24hs → intentar cancelar con <24hs (debe bloquear) →
+  cancelar como coach desde la Sala (sin restricción).
+- Verificar en Supabase que `cancelled_by` y `cancelled_late` quedan con los valores
+  correctos en los 3 escenarios.
+
+---
+
+## 2026-06-22 — Claude (8ª entrada)
+
+**Tocado:** `screens/CoachReservasScreen.tsx`
+
+**Resumen:**
+- Bug fix: el mensaje `system_confirmed` se insertaba con el `sala_id` equivocado. La causa raíz era que `accept()` leía `booking` desde el estado React (`bookings.find(b => b.id === id)`) DESPUÉS del UPDATE, y el realtime subscription disparaba `loadBookings()` en paralelo — el closure capturaba el estado stale de un render anterior que podía tener datos de otra sala.
+- Fix: `.select('id, user_id, coach_id, sala_id, scheduled_date, scheduled_time, user_message')` en el UPDATE mismo, y `const booking = data[0]` en vez de `bookings.find()`. El `booking` ahora viene directamente de la DB, no del estado local.
+- No hubo cambios en schema ni en SalaScreen.
+
+**Pendiente para la próxima sesión:**
+- Testear en el celular: confirmar una reserva desde CoachReservasScreen y verificar que la pill verde aparece con texto correcto (fecha/hora) en la sala correcta (la sala de "amazonalbisu", no la de "andre").
+- Verificar también el flujo de cancelación de conflictos — si `booking.sala_id` estaba mal ahí también, el cancel de conflictos podría tener el mismo bug (pero el `conflicting` query sí usa `booking.scheduled_date`/`scheduled_time` del nuevo `data[0]`, así que debería estar bien).
+
+---
+
+## 2026-06-22 — Claude (7ª entrada)
+
+**Tocado:** `screens/SalaScreen.tsx`, `screens/CoachReservasScreen.tsx`, `SCHEMA.md`
+
+**Resumen:**
+- Mensajes de sistema en el chat rediseñados: nueva "pill" centrada con ícono + texto, fondo verde (`${ViveColors.accent}28`) para confirmación y rojo (`#E0525218`) para cancelación. El fallback `sender_type: 'system'` (mensajes anteriores) mantiene el render original gris/cursiva.
+- Contenido de los mensajes de sistema actualizado en los 5 puntos de inserción: ahora incluyen fecha y hora de la sesión (`"Sesión reservada · lun 22 jun · 7:00 hs"` / `"El coach canceló la sesión\nlun 22 jun · 7:00 hs"`). Para confirmación, el motivo del usuario va en segunda línea si existe.
+- Decisión de arquitectura: en vez de agregar columna `system_event_type`, se reutilizó `sender_type` con dos valores nuevos (`system_confirmed`, `system_cancelled`) — sin ALTER TABLE, compatible con mensajes viejos.
+- SCHEMA.md actualizado con los valores nuevos de `sender_type` y la decisión de diseño.
+
+**Pendiente para la próxima sesión:**
+- Testear en el celular: confirmar una reserva desde CoachReservasScreen y verificar que la pill verde aparece con fecha y hora correctas en SalaScreen.
+- Testear ambas cancelaciones (coach y usuario) y verificar pill roja.
+- Los mensajes viejos con `sender_type: 'system'` van a seguir rindiendo como texto gris — si en algún momento se quiere migrarlos, habría que hacer un UPDATE en Supabase.
+
+---
+
+## 2026-06-22 — Claude (6ª entrada)
+
+**Tocado:** `screens/SalaScreen.tsx`, `screens/CoachReservasScreen.tsx`, `lib/bookingHelpers.ts` (nuevo)
+
+**Resumen:**
+- Bug fix: el banner de "próxima sesión" en SalaScreen bloqueaba la cancelación del coach con la restricción de 24hs del usuario. Se agregó `isCurrentUserCoach = !recipientIsCoach` (derivado del estado ya existente) para bifurcar tanto el banner como `handleCancelBooking()`.
+- Para el coach: botón siempre habilitado, sin texto de 24hs, guarda `cancelled_by: 'coach'` y `cancelled_late` calculado; para el usuario: flujo existente sin cambios.
+- Extraída `isCancelLate()` a `lib/bookingHelpers.ts` (helper compartido) e importada en ambos screens — eliminada la copia local de CoachReservasScreen.
+
+**Pendiente para la próxima sesión:**
+- Testear el flujo completo desde el celular: coach entra a la sala, ve el banner, toca "Cancelar sesión" — verificar que no se bloquea por tiempo y que el booking queda con `cancelled_by: 'coach'` y `cancelled_late` correcto en Supabase.
+- Verificar que el flujo del usuario en la misma sala sigue bloqueando por 24hs correctamente.
+
+---
+
+## 2026-06-22 — Claude (5ª entrada)
+
+**Tocado:** `screens/CoachReservasScreen.tsx`, `screens/SalaScreen.tsx`, `SCHEMA.md`
+
+**Resumen:**
+- Cancelación de sesión confirmada por el coach implementada en CoachReservasScreen: función `cancelConfirmed()` + botón "Cancelar" en cada card de confirmada (layout derecho: badge + texto rojo)
+- `isCancelLate()`: calcula si la cancelación ocurre con menos de 24hs de anticipación respecto a scheduled_date + scheduled_time — mismo patrón que `canCancelConfirmed()` en SalaScreen pero invertido (registra para métrica, no bloquea)
+- UPDATE incluye `cancelled_by: 'coach'` y `cancelled_late: boolean`; agrega mensaje de sistema en sala ("El coach canceló la sesión.") y notificación push al usuario
+- SalaScreen.tsx: agregado `cancelled_by: 'usuario'` al UPDATE de cancelación del usuario (era solo `{ status: 'cancelada' }`)
+- SCHEMA.md actualizado con las 2 columnas nuevas de `bookings`
+- **Migración SQL pendiente de correr en Supabase dashboard** (no destructiva):
+  ```sql
+  ALTER TABLE bookings
+    ADD COLUMN IF NOT EXISTS cancelled_by text,
+    ADD COLUMN IF NOT EXISTS cancelled_late boolean;
+  ```
+
+**Pendiente para la próxima sesión:**
+- Correr la migración SQL en Supabase antes de testear (sin ella el UPDATE de `cancelled_by`/`cancelled_late` silenciosamente no escribe esas columnas pero no rompe nada)
+- Probar en dispositivo: cancelar sesión confirmada como coach → verificar mensaje en sala + push al usuario
+- RLS de `bookings` en UPDATE: confirmar que el coach puede hacer UPDATE con `cancelled_by`/`cancelled_late` (la política actual debería cubrirlo si permite UPDATE en general para el coach, pero verificar)
+
+---
+
+## 2026-06-22 — Claude (4ª entrada)
+
+**Tocado:** `screens/SalaScreen.tsx`
+
+**Resumen:**
+- Cancelación de reserva por el usuario implementada dentro del banner de sesión existente en SalaScreen — sin pantallas nuevas
+- `ConfirmedBooking` type: agregado campo `status: 'pendiente' | 'confirmada'`; query de bookings cambió de `.eq('status', 'confirmada')` a `.in('status', ['pendiente', 'confirmada'])` para cubrir ambos casos cancelables
+- Helper `canCancelConfirmed()`: devuelve true si faltan ≥24hs — mismo patrón que `calcVideoWindow` ya existente en el archivo
+- Función `handleCancelBooking()`: valida elegibilidad → Alert de confirmación → UPDATE booking a 'cancelada' → mensaje de sistema encriptado en sala → notif + push al coach vía `profiles.push_token` del `recipientId`
+- Liberación del slot en `coach_availability` es automática (BookingScreen_Calendar/Time filtran contra bookings con status='confirmada') — no se tocó esa tabla
+- RLS aplicada previamente por Andre: `users_cancel_own_booking` con USING `user_id = auth.uid()` y WITH CHECK `status = 'cancelada'`
+
+**Pendiente para la próxima sesión:**
+- Probar en dispositivo: reserva pendiente → cancelar (siempre disponible) y reserva confirmada → cancelar con >24hs / intentar con <24hs (debe bloquear)
+- Verificar que el coach recibe push notification y mensaje de sistema en la sala
+
+---
+
 ## 2026-06-22 — Claude (3ª entrada)
 
 **Tocado:** `screens/CoachReservasScreen.tsx`, `screens/CoachHomeScreen.tsx`, `screens/BookingScreen_Confirm.tsx`, `screens/BookingScreen_Success.tsx`

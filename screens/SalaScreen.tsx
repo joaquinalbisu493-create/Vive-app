@@ -22,12 +22,13 @@ import { encryptMessage, decryptMessage } from '@/lib/encryption';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { sendPushNotification } from '@/lib/notifications';
+import { isCancelLate } from '@/lib/bookingHelpers';
 
 type Message = {
   id: string;
   text: string;
   sender: 'user' | 'coach';
-  sender_type: 'user' | 'coach' | 'system';
+  sender_type: 'user' | 'coach' | 'system' | 'system_confirmed' | 'system_cancelled';
   time: string;
 };
 
@@ -35,6 +36,7 @@ type ConfirmedBooking = {
   id: string;
   scheduled_date: string;
   scheduled_time: string;
+  status: 'pendiente' | 'confirmada';
   user_message: string | null;
 } | null;
 
@@ -52,6 +54,14 @@ function calcVideoWindow(booking: ConfirmedBooking): boolean {
   return Date.now() >= sessionMs - 5 * 60 * 1000;
 }
 
+function canCancelConfirmed(booking: ConfirmedBooking): boolean {
+  if (!booking) return false;
+  const [year, month, day] = booking.scheduled_date.split('-').map(Number);
+  const [h, m] = booking.scheduled_time.split(':').map(Number);
+  const sessionMs = new Date(year, month - 1, day, h, m, 0).getTime();
+  return Date.now() < sessionMs - 24 * 60 * 60 * 1000;
+}
+
 function formatSalaDate(dateStr: string): string {
   if (!dateStr) return '';
   const [year, month, day] = dateStr.split('-').map(Number);
@@ -66,11 +76,12 @@ function nowTime() {
 }
 
 function rowToMessage(row: Record<string, unknown>, userId: string): Message {
+  const senderType = (row.sender_type as string) ?? 'user';
   return {
     id: row.id as string,
     text: row.content as string,
     sender: (row.sender_id as string) === userId ? 'user' : 'coach',
-    sender_type: ((row.sender_type as string) ?? 'user') as 'user' | 'coach' | 'system',
+    sender_type: senderType as 'user' | 'coach' | 'system' | 'system_confirmed' | 'system_cancelled',
     time: new Date(row.created_at as string).toLocaleTimeString('es-AR', {
       hour: '2-digit',
       minute: '2-digit',
@@ -101,6 +112,7 @@ export default function SalaScreen() {
   const [roomUrl, setRoomUrl] = useState<string | null>(null);
   const [confirmedBooking, setConfirmedBooking] = useState<ConfirmedBooking>(null);
   const [isInVideoWindow, setIsInVideoWindow] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -195,9 +207,9 @@ export default function SalaScreen() {
         supabase.from('profiles').select('name').eq('id', resolvedRecipientId).single(),
         supabase
           .from('bookings')
-          .select('id, scheduled_date, scheduled_time, user_message')
+          .select('id, scheduled_date, scheduled_time, status, user_message')
           .eq('sala_id', id)
-          .eq('status', 'confirmada')
+          .in('status', ['pendiente', 'confirmada'])
           .gte('scheduled_date', todayStr)
           .order('scheduled_date', { ascending: true })
           .order('scheduled_time', { ascending: true })
@@ -265,7 +277,9 @@ export default function SalaScreen() {
         { event: 'INSERT', schema: 'public', table: 'messages', filter: `sala_id=eq.${salaId}` },
         (payload) => {
           const row = payload.new as Record<string, unknown>;
-          if ((row.sender_id as string) === user.id) return;
+          const senderType = (row.sender_type as string) ?? 'user';
+          const isSystemMsg = senderType === 'system_confirmed' || senderType === 'system_cancelled' || senderType === 'system';
+          if (!isSystemMsg && (row.sender_id as string) === user.id) return;
 
           const msg = rowToMessage(row, user.id);
           getAnim(msg.id, 0);
@@ -290,6 +304,125 @@ export default function SalaScreen() {
 
   function handleVideoPress() {
     if (roomUrl) Linking.openURL(roomUrl);
+  }
+
+  async function handleCancelBooking() {
+    if (!confirmedBooking || !salaId || !user) return;
+
+    const isCurrentUserCoach = !recipientIsCoach;
+
+    // Solo el usuario tiene restricción de 24hs; el coach siempre puede cancelar
+    if (!isCurrentUserCoach && confirmedBooking.status === 'confirmada' && !canCancelConfirmed(confirmedBooking)) {
+      Alert.alert(
+        'No se puede cancelar',
+        'Las sesiones confirmadas solo se pueden cancelar con al menos 24hs de anticipación.',
+      );
+      return;
+    }
+
+    const isPending = confirmedBooking.status === 'pendiente';
+    Alert.alert(
+      isPending ? '¿Cancelar solicitud?' : '¿Cancelar sesión?',
+      isPending
+        ? '¿Querés cancelar tu solicitud de sesión?'
+        : '¿Querés cancelar esta sesión confirmada?',
+      [
+        { text: 'No', style: 'cancel' },
+        {
+          text: 'Sí, cancelar',
+          style: 'destructive',
+          onPress: async () => {
+            setIsCancelling(true);
+            const bookingId = confirmedBooking.id;
+            const cancelDateStr = formatSalaDate(confirmedBooking.scheduled_date);
+            const cancelTimeStr = confirmedBooking.scheduled_time.slice(0, 5);
+            try {
+              if (isCurrentUserCoach) {
+                await supabase
+                  .from('bookings')
+                  .update({
+                    status: 'cancelada',
+                    cancelled_by: 'coach',
+                    cancelled_late: isCancelLate(confirmedBooking.scheduled_date, confirmedBooking.scheduled_time),
+                  })
+                  .eq('id', bookingId);
+
+                await supabase.from('messages').insert({
+                  sala_id: salaId,
+                  sender_id: user.id,
+                  sender_type: 'system_cancelled',
+                  content: encryptMessage(`El coach canceló la sesión\n${cancelDateStr} · ${cancelTimeStr} hs`),
+                });
+
+                if (recipientId) {
+                  const { data: userProfile } = await supabase
+                    .from('profiles')
+                    .select('push_token')
+                    .eq('id', recipientId)
+                    .maybeSingle();
+
+                  const notifTitle = 'Sesión cancelada';
+                  const notifBody = 'Tu coach canceló la sesión agendada.';
+
+                  await Promise.all([
+                    supabase.from('notifications').insert({
+                      recipient_id: recipientId,
+                      type: 'reserva_cancelada',
+                      booking_id: bookingId,
+                      title: notifTitle,
+                      body: notifBody,
+                    }),
+                    userProfile?.push_token
+                      ? sendPushNotification(userProfile.push_token, notifTitle, notifBody)
+                      : Promise.resolve(),
+                  ]);
+                }
+              } else {
+                await supabase
+                  .from('bookings')
+                  .update({ status: 'cancelada', cancelled_by: 'usuario' })
+                  .eq('id', bookingId);
+
+                await supabase.from('messages').insert({
+                  sala_id: salaId,
+                  sender_id: user.id,
+                  sender_type: 'system_cancelled',
+                  content: encryptMessage(`El usuario canceló la sesión\n${cancelDateStr} · ${cancelTimeStr} hs`),
+                });
+
+                if (recipientId) {
+                  const { data: coachProfile } = await supabase
+                    .from('profiles')
+                    .select('push_token')
+                    .eq('id', recipientId)
+                    .maybeSingle();
+
+                  const notifTitle = 'Sesión cancelada';
+                  const notifBody = 'El usuario canceló la sesión agendada.';
+
+                  await Promise.all([
+                    supabase.from('notifications').insert({
+                      recipient_id: recipientId,
+                      type: 'reserva_cancelada',
+                      booking_id: bookingId,
+                      title: notifTitle,
+                      body: notifBody,
+                    }),
+                    coachProfile?.push_token
+                      ? sendPushNotification(coachProfile.push_token, notifTitle, notifBody)
+                      : Promise.resolve(),
+                  ]);
+                }
+              }
+
+              setConfirmedBooking(null);
+            } finally {
+              setIsCancelling(false);
+            }
+          },
+        },
+      ],
+    );
   }
 
   function handleHeaderPress() {
@@ -347,6 +480,7 @@ export default function SalaScreen() {
     }
   }
 
+  const isCurrentUserCoach = !recipientIsCoach;
   const canSend = inputText.trim().length > 0 && !!salaId && !!user;
   const displayInitials = recipientProfile?.initials ?? '···';
 
@@ -423,12 +557,31 @@ export default function SalaScreen() {
       <View style={styles.bannerDefault}>
         {confirmedBooking ? (
           <>
-            <Text style={styles.bannerText}>
-              Próxima sesión:{' '}
-              <Text style={styles.bannerBold}>
-                {formatSalaDate(confirmedBooking.scheduled_date)} · {confirmedBooking.scheduled_time.slice(0, 5)} hs
+            <View style={styles.bannerRow}>
+              <Text style={[styles.bannerText, { flex: 1 }]}>
+                {confirmedBooking.status === 'pendiente' ? 'Solicitud pendiente: ' : 'Próxima sesión: '}
+                <Text style={styles.bannerBold}>
+                  {formatSalaDate(confirmedBooking.scheduled_date)} · {confirmedBooking.scheduled_time.slice(0, 5)} hs
+                </Text>
               </Text>
-            </Text>
+              <TouchableOpacity
+                onPress={handleCancelBooking}
+                disabled={isCancelling || (!isCurrentUserCoach && confirmedBooking.status === 'confirmada' && !canCancelConfirmed(confirmedBooking))}
+                hitSlop={8}
+                activeOpacity={0.7}
+              >
+                <Text style={[
+                  styles.cancelBtnText,
+                  (isCancelling || (!isCurrentUserCoach && confirmedBooking.status === 'confirmada' && !canCancelConfirmed(confirmedBooking)))
+                    && styles.cancelBtnTextDisabled,
+                ]}>
+                  {confirmedBooking.status === 'pendiente' ? 'Cancelar solicitud' : 'Cancelar sesión'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            {!isCurrentUserCoach && confirmedBooking.status === 'confirmada' && !canCancelConfirmed(confirmedBooking) && (
+              <Text style={styles.bannerNote}>No se puede cancelar con menos de 24hs de anticipación</Text>
+            )}
           </>
         ) : (
           <Text style={styles.bannerText}>Sin sesión programada</Text>
@@ -460,7 +613,11 @@ export default function SalaScreen() {
             const isUser = msg.sender === 'user';
             const anim = getAnim(msg.id, 1);
 
-            if (msg.sender_type === 'system') {
+            if (msg.sender_type === 'system_confirmed' || msg.sender_type === 'system_cancelled' || msg.sender_type === 'system') {
+              const isConfirmed = msg.sender_type === 'system_confirmed';
+              const isCancelled = msg.sender_type === 'system_cancelled';
+              const decrypted = decryptMessage(msg.text);
+              const [sysLine1, sysLine2] = decrypted.split('\n');
               return (
                 <Animated.View
                   key={msg.id}
@@ -472,7 +629,24 @@ export default function SalaScreen() {
                     },
                   ]}
                 >
-                  <Text style={styles.systemText}>{decryptMessage(msg.text)}</Text>
+                  {(isConfirmed || isCancelled) ? (
+                    <View style={[styles.systemPill, isConfirmed ? styles.systemPillConfirmed : styles.systemPillCancelled]}>
+                      <View style={styles.systemPillRow}>
+                        <MaterialCommunityIcons
+                          name={isConfirmed ? 'calendar-check' : 'calendar-remove'}
+                          size={16}
+                          color={isConfirmed ? ViveColors.accent : '#E05252'}
+                          style={{ marginTop: 1 }}
+                        />
+                        <View style={styles.systemPillContent}>
+                          <Text style={styles.systemPillLine1}>{sysLine1}</Text>
+                          {!!sysLine2 && <Text style={styles.systemPillLine2}>{sysLine2}</Text>}
+                        </View>
+                      </View>
+                    </View>
+                  ) : (
+                    <Text style={styles.systemText}>{decrypted}</Text>
+                  )}
                 </Animated.View>
               );
             }
@@ -628,6 +802,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
+  bannerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
   bannerText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
@@ -643,6 +822,15 @@ const styles = StyleSheet.create({
     color: `${ViveColors.text}70`,
     marginTop: 3,
     fontStyle: 'italic',
+  },
+  cancelBtnText: {
+    fontFamily: ViveFonts.medium,
+    fontSize: 12,
+    color: '#E05252',
+    flexShrink: 0,
+  },
+  cancelBtnTextDisabled: {
+    color: `${ViveColors.text}40`,
   },
   scroll: {
     flex: 1,
@@ -754,6 +942,39 @@ const styles = StyleSheet.create({
     color: `${ViveColors.text}55`,
     fontStyle: 'italic',
     textAlign: 'center',
+  },
+  systemPill: {
+    maxWidth: '88%',
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+  },
+  systemPillConfirmed: {
+    backgroundColor: `${ViveColors.accent}28`,
+  },
+  systemPillCancelled: {
+    backgroundColor: '#E0525218',
+  },
+  systemPillRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+  },
+  systemPillContent: {
+    flexShrink: 1,
+    gap: 2,
+  },
+  systemPillLine1: {
+    fontFamily: ViveFonts.semibold,
+    fontSize: 13,
+    color: ViveColors.text,
+    lineHeight: 18,
+  },
+  systemPillLine2: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 12,
+    color: `${ViveColors.text}70`,
+    lineHeight: 17,
   },
   inputArea: {
     flexDirection: 'row',
