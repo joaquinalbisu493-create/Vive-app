@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vita — Mockup Inicio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,700;1,9..144,400&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #E8E0D5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 40px 0 60px;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  /* ── Phone shell ── */
+  .phone {
+    width: 390px;
+    background: #FBF3E7;
+    border-radius: 48px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 10px #1a1a1a,
+      0 0 0 12px #3a3a3a,
+      0 32px 80px rgba(0,0,0,0.35);
+    position: relative;
+  }
+
+  /* ── Dynamic island ── */
+  .island {
+    width: 126px;
+    height: 34px;
+    background: #0d0d0d;
+    border-radius: 20px;
+    margin: 14px auto 0;
+  }
+
+  /* ── Scrollable content ── */
+  .screen {
+    padding: 0 0 80px;
+    overflow-y: auto;
+    max-height: 780px;
+  }
+
+  /* ─────────────────────────────────────────
+     1. HEADER
+  ───────────────────────────────────────── */
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 22px 8px;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF9A52 0%, #FFB36B 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(255,154,82,0.35);
+  }
+
+  .header-text .greeting {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #1F4A43;
+    line-height: 1.2;
+  }
+
+  .header-text .date {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #1F4A43;
+    opacity: 0.5;
+    margin-top: 1px;
+  }
+
+  .search-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(31,74,67,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .search-btn svg { display: block; }
+
+  /* ── logo bar ── */
+  .logo-bar {
+    text-align: center;
+    padding: 0 22px 16px;
+  }
+
+  .logo-bar span {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #FF9A52;
+    letter-spacing: -0.5px;
+  }
+
+  /* ─────────────────────────────────────────
+     2. QUOTE CARD
+  ───────────────────────────────────────── */
+  .quote-card {
+    margin: 0 18px 18px;
+    background: linear-gradient(135deg, #FF9A52 0%, #E8743B 100%);
+    border-radius: 22px;
+    padding: 22px 22px 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(255,154,82,0.32);
+  }
+
+  .quote-card::before {
+    content: '\201C';
+    position: absolute;
+    top: -10px;
+    right: 18px;
+    font-family: 'Fraunces', serif;
+    font-size: 96px;
+    color: rgba(255,255,255,0.18);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .quote-card .quote-text {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.45;
+    max-width: 220px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-card .quote-author {
+    margin-top: 12px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  /* ─────────────────────────────────────────
+     3. RESOURCES GRID
+  ───────────────────────────────────────── */
+  .section-title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #1F4A43;
+    padding: 0 20px 12px;
+  }
+
+  .resources-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0 18px;
+    margin-bottom: 20px;
+  }
+
+  .resource-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 18px 14px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    box-shadow: 0 2px 12px rgba(31,74,67,0.07);
+    min-height: 100px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .resource-card:hover { transform: scale(0.97); }
+
+  .resource-card.empty {
+    border: 2px dashed rgba(31,74,67,0.18);
+    background: transparent;
+    box-shadow: none;
+    justify-content: center;
+  }
+
+  .resource-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .resource-icon.orange { background: rgba(255,154,82,0.14); }
+  .resource-icon.green  { background: rgba(107,191,138,0.14); }
+
+  .resource-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: #1F4A43;
+    line-height: 1.4;
+  }
+
+  .empty-plus {
+    font-size: 24px;
+    color: rgba(31,74,67,0.25);
+    font-weight: 300;
+    line-height: 1;
+  }
+
+  /* ─────────────────────────────────────────
+     4. PRÓXIMA SESIÓN
+  ───────────────────────────────────────── */
+  .session-card {
+    margin: 0 18px 20px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 18px 18px 16px;
+    box-shadow: 0 2px 14px rgba(31,74,67,0.08);
+  }
+
+  .session-card .card-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    color: #FF9A52;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+
+  .session-body {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .session-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5B8DB8, #7BB5D8);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .session-info { flex: 1; }
+
+  .session-name {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: #1F4A43;
+    line-height: 1.3;
+  }
+
+  .session-sub {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 11.5px;
+    color: #1F4A43;
+    opacity: 0.52;
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  .session-btn {
+    background: #FF9A52;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 9px 14px;
+    border-radius: 12px;
+    white-space: nowrap;
+    box-shadow: 0 3px 10px rgba(255,154,82,0.3);
+    cursor: pointer;
+  }
+
+  /* ─────────────────────────────────────────
+     5. PARA VOS HOY
+  ───────────────────────────────────────── */
+  .recommendation-card {
+    margin: 0 18px 20px;
+    background: #fff;
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 2px 14px rgba(31,74,67,0.08);
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .rec-emoji {
+    font-size: 34px;
+    line-height: 1;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .rec-info { flex: 1; }
+
+  .rec-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    color: #FF9A52;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 5px;
+  }
+
+  .rec-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #1F4A43;
+    line-height: 1.35;
+    margin-bottom: 5px;
+  }
+
+  .rec-desc {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    color: #1F4A43;
+    opacity: 0.55;
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+
+  .rec-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,154,82,0.12);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    color: #E8743B;
+  }
+
+  /* ─────────────────────────────────────────
+     6. BOTTOM NAV
+  ───────────────────────────────────────── */
+  .bottom-nav {
+    position: sticky;
+    bottom: 0;
+    background: rgba(251,243,231,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(31,74,67,0.08);
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0 18px;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    flex: 1;
+  }
+
+  .nav-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-item.active .nav-icon {
+    background: rgba(255,154,82,0.14);
+  }
+
+  .nav-label {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 10px;
+    color: rgba(31,74,67,0.45);
+  }
+
+  .nav-item.active .nav-label { color: #FF9A52; }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="island"></div>
+
+  <div class="screen">
+
+    <!-- 1. HEADER -->
+    <div class="header">
+      <div class="header-left">
+        <div class="avatar">A</div>
+        <div class="header-text">
+          <div class="greeting">Hola, Andre 👋</div>
+          <div class="date">Miércoles, 18 de junio</div>
+        </div>
+      </div>
+      <div class="search-btn">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <circle cx="8" cy="8" r="5.5" stroke="#1F4A43" stroke-width="1.8" stroke-opacity="0.6"/>
+          <path d="M12.5 12.5L15.5 15.5" stroke="#1F4A43" stroke-width="1.8" stroke-linecap="round" stroke-opacity="0.6"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Logo -->
+    <div class="logo-bar"><span>vita</span></div>
+
+    <!-- 2. QUOTE CARD -->
+    <div class="quote-card">
+      <div class="quote-text">Cada día es una nueva oportunidad de crecer.</div>
+      <div class="quote-author">Frase del día</div>
+    </div>
+
+    <!-- 3. RECURSOS -->
+    <div class="section-title">Recursos guardados</div>
+    <div class="resources-grid">
+      <div class="resource-card">
+        <div class="resource-icon orange">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M12 3C8 3 5 7 5 12s3 9 7 9 7-4 7-9-3-9-7-9z" stroke="#FF9A52" stroke-width="1.8" fill="none"/>
+            <path d="M12 7v5l3 3" stroke="#FF9A52" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="resource-label">Respiración<br>4-7-8</div>
+      </div>
+
+      <div class="resource-card">
+        <div class="resource-icon green">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <rect x="4" y="3" width="16" height="18" rx="3" stroke="#6BBF8A" stroke-width="1.8" fill="none"/>
+            <path d="M8 8h8M8 12h8M8 16h5" stroke="#6BBF8A" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="resource-label">Diario de<br>gratitud</div>
+      </div>
+
+      <div class="resource-card empty">
+        <div class="empty-plus">+</div>
+      </div>
+
+      <div class="resource-card empty">
+        <div class="empty-plus">+</div>
+      </div>
+    </div>
+
+    <!-- 4. PRÓXIMA SESIÓN -->
+    <div class="section-title">Tu próxima sesión</div>
+    <div class="session-card">
+      <div class="session-body">
+        <div class="session-avatar">M</div>
+        <div class="session-info">
+          <div class="session-name">María González</div>
+          <div class="session-sub">Psicóloga · Lunes 16 de junio<br>11:00 hs</div>
+        </div>
+        <div class="session-btn">Ver sala</div>
+      </div>
+    </div>
+
+    <!-- 5. PARA VOS HOY -->
+    <div class="section-title">Para vos hoy</div>
+    <div class="recommendation-card">
+      <div class="rec-emoji">💙</div>
+      <div class="rec-info">
+        <div class="rec-label">Recomendación</div>
+        <div class="rec-title">Cómo manejar la ansiedad social</div>
+        <div class="rec-desc">Una guía práctica para sentirte más cómodo en situaciones del día a día.</div>
+        <div class="rec-pill">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+            <circle cx="6" cy="6" r="5" stroke="#E8743B" stroke-width="1.4"/>
+            <path d="M4.5 4l3 2-3 2V4z" fill="#E8743B"/>
+          </svg>
+          Video · 7 min
+        </div>
+      </div>
+    </div>
+
+    <!-- Spacer so last card isn't behind nav -->
+    <div style="height:8px"></div>
+
+  </div><!-- /screen -->
+
+  <!-- 6. BOTTOM NAV -->
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M3 12L12 4l9 8" stroke="#FF9A52" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9" stroke="#FF9A52" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="nav-label">Inicio</div>
+    </div>
+
+    <div class="nav-item">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <rect x="3" y="3" width="8" height="8" rx="2" stroke="rgba(31,74,67,0.4)" stroke-width="1.8"/>
+          <rect x="13" y="3" width="8" height="8" rx="2" stroke="rgba(31,74,67,0.4)" stroke-width="1.8"/>
+          <rect x="3" y="13" width="8" height="8" rx="2" stroke="rgba(31,74,67,0.4)" stroke-width="1.8"/>
+          <rect x="13" y="13" width="8" height="8" rx="2" stroke="rgba(31,74,67,0.4)" stroke-width="1.8"/>
+        </svg>
+      </div>
+      <div class="nav-label">Recursos</div>
+    </div>
+
+    <div class="nav-item">
+      <div class="nav-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <circle cx="9" cy="8" r="3.5" stroke="rgba(31,74,67,0.4)" stroke-width="1.8"/>
+          <path d="M3 20c0-3.314 2.686-6 6-6" stroke="rgba(31,74,67,0.4)" stroke-width="1.8" stroke-linecap="round"/>
+          <circle cx="17" cy="8" r="3.5" stroke="rgba(31,74,67,0.4)" stroke-width="1.8"/>
+          <path d="M21 20c0-3.314-2.686-6-6-6" stroke="rgba(31,74,67,0.4)" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="nav-label">Conexiones</div>
+    </div>
+  </div>
+
+</div><!-- /phone -->
+
+</body>
+</html>
