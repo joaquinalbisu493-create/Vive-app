@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { logError } from '@/lib/logging';
 import {
   View,
   Text,
@@ -146,6 +147,7 @@ export default function BookingScreen_Confirm() {
       });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Error al confirmar la reserva';
+      await logError('BookingScreen_Confirm: failed to confirm booking', err);
       setError(msg);
       Alert.alert('No pudimos guardar tu reserva', msg + '\n\nReintentá en un momento.');
     } finally {
