@@ -16,8 +16,9 @@
 - `saved_resources` verificado con `information_schema` y `SCHEMA.md` actualizado: `id`, `user_id`, `resource_id` (text), `pinned` (bool), `created_at`.
 - Selector "Test:" en `SalaScreen` ya no existía en el historial de git — pendiente cerrado.
 
+- Fix adicional: specialties hardcodeadas en `conexiones.tsx` no coincidían con Supabase — corregidas `'Psicólogo'` → `'Psicóloga clínica'` y `'Coach ejecutiva'` → `'Coach de hábitos'`.
+
 **Pendiente para la próxima sesión:**
-- Verificar que los strings de `specialty` en la tabla `coaches` de Supabase coincidan exactamente con los hardcodeados en `conexiones.tsx` (`'Coach de vida'`, `'Psicólogo'`, `'Coach ejecutiva'`, `'Nutricionista'`). Si no coinciden, el fix de coachId no va a funcionar.
 - `saved_resources` no tiene ninguna pantalla que la use todavía — decidir si se implementa o se descarta.
 
 ---
