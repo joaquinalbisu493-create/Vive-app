@@ -9,6 +9,7 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase, ensureAnonSession } from '@/lib/supabase';
+import { logError } from '@/lib/logging';
 
 type GratitudeEntry = {
   id: string;
@@ -44,7 +45,8 @@ export default function GratitudScreen() {
       const uid = await ensureAnonSession();
       setUserId(uid);
       await fetchEntries(uid);
-    } catch {
+    } catch (err) {
+      await logError('GratitudScreen: init failed', err);
       setError('No se pudo conectar. Revisá tu conexión.');
       setLoading(false);
     }
@@ -59,6 +61,7 @@ export default function GratitudScreen() {
       .order('created_at', { ascending: false });
 
     if (err) {
+      await logError('GratitudScreen: fetchEntries failed', err);
       setError('No se pudieron cargar las entradas.');
     } else {
       setEntries(data ?? []);
@@ -78,6 +81,7 @@ export default function GratitudScreen() {
     });
 
     if (err) {
+      await logError('GratitudScreen: save entry failed', err);
       Alert.alert('Error', 'No se pudo guardar la entrada.');
     } else {
       setText('');
