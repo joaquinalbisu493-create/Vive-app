@@ -4,13 +4,15 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Platform,
   Animated,
+  StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
+import { AppBg } from '@/components/ui/AppBg';
+import { GlassCard } from '@/components/ui/GlassCard';
 
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTH_NAMES = [
@@ -43,7 +45,6 @@ export default function BookingScreen_Success() {
   const specialty = params.specialty ?? 'Coach de vida';
   const dateStr = params.date ?? '';
   const time = params.time ?? '';
-  const roomUrl = params.roomUrl ?? '';
   const salaId = params.salaId ?? '';
 
   const firstName = coachName.split(' ')[0];
@@ -54,7 +55,7 @@ export default function BookingScreen_Success() {
     router.push({ pathname: '/sala', params: { sala_id: salaId } });
   }
 
-  // Animations
+  // Animations — unchanged from original
   const checkScale = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
 
@@ -75,7 +76,8 @@ export default function BookingScreen_Success() {
   }, []);
 
   return (
-    <View style={s.root}>
+    <AppBg>
+      <StatusBar barStyle="light-content" />
       <SafeAreaView style={s.safe} edges={['top', 'bottom']}>
 
         {/* Centro — ícono + texto */}
@@ -94,28 +96,30 @@ export default function BookingScreen_Success() {
           </Animated.View>
 
           {/* Tarjeta resumen */}
-          <Animated.View style={[s.card, { opacity: contentOpacity }]}>
-            <View style={s.coachRow}>
-              <View style={s.avatar}>
-                <MaterialIcons name="person" size={28} color="#C0BAB4" />
+          <Animated.View style={[s.cardWrap, { opacity: contentOpacity }]}>
+            <GlassCard style={s.card}>
+              <View style={s.coachRow}>
+                <View style={s.avatar}>
+                  <MaterialIcons name="person" size={28} color="rgba(255,255,255,0.45)" />
+                </View>
+                <View style={s.coachInfo}>
+                  <Text style={s.coachName}>{coachName}</Text>
+                  <Text style={s.coachSpecialty}>{specialty}</Text>
+                </View>
+                <MaterialIcons name="verified" size={16} color={ViveColors.accent} />
               </View>
-              <View style={s.coachInfo}>
-                <Text style={s.coachName}>{coachName}</Text>
-                <Text style={s.coachSpecialty}>{specialty}</Text>
+
+              <View style={s.divider} />
+
+              <View style={s.detailRow}>
+                <MaterialIcons name="calendar-today" size={15} color={ViveColors.primary} />
+                <Text style={s.detailText}>{formattedDate || '—'}</Text>
               </View>
-              <MaterialIcons name="verified" size={16} color={ViveColors.accent} />
-            </View>
-
-            <View style={s.divider} />
-
-            <View style={s.detailRow}>
-              <MaterialIcons name="calendar-today" size={15} color={ViveColors.primary} />
-              <Text style={s.detailText}>{formattedDate || '—'}</Text>
-            </View>
-            <View style={[s.detailRow, { marginBottom: 0 }]}>
-              <MaterialIcons name="access-time" size={15} color={ViveColors.primary} />
-              <Text style={s.detailText}>{time ? `${time} hs` : '—'}</Text>
-            </View>
+              <View style={[s.detailRow, { marginBottom: 0 }]}>
+                <MaterialIcons name="access-time" size={15} color={ViveColors.primary} />
+                <Text style={s.detailText}>{time ? `${time} hs` : '—'}</Text>
+              </View>
+            </GlassCard>
           </Animated.View>
 
         </View>
@@ -139,25 +143,11 @@ export default function BookingScreen_Success() {
         </Animated.View>
 
       </SafeAreaView>
-    </View>
+    </AppBg>
   );
 }
 
-const cardShadow = Platform.select({
-  ios: {
-    shadowColor: ViveColors.text,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-  },
-  android: { elevation: 4 },
-});
-
 const s = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
   safe: {
     flex: 1,
     paddingHorizontal: 24,
@@ -178,15 +168,8 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 28,
-    ...Platform.select({
-      ios: {
-        shadowColor: ViveColors.accent,
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: { elevation: 6 },
-    }),
+    borderWidth: 3,
+    borderColor: 'rgba(255,255,255,0.30)',
   },
 
   textBlock: {
@@ -196,7 +179,7 @@ const s = StyleSheet.create({
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     textAlign: 'center',
     marginBottom: 10,
     letterSpacing: -0.3,
@@ -204,7 +187,7 @@ const s = StyleSheet.create({
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: `${ViveColors.text}B3`,
+    color: 'rgba(255,255,255,0.70)',
     textAlign: 'center',
     lineHeight: 23,
     marginBottom: 8,
@@ -213,16 +196,13 @@ const s = StyleSheet.create({
   notice: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: `${ViveColors.text}77`,
+    color: 'rgba(255,255,255,0.50)',
     textAlign: 'center',
   },
 
+  cardWrap: { width: '100%' },
   card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 18,
     padding: 18,
-    width: '100%',
-    ...cardShadow,
   },
   coachRow: {
     flexDirection: 'row',
@@ -233,7 +213,9 @@ const s = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#EDE7E0',
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.25)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -242,18 +224,18 @@ const s = StyleSheet.create({
   coachName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 2,
   },
   coachSpecialty: {
     fontFamily: ViveFonts.medium,
     fontSize: 12,
-    color: ViveColors.primary,
+    color: 'rgba(255,255,255,0.60)',
   },
 
   divider: {
     height: 1,
-    backgroundColor: `${ViveColors.text}0D`,
+    backgroundColor: 'rgba(255,255,255,0.15)',
     marginBottom: 14,
   },
 
@@ -266,7 +248,7 @@ const s = StyleSheet.create({
   detailText: {
     fontFamily: ViveFonts.medium,
     fontSize: 14,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
 
   footer: {
@@ -274,7 +256,7 @@ const s = StyleSheet.create({
     paddingBottom: 8,
   },
   btnPrimary: {
-    backgroundColor: ViveColors.primary,
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
@@ -282,30 +264,21 @@ const s = StyleSheet.create({
   btnPrimaryText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#1A1A2E',
     letterSpacing: 0.2,
   },
-  btnDisabled: {
-    opacity: 0.4,
-  },
+  btnDisabled: { opacity: 0.4 },
   btnSecondary: {
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: ViveColors.primary,
+    borderColor: 'rgba(255,255,255,0.45)',
     paddingVertical: 15,
     alignItems: 'center',
   },
   btnSecondaryText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: ViveColors.primary,
+    color: '#FFFFFF',
     letterSpacing: 0.2,
-  },
-  roomNote: {
-    fontFamily: ViveFonts.regular,
-    fontSize: 11,
-    color: `${ViveColors.text}55`,
-    textAlign: 'center',
-    marginTop: -4,
   },
 });

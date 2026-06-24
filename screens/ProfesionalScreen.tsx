@@ -6,12 +6,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
+  StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { ViveColors, ViveFonts } from '@/constants/theme';
+import { AppBg } from '@/components/ui/AppBg';
+import { GlassCard } from '@/components/ui/GlassCard';
 
 // ─── Defaults ────────────────────────────────────────────────────────────────
 const DEFAULT_PROFESIONAL = {
@@ -96,18 +99,18 @@ export default function ProfesionalScreen() {
   };
 
   return (
-    <View style={s.root}>
-      <SafeAreaView style={s.safe} edges={['top']}>
+    <AppBg>
+      <StatusBar barStyle="light-content" />
 
-        {/* ── Botón atrás flotante ─────────────────────────────────────── */}
+      {/* Botón atrás flotante (absolute) */}
+      <SafeAreaView style={s.safe} edges={['top']}>
         <TouchableOpacity
           style={s.backBtn}
           onPress={() => router.back()}
           activeOpacity={0.7}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <MaterialIcons name="arrow-back-ios" size={18} color={ViveColors.text} />
+          <MaterialIcons name="arrow-back-ios" size={18} color="#FFFFFF" />
         </TouchableOpacity>
-
       </SafeAreaView>
 
       {/* ── Scroll ───────────────────────────────────────────────────────── */}
@@ -119,7 +122,7 @@ export default function ProfesionalScreen() {
         {/* ── Foto grande ──────────────────────────────────────────────── */}
         <View style={s.photoContainer}>
           <View style={s.photoPlaceholder}>
-            <MaterialIcons name="person" size={90} color="#C0BAB4" />
+            <MaterialIcons name="person" size={90} color="rgba(255,255,255,0.35)" />
           </View>
 
           {/* Badge verificado */}
@@ -133,10 +136,7 @@ export default function ProfesionalScreen() {
         <View style={s.infoSection}>
           <Text style={s.name}>{prof.name}</Text>
           <Text style={s.specialty}>{prof.specialty}</Text>
-
-          <Text style={s.metaLine}>
-            {prof.age} · {prof.nationality} · {prof.gender}
-          </Text>
+          <Text style={s.metaLine}>{prof.age} · {prof.nationality} · {prof.gender}</Text>
 
           {/* Chips de temas */}
           <View style={s.chipsRow}>
@@ -151,14 +151,14 @@ export default function ProfesionalScreen() {
         {/* ── Video de introducción ─────────────────────────────────────── */}
         <View style={s.section}>
           <Text style={s.sectionTitle}>Video de introducción</Text>
-          <TouchableOpacity style={s.videoPlaceholder} activeOpacity={0.8}>
+          <GlassCard style={s.videoPlaceholder}>
             <View style={s.playBtn}>
-              <MaterialIcons name="play-arrow" size={32} color={ViveColors.primary} />
+              <MaterialIcons name="play-arrow" size={32} color="#FFFFFF" />
             </View>
             <Text style={s.videoCaption}>
               Conocé a {prof.name.split(' ')[0]} en 1 minuto
             </Text>
-          </TouchableOpacity>
+          </GlassCard>
         </View>
 
         {/* ── Reviews ──────────────────────────────────────────────────── */}
@@ -166,18 +166,18 @@ export default function ProfesionalScreen() {
           <Text style={s.sectionTitle}>Reseñas</Text>
 
           {/* Rating general */}
-          <View style={s.ratingOverall}>
+          <GlassCard style={s.ratingOverall}>
             <Text style={s.ratingNumber}>{prof.rating}</Text>
             <View style={s.ratingRight}>
               <Stars rating={prof.rating} size={18} />
               <Text style={s.ratingCount}>{prof.reviewCount} reseñas</Text>
             </View>
-          </View>
+          </GlassCard>
 
           {/* Lista de reviews */}
           <View style={s.reviewsList}>
             {REVIEWS.map(review => (
-              <View key={review.id} style={s.reviewCard}>
+              <GlassCard key={review.id} style={s.reviewCard}>
                 <View style={s.reviewHeader}>
                   <ReviewAvatar name={review.name} />
                   <View style={s.reviewMeta}>
@@ -186,7 +186,7 @@ export default function ProfesionalScreen() {
                   </View>
                 </View>
                 <Text style={s.reviewText}>{review.text}</Text>
-              </View>
+              </GlassCard>
             ))}
           </View>
         </View>
@@ -228,7 +228,7 @@ export default function ProfesionalScreen() {
               <MaterialIcons
                 name={saved ? 'favorite' : 'favorite-border'}
                 size={18}
-                color={ViveColors.primary}
+                color="#FFFFFF"
               />
               <Text style={s.btnSecondaryText}>
                 {saved ? 'Guardado' : 'Guardar en favoritos'}
@@ -237,27 +237,12 @@ export default function ProfesionalScreen() {
           </View>
         </View>
       </SafeAreaView>
-    </View>
+    </AppBg>
   );
 }
 
-// ─── Sombra ──────────────────────────────────────────────────────────────────
-const shadow = Platform.select({
-  ios: {
-    shadowColor: ViveColors.text,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-  },
-  android: { elevation: 3 },
-});
-
 // ─── Estilos ─────────────────────────────────────────────────────────────────
 const s = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
   safe: {
     position: 'absolute',
     top: 0,
@@ -265,31 +250,25 @@ const s = StyleSheet.create({
     right: 0,
     zIndex: 10,
   },
+  scroll: { flex: 1 },
+  scrollContent: { paddingBottom: 24 },
+
+  // ── Foto ──────────────────────────────────────────────────────────────
+  photoContainer: { width: '100%', height: 300 },
+  photoPlaceholder: {
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   backBtn: {
     margin: 16,
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(251,246,239,0.9)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    ...shadow,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 24,
-  },
-
-  // ── Foto ──────────────────────────────────────────────────────────────
-  photoContainer: {
-    width: '100%',
-    height: 300,
-  },
-  photoPlaceholder: {
-    flex: 1,
-    backgroundColor: '#EDE7E0',
+    backgroundColor: 'rgba(255,255,255,0.20)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.35)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -321,7 +300,7 @@ const s = StyleSheet.create({
   name: {
     fontFamily: ViveFonts.semibold,
     fontSize: 28,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     lineHeight: 36,
     letterSpacing: -0.3,
     marginBottom: 4,
@@ -329,24 +308,19 @@ const s = StyleSheet.create({
   specialty: {
     fontFamily: ViveFonts.medium,
     fontSize: 16,
-    color: ViveColors.primary,
+    color: 'rgba(255,255,255,0.75)',
     marginBottom: 8,
   },
   metaLine: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.6,
+    color: 'rgba(255,255,255,0.55)',
     marginBottom: 14,
   },
-  chipsRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
+  chipsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: {
     borderWidth: 1.5,
-    borderColor: ViveColors.primary,
+    borderColor: 'rgba(255,255,255,0.45)',
     borderRadius: 20,
     paddingVertical: 4,
     paddingHorizontal: 12,
@@ -354,7 +328,7 @@ const s = StyleSheet.create({
   chipText: {
     fontFamily: ViveFonts.medium,
     fontSize: 12,
-    color: ViveColors.primary,
+    color: '#FFFFFF',
   },
 
   // ── Sección genérica ──────────────────────────────────────────────────
@@ -365,74 +339,57 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 14,
   },
 
   // ── Video ─────────────────────────────────────────────────────────────
   videoPlaceholder: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
     height: 160,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
-    ...shadow,
   },
   playBtn: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#FDF0E8',
+    backgroundColor: 'rgba(255,255,255,0.20)',
     borderWidth: 2,
-    borderColor: ViveColors.primary,
+    borderColor: 'rgba(255,255,255,0.50)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   videoCaption: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.6,
+    color: 'rgba(255,255,255,0.65)',
   },
 
   // ── Rating general ────────────────────────────────────────────────────
   ratingOverall: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
     padding: 16,
     marginBottom: 14,
     gap: 14,
-    ...shadow,
   },
   ratingNumber: {
     fontFamily: ViveFonts.bold,
     fontSize: 40,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     lineHeight: 48,
   },
-  ratingRight: {
-    gap: 4,
-  },
+  ratingRight: { gap: 4 },
   ratingCount: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: ViveColors.text,
-    opacity: 0.55,
+    color: 'rgba(255,255,255,0.55)',
   },
 
   // ── Reviews ───────────────────────────────────────────────────────────
-  reviewsList: {
-    gap: 12,
-  },
-  reviewCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 14,
-    padding: 14,
-    ...shadow,
-  },
+  reviewsList: { gap: 12 },
+  reviewCard: { padding: 14 },
   reviewHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -443,45 +400,37 @@ const s = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: ViveColors.background,
+    backgroundColor: 'rgba(255,255,255,0.20)',
     borderWidth: 1.5,
-    borderColor: `${ViveColors.text}20`,
+    borderColor: 'rgba(255,255,255,0.38)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   reviewAvatarText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
-  reviewMeta: {
-    gap: 3,
-  },
+  reviewMeta: { gap: 3 },
   reviewName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
   reviewText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.7,
+    color: 'rgba(255,255,255,0.72)',
     lineHeight: 20,
   },
 
   // ── Footer sticky ─────────────────────────────────────────────────────
   footerSafe: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
     borderTopWidth: 1,
-    borderTopColor: `${ViveColors.text}10`,
+    borderTopColor: 'rgba(255,255,255,0.20)',
     ...Platform.select({
-      ios: {
-        shadowColor: ViveColors.text,
-        shadowOffset: { width: 0, height: -4 },
-        shadowOpacity: 0.07,
-        shadowRadius: 10,
-      },
+      ios: { shadowColor: '#000', shadowOffset: { width: 0, height: -4 }, shadowOpacity: 0.12, shadowRadius: 10 },
       android: { elevation: 8 },
     }),
   },
@@ -495,13 +444,11 @@ const s = StyleSheet.create({
   price: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
-  footerButtons: {
-    gap: 10,
-  },
+  footerButtons: { gap: 10 },
   btnPrimary: {
-    backgroundColor: ViveColors.primary,
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     paddingVertical: 15,
     alignItems: 'center',
@@ -510,7 +457,7 @@ const s = StyleSheet.create({
   btnPrimaryText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#1A1A2E',
     letterSpacing: 0.2,
   },
   btnSecondary: {
@@ -519,16 +466,16 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: ViveColors.primary,
+    borderColor: 'rgba(255,255,255,0.45)',
     paddingVertical: 12,
     gap: 8,
   },
   btnSecondaryActive: {
-    backgroundColor: '#FDF0E8',
+    backgroundColor: 'rgba(255,255,255,0.12)',
   },
   btnSecondaryText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: ViveColors.primary,
+    color: '#FFFFFF',
   },
 });

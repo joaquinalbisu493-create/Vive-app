@@ -5,11 +5,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
+  StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
+import { AppBg } from '@/components/ui/AppBg';
 
 const MONTH_NAMES = [
   'Enero','Febrero','Marzo','Abril','Mayo','Junio',
@@ -96,7 +98,8 @@ export default function BookingScreen_Calendar() {
   }
 
   return (
-    <View style={s.root}>
+    <AppBg>
+      <StatusBar barStyle="light-content" />
 
       <SafeAreaView style={s.safeTop} edges={['top']}>
         <View style={s.header}>
@@ -105,7 +108,7 @@ export default function BookingScreen_Calendar() {
             onPress={() => router.back()}
             activeOpacity={0.7}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <MaterialIcons name="arrow-back-ios" size={18} color={ViveColors.text} />
+            <MaterialIcons name="arrow-back-ios" size={18} color="#FFFFFF" />
           </TouchableOpacity>
           <Text style={s.headerTitle}>Elegí una fecha</Text>
           <View style={s.headerSpacer} />
@@ -126,7 +129,7 @@ export default function BookingScreen_Calendar() {
             <MaterialIcons
               name="chevron-left"
               size={28}
-              color={isCurrentMonth ? `${ViveColors.text}28` : ViveColors.text}
+              color={isCurrentMonth ? 'rgba(255,255,255,0.25)' : '#FFFFFF'}
             />
           </TouchableOpacity>
           <Text style={s.monthLabel}>{MONTH_NAMES[month]} {year}</Text>
@@ -135,7 +138,7 @@ export default function BookingScreen_Calendar() {
             style={s.navBtn}
             activeOpacity={0.7}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <MaterialIcons name="chevron-right" size={28} color={ViveColors.text} />
+            <MaterialIcons name="chevron-right" size={28} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
 
@@ -196,29 +199,12 @@ export default function BookingScreen_Calendar() {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-
-    </View>
+    </AppBg>
   );
 }
 
-const dayShadow = Platform.select({
-  ios: {
-    shadowColor: ViveColors.text,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.07,
-    shadowRadius: 4,
-  },
-  android: { elevation: 1 },
-});
-
 const s = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
-  safeTop: {
-    backgroundColor: ViveColors.background,
-  },
+  safeTop: {},
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -230,19 +216,17 @@ const s = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.30)',
     alignItems: 'center',
     justifyContent: 'center',
-    ...Platform.select({
-      ios: { shadowColor: ViveColors.text, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 4 },
-      android: { elevation: 2 },
-    }),
   },
   headerTitle: {
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 18,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     textAlign: 'center',
     letterSpacing: -0.2,
   },
@@ -250,7 +234,7 @@ const s = StyleSheet.create({
 
   progressTrack: {
     height: 4,
-    backgroundColor: `${ViveColors.primary}22`,
+    backgroundColor: 'rgba(255,255,255,0.20)',
     marginHorizontal: 20,
     borderRadius: 2,
     marginBottom: 6,
@@ -284,23 +268,16 @@ const s = StyleSheet.create({
   monthLabel: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     letterSpacing: -0.2,
   },
 
-  weekRow: {
-    flexDirection: 'row',
-    marginBottom: 4,
-  },
-  dayCell: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 3,
-  },
+  weekRow: { flexDirection: 'row', marginBottom: 4 },
+  dayCell: { flex: 1, alignItems: 'center', paddingVertical: 3 },
   dayHeader: {
     fontFamily: ViveFonts.medium,
     fontSize: 12,
-    color: `${ViveColors.text}55`,
+    color: 'rgba(255,255,255,0.50)',
     paddingBottom: 8,
   },
   dayCircle: {
@@ -311,8 +288,9 @@ const s = StyleSheet.create({
     justifyContent: 'center',
   },
   dayCircleAvailable: {
-    backgroundColor: '#FFFFFF',
-    ...dayShadow,
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.28)',
   },
   dayCircleSelected: {
     backgroundColor: ViveColors.primary,
@@ -320,43 +298,38 @@ const s = StyleSheet.create({
   dayText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: '#CBCBCB',
+    color: 'rgba(255,255,255,0.22)',
   },
   dayTextAvailable: {
     fontFamily: ViveFonts.medium,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
   dayTextSelected: {
     fontFamily: ViveFonts.semibold,
     color: '#FFFFFF',
   },
   dayTextUnavailable: {
-    color: '#CBCBCB',
+    color: 'rgba(255,255,255,0.22)',
   },
 
   footerSafe: {
-    backgroundColor: ViveColors.background,
+    backgroundColor: 'rgba(255,255,255,0.10)',
     borderTopWidth: 1,
-    borderTopColor: `${ViveColors.text}10`,
+    borderTopColor: 'rgba(255,255,255,0.18)',
   },
-  footer: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
+  footer: { paddingHorizontal: 20, paddingVertical: 16 },
   btn: {
-    backgroundColor: ViveColors.primary,
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  btnDisabled: {
-    opacity: 0.45,
-  },
+  btnDisabled: { opacity: 0.4 },
   btnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#1A1A2E',
     letterSpacing: 0.2,
   },
 });

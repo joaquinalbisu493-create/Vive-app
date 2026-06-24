@@ -6,11 +6,13 @@ import {
   StyleSheet,
   Platform,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
+import { AppBg } from '@/components/ui/AppBg';
 
 const ALL_TIMES = [
   { label: '9:00',  available: true  },
@@ -68,7 +70,8 @@ export default function BookingScreen_Time() {
   }
 
   return (
-    <View style={s.root}>
+    <AppBg>
+      <StatusBar barStyle="light-content" />
 
       <SafeAreaView style={s.safeTop} edges={['top']}>
         <View style={s.header}>
@@ -77,7 +80,7 @@ export default function BookingScreen_Time() {
             onPress={() => router.back()}
             activeOpacity={0.7}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <MaterialIcons name="arrow-back-ios" size={18} color={ViveColors.text} />
+            <MaterialIcons name="arrow-back-ios" size={18} color="#FFFFFF" />
           </TouchableOpacity>
           <Text style={s.headerTitle}>Elegí un horario</Text>
           <View style={s.headerSpacer} />
@@ -95,7 +98,7 @@ export default function BookingScreen_Time() {
         {/* Recordatorio del coach */}
         <View style={s.coachReminder}>
           <View style={s.coachAvatar}>
-            <MaterialIcons name="person" size={30} color="#C0BAB4" />
+            <MaterialIcons name="person" size={30} color="rgba(255,255,255,0.45)" />
           </View>
           <View style={s.coachInfo}>
             <Text style={s.coachName}>{coachName}</Text>
@@ -138,7 +141,7 @@ export default function BookingScreen_Time() {
         </View>
 
         <View style={s.timezoneNote}>
-          <MaterialIcons name="access-time" size={13} color={`${ViveColors.text}55`} />
+          <MaterialIcons name="access-time" size={13} color="rgba(255,255,255,0.45)" />
           <Text style={s.timezoneText}>Horarios en zona horaria Argentina (ART)</Text>
         </View>
 
@@ -155,29 +158,12 @@ export default function BookingScreen_Time() {
           </TouchableOpacity>
         </View>
       </SafeAreaView>
-
-    </View>
+    </AppBg>
   );
 }
 
-const cardShadow = Platform.select({
-  ios: {
-    shadowColor: ViveColors.text,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-  },
-  android: { elevation: 3 },
-});
-
 const s = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
-  safeTop: {
-    backgroundColor: ViveColors.background,
-  },
+  safeTop: {},
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -189,19 +175,17 @@ const s = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.18)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.30)',
     alignItems: 'center',
     justifyContent: 'center',
-    ...Platform.select({
-      ios: { shadowColor: ViveColors.text, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 4 },
-      android: { elevation: 2 },
-    }),
   },
   headerTitle: {
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 18,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     textAlign: 'center',
     letterSpacing: -0.2,
   },
@@ -209,7 +193,7 @@ const s = StyleSheet.create({
 
   progressTrack: {
     height: 4,
-    backgroundColor: `${ViveColors.primary}22`,
+    backgroundColor: 'rgba(255,255,255,0.20)',
     marginHorizontal: 20,
     borderRadius: 2,
     marginBottom: 6,
@@ -231,17 +215,20 @@ const s = StyleSheet.create({
   coachReminder: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.14)',
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.25)',
     padding: 14,
     marginBottom: 28,
-    ...cardShadow,
   },
   coachAvatar: {
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#EDE7E0',
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.25)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 14,
@@ -250,25 +237,25 @@ const s = StyleSheet.create({
   coachName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 2,
   },
   coachSpecialty: {
     fontFamily: ViveFonts.medium,
     fontSize: 12,
-    color: ViveColors.primary,
+    color: 'rgba(255,255,255,0.65)',
     marginBottom: 4,
   },
   coachDate: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}88`,
+    color: 'rgba(255,255,255,0.55)',
   },
 
   sectionLabel: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 16,
   },
 
@@ -286,71 +273,51 @@ const s = StyleSheet.create({
     borderColor: 'transparent',
   },
   chipAvailable: {
-    backgroundColor: '#FFFFFF',
-    borderColor: `${ViveColors.text}35`,
-    ...Platform.select({
-      ios: { shadowColor: ViveColors.text, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 4 },
-      android: { elevation: 1 },
-    }),
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderColor: 'rgba(255,255,255,0.30)',
   },
   chipSelected: {
     backgroundColor: ViveColors.primary,
     borderColor: ViveColors.primary,
   },
   chipUnavailable: {
-    backgroundColor: `${ViveColors.text}08`,
+    backgroundColor: 'rgba(255,255,255,0.05)',
     borderColor: 'transparent',
   },
   chipText: {
     fontFamily: ViveFonts.medium,
     fontSize: 15,
-    color: ViveColors.text,
-  },
-  chipTextAvailable: {
-    color: ViveColors.text,
-  },
-  chipTextSelected: {
     color: '#FFFFFF',
-    fontFamily: ViveFonts.semibold,
   },
-  chipTextUnavailable: {
-    color: '#CBCBCB',
-  },
+  chipTextAvailable: { color: '#FFFFFF' },
+  chipTextSelected: { color: '#FFFFFF', fontFamily: ViveFonts.semibold },
+  chipTextUnavailable: { color: 'rgba(255,255,255,0.28)' },
 
-  timezoneNote: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
+  timezoneNote: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   timezoneText: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: `${ViveColors.text}55`,
+    color: 'rgba(255,255,255,0.48)',
   },
 
   footerSafe: {
-    backgroundColor: ViveColors.background,
+    backgroundColor: 'rgba(255,255,255,0.10)',
     borderTopWidth: 1,
-    borderTopColor: `${ViveColors.text}10`,
+    borderTopColor: 'rgba(255,255,255,0.18)',
   },
-  footer: {
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
+  footer: { paddingHorizontal: 20, paddingVertical: 16 },
   btn: {
-    backgroundColor: ViveColors.primary,
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  btnDisabled: {
-    opacity: 0.45,
-  },
+  btnDisabled: { opacity: 0.4 },
   btnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#1A1A2E',
     letterSpacing: 0.2,
   },
 });
