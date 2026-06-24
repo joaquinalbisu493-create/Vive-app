@@ -8,6 +8,7 @@ export function AppBg({ children }: Props) {
       source={require('@/assets/bg-aurora.jpg')}
       style={styles.root}
       resizeMode="cover"
+      blurRadius={18}
     >
       {children}
     </ImageBackground>
