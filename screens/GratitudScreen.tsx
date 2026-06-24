@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
   FlatList, ActivityIndicator, Alert, KeyboardAvoidingView,
-  Platform, Keyboard,
+  Platform, Keyboard, StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -10,6 +10,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase, ensureAnonSession } from '@/lib/supabase';
 import { logError } from '@/lib/logging';
+import { AppBg } from '@/components/ui/AppBg';
 
 type GratitudeEntry = {
   id: string;
@@ -113,98 +114,98 @@ export default function GratitudScreen() {
           <Text style={styles.entryDate}>{formatDate(item.created_at)}</Text>
         </View>
         <TouchableOpacity onPress={() => confirmDelete(item.id)} hitSlop={10} style={styles.deleteBtn}>
-          <MaterialCommunityIcons name="trash-can-outline" size={17} color={ViveColors.text} style={{ opacity: 0.28 }} />
+          <MaterialCommunityIcons name="trash-can-outline" size={17} color="rgba(255,255,255,0.35)" />
         </TouchableOpacity>
       </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <AppBg>
+      <StatusBar barStyle="light-content" />
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
 
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-            <MaterialCommunityIcons name="arrow-left" size={20} color={ViveColors.text} />
-            <Text style={styles.backText}>Atrás</Text>
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Gratitud</Text>
-          <View style={{ width: 60 }} />
-        </View>
-
-        {/* Prompt */}
-        <View style={styles.promptArea}>
-          <Text style={styles.promptTitle}>¿Por qué estás agradecido hoy?</Text>
-          <Text style={styles.promptSub}>Anotá algo, por pequeño que sea.</Text>
-        </View>
-
-        {/* Input */}
-        <View style={styles.inputRow}>
-          <TextInput
-            ref={inputRef}
-            style={styles.input}
-            value={text}
-            onChangeText={setText}
-            placeholder="Hoy estoy agradecido por…"
-            placeholderTextColor={`${ViveColors.text}50`}
-            returnKeyType="done"
-            onSubmitEditing={save}
-            maxLength={300}
-          />
-          <TouchableOpacity
-            style={[styles.addBtn, (!text.trim() || saving) && styles.addBtnDisabled]}
-            onPress={save}
-            disabled={!text.trim() || saving}
-            activeOpacity={0.82}
-          >
-            {saving
-              ? <ActivityIndicator size="small" color="#fff" />
-              : <MaterialCommunityIcons name="plus" size={22} color="#fff" />}
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.divider} />
-
-        {/* Body */}
-        {loading ? (
-          <View style={styles.centered}>
-            <ActivityIndicator size="large" color={ViveColors.primary} />
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
+              <MaterialCommunityIcons name="arrow-left" size={20} color="rgba(255,255,255,0.85)" />
+              <Text style={styles.backText}>Atrás</Text>
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Gratitud</Text>
+            <View style={{ width: 60 }} />
           </View>
-        ) : error ? (
-          <View style={styles.centered}>
-            <MaterialCommunityIcons name="wifi-off" size={40} color={ViveColors.text} style={{ opacity: 0.25, marginBottom: 14 }} />
-            <Text style={styles.errorText}>{error}</Text>
-            <TouchableOpacity style={styles.retryBtn} onPress={init} activeOpacity={0.8}>
-              <Text style={styles.retryBtnText}>Reintentar</Text>
+
+          {/* Prompt */}
+          <View style={styles.promptArea}>
+            <Text style={styles.promptTitle}>¿Por qué estás agradecido hoy?</Text>
+            <Text style={styles.promptSub}>Anotá algo, por pequeño que sea.</Text>
+          </View>
+
+          {/* Input */}
+          <View style={styles.inputRow}>
+            <TextInput
+              ref={inputRef}
+              style={styles.input}
+              value={text}
+              onChangeText={setText}
+              placeholder="Hoy estoy agradecido por…"
+              placeholderTextColor="rgba(255,255,255,0.38)"
+              returnKeyType="done"
+              onSubmitEditing={save}
+              maxLength={300}
+            />
+            <TouchableOpacity
+              style={[styles.addBtn, (!text.trim() || saving) && styles.addBtnDisabled]}
+              onPress={save}
+              disabled={!text.trim() || saving}
+              activeOpacity={0.82}
+            >
+              {saving
+                ? <ActivityIndicator size="small" color="#fff" />
+                : <MaterialCommunityIcons name="plus" size={22} color="#fff" />}
             </TouchableOpacity>
           </View>
-        ) : entries.length === 0 ? (
-          <View style={styles.centered}>
-            <Text style={styles.emptyEmoji}>🌱</Text>
-            <Text style={styles.emptyTitle}>Comenzá tu lista de gratitud</Text>
-            <Text style={styles.emptySubtitle}>Escribí algo por lo que estés agradecido hoy.</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={entries}
-            keyExtractor={(e) => e.id}
-            renderItem={renderEntry}
-            contentContainerStyle={styles.listContent}
-            showsVerticalScrollIndicator={false}
-            keyboardDismissMode="on-drag"
-          />
-        )}
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+
+          <View style={styles.divider} />
+
+          {/* Body */}
+          {loading ? (
+            <View style={styles.centered}>
+              <ActivityIndicator size="large" color="rgba(255,255,255,0.7)" />
+            </View>
+          ) : error ? (
+            <View style={styles.centered}>
+              <MaterialCommunityIcons name="wifi-off" size={40} color="rgba(255,255,255,0.35)" style={{ marginBottom: 14 }} />
+              <Text style={styles.errorText}>{error}</Text>
+              <TouchableOpacity style={styles.retryBtn} onPress={init} activeOpacity={0.8}>
+                <Text style={styles.retryBtnText}>Reintentar</Text>
+              </TouchableOpacity>
+            </View>
+          ) : entries.length === 0 ? (
+            <View style={styles.centered}>
+              <Text style={styles.emptyEmoji}>🌱</Text>
+              <Text style={styles.emptyTitle}>Comenzá tu lista de gratitud</Text>
+              <Text style={styles.emptySubtitle}>Escribí algo por lo que estés agradecido hoy.</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={entries}
+              keyExtractor={(e) => e.id}
+              renderItem={renderEntry}
+              contentContainerStyle={styles.listContent}
+              showsVerticalScrollIndicator={false}
+              keyboardDismissMode="on-drag"
+            />
+          )}
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </AppBg>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
+  safeArea: { flex: 1 },
 
   // Header
   header: {
@@ -224,13 +225,12 @@ const styles = StyleSheet.create({
   backText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.45,
+    color: 'rgba(255,255,255,0.55)',
   },
   headerTitle: {
-    fontFamily: ViveFonts.frauncesSerif,
+    fontFamily: ViveFonts.bold,
     fontSize: 22,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     letterSpacing: -0.3,
   },
 
@@ -244,15 +244,14 @@ const styles = StyleSheet.create({
   promptTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 20,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     lineHeight: 28,
     letterSpacing: -0.3,
   },
   promptSub: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.5,
+    color: 'rgba(255,255,255,0.55)',
   },
 
   // Input row
@@ -264,17 +263,15 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.14)',
     borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255,255,255,0.28)',
     paddingHorizontal: 16,
     paddingVertical: 13,
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: ViveColors.text,
-    ...Platform.select({
-      ios: { shadowColor: '#1F4A43', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.07, shadowRadius: 6 },
-      android: { elevation: 2 },
-    }),
+    color: '#FFFFFF',
   },
   addBtn: {
     width: 48,
@@ -288,13 +285,11 @@ const styles = StyleSheet.create({
       android: { elevation: 3 },
     }),
   },
-  addBtnDisabled: {
-    opacity: 0.4,
-  },
+  addBtnDisabled: { opacity: 0.4 },
 
   divider: {
     height: 1,
-    backgroundColor: `${ViveColors.text}0D`,
+    backgroundColor: 'rgba(255,255,255,0.15)',
     marginHorizontal: 20,
     marginVertical: 16,
   },
@@ -310,38 +305,35 @@ const styles = StyleSheet.create({
   errorText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: ViveColors.text,
-    opacity: 0.6,
+    color: 'rgba(255,255,255,0.65)',
     textAlign: 'center',
     marginBottom: 16,
   },
   retryBtn: {
-    backgroundColor: ViveColors.primary,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     borderRadius: 12,
     paddingVertical: 10,
     paddingHorizontal: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.35)',
   },
   retryBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
     color: '#FFFFFF',
   },
-  emptyEmoji: {
-    fontSize: 44,
-    marginBottom: 14,
-  },
+  emptyEmoji: { fontSize: 44, marginBottom: 14 },
   emptyTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     textAlign: 'center',
     marginBottom: 6,
   },
   emptySubtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: ViveColors.text,
-    opacity: 0.5,
+    color: 'rgba(255,255,255,0.55)',
     textAlign: 'center',
   },
 
@@ -354,14 +346,12 @@ const styles = StyleSheet.create({
   entryCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.22)',
     padding: 14,
     gap: 12,
-    ...Platform.select({
-      ios: { shadowColor: '#1F4A43', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 5 },
-      android: { elevation: 2 },
-    }),
   },
   entryDot: {
     width: 8,
@@ -370,24 +360,17 @@ const styles = StyleSheet.create({
     marginTop: 5,
     flexShrink: 0,
   },
-  entryBody: {
-    flex: 1,
-    gap: 4,
-  },
+  entryBody: { flex: 1, gap: 4 },
   entryContent: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     lineHeight: 20,
   },
   entryDate: {
     fontFamily: ViveFonts.medium,
     fontSize: 11,
-    color: ViveColors.text,
-    opacity: 0.4,
+    color: 'rgba(255,255,255,0.42)',
   },
-  deleteBtn: {
-    marginTop: 2,
-    flexShrink: 0,
-  },
+  deleteBtn: { marginTop: 2, flexShrink: 0 },
 });

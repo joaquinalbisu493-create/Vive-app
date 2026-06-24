@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import {
   View, Text, TextInput, TouchableOpacity, StyleSheet,
   FlatList, ActivityIndicator, Alert, KeyboardAvoidingView,
-  Platform, Keyboard,
+  Platform, Keyboard, StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -10,6 +10,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase, ensureAnonSession } from '@/lib/supabase';
 import { logError } from '@/lib/logging';
+import { AppBg } from '@/components/ui/AppBg';
 
 type JournalEntry = {
   id: string;
@@ -124,7 +125,7 @@ export default function DiarioScreen() {
           <View style={styles.entryHeaderRight}>
             {moodEmoji ? <Text style={styles.entryMood}>{moodEmoji}</Text> : null}
             <TouchableOpacity onPress={() => confirmDelete(item.id)} hitSlop={10}>
-              <MaterialCommunityIcons name="trash-can-outline" size={17} color={ViveColors.text} style={{ opacity: 0.3 }} />
+              <MaterialCommunityIcons name="trash-can-outline" size={17} color="rgba(255,255,255,0.35)" />
             </TouchableOpacity>
           </View>
         </View>
@@ -134,101 +135,101 @@ export default function DiarioScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={0}>
+    <AppBg>
+      <StatusBar barStyle="light-content" />
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={0}>
 
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-            <MaterialCommunityIcons name="arrow-left" size={20} color={ViveColors.text} />
-            <Text style={styles.backText}>Atrás</Text>
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Diario</Text>
-          <View style={{ width: 60 }} />
-        </View>
+          {/* Header */}
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
+              <MaterialCommunityIcons name="arrow-left" size={20} color="rgba(255,255,255,0.85)" />
+              <Text style={styles.backText}>Atrás</Text>
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Diario</Text>
+            <View style={{ width: 60 }} />
+          </View>
 
-        {/* Compose */}
-        <View style={styles.compose}>
-          <TextInput
-            ref={inputRef}
-            style={styles.composeInput}
-            value={text}
-            onChangeText={setText}
-            placeholder="¿Qué estás pensando hoy?"
-            placeholderTextColor={`${ViveColors.text}50`}
-            multiline
-            maxLength={800}
-            textAlignVertical="top"
-          />
-          <View style={styles.composeFooter}>
-            {/* Mood row */}
-            <View style={styles.moodRow}>
-              {MOODS.map((m) => (
-                <TouchableOpacity
-                  key={m.key}
-                  onPress={() => setMood(mood === m.key ? null : m.key)}
-                  style={[styles.moodBtn, mood === m.key && styles.moodBtnActive]}
-                  activeOpacity={0.7}
-                >
-                  <Text style={styles.moodEmoji}>{m.emoji}</Text>
-                </TouchableOpacity>
-              ))}
+          {/* Compose */}
+          <View style={styles.compose}>
+            <TextInput
+              ref={inputRef}
+              style={styles.composeInput}
+              value={text}
+              onChangeText={setText}
+              placeholder="¿Qué estás pensando hoy?"
+              placeholderTextColor="rgba(255,255,255,0.38)"
+              multiline
+              maxLength={800}
+              textAlignVertical="top"
+            />
+            <View style={styles.composeFooter}>
+              {/* Mood row */}
+              <View style={styles.moodRow}>
+                {MOODS.map((m) => (
+                  <TouchableOpacity
+                    key={m.key}
+                    onPress={() => setMood(mood === m.key ? null : m.key)}
+                    style={[styles.moodBtn, mood === m.key && styles.moodBtnActive]}
+                    activeOpacity={0.7}
+                  >
+                    <Text style={styles.moodEmoji}>{m.emoji}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              {/* Save */}
+              <TouchableOpacity
+                style={[styles.saveBtn, (!text.trim() || saving) && styles.saveBtnDisabled]}
+                onPress={save}
+                disabled={!text.trim() || saving}
+                activeOpacity={0.82}
+              >
+                {saving
+                  ? <ActivityIndicator size="small" color="#fff" />
+                  : <Text style={styles.saveBtnText}>Guardar</Text>}
+              </TouchableOpacity>
             </View>
-            {/* Save */}
-            <TouchableOpacity
-              style={[styles.saveBtn, (!text.trim() || saving) && styles.saveBtnDisabled]}
-              onPress={save}
-              disabled={!text.trim() || saving}
-              activeOpacity={0.82}
-            >
-              {saving
-                ? <ActivityIndicator size="small" color="#fff" />
-                : <Text style={styles.saveBtnText}>Guardar</Text>}
-            </TouchableOpacity>
           </View>
-        </View>
 
-        <View style={styles.divider} />
+          <View style={styles.divider} />
 
-        {/* Body */}
-        {loading ? (
-          <View style={styles.centered}>
-            <ActivityIndicator size="large" color={ViveColors.primary} />
-          </View>
-        ) : error ? (
-          <View style={styles.centered}>
-            <MaterialCommunityIcons name="wifi-off" size={40} color={ViveColors.text} style={{ opacity: 0.25, marginBottom: 14 }} />
-            <Text style={styles.errorText}>{error}</Text>
-            <TouchableOpacity style={styles.retryBtn} onPress={init} activeOpacity={0.8}>
-              <Text style={styles.retryBtnText}>Reintentar</Text>
-            </TouchableOpacity>
-          </View>
-        ) : entries.length === 0 ? (
-          <View style={styles.centered}>
-            <MaterialCommunityIcons name="notebook-outline" size={48} color={ViveColors.primary} style={{ opacity: 0.35, marginBottom: 14 }} />
-            <Text style={styles.emptyTitle}>Tu primer entrada te espera</Text>
-            <Text style={styles.emptySubtitle}>Escribí lo que sentís o pensás hoy.</Text>
-          </View>
-        ) : (
-          <FlatList
-            data={entries}
-            keyExtractor={(e) => e.id}
-            renderItem={renderEntry}
-            contentContainerStyle={styles.listContent}
-            showsVerticalScrollIndicator={false}
-            keyboardDismissMode="on-drag"
-          />
-        )}
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+          {/* Body */}
+          {loading ? (
+            <View style={styles.centered}>
+              <ActivityIndicator size="large" color="rgba(255,255,255,0.7)" />
+            </View>
+          ) : error ? (
+            <View style={styles.centered}>
+              <MaterialCommunityIcons name="wifi-off" size={40} color="rgba(255,255,255,0.35)" style={{ marginBottom: 14 }} />
+              <Text style={styles.errorText}>{error}</Text>
+              <TouchableOpacity style={styles.retryBtn} onPress={init} activeOpacity={0.8}>
+                <Text style={styles.retryBtnText}>Reintentar</Text>
+              </TouchableOpacity>
+            </View>
+          ) : entries.length === 0 ? (
+            <View style={styles.centered}>
+              <MaterialCommunityIcons name="notebook-outline" size={48} color="rgba(255,255,255,0.35)" style={{ marginBottom: 14 }} />
+              <Text style={styles.emptyTitle}>Tu primer entrada te espera</Text>
+              <Text style={styles.emptySubtitle}>Escribí lo que sentís o pensás hoy.</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={entries}
+              keyExtractor={(e) => e.id}
+              renderItem={renderEntry}
+              contentContainerStyle={styles.listContent}
+              showsVerticalScrollIndicator={false}
+              keyboardDismissMode="on-drag"
+            />
+          )}
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </AppBg>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
+  safeArea: { flex: 1 },
 
   // Header
   header: {
@@ -248,13 +249,12 @@ const styles = StyleSheet.create({
   backText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.45,
+    color: 'rgba(255,255,255,0.55)',
   },
   headerTitle: {
-    fontFamily: ViveFonts.frauncesSerif,
+    fontFamily: ViveFonts.bold,
     fontSize: 22,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     letterSpacing: -0.3,
   },
 
@@ -262,18 +262,16 @@ const styles = StyleSheet.create({
   compose: {
     marginHorizontal: 18,
     marginBottom: 4,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.14)',
     borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.28)',
     padding: 16,
-    ...Platform.select({
-      ios: { shadowColor: '#1F4A43', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.07, shadowRadius: 8 },
-      android: { elevation: 2 },
-    }),
   },
   composeInput: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     minHeight: 90,
     lineHeight: 22,
     paddingTop: 0,
@@ -284,10 +282,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 12,
   },
-  moodRow: {
-    flexDirection: 'row',
-    gap: 4,
-  },
+  moodRow: { flexDirection: 'row', gap: 4 },
   moodBtn: {
     width: 36,
     height: 36,
@@ -297,13 +292,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   moodBtnActive: {
-    backgroundColor: 'rgba(232,116,59,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.18)',
   },
-  moodEmoji: {
-    fontSize: 20,
-  },
+  moodEmoji: { fontSize: 20 },
   saveBtn: {
-    backgroundColor: ViveColors.primary,
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     paddingVertical: 9,
     paddingHorizontal: 18,
@@ -312,18 +305,16 @@ const styles = StyleSheet.create({
     minWidth: 88,
     minHeight: 38,
   },
-  saveBtnDisabled: {
-    opacity: 0.4,
-  },
+  saveBtnDisabled: { opacity: 0.4 },
   saveBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#1A1A2E',
   },
 
   divider: {
     height: 1,
-    backgroundColor: `${ViveColors.text}0D`,
+    backgroundColor: 'rgba(255,255,255,0.15)',
     marginHorizontal: 20,
     marginVertical: 14,
   },
@@ -339,16 +330,17 @@ const styles = StyleSheet.create({
   errorText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: ViveColors.text,
-    opacity: 0.6,
+    color: 'rgba(255,255,255,0.65)',
     textAlign: 'center',
     marginBottom: 16,
   },
   retryBtn: {
-    backgroundColor: ViveColors.primary,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     borderRadius: 12,
     paddingVertical: 10,
     paddingHorizontal: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.35)',
   },
   retryBtnText: {
     fontFamily: ViveFonts.semibold,
@@ -358,15 +350,14 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     textAlign: 'center',
     marginBottom: 6,
   },
   emptySubtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: ViveColors.text,
-    opacity: 0.5,
+    color: 'rgba(255,255,255,0.55)',
     textAlign: 'center',
   },
 
@@ -377,13 +368,11 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   entryCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.22)',
     padding: 16,
-    ...Platform.select({
-      ios: { shadowColor: '#1F4A43', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 6 },
-      android: { elevation: 2 },
-    }),
   },
   entryHeader: {
     flexDirection: 'row',
@@ -394,8 +383,7 @@ const styles = StyleSheet.create({
   entryDate: {
     fontFamily: ViveFonts.medium,
     fontSize: 11,
-    color: ViveColors.text,
-    opacity: 0.45,
+    color: 'rgba(255,255,255,0.48)',
     letterSpacing: 0.2,
   },
   entryHeaderRight: {
@@ -403,13 +391,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  entryMood: {
-    fontSize: 17,
-  },
+  entryMood: { fontSize: 17 },
   entryContent: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     lineHeight: 21,
   },
 });
