@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import {
   View, Text, TouchableOpacity, StyleSheet,
-  Animated, ScrollView,
+  Animated, ScrollView, StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
+import { AppBg } from '@/components/ui/AppBg';
 
 type UniversoId = 'cuerpo' | 'mente' | 'alma';
 
@@ -114,121 +115,121 @@ export default function OnboardingScreen5() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Animated.View style={[styles.header, fadeUp(headerAnim)]}>
-        <TouchableOpacity onPress={() => { console.log('[vita back] onboarding5 → back'); router.back(); }} style={styles.backBtn} hitSlop={8}>
-          <MaterialCommunityIcons name="arrow-left" size={20} color={ViveColors.text} />
-          <Text style={styles.backText}>Atrás</Text>
-        </TouchableOpacity>
-        <View style={styles.logoRow}>
-          <Text style={styles.logo}>vita</Text>
-        </View>
-        <View style={styles.headerSide} />
-      </Animated.View>
+    <AppBg>
+      <StatusBar barStyle="light-content" />
+      <SafeAreaView style={styles.container}>
+        <Animated.View style={[styles.header, fadeUp(headerAnim)]}>
+          <TouchableOpacity onPress={() => { console.log('[vita back] onboarding5 → back'); router.back(); }} style={styles.backBtn} hitSlop={8}>
+            <MaterialCommunityIcons name="arrow-left" size={20} color="rgba(255,255,255,0.85)" />
+            <Text style={styles.backText}>Atrás</Text>
+          </TouchableOpacity>
+          <View style={styles.logoRow}>
+            <Text style={styles.logo}>VITA</Text>
+          </View>
+          <View style={styles.headerSide} />
+        </Animated.View>
 
-      <Animated.View style={[styles.progressArea, fadeUp(progressAnim)]}>
-        <Text style={styles.progressLabel}>Paso 3 de 3</Text>
-        <View style={styles.progressBar}>
-          <View style={[styles.progressFill, { width: '100%' }]} />
-        </View>
-      </Animated.View>
+        <Animated.View style={[styles.progressArea, fadeUp(progressAnim)]}>
+          <Text style={styles.progressLabel}>Paso 3 de 3</Text>
+          <View style={styles.progressBar}>
+            <View style={[styles.progressFill, { width: '100%' }]} />
+          </View>
+        </Animated.View>
 
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.questionArea}>
-          <Animated.Text style={[styles.title, fadeUp(titleAnim)]}>
-            ¿Qué te está pasando puntualmente?
-          </Animated.Text>
-          <Animated.Text style={[styles.subtitle, fadeUp(subtitleAnim)]}>
-            Podés elegir más de uno
-          </Animated.Text>
-        </View>
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.questionArea}>
+            <Animated.Text style={[styles.title, fadeUp(titleAnim)]}>
+              ¿Qué te está pasando puntualmente?
+            </Animated.Text>
+            <Animated.Text style={[styles.subtitle, fadeUp(subtitleAnim)]}>
+              Podés elegir más de uno
+            </Animated.Text>
+          </View>
 
-        <Animated.View style={[styles.mosaic, fadeUp(chipsAnim)]}>
-          {temas.map((tema) => {
-            const anim = getAnim(tema);
-            const cfg = chipConfig(tema);
+          <Animated.View style={[styles.mosaic, fadeUp(chipsAnim)]}>
+            {temas.map((tema) => {
+              const anim = getAnim(tema);
+              const cfg = chipConfig(tema);
 
-            const animBorderColor = anim.interpolate({
-              inputRange: [0, 1],
-              outputRange: ['rgba(31,74,67,0.14)', accent],
-            });
-            const animBg = anim.interpolate({
-              inputRange: [0, 1],
-              outputRange: ['#FFFFFF', accent],
-            });
-            const animShadowOpacity = anim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0.05, 0.20],
-            });
-            const animTextColor = anim.interpolate({
-              inputRange: [0, 1],
-              outputRange: [ViveColors.text, '#FFFFFF'],
-            });
+              const animBorderColor = anim.interpolate({
+                inputRange: [0, 1],
+                outputRange: ['rgba(255,255,255,0.25)', accent],
+              });
+              const animBg = anim.interpolate({
+                inputRange: [0, 1],
+                outputRange: ['rgba(255,255,255,0.12)', accent],
+              });
+              const animShadowOpacity = anim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0.05, 0.20],
+              });
+              const animTextColor = anim.interpolate({
+                inputRange: [0, 1],
+                outputRange: ['rgba(255,255,255,0.85)', '#FFFFFF'],
+              });
 
-            const pressAnim = getPressAnim(tema);
-            return (
-              <AnimatedTouchable
-                key={tema}
-                onPress={() => toggleTema(tema)}
-                activeOpacity={0.95}
-                onPressIn={() =>
-                  Animated.spring(pressAnim, { toValue: 0.94, useNativeDriver: false, damping: 20, stiffness: 300 }).start()
-                }
-                onPressOut={() =>
-                  Animated.spring(pressAnim, { toValue: 1, useNativeDriver: false, damping: 14, stiffness: 180 }).start()
-                }
-                style={[
-                  styles.chip,
-                  {
-                    flexGrow: cfg.flexGrow,
-                    flexBasis: cfg.flexBasis,
-                    borderRadius: cfg.borderRadius,
-                    paddingVertical: cfg.py,
-                    paddingHorizontal: cfg.px,
-                    backgroundColor: animBg,
-                    borderColor: animBorderColor,
-                    shadowOpacity: animShadowOpacity,
-                    transform: [{ scale: pressAnim }],
-                  },
-                ]}
-              >
-                <Animated.Text
+              const pressAnim = getPressAnim(tema);
+              return (
+                <AnimatedTouchable
+                  key={tema}
+                  onPress={() => toggleTema(tema)}
+                  activeOpacity={0.95}
+                  onPressIn={() =>
+                    Animated.spring(pressAnim, { toValue: 0.94, useNativeDriver: false, damping: 20, stiffness: 300 }).start()
+                  }
+                  onPressOut={() =>
+                    Animated.spring(pressAnim, { toValue: 1, useNativeDriver: false, damping: 14, stiffness: 180 }).start()
+                  }
                   style={[
-                    styles.chipText,
-                    { fontSize: cfg.fontSize, color: animTextColor },
+                    styles.chip,
+                    {
+                      flexGrow: cfg.flexGrow,
+                      flexBasis: cfg.flexBasis,
+                      borderRadius: cfg.borderRadius,
+                      paddingVertical: cfg.py,
+                      paddingHorizontal: cfg.px,
+                      backgroundColor: animBg,
+                      borderColor: animBorderColor,
+                      shadowOpacity: animShadowOpacity,
+                      transform: [{ scale: pressAnim }],
+                    },
                   ]}
                 >
-                  {tema}
-                </Animated.Text>
-              </AnimatedTouchable>
-            );
-          })}
-        </Animated.View>
-      </ScrollView>
+                  <Animated.Text
+                    style={[
+                      styles.chipText,
+                      { fontSize: cfg.fontSize, color: animTextColor },
+                    ]}
+                  >
+                    {tema}
+                  </Animated.Text>
+                </AnimatedTouchable>
+              );
+            })}
+          </Animated.View>
+        </ScrollView>
 
-      <Animated.View style={[styles.footer, { opacity: buttonAnim }]}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleContinue}
-          activeOpacity={0.85}
-          disabled={selected.length === 0}
-        >
-          <Text style={styles.buttonText}>Ver profesionales</Text>
-        </TouchableOpacity>
-      </Animated.View>
-    </SafeAreaView>
+        <Animated.View style={[styles.footer, { opacity: buttonAnim }]}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleContinue}
+            activeOpacity={0.85}
+            disabled={selected.length === 0}
+          >
+            <Text style={styles.buttonText}>Ver profesionales</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </SafeAreaView>
+    </AppBg>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
+  container: { flex: 1 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -246,26 +247,16 @@ const styles = StyleSheet.create({
   backText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.45,
+    color: 'rgba(255,255,255,0.55)',
   },
-  logoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+  logoRow: { flexDirection: 'row', alignItems: 'center' },
   logo: {
-    fontFamily: ViveFonts.frauncesSerif,
-    fontSize: 24,
-    color: ViveColors.primary,
-    letterSpacing: -0.5,
-    lineHeight: 28,
+    fontFamily: ViveFonts.bold,
+    fontSize: 20,
+    color: '#FFFFFF',
+    letterSpacing: 4,
   },
-  logoIcon: {
-    marginTop: 1,
-  },
-  headerSide: {
-    minWidth: 60,
-  },
+  headerSide: { minWidth: 60 },
   progressArea: {
     paddingHorizontal: 24,
     paddingTop: 16,
@@ -275,13 +266,12 @@ const styles = StyleSheet.create({
   progressLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.55,
+    color: 'rgba(255,255,255,0.55)',
   },
   progressBar: {
     width: '100%',
     height: 5,
-    backgroundColor: 'rgba(31, 74, 67, 0.10)',
+    backgroundColor: 'rgba(255,255,255,0.18)',
     borderRadius: 999,
     overflow: 'hidden',
   },
@@ -290,11 +280,7 @@ const styles = StyleSheet.create({
     backgroundColor: ViveColors.accent,
     borderRadius: 999,
   },
-  scroll: {
-    flex: 1,
-  },
-  // flexGrow:1 + justifyContent:'center' centers content vertically
-  // when it fits; scroll kicks in only when content overflows
+  scroll: { flex: 1 },
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 20,
@@ -302,14 +288,11 @@ const styles = StyleSheet.create({
     gap: 36,
     justifyContent: 'center',
   },
-  questionArea: {
-    gap: 10,
-    alignItems: 'center',
-  },
+  questionArea: { gap: 10, alignItems: 'center' },
   title: {
     fontFamily: ViveFonts.bold,
     fontSize: 28,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     letterSpacing: -0.5,
     lineHeight: 36,
     textAlign: 'center',
@@ -317,8 +300,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: ViveColors.text,
-    opacity: 0.55,
+    color: 'rgba(255,255,255,0.62)',
     lineHeight: 22,
     textAlign: 'center',
   },
@@ -334,7 +316,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
-    shadowColor: '#1F4A43',
+    shadowColor: '#000000',
     elevation: 2,
   },
   chipText: {
@@ -348,7 +330,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   button: {
-    backgroundColor: ViveColors.primary,
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     paddingVertical: 18,
     alignItems: 'center',
@@ -356,7 +338,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#1A1A2E',
     letterSpacing: 0.3,
   },
 });

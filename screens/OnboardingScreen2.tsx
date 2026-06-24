@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { ViveColors, ViveFonts } from '@/constants/theme';
+import { ViveFonts } from '@/constants/theme';
 import { ScaleCard } from '@/components/ScaleCard';
+import { AppBg } from '@/components/ui/AppBg';
 
 type OptionId = 'explore' | 'search' | 'guide';
 
@@ -22,7 +23,7 @@ const OPTIONS: {
     desc: 'Ver todo lo que ofrece VIVE',
     icon: 'map-outline',
     accent: '#E8743B',
-    accentLight: 'rgba(232, 116, 59, 0.10)',
+    accentLight: 'rgba(232, 116, 59, 0.30)',
   },
   {
     id: 'search',
@@ -30,7 +31,7 @@ const OPTIONS: {
     desc: 'Busco el profesional indicado',
     icon: 'compass-outline',
     accent: '#5B8DB8',
-    accentLight: 'rgba(91, 141, 184, 0.10)',
+    accentLight: 'rgba(91, 141, 184, 0.30)',
   },
   {
     id: 'guide',
@@ -38,7 +39,7 @@ const OPTIONS: {
     desc: 'Necesito que me orienten',
     icon: 'shimmer',
     accent: '#9B7FD4',
-    accentLight: 'rgba(155, 127, 212, 0.10)',
+    accentLight: 'rgba(155, 127, 212, 0.30)',
   },
 ];
 
@@ -84,71 +85,71 @@ export default function OnboardingScreen2() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => { console.log('[vita back] onboarding2 → back'); router.back(); }} style={styles.backBtn} hitSlop={8}>
-          <MaterialCommunityIcons name="arrow-left" size={20} color={ViveColors.text} />
-          <Text style={styles.backText}>Atrás</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.content}>
-        <Animated.View style={fadeUp(titleAnim)}>
-          <Text style={styles.title}>¿Cómo te gustaría empezar?</Text>
-        </Animated.View>
-
-        <View style={styles.cards}>
-          {OPTIONS.map((option, i) => {
-            const isSelected = selected === option.id;
-            return (
-              <Animated.View key={option.id} style={[{ flex: 1 }, fadeUp(cardAnims[i])]}>
-                <ScaleCard
-                  onPress={() => setSelected(option.id)}
-                  style={[
-                    styles.card,
-                    { borderColor: isSelected ? option.accent : 'transparent' },
-                    isSelected && {
-                      backgroundColor: option.accentLight,
-                      shadowColor: option.accent,
-                      shadowOpacity: 0.22,
-                      shadowRadius: 14,
-                      elevation: 6,
-                    },
-                  ]}
-                >
-                  <View style={[styles.iconBubble, { backgroundColor: isSelected ? 'rgba(255,255,255,0.6)' : option.accentLight }]}>
-                    <MaterialCommunityIcons name={option.icon} size={26} color={option.accent} />
-                  </View>
-                  <View style={styles.cardText}>
-                    <Text style={styles.cardTitle}>{option.title}</Text>
-                    <Text style={styles.cardDesc}>{option.desc}</Text>
-                  </View>
-                </ScaleCard>
-              </Animated.View>
-            );
-          })}
+    <AppBg>
+      <StatusBar barStyle="light-content" />
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => { console.log('[vita back] onboarding2 → back'); router.back(); }} style={styles.backBtn} hitSlop={8}>
+            <MaterialCommunityIcons name="arrow-left" size={20} color="rgba(255,255,255,0.85)" />
+            <Text style={styles.backText}>Atrás</Text>
+          </TouchableOpacity>
         </View>
-      </View>
 
-      <Animated.View style={[styles.footer, { opacity: buttonAnim }]}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleContinue}
-          activeOpacity={0.85}
-          disabled={!selected}
-        >
-          <Text style={styles.buttonText}>¿Seguimos?</Text>
-        </TouchableOpacity>
-      </Animated.View>
-    </SafeAreaView>
+        <View style={styles.content}>
+          <Animated.View style={fadeUp(titleAnim)}>
+            <Text style={styles.title}>¿Cómo te gustaría empezar?</Text>
+          </Animated.View>
+
+          <View style={styles.cards}>
+            {OPTIONS.map((option, i) => {
+              const isSelected = selected === option.id;
+              return (
+                <Animated.View key={option.id} style={[{ flex: 1 }, fadeUp(cardAnims[i])]}>
+                  <ScaleCard
+                    onPress={() => setSelected(option.id)}
+                    style={[
+                      styles.card,
+                      { borderColor: isSelected ? option.accent : 'rgba(255,255,255,0.22)' },
+                      isSelected && {
+                        backgroundColor: option.accentLight,
+                        shadowColor: option.accent,
+                        shadowOpacity: 0.22,
+                        shadowRadius: 14,
+                        elevation: 6,
+                      },
+                    ]}
+                  >
+                    <View style={[styles.iconBubble, { backgroundColor: isSelected ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.12)' }]}>
+                      <MaterialCommunityIcons name={option.icon} size={26} color={isSelected ? option.accent : 'rgba(255,255,255,0.75)'} />
+                    </View>
+                    <View style={styles.cardText}>
+                      <Text style={styles.cardTitle}>{option.title}</Text>
+                      <Text style={styles.cardDesc}>{option.desc}</Text>
+                    </View>
+                  </ScaleCard>
+                </Animated.View>
+              );
+            })}
+          </View>
+        </View>
+
+        <Animated.View style={[styles.footer, { opacity: buttonAnim }]}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleContinue}
+            activeOpacity={0.85}
+            disabled={!selected}
+          >
+            <Text style={styles.buttonText}>¿Seguimos?</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </SafeAreaView>
+    </AppBg>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
+  container: { flex: 1 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -164,8 +165,7 @@ const styles = StyleSheet.create({
   backText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.45,
+    color: 'rgba(255,255,255,0.55)',
   },
   content: {
     flex: 1,
@@ -177,30 +177,22 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 34,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     letterSpacing: -0.5,
     lineHeight: 42,
     textAlign: 'center',
   },
-  cards: {
-    flex: 1,
-    gap: 12,
-  },
+  cards: { flex: 1, gap: 12 },
   card: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
     borderRadius: 16,
     padding: 20,
     borderWidth: 2,
-    borderColor: 'transparent',
-    shadowColor: '#1F4A43',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-    elevation: 2,
+    borderColor: 'rgba(255,255,255,0.22)',
   },
   iconBubble: {
     width: 52,
@@ -210,23 +202,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexShrink: 0,
   },
-  cardText: {
-    flex: 1,
-    gap: 4,
-    alignItems: 'center',
-  },
+  cardText: { flex: 1, gap: 4, alignItems: 'center' },
   cardTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     lineHeight: 22,
     textAlign: 'center',
   },
   cardDesc: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.55,
+    color: 'rgba(255,255,255,0.62)',
     lineHeight: 18,
     textAlign: 'center',
   },
@@ -236,7 +223,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   button: {
-    backgroundColor: ViveColors.primary,
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     paddingVertical: 18,
     alignItems: 'center',
@@ -244,7 +231,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#1A1A2E',
     letterSpacing: 0.3,
   },
 });
