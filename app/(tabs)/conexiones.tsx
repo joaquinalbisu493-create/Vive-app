@@ -5,8 +5,8 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Platform,
   ScrollView,
+  StatusBar,
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from 'react-native';
@@ -18,16 +18,13 @@ import { ViveColors, ViveFonts } from '@/constants/theme';
 import { FirstTimeTooltip } from '@/components/FirstTimeTooltip';
 import { ScaleCard } from '@/components/ScaleCard';
 import { supabase } from '@/lib/supabase';
+import { AppBg } from '@/components/ui/AppBg';
 
-// ─── Paleta suave ────────────────────────────────────────────────────────────
-const TERRACOTA_SOFT = '#FDF0E8';
-const VERDE_SOFT     = '#E8F5EE';
-const AZUL_SOFT      = '#E8EFF6';
-
+// ─── Paleta de íconos (colores del ícono sobre círculo glass) ─────────────────
 const PALETTE = [
-  { bg: TERRACOTA_SOFT, fg: ViveColors.primary },
-  { bg: VERDE_SOFT,     fg: ViveColors.accent  },
-  { bg: AZUL_SOFT,      fg: ViveColors.calm    },
+  { fg: ViveColors.primary },
+  { fg: ViveColors.accent  },
+  { fg: ViveColors.calm    },
 ];
 
 // ─── Datos ───────────────────────────────────────────────────────────────────
@@ -145,160 +142,148 @@ export default function ConexionesScreen() {
   }
 
   return (
-    <SafeAreaView style={s.safe} edges={['top']}>
-      <FirstTimeTooltip
-        storageKey="vive_tooltip_conexiones"
-        icon="account-group-outline"
-        iconColor={ViveColors.accent}
-        title="Encontrá a tu guía"
-        description="Explorá coaches y profesionales según lo que estás viviendo. Filtrá por tema o buscá por nombre."
-        delay={800}
-      />
-      <View style={s.screen}>
+    <AppBg>
+      <StatusBar barStyle="light-content" />
+      <SafeAreaView style={s.safe} edges={['top']}>
+        <FirstTimeTooltip
+          storageKey="vive_tooltip_conexiones"
+          icon="account-group-outline"
+          iconColor={ViveColors.accent}
+          title="Encontrá a tu guía"
+          description="Explorá coaches y profesionales según lo que estás viviendo. Filtrá por tema o buscá por nombre."
+          delay={800}
+        />
+        <View style={s.screen}>
 
-        {/* ── Header ───────────────────────────────────────────────────── */}
-        <View style={s.header}>
-          <View style={{ flex: 1 }}>
-            <Text style={s.title}>Conexiones</Text>
-            <Text style={s.subtitle}>Las personas indicadas para lo que estás viviendo.</Text>
-          </View>
-          <TouchableOpacity style={s.bellBtn} activeOpacity={0.7}>
-            <MaterialIcons name="notifications-none" size={24} color={ViveColors.text} />
-          </TouchableOpacity>
-        </View>
-
-        {/* ── Buscador ─────────────────────────────────────────────────── */}
-        <View style={s.searchBar}>
-          <MaterialIcons name="search" size={18} color={ViveColors.text} />
-          <TextInput
-            style={s.searchInput}
-            placeholder="Buscá por nombre, especialidad o tema..."
-            placeholderTextColor={`${ViveColors.text}66`}
-            returnKeyType="search"
-          />
-          <MaterialIcons name="tune" size={18} color={ViveColors.text} />
-        </View>
-
-        {/* ── Temas ────────────────────────────────────────────────────── */}
-        <View style={s.section}>
-          <View style={s.sectionRow}>
-            <Text style={s.sectionTitle}>¿Qué te gustaría trabajar hoy?</Text>
-            <TouchableOpacity activeOpacity={0.7}>
-              <Text style={s.seeAll}>Ver todos</Text>
+          {/* ── Header ───────────────────────────────────────────────────── */}
+          <View style={s.header}>
+            <View style={{ flex: 1 }}>
+              <Text style={s.title}>Conexiones</Text>
+              <Text style={s.subtitle}>Las personas indicadas para lo que estás viviendo.</Text>
+            </View>
+            <TouchableOpacity style={s.bellBtn} activeOpacity={0.7}>
+              <MaterialIcons name="notifications-none" size={24} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
 
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={s.topicsRow}
-            onScroll={handleTopicScroll}
-            scrollEventThrottle={16}>
-            {TOPICS.map((t, i) => {
-              const pal = PALETTE[i % PALETTE.length];
-              return (
-                <ScaleCard key={t.id} style={s.topicCard}>
-                  <View style={[s.topicCircle, { backgroundColor: pal.bg }]}>
-                    <MaterialIcons name={t.icon} size={22} color={pal.fg} />
+          {/* ── Buscador ─────────────────────────────────────────────────── */}
+          <View style={s.searchBar}>
+            <MaterialIcons name="search" size={18} color="rgba(255,255,255,0.60)" />
+            <TextInput
+              style={s.searchInput}
+              placeholder="Buscá por nombre, especialidad o tema..."
+              placeholderTextColor="rgba(255,255,255,0.38)"
+              returnKeyType="search"
+            />
+            <MaterialIcons name="tune" size={18} color="rgba(255,255,255,0.60)" />
+          </View>
+
+          {/* ── Temas ────────────────────────────────────────────────────── */}
+          <View style={s.section}>
+            <View style={s.sectionRow}>
+              <Text style={s.sectionTitle}>¿Qué te gustaría trabajar hoy?</Text>
+              <TouchableOpacity activeOpacity={0.7}>
+                <Text style={s.seeAll}>Ver todos</Text>
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={s.topicsRow}
+              onScroll={handleTopicScroll}
+              scrollEventThrottle={16}>
+              {TOPICS.map((t, i) => {
+                const pal = PALETTE[i % PALETTE.length];
+                return (
+                  <ScaleCard key={t.id} style={s.topicCard}>
+                    <View style={s.topicCircle}>
+                      <MaterialIcons name={t.icon} size={22} color={pal.fg} />
+                    </View>
+                    <Text style={s.topicLabel}>{t.label}</Text>
+                  </ScaleCard>
+                );
+              })}
+            </ScrollView>
+
+            <Dots count={TOPIC_DOTS} active={topicDot} />
+          </View>
+
+          {/* ── Destacados ───────────────────────────────────────────────── */}
+          <View style={s.section}>
+            <View style={s.sectionRow}>
+              <Text style={s.sectionTitle}>Destacados de la semana</Text>
+              <TouchableOpacity activeOpacity={0.7}>
+                <Text style={s.seeAll}>Ver todos</Text>
+              </TouchableOpacity>
+            </View>
+
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={s.coachesRow}
+              onScroll={handleCoachScroll}
+              scrollEventThrottle={16}>
+              {COACHES.map(coach => (
+                <ScaleCard key={coach.id} style={s.coachCard} onPress={() => goToPerfil(coach)}>
+                  {/* Foto placeholder */}
+                  <View style={s.coachPhoto}>
+                    <MaterialIcons name="person" size={52} color="rgba(255,255,255,0.45)" />
+                    <TouchableOpacity
+                      style={s.favBtn}
+                      onPress={() => toggleFav(coach.id)}
+                      hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
+                      activeOpacity={0.7}>
+                      <MaterialIcons
+                        name={favs.has(coach.id) ? 'star' : 'star-border'}
+                        size={20}
+                        color={favs.has(coach.id) ? '#E8C547' : '#FFFFFF'}
+                      />
+                    </TouchableOpacity>
                   </View>
-                  <Text style={s.topicLabel}>{t.label}</Text>
+                  {/* Info */}
+                  <View style={s.coachInfo}>
+                    <Text style={s.coachName} numberOfLines={1}>{coach.name}</Text>
+                    <Text style={s.coachSpecialty} numberOfLines={1}>{coach.specialty}</Text>
+                    <Text style={s.coachPrice}>Desde ${coach.priceFrom.toLocaleString('es-AR')}</Text>
+                    <View style={s.ratingRow}>
+                      <MaterialIcons name="star" size={12} color="#E8C547" />
+                      <Text style={s.ratingText}>{coach.rating} ({coach.reviews} reseñas)</Text>
+                    </View>
+                  </View>
                 </ScaleCard>
-              );
-            })}
-          </ScrollView>
+              ))}
+            </ScrollView>
 
-          <Dots count={TOPIC_DOTS} active={topicDot} />
-        </View>
-
-        {/* ── Destacados ───────────────────────────────────────────────── */}
-        <View style={s.section}>
-          <View style={s.sectionRow}>
-            <Text style={s.sectionTitle}>Destacados de la semana</Text>
-            <TouchableOpacity activeOpacity={0.7}>
-              <Text style={s.seeAll}>Ver todos</Text>
-            </TouchableOpacity>
+            <Dots count={COACH_DOTS} active={coachDot} />
           </View>
 
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={s.coachesRow}
-            onScroll={handleCoachScroll}
-            scrollEventThrottle={16}>
-            {COACHES.map(coach => (
-              <ScaleCard key={coach.id} style={s.coachCard} onPress={() => goToPerfil(coach)}>
-                {/* Foto placeholder */}
-                <View style={s.coachPhoto}>
-                  <MaterialIcons name="person" size={52} color="#C0BAB4" />
-                  <TouchableOpacity
-                    style={s.favBtn}
-                    onPress={() => toggleFav(coach.id)}
-                    hitSlop={{ top: 6, bottom: 6, left: 6, right: 6 }}
-                    activeOpacity={0.7}>
-                    <MaterialIcons
-                      name={favs.has(coach.id) ? 'star' : 'star-border'}
-                      size={20}
-                      color={favs.has(coach.id) ? ViveColors.primary : '#FFFFFF'}
-                    />
-                  </TouchableOpacity>
-                </View>
-                {/* Info */}
-                <View style={s.coachInfo}>
-                  <Text style={s.coachName} numberOfLines={1}>{coach.name}</Text>
-                  <Text style={s.coachSpecialty} numberOfLines={1}>{coach.specialty}</Text>
-                  <Text style={s.coachPrice}>Desde ${coach.priceFrom.toLocaleString('es-AR')}</Text>
-                  <View style={s.ratingRow}>
-                    <MaterialIcons name="star" size={12} color="#E8C547" />
-                    <Text style={s.ratingText}>{coach.rating} ({coach.reviews} reseñas)</Text>
-                  </View>
-                </View>
-              </ScaleCard>
-            ))}
-          </ScrollView>
+          {/* ── Espaciador ───────────────────────────────────────────────── */}
+          <View style={{ flex: 1 }} />
 
-          <Dots count={COACH_DOTS} active={coachDot} />
+          {/* ── Tarjeta Sofía ────────────────────────────────────────────── */}
+          <ScaleCard
+            style={s.sofiaCard}
+            onPress={() => console.log('matching guiado')}>
+            <VennDiagram />
+            <View style={s.sofiaText}>
+              <Text style={s.sofiaQ}>¿No sabés qué necesitás?</Text>
+              <Text style={s.sofiaA}>Te ayudo a encontrarlo.</Text>
+            </View>
+            <MaterialIcons name="chevron-right" size={20} color="rgba(255,255,255,0.65)" />
+          </ScaleCard>
+
         </View>
-
-        {/* ── Espaciador ───────────────────────────────────────────────── */}
-        <View style={{ flex: 1 }} />
-
-        {/* ── Tarjeta Sofía ────────────────────────────────────────────── */}
-        <ScaleCard
-          style={s.sofiaCard}
-          onPress={() => console.log('matching guiado')}>
-          <VennDiagram />
-          <View style={s.sofiaText}>
-            <Text style={s.sofiaQ}>¿No sabés qué necesitás?</Text>
-            <Text style={s.sofiaA}>Te ayudo a encontrarlo.</Text>
-          </View>
-          <MaterialIcons name="chevron-right" size={20} color={ViveColors.primary} />
-        </ScaleCard>
-
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </AppBg>
   );
 }
 
-// ─── Sombra ──────────────────────────────────────────────────────────────────
-const shadow = Platform.select({
-  ios: {
-    shadowColor: ViveColors.text,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-  },
-  android: { elevation: 3 },
-});
-
 // ─── Estilos ─────────────────────────────────────────────────────────────────
 const s = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
+  safe: { flex: 1 },
   screen: {
     flex: 1,
-    backgroundColor: ViveColors.background,
     paddingTop: 16,
     paddingBottom: 90,
   },
@@ -313,14 +298,14 @@ const s = StyleSheet.create({
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     lineHeight: 32,
     marginBottom: 2,
   },
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}99`,
+    color: 'rgba(255,255,255,0.60)',
     lineHeight: 19,
   },
   bellBtn: {
@@ -332,20 +317,21 @@ const s = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.28)',
     marginHorizontal: 20,
     marginBottom: 20,
-    paddingHorizontal: 12,
-    paddingVertical: Platform.OS === 'ios' ? 11 : 6,
+    paddingHorizontal: 14,
+    paddingVertical: 11,
     gap: 8,
-    ...shadow,
   },
   searchInput: {
     flex: 1,
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     padding: 0,
   },
 
@@ -363,7 +349,7 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     flex: 1,
   },
   seeAll: {
@@ -380,18 +366,22 @@ const s = StyleSheet.create({
   topicCard: {
     width: TOPIC_W,
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.14)',
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.28)',
     paddingTop: 14,
     paddingBottom: 12,
     paddingHorizontal: 6,
     marginRight: TOPIC_GAP,
-    ...shadow,
   },
   topicCircle: {
     width: 48,
     height: 48,
     borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.20)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.30)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 8,
@@ -399,7 +389,7 @@ const s = StyleSheet.create({
   topicLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 10,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     textAlign: 'center',
     lineHeight: 14,
   },
@@ -411,17 +401,17 @@ const s = StyleSheet.create({
   },
   coachCard: {
     width: COACH_W,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.14)',
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.28)',
     marginRight: COACH_GAP,
-    ...shadow,
+    overflow: 'hidden',
   },
   coachPhoto: {
     width: COACH_W,
     height: 102,
-    backgroundColor: '#EDE7E0',
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.18)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -429,7 +419,7 @@ const s = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: 'rgba(0,0,0,0.22)',
+    backgroundColor: 'rgba(0,0,0,0.28)',
     borderRadius: 14,
     padding: 4,
   },
@@ -439,7 +429,7 @@ const s = StyleSheet.create({
   coachName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 2,
   },
   coachSpecialty: {
@@ -451,7 +441,7 @@ const s = StyleSheet.create({
   coachPrice: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: ViveColors.text,
+    color: 'rgba(255,255,255,0.75)',
     marginBottom: 5,
   },
   ratingRow: {
@@ -462,19 +452,20 @@ const s = StyleSheet.create({
   ratingText: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: `${ViveColors.text}99`,
+    color: 'rgba(255,255,255,0.60)',
   },
 
   // Sofía
   sofiaCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.14)',
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.28)',
     marginHorizontal: 20,
     paddingVertical: 16,
     paddingHorizontal: 18,
-    ...shadow,
   },
   sofiaText: {
     flex: 1,
@@ -484,13 +475,13 @@ const s = StyleSheet.create({
   sofiaQ: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 2,
   },
   sofiaA: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: `${ViveColors.text}B3`,
+    color: 'rgba(255,255,255,0.65)',
   },
 });
 
@@ -506,11 +497,11 @@ const dot = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: `${ViveColors.text}33`,
+    backgroundColor: 'rgba(255,255,255,0.30)',
   },
   active: {
     width: 16,
-    backgroundColor: ViveColors.text,
+    backgroundColor: '#FFFFFF',
   },
 });
 
