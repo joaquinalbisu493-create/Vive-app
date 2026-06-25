@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Platform,
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
@@ -14,6 +13,7 @@ import { Feather } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { AppBg } from '@/components/ui/AppBg';
 
 type Notif = {
   id: string;
@@ -36,10 +36,8 @@ function formatTimeAgo(isoString: string): string {
   return `hace ${diffD} ${diffD === 1 ? 'día' : 'días'}`;
 }
 
-const cardShadow = Platform.select({
-  ios: { shadowColor: ViveColors.text, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 6 },
-  android: { elevation: 1 },
-});
+const GLASS = 'rgba(255,255,255,0.14)';
+const GLASS_BORDER = 'rgba(255,255,255,0.28)';
 
 export default function CoachNotificationsScreen() {
   const router = useRouter();
@@ -73,11 +71,12 @@ export default function CoachNotificationsScreen() {
   }, [user]);
 
   return (
+    <AppBg>
     <SafeAreaView style={s.safe} edges={['top']}>
       {/* Header */}
       <View style={s.header}>
         <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8} activeOpacity={0.7}>
-          <Feather name="arrow-left" size={22} color={ViveColors.text} />
+          <Feather name="arrow-left" size={22} color="rgba(255,255,255,0.8)" />
         </TouchableOpacity>
         <Text style={s.headerTitle}>Notificaciones</Text>
         <View style={s.headerSpacer} />
@@ -90,7 +89,7 @@ export default function CoachNotificationsScreen() {
         </View>
       ) : notifs.length === 0 ? (
         <View style={s.emptyState}>
-          <Feather name="bell-off" size={36} color={`${ViveColors.text}30`} />
+          <Feather name="bell-off" size={36} color="rgba(255,255,255,0.25)" />
           <Text style={s.emptyText}>No tenés notificaciones todavía.</Text>
         </View>
       ) : (
@@ -109,7 +108,7 @@ export default function CoachNotificationsScreen() {
                 <Text style={s.itemTime}>{formatTimeAgo(n.created_at)}</Text>
               </View>
               {n.booking_id && (
-                <Feather name="chevron-right" size={16} color={`${ViveColors.text}40`} style={s.chevron} />
+                <Feather name="chevron-right" size={16} color="rgba(255,255,255,0.35)" style={s.chevron} />
               )}
             </TouchableOpacity>
           ))}
@@ -117,18 +116,21 @@ export default function CoachNotificationsScreen() {
         </ScrollView>
       )}
     </SafeAreaView>
+    </AppBg>
   );
 }
 
 const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: ViveColors.background },
+  safe: { flex: 1 },
 
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.15)',
     gap: 12,
   },
   backBtn: { padding: 4 },
@@ -136,12 +138,12 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     textAlign: 'center',
     marginRight: 30,
   },
   headerSpacer: { width: 30 },
-  divider: { height: 1, backgroundColor: `${ViveColors.text}0D` },
+  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
 
   loadingState: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 
@@ -154,7 +156,7 @@ const s = StyleSheet.create({
   emptyText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: `${ViveColors.text}60`,
+    color: 'rgba(255,255,255,0.55)',
   },
 
   list: {
@@ -166,13 +168,14 @@ const s = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     overflow: 'hidden',
-    ...cardShadow,
   },
   itemUnread: {
-    backgroundColor: `${ViveColors.primary}08`,
+    backgroundColor: 'rgba(232,116,59,0.1)',
   },
   unreadBar: {
     width: 3,
@@ -190,18 +193,18 @@ const s = StyleSheet.create({
   itemTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
   itemBody: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}80`,
+    color: 'rgba(255,255,255,0.7)',
     lineHeight: 18,
   },
   itemTime: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: `${ViveColors.text}50`,
+    color: 'rgba(255,255,255,0.45)',
     marginTop: 2,
   },
   chevron: {

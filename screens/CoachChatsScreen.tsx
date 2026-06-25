@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Platform,
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
@@ -14,6 +13,7 @@ import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { decryptMessage } from '@/lib/encryption';
+import { AppBg } from '@/components/ui/AppBg';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type ChatRoom = {
@@ -115,6 +115,7 @@ export default function CoachChatsScreen() {
   }, [loadRooms]);
 
   return (
+    <AppBg>
     <SafeAreaView style={s.safe} edges={['top']}>
       <View style={s.header}>
         <Text style={s.title}>Chats</Text>
@@ -163,24 +164,21 @@ export default function CoachChatsScreen() {
         </ScrollView>
       )}
     </SafeAreaView>
+    </AppBg>
   );
 }
 
 const s = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
+  safe: { flex: 1 },
   header: {
     paddingHorizontal: 20,
     paddingTop: 22,
     paddingBottom: 14,
-    backgroundColor: ViveColors.background,
   },
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
   container: {
     paddingHorizontal: 0,
@@ -200,7 +198,7 @@ const s = StyleSheet.create({
   emptyText: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: `${ViveColors.text}60`,
+    color: 'rgba(255,255,255,0.55)',
     textAlign: 'center',
     lineHeight: 24,
   },
@@ -211,12 +209,12 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.1)',
     gap: 14,
   },
   chatRowBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: `${ViveColors.text}08`,
+    borderBottomColor: 'rgba(255,255,255,0.1)',
   },
 
   // Avatar
@@ -232,7 +230,7 @@ const s = StyleSheet.create({
   avatarText: {
     fontFamily: ViveFonts.bold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
 
   // Info
@@ -246,16 +244,16 @@ const s = StyleSheet.create({
   chatName: {
     fontFamily: ViveFonts.medium,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
   chatDate: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: `${ViveColors.text}55`,
+    color: 'rgba(255,255,255,0.5)',
   },
   lastMessage: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}70`,
+    color: 'rgba(255,255,255,0.6)',
   },
 });
