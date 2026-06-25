@@ -19,6 +19,7 @@ import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { generateWeeklySlots } from '@/lib/availabilityGenerator';
+import { AppBg } from '@/components/ui/AppBg';
 
 const DAY_NAMES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 const DURATIONS = [30, 60, 90] as const;
@@ -180,10 +181,11 @@ export default function CoachWeeklyPatternScreen() {
 
   if (loading) {
     return (
+      <AppBg>
       <SafeAreaView style={s.safe} edges={['top']}>
         <View style={s.header}>
           <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8}>
-            <MaterialCommunityIcons name="arrow-left" size={22} color={ViveColors.text} />
+            <MaterialCommunityIcons name="arrow-left" size={22} color="rgba(255,255,255,0.8)" />
           </TouchableOpacity>
           <Text style={s.headerTitle}>Horario semanal</Text>
           <View style={{ width: 36 }} />
@@ -191,14 +193,16 @@ export default function CoachWeeklyPatternScreen() {
         <View style={s.divider} />
         <ActivityIndicator color={ViveColors.primary} style={{ marginTop: 48 }} />
       </SafeAreaView>
+      </AppBg>
     );
   }
 
   return (
+    <AppBg>
     <SafeAreaView style={s.safe} edges={['top']}>
       <View style={s.header}>
         <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8} activeOpacity={0.7}>
-          <MaterialCommunityIcons name="arrow-left" size={22} color={ViveColors.text} />
+          <MaterialCommunityIcons name="arrow-left" size={22} color="rgba(255,255,255,0.8)" />
         </TouchableOpacity>
         <Text style={s.headerTitle}>Horario semanal</Text>
         <View style={{ width: 36 }} />
@@ -244,7 +248,7 @@ export default function CoachWeeklyPatternScreen() {
                         <MaterialCommunityIcons
                           name="trash-can-outline"
                           size={18}
-                          color={`${ViveColors.text}44`}
+                          color="rgba(255,255,255,0.35)"
                         />
                       </TouchableOpacity>
                     </View>
@@ -381,23 +385,24 @@ export default function CoachWeeklyPatternScreen() {
         />
       )}
     </SafeAreaView>
+    </AppBg>
   );
 }
 
-const cardShadow = Platform.select({
-  ios: { shadowColor: ViveColors.text, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.07, shadowRadius: 8 },
-  android: { elevation: 2 },
-});
+const GLASS = 'rgba(255,255,255,0.14)';
+const GLASS_BORDER = 'rgba(255,255,255,0.28)';
 
 const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: ViveColors.background },
+  safe: { flex: 1 },
 
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.15)',
     gap: 12,
   },
   backBtn: { padding: 4 },
@@ -405,11 +410,11 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     textAlign: 'center',
     marginRight: 36,
   },
-  divider: { height: 1, backgroundColor: `${ViveColors.text}0D` },
+  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
 
   generatingBar: {
     flexDirection: 'row',
@@ -417,9 +422,9 @@ const s = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: `${ViveColors.primary}0D`,
+    backgroundColor: 'rgba(232,116,59,0.1)',
     borderBottomWidth: 1,
-    borderBottomColor: `${ViveColors.primary}1A`,
+    borderBottomColor: 'rgba(232,116,59,0.2)',
   },
   generatingText: {
     fontFamily: ViveFonts.regular,
@@ -432,24 +437,25 @@ const s = StyleSheet.create({
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}88`,
+    color: 'rgba(255,255,255,0.6)',
     lineHeight: 20,
     marginHorizontal: 16,
     marginBottom: 16,
   },
 
   dayCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 18,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     marginHorizontal: 16,
     marginBottom: 10,
     padding: 16,
-    ...cardShadow,
   },
   dayName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 10,
   },
 
@@ -464,15 +470,15 @@ const s = StyleSheet.create({
     paddingHorizontal: 12,
   },
   blockInfo: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  blockTime: { fontFamily: ViveFonts.medium, fontSize: 13, color: ViveColors.text },
-  blockDuration: { fontFamily: ViveFonts.regular, fontSize: 12, color: `${ViveColors.text}66` },
+  blockTime: { fontFamily: ViveFonts.medium, fontSize: 13, color: 'rgba(255,255,255,0.9)' },
+  blockDuration: { fontFamily: ViveFonts.regular, fontSize: 12, color: 'rgba(255,255,255,0.5)' },
 
   addBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingTop: 4 },
   addBtnText: { fontFamily: ViveFonts.medium, fontSize: 13, color: ViveColors.primary },
 
   addForm: {
     borderTopWidth: 1,
-    borderTopColor: `${ViveColors.text}0D`,
+    borderTopColor: 'rgba(255,255,255,0.1)',
     marginTop: 4,
     paddingTop: 12,
   },
@@ -483,7 +489,7 @@ const s = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 6,
   },
-  timeLabel: { fontFamily: ViveFonts.medium, fontSize: 14, color: ViveColors.text },
+  timeLabel: { fontFamily: ViveFonts.medium, fontSize: 14, color: 'rgba(255,255,255,0.85)' },
   timeBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -492,13 +498,13 @@ const s = StyleSheet.create({
     paddingHorizontal: 14,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: `${ViveColors.text}28`,
+    borderColor: 'rgba(255,255,255,0.25)',
   },
   timeBtnSet: {
     borderColor: `${ViveColors.primary}55`,
     backgroundColor: `${ViveColors.primary}0D`,
   },
-  timeBtnText: { fontFamily: ViveFonts.medium, fontSize: 14, color: `${ViveColors.text}66` },
+  timeBtnText: { fontFamily: ViveFonts.medium, fontSize: 14, color: 'rgba(255,255,255,0.5)' },
   timeBtnTextSet: { color: ViveColors.primary },
 
   validationHint: {
@@ -512,7 +518,7 @@ const s = StyleSheet.create({
   durationLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
+    color: 'rgba(255,255,255,0.85)',
     marginTop: 14,
     marginBottom: 8,
   },
@@ -522,10 +528,10 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: `${ViveColors.text}28`,
+    borderColor: 'rgba(255,255,255,0.25)',
   },
   durationChipActive: { backgroundColor: ViveColors.primary, borderColor: ViveColors.primary },
-  durationChipText: { fontFamily: ViveFonts.medium, fontSize: 13, color: `${ViveColors.text}88` },
+  durationChipText: { fontFamily: ViveFonts.medium, fontSize: 13, color: 'rgba(255,255,255,0.6)' },
   durationChipTextActive: { color: '#FFFFFF' },
 
   formActions: { flexDirection: 'row', gap: 10, marginTop: 16 },
@@ -534,10 +540,10 @@ const s = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: `${ViveColors.text}28`,
+    borderColor: 'rgba(255,255,255,0.25)',
     alignItems: 'center',
   },
-  cancelBtnText: { fontFamily: ViveFonts.medium, fontSize: 14, color: `${ViveColors.text}88` },
+  cancelBtnText: { fontFamily: ViveFonts.medium, fontSize: 14, color: 'rgba(255,255,255,0.6)' },
   saveBtn: {
     flex: 1.5,
     paddingVertical: 12,

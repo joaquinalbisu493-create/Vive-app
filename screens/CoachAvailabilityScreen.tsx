@@ -18,6 +18,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { AppBg } from '@/components/ui/AppBg';
 
 const MONTH_NAMES = [
   'Enero','Febrero','Marzo','Abril','Mayo','Junio',
@@ -191,10 +192,11 @@ export default function CoachAvailabilityScreen() {
   const weeks = buildCalendar(year, month);
 
   return (
+    <AppBg>
     <SafeAreaView style={s.safe} edges={['top']}>
       <View style={s.header}>
         <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8} activeOpacity={0.7}>
-          <MaterialCommunityIcons name="arrow-left" size={22} color={ViveColors.text} />
+          <MaterialCommunityIcons name="arrow-left" size={22} color="rgba(255,255,255,0.8)" />
         </TouchableOpacity>
         <Text style={s.headerTitle}>Disponibilidad</Text>
         <View style={{ width: 36 }} />
@@ -219,12 +221,12 @@ export default function CoachAvailabilityScreen() {
               <MaterialCommunityIcons
                 name="chevron-left"
                 size={28}
-                color={isCurrentMonth ? `${ViveColors.text}28` : ViveColors.text}
+                color={isCurrentMonth ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.8)'}
               />
             </TouchableOpacity>
             <Text style={s.monthLabel}>{MONTH_NAMES[month]} {year}</Text>
             <TouchableOpacity onPress={nextMonth} hitSlop={8} activeOpacity={0.7}>
-              <MaterialCommunityIcons name="chevron-right" size={28} color={ViveColors.text} />
+              <MaterialCommunityIcons name="chevron-right" size={28} color="rgba(255,255,255,0.8)" />
             </TouchableOpacity>
           </View>
 
@@ -289,7 +291,7 @@ export default function CoachAvailabilityScreen() {
                       if (slot.isBooked) {
                         return (
                           <View key={slot.id} style={[s.slotRow, s.slotRowBooked]}>
-                            <MaterialCommunityIcons name="lock-outline" size={14} color={`${ViveColors.text}44`} />
+                            <MaterialCommunityIcons name="lock-outline" size={14} color="rgba(255,255,255,0.3)" />
                             <Text style={[s.slotTime, s.slotTimeBooked]}>{slot.time}</Text>
                           </View>
                         );
@@ -319,7 +321,7 @@ export default function CoachAvailabilityScreen() {
                         >
                           <MaterialCommunityIcons name="lock-open-variant-outline" size={14} color={ViveColors.accent} />
                           <Text style={[s.slotTime, s.slotTimeFree]}>{slot.time}</Text>
-                          <MaterialCommunityIcons name="close" size={14} color={`${ViveColors.text}55`} />
+                          <MaterialCommunityIcons name="close" size={14} color="rgba(255,255,255,0.4)" />
                         </TouchableOpacity>
                       );
                     })}
@@ -350,7 +352,7 @@ export default function CoachAvailabilityScreen() {
           </View>
         ) : (
           <View style={s.emptyState}>
-            <MaterialCommunityIcons name="calendar-blank-outline" size={44} color={`${ViveColors.text}22`} />
+            <MaterialCommunityIcons name="calendar-blank-outline" size={44} color="rgba(255,255,255,0.2)" />
             <Text style={s.emptyText}>Tocá una fecha para ver o editar sus horarios</Text>
           </View>
         )}
@@ -366,26 +368,23 @@ export default function CoachAvailabilityScreen() {
         />
       )}
     </SafeAreaView>
+    </AppBg>
   );
 }
 
-const dayShadow = Platform.select({
-  ios: { shadowColor: ViveColors.text, shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.07, shadowRadius: 4 },
-  android: { elevation: 1 },
-});
-const cardShadow = Platform.select({
-  ios: { shadowColor: ViveColors.text, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.07, shadowRadius: 8 },
-  android: { elevation: 2 },
-});
+const GLASS = 'rgba(255,255,255,0.14)';
+const GLASS_BORDER = 'rgba(255,255,255,0.28)';
 
 const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: ViveColors.background },
+  safe: { flex: 1 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.15)',
     gap: 12,
   },
   backBtn: { padding: 4 },
@@ -393,11 +392,11 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     textAlign: 'center',
     marginRight: 36,
   },
-  divider: { height: 1, backgroundColor: `${ViveColors.text}0D` },
+  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
   scroll: { paddingTop: 20 },
   calSection: { paddingHorizontal: 16, marginBottom: 8 },
   monthNav: {
@@ -410,7 +409,7 @@ const s = StyleSheet.create({
   monthLabel: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     letterSpacing: -0.2,
   },
   weekRow: { flexDirection: 'row', marginBottom: 4 },
@@ -418,7 +417,7 @@ const s = StyleSheet.create({
   dayHeader: {
     fontFamily: ViveFonts.medium,
     fontSize: 12,
-    color: `${ViveColors.text}55`,
+    color: 'rgba(255,255,255,0.5)',
     paddingBottom: 8,
   },
   dayCircle: {
@@ -428,30 +427,31 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  dayCircleSelectable: { backgroundColor: '#FFFFFF', ...dayShadow },
+  dayCircleSelectable: { backgroundColor: 'rgba(255,255,255,0.12)' },
   dayCircleSelected: { backgroundColor: ViveColors.primary },
-  dayText: { fontFamily: ViveFonts.medium, fontSize: 14, color: ViveColors.text },
+  dayText: { fontFamily: ViveFonts.medium, fontSize: 14, color: 'rgba(255,255,255,0.85)' },
   dayTextSelected: { fontFamily: ViveFonts.semibold, color: '#FFFFFF' },
-  dayTextPast: { color: '#CBCBCB', fontFamily: ViveFonts.regular },
+  dayTextPast: { color: 'rgba(255,255,255,0.25)', fontFamily: ViveFonts.regular },
   slotsCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 18,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     marginHorizontal: 16,
     marginTop: 12,
     padding: 18,
-    ...cardShadow,
   },
   slotsTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: 'rgba(255,255,255,0.9)',
     marginBottom: 16,
   },
   slotsTitleDate: { color: ViveColors.primary },
   noSlotsText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}55`,
+    color: 'rgba(255,255,255,0.5)',
     marginBottom: 14,
   },
   slotList: { gap: 8, marginBottom: 14 },
@@ -469,7 +469,7 @@ const s = StyleSheet.create({
     borderColor: `${ViveColors.accent}44`,
   },
   slotRowBooked: {
-    backgroundColor: `${ViveColors.text}0A`,
+    backgroundColor: 'rgba(255,255,255,0.06)',
     borderColor: 'transparent',
   },
   slotRowBlocked: {
@@ -478,8 +478,8 @@ const s = StyleSheet.create({
   },
   slotTimeBlocked: { color: ViveColors.primary },
   slotTime: { fontFamily: ViveFonts.medium, fontSize: 14, flex: 1 },
-  slotTimeFree: { color: ViveColors.text },
-  slotTimeBooked: { color: `${ViveColors.text}44` },
+  slotTimeFree: { color: 'rgba(255,255,255,0.85)' },
+  slotTimeBooked: { color: 'rgba(255,255,255,0.3)' },
   addSlotBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -507,7 +507,7 @@ const s = StyleSheet.create({
   emptyText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: `${ViveColors.text}55`,
+    color: 'rgba(255,255,255,0.5)',
     textAlign: 'center',
     paddingHorizontal: 40,
     lineHeight: 22,

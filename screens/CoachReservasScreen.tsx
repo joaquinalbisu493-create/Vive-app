@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Platform,
   ScrollView,
   Modal,
   Alert,
@@ -21,6 +20,7 @@ import { useAuth } from '@/context/AuthContext';
 import { sendPushNotification } from '@/lib/notifications';
 import { encryptMessage } from '@/lib/encryption';
 import { isCancelLate } from '@/lib/bookingHelpers';
+import { AppBg } from '@/components/ui/AppBg';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type ReservationStatus = 'pendiente' | 'confirmada' | 'cancelada';
@@ -70,13 +70,11 @@ function hoursLeftToRespond(createdAt: string): number {
 function urgencyColor(hoursLeft: number): string {
   if (hoursLeft <= 6) return '#E05252';
   if (hoursLeft <= 12) return ViveColors.primary;
-  return `${ViveColors.text}70`;
+  return 'rgba(255,255,255,0.6)';
 }
 
-const cardShadow = Platform.select({
-  ios: { shadowColor: ViveColors.text, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08, shadowRadius: 8 },
-  android: { elevation: 2 },
-});
+const GLASS = 'rgba(255,255,255,0.14)';
+const GLASS_BORDER = 'rgba(255,255,255,0.28)';
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 export default function CoachReservasScreen() {
@@ -408,12 +406,13 @@ export default function CoachReservasScreen() {
   console.log('[CoachReservas] render bookings:', bookings);
 
   return (
+    <AppBg>
     <SafeAreaView style={s.safe} edges={['top']}>
       {/* Header */}
       <View style={s.header}>
         {!isInTab && (
           <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8} activeOpacity={0.7}>
-            <MaterialCommunityIcons name="arrow-left" size={22} color={ViveColors.text} />
+            <MaterialCommunityIcons name="arrow-left" size={22} color="rgba(255,255,255,0.8)" />
           </TouchableOpacity>
         )}
         <Text style={[s.headerTitle, isInTab && s.headerTitleTab]}>Reservas</Text>
@@ -477,7 +476,7 @@ export default function CoachReservasScreen() {
 
                   {!!b.user_message && (
                     <View style={s.userMessageBox}>
-                      <MaterialCommunityIcons name="format-quote-open" size={16} color={`${ViveColors.text}55`} />
+                      <MaterialCommunityIcons name="format-quote-open" size={16} color="rgba(255,255,255,0.4)" />
                       <Text style={s.userMessageText}>{b.user_message}</Text>
                     </View>
                   )}
@@ -553,7 +552,7 @@ export default function CoachReservasScreen() {
               onPress={() => setRejectModal({ visible: false, id: null })}
               hitSlop={8}
               activeOpacity={0.7}>
-              <MaterialCommunityIcons name="close" size={22} color={ViveColors.text} />
+              <MaterialCommunityIcons name="close" size={22} color="rgba(255,255,255,0.8)" />
             </TouchableOpacity>
           </View>
 
@@ -564,7 +563,7 @@ export default function CoachReservasScreen() {
               value={rejectReason}
               onChangeText={setRejectReason}
               placeholder="Ej: No tengo disponibilidad ese horario."
-              placeholderTextColor={`${ViveColors.text}44`}
+              placeholderTextColor="rgba(255,255,255,0.35)"
               multiline
               numberOfLines={4}
               textAlignVertical="top"
@@ -583,18 +582,21 @@ export default function CoachReservasScreen() {
         </SafeAreaView>
       </Modal>
     </SafeAreaView>
+    </AppBg>
   );
 }
 
 const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: ViveColors.background },
+  safe: { flex: 1 },
 
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.15)',
     gap: 12,
   },
   backBtn: { padding: 4 },
@@ -602,7 +604,7 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     textAlign: 'center',
     marginRight: 30,
   },
@@ -610,7 +612,7 @@ const s = StyleSheet.create({
     marginRight: 0,
   },
   headerSpacer: { width: 30 },
-  divider: { height: 1, backgroundColor: `${ViveColors.text}0D` },
+  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
 
   loadingState: {
     flex: 1,
@@ -623,7 +625,7 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 14,
   },
   pendingCount: { color: ViveColors.primary },
@@ -631,11 +633,12 @@ const s = StyleSheet.create({
 
   // Pending card
   pendingCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     padding: 16,
     marginBottom: 14,
-    ...cardShadow,
   },
   cardHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, marginBottom: 12 },
   avatar: {
@@ -653,25 +656,25 @@ const s = StyleSheet.create({
   avatarText: {
     fontFamily: ViveFonts.bold,
     fontSize: 14,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
   cardInfo: { flex: 1 },
   cardName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 3,
   },
   cardDate: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
+    color: 'rgba(255,255,255,0.85)',
     marginBottom: 2,
   },
   cardRequested: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: `${ViveColors.text}60`,
+    color: 'rgba(255,255,255,0.5)',
   },
 
   countdownRow: {
@@ -690,7 +693,9 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 8,
-    backgroundColor: ViveColors.background,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.15)',
     borderRadius: 10,
     padding: 12,
     marginBottom: 14,
@@ -699,7 +704,7 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: ViveColors.text,
+    color: 'rgba(255,255,255,0.85)',
     lineHeight: 19,
   },
 
@@ -723,10 +728,6 @@ const s = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     backgroundColor: ViveColors.accent,
-    ...Platform.select({
-      ios: { shadowColor: ViveColors.accent, shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.25, shadowRadius: 6 },
-      android: { elevation: 3 },
-    }),
   },
   acceptBtnText: {
     fontFamily: ViveFonts.semibold,
@@ -738,12 +739,13 @@ const s = StyleSheet.create({
   confirmedCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     padding: 14,
     marginBottom: 10,
     gap: 12,
-    ...cardShadow,
   },
   confirmedCardRight: {
     alignItems: 'flex-end',
@@ -773,25 +775,26 @@ const s = StyleSheet.create({
 
   // Empty state
   emptyState: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     paddingVertical: 32,
     alignItems: 'center',
     gap: 10,
     marginBottom: 14,
-    ...cardShadow,
   },
   emptyText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: `${ViveColors.text}70`,
+    color: 'rgba(255,255,255,0.6)',
     textAlign: 'center',
     lineHeight: 22,
   },
 });
 
 const rm = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: '#FFFFFF' },
+  safe: { flex: 1, backgroundColor: '#1A0A26' },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -799,21 +802,22 @@ const rm = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: `${ViveColors.text}0D`,
+    borderBottomColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,255,255,0.08)',
   },
-  title: { fontFamily: ViveFonts.semibold, fontSize: 17, color: ViveColors.text },
+  title: { fontFamily: ViveFonts.semibold, fontSize: 17, color: '#FFFFFF' },
   body: { paddingHorizontal: 20, paddingTop: 24 },
-  label: { fontFamily: ViveFonts.semibold, fontSize: 13, color: ViveColors.text, marginBottom: 10 },
+  label: { fontFamily: ViveFonts.semibold, fontSize: 13, color: 'rgba(255,255,255,0.85)', marginBottom: 10 },
   input: {
-    backgroundColor: ViveColors.background,
+    backgroundColor: 'rgba(255,255,255,0.12)',
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 13,
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     borderWidth: 1,
-    borderColor: `${ViveColors.text}14`,
+    borderColor: 'rgba(255,255,255,0.28)',
     height: 110,
   },
   rejectBtn: {
@@ -822,10 +826,6 @@ const rm = StyleSheet.create({
     paddingVertical: 14,
     alignItems: 'center',
     marginTop: 24,
-    ...Platform.select({
-      ios: { shadowColor: '#E05252', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.25, shadowRadius: 8 },
-      android: { elevation: 4 },
-    }),
   },
   rejectBtnText: { fontFamily: ViveFonts.semibold, fontSize: 15, color: '#FFFFFF' },
   cancelBtn: {
@@ -833,5 +833,5 @@ const rm = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
-  cancelBtnText: { fontFamily: ViveFonts.medium, fontSize: 14, color: `${ViveColors.text}70` },
+  cancelBtnText: { fontFamily: ViveFonts.medium, fontSize: 14, color: 'rgba(255,255,255,0.6)' },
 });

@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Platform,
   ScrollView,
   Switch,
 } from 'react-native';
@@ -14,12 +13,10 @@ import { useRouter } from 'expo-router';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { ViveColors, ViveFonts } from '@/constants/theme';
+import { AppBg } from '@/components/ui/AppBg';
 
-
-const cardShadow = Platform.select({
-  ios: { shadowColor: ViveColors.text, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.07, shadowRadius: 8 },
-  android: { elevation: 2 },
-});
+const GLASS = 'rgba(255,255,255,0.14)';
+const GLASS_BORDER = 'rgba(255,255,255,0.28)';
 
 type CoachProfile = {
   name: string;
@@ -73,6 +70,7 @@ export default function CoachProfileScreen() {
   const initials = profile?.name ? getInitials(profile.name) : loadingProfile ? '…' : '?';
 
   return (
+    <AppBg>
     <SafeAreaView style={s.safe} edges={['top']}>
       <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
 
@@ -163,14 +161,14 @@ export default function CoachProfileScreen() {
         >
           <MaterialCommunityIcons name="calendar-clock" size={18} color={ViveColors.primary} />
           <Text style={s.availBtnText}>Gestionar disponibilidad</Text>
-          <MaterialCommunityIcons name="chevron-right" size={18} color={`${ViveColors.text}44`} />
+          <MaterialCommunityIcons name="chevron-right" size={18} color="rgba(255,255,255,0.4)" />
         </TouchableOpacity>
 
         {/* ── Video perfil ──────────────────────────────────── */}
         <Text style={[s.sectionTitle, s.sectionSpaced]}>Video de perfil</Text>
         <View style={s.videoCard}>
           <View style={s.videoPlaceholder}>
-            <MaterialCommunityIcons name="video-outline" size={36} color={`${ViveColors.text}40`} />
+            <MaterialCommunityIcons name="video-outline" size={36} color="rgba(255,255,255,0.35)" />
             <Text style={s.videoPlaceholderText}>Sin video grabado</Text>
           </View>
           <TouchableOpacity style={s.recordBtn} onPress={() => console.log('[Coach] grabar video')} activeOpacity={0.85}>
@@ -182,7 +180,7 @@ export default function CoachProfileScreen() {
         {/* ── Estadísticas (post-MVP) ───────────────────────── */}
         <Text style={[s.sectionTitle, s.sectionSpaced]}>Estadísticas</Text>
         <View style={s.comingSoonCard}>
-          <MaterialCommunityIcons name="chart-bar" size={30} color={`${ViveColors.text}30`} />
+          <MaterialCommunityIcons name="chart-bar" size={30} color="rgba(255,255,255,0.25)" />
           <Text style={s.comingSoonText}>Próximamente</Text>
           <Text style={s.comingSoonDesc}>
             Aquí vas a ver sesiones completadas, rating promedio, retención de usuarios y más.
@@ -198,11 +196,12 @@ export default function CoachProfileScreen() {
         <View style={{ height: 40 }} />
       </ScrollView>
     </SafeAreaView>
+    </AppBg>
   );
 }
 
 const s = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: ViveColors.background },
+  safe: { flex: 1 },
   container: { paddingTop: 0, paddingHorizontal: 0 },
 
   // Identity section
@@ -211,7 +210,9 @@ const s = StyleSheet.create({
     paddingTop: 32,
     paddingBottom: 28,
     paddingHorizontal: 24,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
+    borderBottomWidth: 1,
+    borderBottomColor: GLASS_BORDER,
     marginBottom: 24,
   },
   photoWrap: { position: 'relative', marginBottom: 16 },
@@ -224,15 +225,11 @@ const s = StyleSheet.create({
     borderColor: ViveColors.primary,
     alignItems: 'center',
     justifyContent: 'center',
-    ...Platform.select({
-      ios: { shadowColor: ViveColors.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 10 },
-      android: { elevation: 4 },
-    }),
   },
   photoInitials: {
     fontFamily: ViveFonts.bold,
     fontSize: 30,
-    color: ViveColors.primary,
+    color: '#FFFFFF',
   },
   editPhotoBtn: {
     position: 'absolute',
@@ -250,7 +247,7 @@ const s = StyleSheet.create({
   coachName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 22,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 4,
   },
   coachSpecialty: {
@@ -262,7 +259,7 @@ const s = StyleSheet.create({
   coachBio: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}80`,
+    color: 'rgba(255,255,255,0.7)',
     textAlign: 'center',
     lineHeight: 19,
     marginBottom: 4,
@@ -271,13 +268,13 @@ const s = StyleSheet.create({
   coachMeta: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}70`,
+    color: 'rgba(255,255,255,0.65)',
     marginBottom: 18,
   },
   emptyCoachText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}60`,
+    color: 'rgba(255,255,255,0.55)',
     textAlign: 'center',
     marginBottom: 18,
     marginTop: 4,
@@ -301,7 +298,7 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 12,
     paddingHorizontal: 20,
   },
@@ -318,12 +315,12 @@ const s = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 13,
     borderRadius: 20,
-    backgroundColor: `${ViveColors.text}10`,
+    backgroundColor: 'rgba(255,255,255,0.1)',
   },
   topicChipText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
   addChip: {
     flexDirection: 'row',
@@ -343,11 +340,12 @@ const s = StyleSheet.create({
 
   // Price
   priceCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     padding: 16,
     marginHorizontal: 20,
-    ...cardShadow,
   },
   priceRow: {
     flexDirection: 'row',
@@ -356,13 +354,13 @@ const s = StyleSheet.create({
   },
   priceDivider: {
     height: 1,
-    backgroundColor: `${ViveColors.text}0D`,
+    backgroundColor: 'rgba(255,255,255,0.1)',
     marginVertical: 12,
   },
   priceLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 14,
-    color: ViveColors.text,
+    color: 'rgba(255,255,255,0.85)',
   },
   priceSaving: {
     fontFamily: ViveFonts.regular,
@@ -373,77 +371,80 @@ const s = StyleSheet.create({
   priceValue: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
 
   // Toggle
   toggleCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     padding: 16,
     marginHorizontal: 20,
     gap: 16,
-    ...cardShadow,
   },
   toggleInfo: { flex: 1 },
   toggleTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 3,
   },
   toggleDesc: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: `${ViveColors.text}70`,
+    color: 'rgba(255,255,255,0.6)',
     lineHeight: 18,
   },
 
   availBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     padding: 16,
     marginHorizontal: 20,
     gap: 12,
-    ...cardShadow,
   },
   availBtnText: {
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
 
   // Video
   videoCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     padding: 16,
     marginHorizontal: 20,
     alignItems: 'center',
     gap: 16,
-    ...cardShadow,
   },
   videoPlaceholder: {
     width: '100%',
     height: 130,
     borderRadius: 12,
-    backgroundColor: ViveColors.background,
+    backgroundColor: 'rgba(255,255,255,0.08)',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
     borderWidth: 1,
-    borderColor: `${ViveColors.text}10`,
+    borderColor: 'rgba(255,255,255,0.15)',
     borderStyle: 'dashed',
   },
   videoPlaceholderText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}50`,
+    color: 'rgba(255,255,255,0.45)',
   },
   recordBtn: {
     flexDirection: 'row',
@@ -463,23 +464,24 @@ const s = StyleSheet.create({
 
   // Coming soon
   comingSoonCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     padding: 24,
     marginHorizontal: 20,
     alignItems: 'center',
     gap: 8,
-    ...cardShadow,
   },
   comingSoonText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: `${ViveColors.text}50`,
+    color: 'rgba(255,255,255,0.5)',
   },
   comingSoonDesc: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}55`,
+    color: 'rgba(255,255,255,0.5)',
     textAlign: 'center',
     lineHeight: 20,
     marginTop: 2,
