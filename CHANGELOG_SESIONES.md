@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-06-25 — Joaquín (sesión 12)
+
+**Tocado:** `app/progreso.tsx`, `app/(tabs)/index.tsx`
+
+**Resumen:**
+- Pantalla `/progreso` existente completada: conectada con datos reales de Supabase (historial de sesiones pasadas: bookings con `status='completada'` o `status='confirmada'` y fecha anterior a hoy, con coach name + specialty via `Promise.all`). El stat "Sesiones completadas" también viene de Supabase; semanas y áreas quedan como placeholders con TODO.
+- Navegación del Home corregida: la tarjeta "Sobre ti" ahora apunta a `/progreso` en vez de `/sessions`.
+- Sin cambios de schema ni de base de datos.
+
+**Pendiente para la próxima sesión:**
+- Verificar que `BookingScreen_Time.tsx` recibe los params correctos desde Calendar (abierto desde sesión 8).
+- Testear visualmente Home + Progreso en dispositivo.
+
+---
+
 ## 2026-06-25 — Joaquín (sesión 11)
 
 **Tocado:** `app/(tabs)/index.tsx`
