@@ -7,10 +7,9 @@ import {
   StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { ViveColors, ViveFonts } from '@/constants/theme';
+import { ViveFonts } from '@/constants/theme';
 import { ScaleCard } from '@/components/ScaleCard';
 import { FirstTimeTooltip } from '@/components/FirstTimeTooltip';
 import { AppBg } from '@/components/ui/AppBg';

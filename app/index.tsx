@@ -15,7 +15,7 @@ export default function Index() {
     if (user) {
       router.replace(role === 'coach' ? '/(coach)' : '/(tabs)' as any);
     }
-  }, [user, loading, role]);
+  }, [user, loading, role, router]);
 
   if (loading) {
     return (

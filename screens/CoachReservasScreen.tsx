@@ -259,7 +259,7 @@ export default function CoachReservasScreen() {
 
         await Promise.all(
           conflicting.map((cb) => {
-            const ops: Promise<unknown>[] = [
+            const ops: PromiseLike<unknown>[] = [
               supabase.from('bookings').update({ status: 'cancelada' }).eq('id', cb.id),
               supabase.from('notifications').insert({
                 recipient_id: cb.user_id,

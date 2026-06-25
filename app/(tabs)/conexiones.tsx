@@ -136,7 +136,7 @@ export default function ConexionesScreen() {
   function toggleFav(profileId: string) {
     setFavs(prev => {
       const next = new Set(prev);
-      next.has(profileId) ? next.delete(profileId) : next.add(profileId);
+      if (next.has(profileId)) { next.delete(profileId); } else { next.add(profileId); }
       return next;
     });
   }

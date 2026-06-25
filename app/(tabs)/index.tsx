@@ -96,7 +96,7 @@ export default function InicioScreen() {
       Animated.timing(a5, { toValue: 1, duration: 380, useNativeDriver: true }),
       Animated.timing(a6, { toValue: 1, duration: 380, useNativeDriver: true }),
     ]).start();
-  }, []);
+  }, [a1, a2, a3, a4, a5, a6]);
 
   useEffect(() => {
     if (!user) return;

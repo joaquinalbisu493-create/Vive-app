@@ -30,7 +30,7 @@ function NotificationSetup() {
   useEffect(() => {
     if (!user) return;
     registerForPushNotifications(user.id);
-  }, [user?.id]);
+  }, [user]);
 
   useEffect(() => {
     const sub = Notifications.addNotificationReceivedListener(notification => {
@@ -67,7 +67,7 @@ function AuthRedirect() {
     } else if (role === 'user' && inCoachGroup) {
       router.replace('/(tabs)');
     }
-  }, [user, loading, role, segments]);
+  }, [user, loading, role, segments, router]);
 
   return null;
 }

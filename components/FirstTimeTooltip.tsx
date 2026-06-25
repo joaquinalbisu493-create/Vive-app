@@ -40,7 +40,7 @@ export function FirstTimeTooltip({
         setTimeout(() => setVisible(true), delay);
       }
     });
-  }, []);
+  }, [storageKey, delay]);
 
   useEffect(() => {
     if (!visible) return;
@@ -53,7 +53,7 @@ export function FirstTimeTooltip({
         useNativeDriver: true,
       }),
     ]).start();
-  }, [visible]);
+  }, [visible, fadeAnim, slideAnim]);
 
   function dismiss() {
     Animated.parallel([

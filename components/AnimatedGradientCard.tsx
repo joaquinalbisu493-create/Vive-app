@@ -32,7 +32,7 @@ export function AnimatedGradientCard({ style, children }: Props) {
         Animated.timing(anim2, { toValue: 0, duration: 3500, easing: Easing.inOut(Easing.ease), useNativeDriver: false }),
       ])
     ).start();
-  }, []);
+  }, [anim1, anim2]);
 
   const layer1Style = {
     opacity: anim1.interpolate({ inputRange: [0, 0.5, 1], outputRange: [0, 0.88, 0] }),

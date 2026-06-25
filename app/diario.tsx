@@ -168,7 +168,7 @@ export default function DiarioScreen() {
 
           {/* ── Paso 2: Prompt del día ───────────────────────────── */}
           <View style={[s.section, s.promptCard]}>
-            <Text style={s.quoteChar}>"</Text>
+            <Text style={s.quoteChar}>{'"'}</Text>
             <Text style={s.promptText}>{DAILY_PROMPT}</Text>
             <Text style={s.promptHint}>
               No hay respuesta correcta. Escribí lo que te salga.

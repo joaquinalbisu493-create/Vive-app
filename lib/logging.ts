@@ -1,53 +1,44 @@
-import { File, Paths } from "expo-file-system";
+// Simple in-memory + console logger.
+// expo-file-system is not a project dependency; keeping the same exported API
+// so callers don't need to change.
 
-function logFile() {
-  return new File(Paths.document, "error.log");
-}
+const MAX_ENTRIES = 200;
+const logBuffer: string[] = [];
 
 function formatEntry(level: string, message: string, error?: unknown): string {
   const timestamp = new Date().toISOString();
   const detail =
-    error instanceof Error ? `\n  ${error.stack ?? error.message}` : "";
-  return `[${timestamp}] [${level}] ${message}${detail}\n`;
+    error instanceof Error ? `\n  ${error.stack ?? error.message}` : '';
+  return `[${timestamp}] [${level}] ${message}${detail}`;
 }
 
-async function append(entry: string) {
-  try {
-    const file = logFile();
-    const existing = file.exists ? await file.text() : "";
-    file.write(existing + entry);
-  } catch {
-    // Silently fail — logging must not crash the app
-  }
+function push(entry: string) {
+  logBuffer.push(entry);
+  if (logBuffer.length > MAX_ENTRIES) logBuffer.shift();
 }
 
 export async function logError(message: string, error?: unknown) {
-  await append(formatEntry("ERROR", message, error));
+  const entry = formatEntry('ERROR', message, error);
+  push(entry);
+  console.error(entry);
 }
 
 export async function logWarn(message: string) {
-  await append(formatEntry("WARN", message));
+  const entry = formatEntry('WARN', message);
+  push(entry);
+  console.warn(entry);
 }
 
 export async function logInfo(message: string) {
-  await append(formatEntry("INFO", message));
+  const entry = formatEntry('INFO', message);
+  push(entry);
+  console.log(entry);
 }
 
 export async function readLog(): Promise<string> {
-  try {
-    const file = logFile();
-    if (!file.exists) return "";
-    return await file.text();
-  } catch {
-    return "";
-  }
+  return logBuffer.join('\n');
 }
 
 export async function clearLog() {
-  try {
-    const file = logFile();
-    if (file.exists) file.delete();
-  } catch {
-    // ignore
-  }
+  logBuffer.length = 0;
 }
