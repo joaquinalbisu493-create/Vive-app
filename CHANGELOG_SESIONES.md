@@ -5,6 +5,29 @@
 
 ---
 
+## 2026-06-25 — Andre (auditoría post-merge sesión 8)
+
+**Tocado:** ningún archivo modificado (sesión de auditoría solamente)
+
+**Resumen:**
+- Auditoría completa de los 6 puntos críticos de la sesión 7 (Joaquín) post-merge
+  glass de la sesión 8. Los 6 sobrevivieron intactos sin pérdidas:
+  1. **Cancelación usuario/coach** — flujo y lógica preservados.
+  2. **Columnas `cancelled_by` / `cancelled_late`** — presentes en schema y en código.
+  3. **Mensajes de sistema** (incluyendo los 2 bugs resueltos en sesión 7) — código
+     intacto, correcciones no revertidas por el merge.
+  4. **Push notifications** — lógica y wiring sin cambios.
+  5. **Archivos de coordinación** (`SCHEMA.md`, `CHANGELOG_SESIONES.md`) — consistentes
+     con el estado real del código.
+  6. **`lib/logging.ts`** y el chain `coachId`/`coachProfileId` — presentes y sin
+     regresiones.
+
+**Pendiente para la próxima sesión:**
+- Ninguno abierto por esta auditoría; los pendientes vigentes son los de la sesión 8
+  (panel coach con glass, params de BookingScreen_Time, push a andre/main).
+
+---
+
 ## 2026-06-25 — Joaquín (sesión 8)
 
 **Tocado:** `screens/RegisterScreen.tsx`, `screens/SalaScreen.tsx`, `app/(tabs)/index.tsx`, `app/(tabs)/conexiones.tsx`, `screens/BookingScreen_Calendar.tsx`, `screens/BookingScreen_Time.tsx`, `screens/BookingScreen_Confirm.tsx`, `screens/BookingScreen_Success.tsx`, `screens/ProfesionalScreen.tsx`
