@@ -31,7 +31,7 @@ type Params = {
   specialty?: string;
   date?: string;
   time?: string;
-  coachId?: string;
+  salaId?: string;
 };
 
 export default function BookingScreen_Success() {
@@ -42,7 +42,7 @@ export default function BookingScreen_Success() {
   const specialty = params.specialty ?? 'Coach de vida';
   const dateStr = params.date ?? '';
   const time = params.time ?? '';
-  const coachId = params.coachId ?? '';
+  const salaId = params.salaId ?? '';
 
   const firstName = coachName.split(' ')[0];
   const formattedDate = formatDate(dateStr);
@@ -120,7 +120,7 @@ export default function BookingScreen_Success() {
         <Animated.View style={[s.footer, { opacity: contentOpacity }]}>
           <TouchableOpacity
             style={s.btnPrimary}
-            onPress={() => router.push({ pathname: '/sala', params: { coach_id: coachId } })}
+            onPress={() => router.push({ pathname: '/sala', params: { sala_id: salaId } })}
             activeOpacity={0.85}>
             <Text style={s.btnPrimaryText}>Ver mi sala</Text>
           </TouchableOpacity>

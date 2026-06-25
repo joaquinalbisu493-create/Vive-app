@@ -169,6 +169,7 @@ export default function BookingScreen_Confirm() {
           time,
           bookingId: booking.id,
           roomUrl,
+          salaId,
         },
       });
     } catch (e: any) {
