@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-06-25 — Joaquín (sesión 13)
+
+**Tocado:** `app/(tabs)/index.tsx`, `app/progreso.tsx` (navegación), todos los archivos del fix de errores
+
+**Resumen:**
+- Pantalla **Progreso** conectada a la tarjeta "Sobre ti" del Home (navegación `/progreso`).
+- Fix completo de todos los errores de TypeScript y lint de la app: 0 errores TS, 0 warnings lint. Ver commit d6dbe656 para detalle.
+- Merge con `andre/main`: integrado `expo-blur` que Andre agregó + su entrada de auditoría en CHANGELOG. Ambos repos (`origin` y `andre`) quedaron sincronizados.
+
+**Pendiente para la próxima sesión:**
+- Verificar que `BookingScreen_Time.tsx` recibe los params correctos desde Calendar (abierto desde sesión 8).
+- Testear visualmente en dispositivo Home + Progreso.
+
+---
+
 ## 2026-06-25 — Joaquín (sesión 12)
 
 **Tocado:** `app/progreso.tsx`, `app/(tabs)/index.tsx`
