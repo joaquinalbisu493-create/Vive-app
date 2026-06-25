@@ -9,6 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { AppBg } from '@/components/ui/AppBg';
 
 const SPECIALTIES = [
   'Coach de vida',
@@ -107,6 +108,7 @@ export default function CoachApplicationScreen() {
 
   if (submitted) {
     return (
+      <AppBg>
       <SafeAreaView style={styles.container}>
         <Animated.View style={[styles.successContainer, fadeUp(successAnim)]}>
           <View style={styles.successIcon}>
@@ -125,10 +127,12 @@ export default function CoachApplicationScreen() {
           </TouchableOpacity>
         </Animated.View>
       </SafeAreaView>
+      </AppBg>
     );
   }
 
   return (
+    <AppBg>
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -141,7 +145,7 @@ export default function CoachApplicationScreen() {
         >
           <Animated.View style={[styles.header, fadeUp(headerAnim)]}>
             <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-              <MaterialCommunityIcons name="arrow-left" size={20} color={ViveColors.text} />
+              <MaterialCommunityIcons name="arrow-left" size={20} color="rgba(255,255,255,0.8)" />
               <Text style={styles.backText}>Atrás</Text>
             </TouchableOpacity>
           </Animated.View>
@@ -190,7 +194,7 @@ export default function CoachApplicationScreen() {
                 value={bio}
                 onChangeText={(t) => setBio(t.slice(0, BIO_MAX))}
                 placeholder="Contanos sobre tu experiencia y cómo trabajás"
-                placeholderTextColor={`${ViveColors.text}55`}
+                placeholderTextColor="rgba(255,255,255,0.4)"
                 multiline
                 numberOfLines={5}
                 textAlignVertical="top"
@@ -206,7 +210,7 @@ export default function CoachApplicationScreen() {
                 value={price}
                 onChangeText={setPrice}
                 placeholder="Ej: 8000"
-                placeholderTextColor={`${ViveColors.text}55`}
+                placeholderTextColor="rgba(255,255,255,0.4)"
                 keyboardType="numeric"
               />
             </View>
@@ -219,7 +223,7 @@ export default function CoachApplicationScreen() {
                 value={nationality}
                 onChangeText={setNationality}
                 placeholder="Ej: Argentina"
-                placeholderTextColor={`${ViveColors.text}55`}
+                placeholderTextColor="rgba(255,255,255,0.4)"
                 autoCapitalize="words"
               />
             </View>
@@ -235,7 +239,7 @@ export default function CoachApplicationScreen() {
                 value={videoUrl}
                 onChangeText={setVideoUrl}
                 placeholder="https://..."
-                placeholderTextColor={`${ViveColors.text}55`}
+                placeholderTextColor="rgba(255,255,255,0.4)"
                 keyboardType="url"
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -263,18 +267,13 @@ export default function CoachApplicationScreen() {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
+    </AppBg>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
-  scroll: {
-    flexGrow: 1,
-    paddingBottom: 48,
-  },
+  container: { flex: 1 },
+  scroll: { flexGrow: 1, paddingBottom: 48 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -282,47 +281,32 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 4,
   },
-  backBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
+  backBtn: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   backText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.45,
+    color: 'rgba(255,255,255,0.6)',
   },
-  content: {
-    paddingHorizontal: 24,
-    paddingTop: 24,
-    gap: 24,
-  },
-  titleArea: {
-    gap: 8,
-  },
+  content: { paddingHorizontal: 24, paddingTop: 24, gap: 24 },
+  titleArea: { gap: 8 },
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 30,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     letterSpacing: -0.5,
     lineHeight: 38,
   },
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: ViveColors.text,
-    opacity: 0.55,
+    color: 'rgba(255,255,255,0.7)',
     lineHeight: 21,
   },
-  section: {
-    gap: 8,
-  },
+  section: { gap: 8 },
   sectionLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.7,
+    color: 'rgba(255,255,255,0.7)',
   },
   labelRow: {
     flexDirection: 'row',
@@ -332,64 +316,53 @@ const styles = StyleSheet.create({
   charCount: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: ViveColors.text,
-    opacity: 0.4,
+    color: 'rgba(255,255,255,0.4)',
   },
-  specialtyGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
+  specialtyGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: {
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
     borderWidth: 1.5,
-    borderColor: 'rgba(31,74,67,0.12)',
+    borderColor: 'rgba(255,255,255,0.28)',
   },
   chipSelected: {
-    backgroundColor: 'rgba(107, 191, 138, 0.12)',
+    backgroundColor: 'rgba(107,191,138,0.22)',
     borderColor: ViveColors.accent,
   },
   chipText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.7,
+    color: 'rgba(255,255,255,0.7)',
   },
   chipTextSelected: {
     fontFamily: ViveFonts.medium,
-    color: ViveColors.text,
-    opacity: 1,
+    color: '#FFFFFF',
   },
   input: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: 'rgba(31,74,67,0.12)',
+    borderColor: 'rgba(255,255,255,0.28)',
   },
-  bioInput: {
-    minHeight: 120,
-    paddingTop: 14,
-  },
+  bioInput: { minHeight: 120, paddingTop: 14 },
   fieldHint: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: ViveColors.text,
-    opacity: 0.5,
+    color: 'rgba(255,255,255,0.5)',
     lineHeight: 17,
   },
   errorBox: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: 'rgba(192,57,43,0.08)',
+    backgroundColor: 'rgba(224,82,82,0.15)',
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -397,7 +370,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: '#C0392B',
+    color: '#FF7070',
     flex: 1,
     lineHeight: 18,
   },
@@ -408,16 +381,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 4,
   },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
+  buttonDisabled: { opacity: 0.6 },
   buttonText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
     color: '#FFFFFF',
     letterSpacing: 0.3,
   },
-  // Success state
   successContainer: {
     flex: 1,
     paddingHorizontal: 32,
@@ -425,13 +395,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 20,
   },
-  successIcon: {
-    marginBottom: 8,
-  },
+  successIcon: { marginBottom: 8 },
   successTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     letterSpacing: -0.3,
     lineHeight: 34,
     textAlign: 'center',
@@ -439,8 +407,7 @@ const styles = StyleSheet.create({
   successSubtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: ViveColors.text,
-    opacity: 0.55,
+    color: 'rgba(255,255,255,0.7)',
     lineHeight: 22,
     textAlign: 'center',
   },

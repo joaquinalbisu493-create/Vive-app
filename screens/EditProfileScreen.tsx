@@ -15,6 +15,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { AppBg } from '@/components/ui/AppBg';
 
 const GENDER_OPTIONS = ['Prefiero no decir', 'Masculino', 'Femenino', 'No binario'] as const;
 type Gender = (typeof GENDER_OPTIONS)[number];
@@ -128,10 +129,11 @@ export default function EditProfileScreen() {
       .join('') || 'U';
 
   return (
+    <AppBg>
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-          <MaterialCommunityIcons name="arrow-left" size={22} color={ViveColors.text} />
+          <MaterialCommunityIcons name="arrow-left" size={22} color="rgba(255,255,255,0.8)" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Editar perfil</Text>
         <View style={styles.headerSpacer} />
@@ -168,7 +170,7 @@ export default function EditProfileScreen() {
                 value={name}
                 onChangeText={setName}
                 placeholder="Tu nombre"
-                placeholderTextColor={`${ViveColors.text}40`}
+                placeholderTextColor="rgba(255,255,255,0.4)"
                 autoCapitalize="words"
                 returnKeyType="next"
               />
@@ -196,7 +198,7 @@ export default function EditProfileScreen() {
                 value={birthDate}
                 onChangeText={handleBirthDateChange}
                 placeholder="DD/MM/AAAA"
-                placeholderTextColor={`${ViveColors.text}40`}
+                placeholderTextColor="rgba(255,255,255,0.4)"
                 keyboardType="numeric"
                 maxLength={10}
                 returnKeyType="next"
@@ -237,7 +239,7 @@ export default function EditProfileScreen() {
                 value={nationality}
                 onChangeText={setNationality}
                 placeholder="Tu nacionalidad"
-                placeholderTextColor={`${ViveColors.text}40`}
+                placeholderTextColor="rgba(255,255,255,0.4)"
                 autoCapitalize="words"
                 returnKeyType="done"
               />
@@ -275,30 +277,24 @@ export default function EditProfileScreen() {
         </ScrollView>
       )}
     </SafeAreaView>
+    </AppBg>
   );
 }
 
-const cardShadow = Platform.select({
-  ios: {
-    shadowColor: '#1F4A43',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-  },
-  android: { elevation: 2 },
-});
+const GLASS = 'rgba(255,255,255,0.14)';
+const GLASS_BORDER = 'rgba(255,255,255,0.28)';
+const INPUT_BG = 'rgba(255,255,255,0.12)';
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
+  safeArea: { flex: 1 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.15)',
     gap: 12,
   },
   backBtn: { padding: 4 },
@@ -306,21 +302,14 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     textAlign: 'center',
     marginRight: 30,
   },
   headerSpacer: { width: 30 },
-  headerDivider: {
-    height: 1,
-    backgroundColor: `${ViveColors.text}0D`,
-  },
+  headerDivider: { height: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
 
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 
   scroll: { flex: 1 },
   scrollContent: { paddingBottom: 32 },
@@ -329,37 +318,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 32,
     paddingBottom: 28,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
+    borderBottomWidth: 1,
+    borderBottomColor: GLASS_BORDER,
     marginBottom: 16,
   },
   avatarCircle: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: `${ViveColors.primary}20`,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     borderWidth: 2,
-    borderColor: ViveColors.primary,
+    borderColor: 'rgba(255,255,255,0.5)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 14,
-    ...Platform.select({
-      ios: {
-        shadowColor: ViveColors.primary,
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.18,
-        shadowRadius: 8,
-      },
-      android: { elevation: 3 },
-    }),
   },
   avatarText: {
     fontFamily: ViveFonts.bold,
     fontSize: 30,
-    color: ViveColors.primary,
+    color: '#FFFFFF',
   },
   changePhotoBtn: {
     borderWidth: 1.5,
-    borderColor: ViveColors.primary,
+    borderColor: 'rgba(255,255,255,0.5)',
     borderRadius: 20,
     paddingVertical: 7,
     paddingHorizontal: 20,
@@ -367,16 +349,17 @@ const styles = StyleSheet.create({
   changePhotoText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.primary,
+    color: '#FFFFFF',
   },
 
   formCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     marginHorizontal: 20,
     marginBottom: 16,
     overflow: 'hidden',
-    ...cardShadow,
   },
   fieldGroup: {
     paddingHorizontal: 16,
@@ -384,13 +367,13 @@ const styles = StyleSheet.create({
   },
   fieldDivider: {
     height: 1,
-    backgroundColor: `${ViveColors.text}08`,
+    backgroundColor: 'rgba(255,255,255,0.1)',
     marginHorizontal: 16,
   },
   fieldLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 12,
-    color: `${ViveColors.text}70`,
+    color: 'rgba(255,255,255,0.6)',
     marginBottom: 6,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -398,16 +381,16 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     paddingVertical: 0,
   },
   inputDisabled: {
-    color: `${ViveColors.text}50`,
+    color: 'rgba(255,255,255,0.4)',
   },
   fieldNote: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: `${ViveColors.text}50`,
+    color: 'rgba(255,255,255,0.45)',
     marginTop: 4,
   },
 
@@ -419,23 +402,24 @@ const styles = StyleSheet.create({
   },
   genderChip: {
     borderWidth: 1.5,
-    borderColor: `${ViveColors.text}25`,
+    borderColor: 'rgba(255,255,255,0.3)',
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 14,
+    backgroundColor: INPUT_BG,
   },
   genderChipSelected: {
-    borderColor: ViveColors.primary,
-    backgroundColor: `${ViveColors.primary}12`,
+    borderColor: 'rgba(255,255,255,0.7)',
+    backgroundColor: 'rgba(255,255,255,0.22)',
   },
   genderChipText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: `${ViveColors.text}70`,
+    color: 'rgba(255,255,255,0.7)',
   },
   genderChipTextSelected: {
     fontFamily: ViveFonts.medium,
-    color: ViveColors.primary,
+    color: '#FFFFFF',
   },
 
   successBanner: {
@@ -444,12 +428,12 @@ const styles = StyleSheet.create({
     gap: 8,
     marginHorizontal: 20,
     marginBottom: 12,
-    backgroundColor: `${ViveColors.accent}15`,
+    backgroundColor: 'rgba(107,191,138,0.2)',
     borderRadius: 12,
     paddingVertical: 10,
     paddingHorizontal: 14,
     borderWidth: 1,
-    borderColor: `${ViveColors.accent}40`,
+    borderColor: 'rgba(107,191,138,0.45)',
   },
   successText: {
     fontFamily: ViveFonts.medium,
@@ -462,17 +446,17 @@ const styles = StyleSheet.create({
     gap: 8,
     marginHorizontal: 20,
     marginBottom: 12,
-    backgroundColor: '#FFF0F0',
+    backgroundColor: 'rgba(224,82,82,0.15)',
     borderRadius: 12,
     paddingVertical: 10,
     paddingHorizontal: 14,
     borderWidth: 1,
-    borderColor: '#F5C0C0',
+    borderColor: 'rgba(224,82,82,0.35)',
   },
   errorText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: '#E05252',
+    color: '#FF7070',
   },
 
   saveBtn: {
@@ -481,19 +465,8 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     paddingVertical: 15,
     alignItems: 'center',
-    ...Platform.select({
-      ios: {
-        shadowColor: ViveColors.primary,
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
-        shadowRadius: 8,
-      },
-      android: { elevation: 4 },
-    }),
   },
-  saveBtnDisabled: {
-    opacity: 0.65,
-  },
+  saveBtnDisabled: { opacity: 0.65 },
   saveBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,

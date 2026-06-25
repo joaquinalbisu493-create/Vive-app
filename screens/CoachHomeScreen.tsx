@@ -14,6 +14,7 @@ import { Feather } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { AppBg } from '@/components/ui/AppBg';
 
 type Session = {
   id: string;
@@ -28,15 +29,8 @@ type DayEntry = { abbr: string; sessions: Session[] };
 
 const WEEK_ABBRS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
-const cardShadow = Platform.select({
-  ios: {
-    shadowColor: ViveColors.text,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-  },
-  android: { elevation: 2 },
-});
+const GLASS = 'rgba(255,255,255,0.14)';
+const GLASS_BORDER = 'rgba(255,255,255,0.28)';
 
 function toDateStr(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -181,15 +175,18 @@ export default function CoachHomeScreen() {
 
   if (loading) {
     return (
+      <AppBg>
       <SafeAreaView style={s.safe} edges={['top']}>
         <View style={s.loadingContainer}>
           <ActivityIndicator size="small" color={ViveColors.primary} />
         </View>
       </SafeAreaView>
+      </AppBg>
     );
   }
 
   return (
+    <AppBg>
     <SafeAreaView style={s.safe} edges={['top']}>
       <ScrollView
         contentContainerStyle={s.container}
@@ -203,7 +200,7 @@ export default function CoachHomeScreen() {
             onPress={() => router.push('/coach-notifications')}
             hitSlop={8}
             activeOpacity={0.7}>
-            <Feather name="bell" size={22} color={ViveColors.text} />
+            <Feather name="bell" size={22} color="rgba(255,255,255,0.8)" />
             {unreadCount > 0 && <View style={s.bellDot} />}
           </TouchableOpacity>
         </View>
@@ -220,7 +217,7 @@ export default function CoachHomeScreen() {
               <Text style={s.alertBold}>{pendingCount} solicitudes pendientes</Text>
               {' '}— tenés 24hs para responder
             </Text>
-            <Feather name="chevron-right" size={15} color={ViveColors.primary} />
+            <Feather name="chevron-right" size={15} color="rgba(255,255,255,0.7)" />
           </TouchableOpacity>
         )}
 
@@ -248,7 +245,7 @@ export default function CoachHomeScreen() {
                 }
                 activeOpacity={0.75}
                 hitSlop={6}>
-                <Feather name="message-circle" size={20} color={ViveColors.primary} />
+                <Feather name="message-circle" size={20} color="rgba(255,255,255,0.75)" />
               </TouchableOpacity>
             </View>
           ))
@@ -280,38 +277,23 @@ export default function CoachHomeScreen() {
         <View style={{ height: 40 }} />
       </ScrollView>
     </SafeAreaView>
+    </AppBg>
   );
 }
 
 const s = StyleSheet.create({
-  safe: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
-  container: {
-    paddingHorizontal: 20,
-    paddingTop: 22,
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  safe: { flex: 1 },
+  container: { paddingHorizontal: 20, paddingTop: 22 },
+  loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 
-  greetingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 18,
-  },
+  greetingRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 18 },
   greeting: {
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: ViveColors.text,
+    color: '#FFFFFF',
   },
-  bellBtn: {
-    padding: 4,
-  },
+  bellBtn: { padding: 4 },
   bellDot: {
     position: 'absolute',
     top: 2,
@@ -321,20 +303,19 @@ const s = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: ViveColors.primary,
     borderWidth: 1.5,
-    borderColor: ViveColors.background,
+    borderColor: 'rgba(255,255,255,0.3)',
   },
 
-  // Alert Banner
   alertBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FDF0E8',
+    backgroundColor: 'rgba(232,116,59,0.18)',
     borderRadius: 14,
     paddingHorizontal: 14,
     paddingVertical: 13,
     marginBottom: 28,
     borderWidth: 1,
-    borderColor: `${ViveColors.primary}30`,
+    borderColor: 'rgba(232,116,59,0.4)',
     gap: 8,
   },
   alertIcon: { flexShrink: 0 },
@@ -342,7 +323,7 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: ViveColors.text,
+    color: 'rgba(255,255,255,0.85)',
     lineHeight: 19,
   },
   alertBold: {
@@ -350,28 +331,27 @@ const s = StyleSheet.create({
     color: ViveColors.primary,
   },
 
-  // Sections
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 12,
   },
   sectionSpaced: { marginTop: 28 },
 
-  // Session Card
   sessionCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     padding: 14,
     marginBottom: 10,
     gap: 12,
-    ...cardShadow,
   },
   timeTag: {
-    backgroundColor: `${ViveColors.primary}15`,
+    backgroundColor: 'rgba(232,116,59,0.22)',
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 6,
@@ -386,73 +366,60 @@ const s = StyleSheet.create({
   sessionUser: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     marginBottom: 2,
   },
   sessionType: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: `${ViveColors.text}70`,
+    color: 'rgba(255,255,255,0.6)',
   },
-  chatBtn: {
-    padding: 4,
-    flexShrink: 0,
-  },
+  chatBtn: { padding: 4, flexShrink: 0 },
 
-  // Empty today
   emptyToday: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     paddingVertical: 28,
     paddingHorizontal: 20,
     alignItems: 'center',
     marginBottom: 10,
-    ...cardShadow,
   },
   emptyTodayText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: `${ViveColors.text}70`,
+    color: 'rgba(255,255,255,0.65)',
     textAlign: 'center',
     lineHeight: 22,
   },
 
-  // Week grid
   weekCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: GLASS,
     borderRadius: 16,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
     paddingVertical: 18,
     paddingHorizontal: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    ...cardShadow,
   },
-  dayCol: {
-    flex: 1,
-    alignItems: 'center',
-    gap: 6,
-  },
+  dayCol: { flex: 1, alignItems: 'center', gap: 6 },
   dayAbbr: {
     fontFamily: ViveFonts.medium,
     fontSize: 11,
-    color: `${ViveColors.text}80`,
+    color: 'rgba(255,255,255,0.6)',
   },
   dayDot: {
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: `${ViveColors.text}12`,
+    backgroundColor: 'rgba(255,255,255,0.12)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  dayDotActive: {
-    backgroundColor: ViveColors.primary,
-  },
-  dayCount: {
-    fontFamily: ViveFonts.bold,
-    fontSize: 11,
-    color: '#FFFFFF',
-  },
+  dayDotActive: { backgroundColor: ViveColors.primary },
+  dayCount: { fontFamily: ViveFonts.bold, fontSize: 11, color: '#FFFFFF' },
   dayTime: {
     fontFamily: ViveFonts.regular,
     fontSize: 9,

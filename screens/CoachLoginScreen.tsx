@@ -9,6 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
+import { AppBg } from '@/components/ui/AppBg';
 
 const fadeUp = (anim: Animated.Value) => ({
   opacity: anim,
@@ -117,6 +118,7 @@ export default function CoachLoginScreen() {
   }
 
   return (
+    <AppBg>
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -129,7 +131,7 @@ export default function CoachLoginScreen() {
         >
           <Animated.View style={[styles.header, fadeUp(headerAnim)]}>
             <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-              <MaterialCommunityIcons name="arrow-left" size={20} color={ViveColors.text} />
+              <MaterialCommunityIcons name="arrow-left" size={20} color="rgba(255,255,255,0.8)" />
               <Text style={styles.backText}>Atrás</Text>
             </TouchableOpacity>
           </Animated.View>
@@ -150,7 +152,7 @@ export default function CoachLoginScreen() {
                   value={email}
                   onChangeText={setEmail}
                   placeholder="tu@email.com"
-                  placeholderTextColor={`${ViveColors.text}55`}
+                  placeholderTextColor="rgba(255,255,255,0.4)"
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -165,7 +167,7 @@ export default function CoachLoginScreen() {
                     value={password}
                     onChangeText={setPassword}
                     placeholder="Mínimo 6 caracteres"
-                    placeholderTextColor={`${ViveColors.text}55`}
+                    placeholderTextColor="rgba(255,255,255,0.4)"
                     secureTextEntry={!showPassword}
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -178,7 +180,7 @@ export default function CoachLoginScreen() {
                     <MaterialCommunityIcons
                       name={showPassword ? 'eye-off-outline' : 'eye-outline'}
                       size={20}
-                      color={`${ViveColors.text}66`}
+                      color="rgba(255,255,255,0.5)"
                     />
                   </TouchableOpacity>
                 </View>
@@ -212,18 +214,13 @@ export default function CoachLoginScreen() {
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
+    </AppBg>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: ViveColors.background,
-  },
-  scroll: {
-    flexGrow: 1,
-    paddingBottom: 40,
-  },
+  container: { flex: 1 },
+  scroll: { flexGrow: 1, paddingBottom: 40 },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -231,69 +228,47 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 4,
   },
-  backBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
+  backBtn: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   backText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.45,
+    color: 'rgba(255,255,255,0.6)',
   },
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 28,
-    gap: 28,
-  },
-  titleArea: {
-    gap: 8,
-  },
+  content: { flex: 1, paddingHorizontal: 24, paddingTop: 28, gap: 28 },
+  titleArea: { gap: 8 },
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 30,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     letterSpacing: -0.5,
     lineHeight: 38,
   },
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: ViveColors.text,
-    opacity: 0.55,
+    color: 'rgba(255,255,255,0.7)',
     lineHeight: 22,
   },
-  form: {
-    gap: 16,
-  },
-  field: {
-    gap: 6,
-  },
+  form: { gap: 16 },
+  field: { gap: 6 },
   label: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: ViveColors.text,
-    opacity: 0.7,
+    color: 'rgba(255,255,255,0.7)',
   },
   input: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'rgba(255,255,255,0.12)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: ViveColors.text,
+    color: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: 'rgba(31,74,67,0.12)',
+    borderColor: 'rgba(255,255,255,0.28)',
   },
-  passwordWrap: {
-    position: 'relative',
-  },
-  passwordInput: {
-    paddingRight: 48,
-  },
+  passwordWrap: { position: 'relative' },
+  passwordInput: { paddingRight: 48 },
   eyeBtn: {
     position: 'absolute',
     right: 14,
@@ -305,7 +280,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: 'rgba(192,57,43,0.08)',
+    backgroundColor: 'rgba(224,82,82,0.15)',
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -313,7 +288,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: '#C0392B',
+    color: '#FF7070',
     flex: 1,
     lineHeight: 18,
   },
@@ -323,9 +298,7 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
     alignItems: 'center',
   },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
+  buttonDisabled: { opacity: 0.6 },
   buttonText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
@@ -335,8 +308,7 @@ const styles = StyleSheet.create({
   note: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: ViveColors.text,
-    opacity: 0.45,
+    color: 'rgba(255,255,255,0.5)',
     lineHeight: 18,
     textAlign: 'center',
   },
