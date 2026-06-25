@@ -5,6 +5,23 @@
 
 ---
 
+## 2026-06-25 — Joaquín (sesión 11)
+
+**Tocado:** `app/(tabs)/index.tsx`
+
+**Resumen:**
+- Rediseño completo del layout del Home screen para replicar la distribución de la imagen de referencia (app UMANO), manteniendo colores aurora/glass/palette de VITA intactos.
+- 8 secciones nuevas: barra superior con logo "vita" izquierda + avatar circular derecha; saludo grande standalone; "Tu progreso" con toggle Hoy/Mes (estado local); tarjeta grande "Sobre ti" con `12 / Semanas` a la izquierda y texto descriptivo a la derecha; tarjeta "Frase del día" glass con ícono shimmer; sección "Recursos útiles" en fila horizontal con cards compactas (ícono circular + título + botón "+"); tarjeta "Tu próxima sesión" con especialidad del coach (nuevo fetch a tabla `coaches`); tarjeta "Para vos hoy" con label RECOMENDACIÓN + tipo + flecha.
+- Nueva consulta a `coaches.specialty` vía `Promise.all` junto al fetch existente de `profiles.name`. No se tocó el schema.
+- Todas las animaciones fadeUp/stagger conservadas; toda la navegación y lógica de Supabase intacta.
+
+**Pendiente para la próxima sesión:**
+- Verificar que `BookingScreen_Time.tsx` recibe los params correctos desde Calendar (sigue abierto desde sesión 8).
+- Testear visualmente en dispositivo la nueva pantalla Home.
+- Push a `andre/main` sigue pendiente.
+
+---
+
 ## 2026-06-25 — Joaquín (sesión 10)
 
 **Tocado:** `screens/CoachReservasScreen.tsx`, `screens/CoachProfileScreen.tsx`, `screens/CoachAvailabilityScreen.tsx`, `screens/CoachWeeklyPatternScreen.tsx`, `screens/CoachNotificationsScreen.tsx`, `screens/CoachChatsScreen.tsx`, `screens/CoachResourcesScreen.tsx`
