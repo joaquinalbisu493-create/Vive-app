@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Tabs } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
-import { Platform, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { BlurView } from 'expo-blur';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { ViveColors, ViveFonts } from '@/constants/theme';
@@ -12,20 +13,23 @@ const TAB_ACTIVE   = '#FFFFFF';
 const TAB_INACTIVE = 'rgba(255,255,255,0.45)';
 const DOT_RED      = '#E05252';
 
-// Estilo de tab bar para pantallas con fondo claro (no aurora)
-const LIGHT_TAB_STYLE = {
-  position: 'absolute' as const,
-  backgroundColor: '#FFFFFF',
-  borderTopWidth: 1,
-  borderTopColor: 'rgba(0,0,0,0.08)',
-  ...Platform.select({
-    ios: { shadowColor: '#000', shadowOffset: { width: 0, height: -2 }, shadowOpacity: 0.06, shadowRadius: 8 },
-    android: { elevation: 8 },
-  }),
-  height: 64,
-  paddingBottom: 10,
-  paddingTop: 6,
-};
+// Guardado para revertir Conexiones si hace falta (3 líneas en <Tabs.Screen name="conexiones">):
+//   tabBarStyle: LIGHT_TAB_STYLE,
+//   tabBarActiveTintColor: ViveColors.primary,
+//   tabBarInactiveTintColor: `${ViveColors.text}66`,
+// const LIGHT_TAB_STYLE: StyleProp<ViewStyle> = {
+//   position: 'absolute',
+//   backgroundColor: '#FFFFFF',
+//   borderTopWidth: 1,
+//   borderTopColor: 'rgba(0,0,0,0.08)',
+//   ...Platform.select({
+//     ios: { shadowColor: '#000', shadowOffset: { width: 0, height: -2 }, shadowOpacity: 0.06, shadowRadius: 8 },
+//     android: { elevation: 8 },
+//   }),
+//   height: 64,
+//   paddingBottom: 10,
+//   paddingTop: 6,
+// };
 
 // Queries: (1) salas con user_last_read_at, (2) mensajes de otros acotados por fecha,
 // (3) sesión confirmada hoy — 2-3 total, nunca N+1
@@ -39,7 +43,6 @@ async function checkDot(userId: string, setHasDot: (v: boolean) => void) {
 
   const salaIds = salas.map(s => s.id as string);
 
-  // Calcular el mínimo last_read_at para acotar la query de mensajes
   let minLastRead: string | null = null;
   let anyNull = false;
   for (const s of salas) {
@@ -59,7 +62,6 @@ async function checkDot(userId: string, setHasDot: (v: boolean) => void) {
     !anyNull && minLastRead ? msgsBase.gt('created_at', minLastRead) : msgsBase
   );
 
-  // Primer mensaje de otros por sala (ya están en orden DESC → el primero es el más nuevo)
   const latestBySala: Record<string, string> = {};
   foreignMsgs?.forEach(msg => {
     const sid = msg.sala_id as string;
@@ -75,7 +77,6 @@ async function checkDot(userId: string, setHasDot: (v: boolean) => void) {
 
   if (hasUnread) { setHasDot(true); return; }
 
-  // Solo si no hay mensajes sin leer: chequear sesión confirmada hoy
   const today = new Date().toISOString().split('T')[0];
   const { count } = await supabase
     .from('bookings')
@@ -85,6 +86,15 @@ async function checkDot(userId: string, setHasDot: (v: boolean) => void) {
     .eq('scheduled_date', today);
 
   setHasDot((count ?? 0) > 0);
+}
+
+function TabIcon({ focused, children }: { focused: boolean; children: React.ReactNode }) {
+  return (
+    <View style={styles.iconWrap}>
+      {focused && <View style={styles.activeBubble} />}
+      {children}
+    </View>
+  );
 }
 
 export default function TabLayout() {
@@ -116,19 +126,10 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
         tabBarActiveTintColor: TAB_ACTIVE,
         tabBarInactiveTintColor: TAB_INACTIVE,
-        tabBarStyle: {
-          position: 'absolute',
-          backgroundColor: 'rgba(255,255,255,0.18)',
-          borderTopWidth: 1,
-          borderTopColor: 'rgba(255,255,255,0.35)',
-          ...Platform.select({
-            ios: { shadowColor: 'transparent' },
-            android: { elevation: 0 },
-          }),
-          height: 64,
-          paddingBottom: 10,
-          paddingTop: 6,
-        },
+        tabBarStyle: styles.tabBar,
+        tabBarBackground: () => (
+          <BlurView intensity={60} tint="light" style={StyleSheet.absoluteFill} />
+        ),
         tabBarLabelStyle: {
           fontFamily: ViveFonts.medium,
           fontSize: 11,
@@ -138,18 +139,24 @@ export default function TabLayout() {
         name="index"
         options={{
           title: 'Inicio',
-          tabBarIcon: ({ color }) => <Feather name="home" size={22} color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused}>
+              <Feather name="home" size={22} color={color} />
+            </TabIcon>
+          ),
         }}
       />
       <Tabs.Screen
         name="mis-salas"
         options={{
           title: 'Mis salas',
-          tabBarIcon: ({ color }) => (
-            <View>
-              <Feather name="message-square" size={22} color={color} />
-              {hasDot && <View style={styles.notifDot} />}
-            </View>
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused}>
+              <View>
+                <Feather name="message-square" size={22} color={color} />
+                {hasDot && <View style={styles.notifDot} />}
+              </View>
+            </TabIcon>
           ),
         }}
       />
@@ -157,17 +164,22 @@ export default function TabLayout() {
         name="recursos"
         options={{
           title: 'Recursos',
-          tabBarIcon: ({ color }) => <Feather name="book-open" size={22} color={color} />,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused}>
+              <Feather name="book-open" size={22} color={color} />
+            </TabIcon>
+          ),
         }}
       />
       <Tabs.Screen
         name="conexiones"
         options={{
           title: 'Conexiones',
-          tabBarIcon: ({ color }) => <Feather name="users" size={22} color={color} />,
-          tabBarStyle: LIGHT_TAB_STYLE,
-          tabBarActiveTintColor: ViveColors.primary,
-          tabBarInactiveTintColor: `${ViveColors.text}66`,
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused}>
+              <Feather name="users" size={22} color={color} />
+            </TabIcon>
+          ),
         }}
       />
       <Tabs.Screen
@@ -183,6 +195,30 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
+  tabBar: {
+    position: 'absolute',
+    bottom: 24,
+    left: 16,
+    right: 16,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: 'transparent',
+    borderTopWidth: 0,
+    overflow: 'hidden',
+  },
+  iconWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 52,
+    height: 36,
+  },
+  activeBubble: {
+    position: 'absolute',
+    width: 52,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.25)',
+  },
   notifDot: {
     position: 'absolute',
     top: -3,
