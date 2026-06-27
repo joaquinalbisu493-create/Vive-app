@@ -433,6 +433,7 @@ export default function SalaScreen() {
     router.push({
       pathname: '/profesional',
       params: {
+        profileId: recipientId ?? '',
         name: recipientProfile.name,
         specialty: recipientProfile.specialty ?? '',
         rating: '',

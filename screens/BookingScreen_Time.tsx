@@ -103,8 +103,7 @@ export default function BookingScreen_Time() {
   }
 
   return (
-    <View style={s.root}>
-
+    <AppBg>
       <SafeAreaView style={s.safeTop} edges={['top']}>
         <View style={s.header}>
           <TouchableOpacity
@@ -195,7 +194,7 @@ export default function BookingScreen_Time() {
         </View>
       </SafeAreaView>
 
-    </View>
+    </AppBg>
   );
 }
 
