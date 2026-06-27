@@ -5,6 +5,22 @@
 
 ---
 
+## 2026-06-27 — Joaquín (sesión 15)
+
+**Tocado:** `app/(tabs)/index.tsx`, `.claude/settings.json`
+
+**Resumen:**
+- Bug fix: `index.tsx` navegaba a `/(tabs)/coaches` (ruta inexistente) en la card "sin próxima sesión". Corregido a `/(tabs)/conexiones`.
+- Hook de sincronización automática configurado en `.claude/settings.json`: después de cada `git commit`, fetcha ambos remotes, mergea si hay cambios de Andre, y pushea a `origin` y `andre` en background.
+- Revisión de los cambios de Andre (sesiones 14–18): tab bar glassmorphism, dot en "Mis salas", `TAB_BAR_CLEARANCE = 110`, `user_last_read_at`/`coach_last_read_at` en `salas`. Todo integrado sin regressions.
+
+**Pendiente para la próxima sesión:**
+- Agregar `specialty` del coach en cada row de "Mis salas" (`SessionsScreen`) — Andre lo marcó como diferido.
+- Confirmar visualmente en dispositivo: pill de tab bar, dot de "Mis salas", botón "Cerrar sesión" de CoachProfileScreen sobre el pill.
+- UI del flujo de reviews (sigue abierto desde sesión 23/06).
+
+---
+
 ## 2026-06-27 — Joaquín (sesión 14)
 
 **Tocado:** `screens/SalaScreen.tsx`, `screens/BookingScreen_Time.tsx`
