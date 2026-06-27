@@ -5,6 +5,22 @@
 
 ---
 
+## 2026-06-27 — Joaquín (sesión 14)
+
+**Tocado:** `screens/SalaScreen.tsx`, `screens/BookingScreen_Time.tsx`
+
+**Resumen:**
+- Bug fix: `SalaScreen.handleHeaderPress` no pasaba `profileId` al navegar a `/profesional`. Cuando el usuario tocaba el header del coach en la Sala e intentaba reservar, Calendar recibía `coachId: ''` y no podía fetchear disponibilidad — calendario vacío, botón "Seguimos" nunca habilitado. Fix: agregar `profileId: recipientId` en los params (el valor ya estaba disponible en el estado, solo no se pasaba). Como efecto secundario, `ProfesionalScreen` ahora también fetchea precio/specialty desde Supabase correctamente en este path.
+- Fix visual: `BookingScreen_Time` usaba `<View>` como raíz (fondo transparente) en lugar de `<AppBg>`, diferenciándose visualmente de Calendar y Confirm. Reemplazado por `<AppBg>`.
+- Pendiente de la sesión 8 cerrado: la cadena Calendar → Time de params ya estaba correcta; el problema real era el path SalaScreen → ProfesionalScreen, no el paso Calendar → Time en sí.
+
+**Pendiente para la próxima sesión:**
+- UI del flujo de reviews: pantalla para crear/editar review al llegar notificación `'invitacion_review'`, y display de rating promedio real en `ProfesionalScreen` (hoy usa mock hardcodeado).
+- Decidir si el coach ve sus reviews recibidas en algún panel propio (`CoachProfileScreen` tiene un placeholder).
+- Verificar en producción que el cron job `complete_confirmed_sessions()` dispara a los 20 minutos.
+
+---
+
 ## 2026-06-25 — Joaquín (sesión 13)
 
 **Tocado:** `app/(tabs)/index.tsx`, `app/progreso.tsx` (navegación), todos los archivos del fix de errores
