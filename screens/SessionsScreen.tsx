@@ -22,6 +22,7 @@ type SalaItem = {
   coach_id: string;
   otherName: string;
   otherInitials: string;
+  otherSpecialty?: string;
   lastMessage: string;
   lastMessageDate: string;
 };
@@ -88,6 +89,14 @@ export default function SessionsScreen() {
     const profileMap: Record<string, string> = {};
     profiles?.forEach(p => { profileMap[p.id] = p.name ?? 'Usuario'; });
 
+    const uniqueCoachIds = [...new Set(salasData.map(s => s.coach_id))];
+    const { data: coachRows } = await supabase
+      .from('coaches')
+      .select('profile_id, specialty')
+      .in('profile_id', uniqueCoachIds);
+    const specialtyMap: Record<string, string> = {};
+    coachRows?.forEach(c => { if (c.specialty) specialtyMap[c.profile_id] = c.specialty; });
+
     const results: SalaItem[] = await Promise.all(
       salasData.map(async (sala) => {
         const otherId = sala.user_id === user.id ? sala.coach_id : sala.user_id;
@@ -106,6 +115,7 @@ export default function SessionsScreen() {
           coach_id: sala.coach_id,
           otherName,
           otherInitials: getInitials(otherName),
+          otherSpecialty: specialtyMap[sala.coach_id],
           lastMessage: lastMsg?.content ? decryptMessage(lastMsg.content) : 'Sin mensajes aún',
           lastMessageDate: lastMsg ? formatMessageDate(lastMsg.created_at) : '',
         };
@@ -212,6 +222,9 @@ function SalaRow({
             <Text style={styles.coachName} numberOfLines={1}>{sala.otherName}</Text>
             <Text style={styles.dateText}>{sala.lastMessageDate}</Text>
           </View>
+          {!!sala.otherSpecialty && (
+            <Text style={styles.specialtyText} numberOfLines={1}>{sala.otherSpecialty}</Text>
+          )}
           <Text style={styles.lastMessage} numberOfLines={1}>{sala.lastMessage}</Text>
         </View>
       </TouchableOpacity>
@@ -291,6 +304,12 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: 'rgba(255,255,255,0.5)',
     flexShrink: 0,
+  },
+  specialtyText: {
+    fontFamily: ViveFonts.medium,
+    fontSize: 11,
+    color: ViveColors.primary,
+    marginBottom: 2,
   },
   lastMessage: {
     fontFamily: ViveFonts.regular,
