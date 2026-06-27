@@ -283,7 +283,7 @@ export default function InicioScreen() {
             ) : (
               <TouchableOpacity
                 style={s.noSessionCard}
-                onPress={() => router.push('/(tabs)/coaches' as any)}
+                onPress={() => router.push('/(tabs)/conexiones')}
                 activeOpacity={0.8}
               >
                 <MaterialCommunityIcons name="calendar-plus" size={22} color={ViveColors.primary} />
