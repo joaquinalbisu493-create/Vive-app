@@ -79,6 +79,7 @@ export default function InicioScreen() {
   const { user } = useAuth();
   const [nextSession, setNextSession] = useState<NextSession | null>(null);
   const [progressTab, setProgressTab] = useState<'hoy' | 'mes'>('hoy');
+  const [unreadNotifCount, setUnreadNotifCount] = useState(0);
 
   const a1 = useRef(new Animated.Value(0)).current;
   const a2 = useRef(new Animated.Value(0)).current;
@@ -97,6 +98,16 @@ export default function InicioScreen() {
       Animated.timing(a6, { toValue: 1, duration: 380, useNativeDriver: true }),
     ]).start();
   }, [a1, a2, a3, a4, a5, a6]);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('notifications')
+      .select('*', { count: 'exact', head: true })
+      .eq('recipient_id', user.id)
+      .eq('read', false)
+      .then(({ count }) => setUnreadNotifCount(count ?? 0));
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -150,23 +161,38 @@ export default function InicioScreen() {
           showsVerticalScrollIndicator={false}
         >
 
-          {/* ── 1. TOP BAR: logo + avatar ── */}
+          {/* ── 1. TOP BAR: logo + campana + avatar ── */}
           <Animated.View style={[s.topBar, fadeUp(a1)]}>
             <Text style={s.logo}>vita</Text>
-            <TouchableOpacity
-              onPress={() => router.push('/profile-own')}
-              hitSlop={8}
-              activeOpacity={0.8}
-            >
-              <LinearGradient
-                colors={['#FF9A52', ViveColors.primary]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={s.avatarCircle}
+            <View style={s.topRight}>
+              <TouchableOpacity
+                onPress={() => router.push('/notifications')}
+                hitSlop={8}
+                activeOpacity={0.8}
+                style={s.bellBtn}
               >
-                <Text style={s.avatarInitial}>{(displayName.charAt(0) || '?').toUpperCase()}</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+                <MaterialCommunityIcons
+                  name={unreadNotifCount > 0 ? 'bell' : 'bell-outline'}
+                  size={24}
+                  color="#FFFFFF"
+                />
+                {unreadNotifCount > 0 && <View style={s.bellDot} />}
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => router.push('/profile-own')}
+                hitSlop={8}
+                activeOpacity={0.8}
+              >
+                <LinearGradient
+                  colors={['#FF9A52', ViveColors.primary]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={s.avatarCircle}
+                >
+                  <Text style={s.avatarInitial}>{(displayName.charAt(0) || '?').toUpperCase()}</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
           </Animated.View>
 
           {/* ── 2. SALUDO ── */}
@@ -337,6 +363,26 @@ const s = StyleSheet.create({
     fontSize: 22,
     color: '#FFFFFF',
     letterSpacing: 4,
+  },
+  topRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  bellBtn: {
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bellDot: {
+    position: 'absolute',
+    top: 2,
+    right: 2,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#E05252',
   },
   avatarCircle: {
     width: 40,
