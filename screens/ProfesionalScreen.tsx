@@ -25,31 +25,10 @@ const DEFAULT_PROFESIONAL = {
   nationality: 'Argentina',
   gender: 'Mujer',
   topics: ['Ansiedad', 'Autoestima', 'Relaciones', 'Propósito', 'Estrés'],
-  rating: 4.9,
-  reviewCount: 127,
   priceFrom: 4500,
 };
 
-const REVIEWS = [
-  {
-    id: '1',
-    name: 'Sofía R.',
-    text: 'Laura me ayudó a entender patrones que me bloqueaban hace años. Muy recomendable, tiene una escucha increíble.',
-    rating: 5,
-  },
-  {
-    id: '2',
-    name: 'Matías T.',
-    text: 'Cada sesión la siento como un paso concreto hacia adelante. Clara, empática y muy profesional.',
-    rating: 5,
-  },
-  {
-    id: '3',
-    name: 'Camila V.',
-    text: 'Me sorprendió lo mucho que avancé en pocas sesiones. Tiene una forma de guiar que se siente muy natural.',
-    rating: 4,
-  },
-];
+type LiveReview = { rating: number; comment: string | null; reviewerName: string };
 
 // ─── Subcomponentes ───────────────────────────────────────────────────────────
 function Stars({ rating, size = 14 }: { rating: number; size?: number }) {
@@ -91,6 +70,9 @@ export default function ProfesionalScreen() {
   }>();
   const [saved, setSaved] = useState(false);
   const [fetchedData, setFetchedData] = useState<Partial<typeof DEFAULT_PROFESIONAL> | null>(null);
+  const [liveReviews, setLiveReviews] = useState<LiveReview[]>([]);
+  const [liveAvgRating, setLiveAvgRating] = useState<number | null>(null);
+  const [reviewsLoaded, setReviewsLoaded] = useState(false);
 
   useEffect(() => {
     const pid = Array.isArray(params.profileId) ? params.profileId[0] : params.profileId;
@@ -111,15 +93,55 @@ export default function ProfesionalScreen() {
       });
   }, [params.profileId]);
 
+  useEffect(() => {
+    const pid = Array.isArray(params.profileId) ? params.profileId[0] : params.profileId;
+    if (!pid) return;
+
+    async function loadReviews() {
+      const { data: reviewRows } = await supabase
+        .from('reviews')
+        .select('rating, comment, reviewer_id')
+        .eq('reviewed_id', pid!)
+        .eq('is_private', false)
+        .order('created_at', { ascending: false });
+
+      if (!reviewRows || reviewRows.length === 0) {
+        setReviewsLoaded(true);
+        return;
+      }
+
+      const reviewerIds = reviewRows.map(r => r.reviewer_id);
+      const { data: profileRows } = await supabase
+        .from('profiles')
+        .select('id, name')
+        .in('id', reviewerIds);
+
+      const nameMap: Record<string, string> = {};
+      profileRows?.forEach(p => { nameMap[p.id] = p.name ?? 'Usuario'; });
+
+      const avg = reviewRows.reduce((s, r) => s + r.rating, 0) / reviewRows.length;
+      setLiveAvgRating(Math.round(avg * 10) / 10);
+      setLiveReviews(reviewRows.map(r => ({
+        rating: r.rating,
+        comment: r.comment,
+        reviewerName: nameMap[r.reviewer_id] ?? 'Usuario',
+      })));
+      setReviewsLoaded(true);
+    }
+
+    loadReviews();
+  }, [params.profileId]);
+
   const prof = {
     ...DEFAULT_PROFESIONAL,
     ...(params.name && { name: params.name }),
     ...(params.specialty && { specialty: params.specialty }),
-    ...(params.rating && { rating: parseFloat(params.rating) }),
-    ...(params.reviewCount && { reviewCount: parseInt(params.reviewCount, 10) }),
     ...(params.priceFrom && { priceFrom: parseInt(params.priceFrom, 10) }),
     ...fetchedData,
   };
+
+  const displayRating = liveAvgRating ?? (params.rating ? parseFloat(params.rating) : null);
+  const displayReviewCount = reviewsLoaded ? liveReviews.length : (params.reviewCount ? parseInt(params.reviewCount, 10) : 0);
 
   return (
     <AppBg>
@@ -192,30 +214,40 @@ export default function ProfesionalScreen() {
         <View style={s.section}>
           <Text style={s.sectionTitle}>Reseñas</Text>
 
-          {/* Rating general */}
-          <View style={s.ratingOverall}>
-            <Text style={s.ratingNumber}>{prof.rating}</Text>
-            <View style={s.ratingRight}>
-              <Stars rating={prof.rating} size={18} />
-              <Text style={s.ratingCount}>{prof.reviewCount} reseñas</Text>
-            </View>
-          </View>
-
-          {/* Lista de reviews */}
-          <View style={s.reviewsList}>
-            {REVIEWS.map(review => (
-              <View key={review.id} style={s.reviewCard}>
-                <View style={s.reviewHeader}>
-                  <ReviewAvatar name={review.name} />
-                  <View style={s.reviewMeta}>
-                    <Text style={s.reviewName}>{review.name}</Text>
-                    <Stars rating={review.rating} size={12} />
-                  </View>
+          {reviewsLoaded && displayRating !== null && displayReviewCount > 0 ? (
+            <>
+              {/* Rating general */}
+              <View style={s.ratingOverall}>
+                <Text style={s.ratingNumber}>{displayRating.toFixed(1)}</Text>
+                <View style={s.ratingRight}>
+                  <Stars rating={displayRating} size={18} />
+                  <Text style={s.ratingCount}>{displayReviewCount} {displayReviewCount === 1 ? 'reseña' : 'reseñas'}</Text>
                 </View>
-                <Text style={s.reviewText}>{review.text}</Text>
               </View>
-            ))}
-          </View>
+
+              {/* Lista de reviews */}
+              <View style={s.reviewsList}>
+                {liveReviews.slice(0, 5).map((review, i) => (
+                  <View key={i} style={s.reviewCard}>
+                    <View style={s.reviewHeader}>
+                      <ReviewAvatar name={review.reviewerName} />
+                      <View style={s.reviewMeta}>
+                        <Text style={s.reviewName}>{review.reviewerName}</Text>
+                        <Stars rating={review.rating} size={12} />
+                      </View>
+                    </View>
+                    {!!review.comment && (
+                      <Text style={s.reviewText}>{review.comment}</Text>
+                    )}
+                  </View>
+                ))}
+              </View>
+            </>
+          ) : reviewsLoaded ? (
+            <View style={s.noReviews}>
+              <Text style={s.noReviewsText}>Todavía no hay reseñas para este coach.</Text>
+            </View>
+          ) : null}
         </View>
 
         {/* Espaciador para el footer sticky */}
@@ -454,6 +486,18 @@ const s = StyleSheet.create({
   },
 
   // ── Reviews ───────────────────────────────────────────────────────────
+  noReviews: {
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderRadius: 14,
+    padding: 16,
+    alignItems: 'center',
+  },
+  noReviewsText: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.45)',
+    textAlign: 'center',
+  },
   reviewsList: {
     gap: 12,
   },

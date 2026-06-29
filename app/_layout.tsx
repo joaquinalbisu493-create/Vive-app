@@ -26,6 +26,7 @@ const ONBOARDING_SCREENS = new Set(['index', 'onboarding-bifurcacion', 'onboardi
 
 function NotificationSetup() {
   const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (!user) return;
@@ -33,11 +34,22 @@ function NotificationSetup() {
   }, [user]);
 
   useEffect(() => {
-    const sub = Notifications.addNotificationReceivedListener(notification => {
+    const fgSub = Notifications.addNotificationReceivedListener(notification => {
       console.log('[Notifs] Recibida en foreground:', notification.request.content.title);
     });
-    return () => sub.remove();
-  }, []);
+
+    const tapSub = Notifications.addNotificationResponseReceivedListener(response => {
+      const data = response.notification.request.content.data as Record<string, string> | undefined;
+      if (data?.type === 'invitacion_review' && data?.booking_id) {
+        router.push({ pathname: '/review', params: { booking_id: data.booking_id } });
+      }
+    });
+
+    return () => {
+      fgSub.remove();
+      tapSub.remove();
+    };
+  }, [router]);
 
   return null;
 }
@@ -124,6 +136,7 @@ export default function RootLayout() {
           <Stack.Screen name="diario" options={{ headerShown: false }} />
           <Stack.Screen name="gratitud" options={{ headerShown: false }} />
           <Stack.Screen name="progreso" options={{ headerShown: false }} />
+          <Stack.Screen name="review" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
         </Stack>
         <StatusBar style="auto" />
