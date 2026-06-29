@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
@@ -26,6 +27,19 @@ type CoachProfile = {
   nationality: string | null;
 };
 
+type ReceivedReview = {
+  rating: number;
+  comment: string | null;
+  reviewerName: string;
+  createdAt: string;
+  isPrivate: boolean;
+};
+
+function formatReviewDate(isoString: string): string {
+  const d = new Date(isoString);
+  return d.toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: '2-digit' });
+}
+
 function getInitials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return '?';
@@ -40,6 +54,9 @@ export default function CoachProfileScreen() {
   const [profile, setProfile] = useState<CoachProfile | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
   const [noCoachProfile, setNoCoachProfile] = useState(false);
+  const [reviews, setReviews] = useState<ReceivedReview[]>([]);
+  const [reviewsLoaded, setReviewsLoaded] = useState(false);
+  const [avgRating, setAvgRating] = useState<number | null>(null);
 
   useEffect(() => {
     if (!user) { setLoadingProfile(false); return; }
@@ -59,6 +76,43 @@ export default function CoachProfileScreen() {
       });
       setNoCoachProfile(!coachRow);
       setLoadingProfile(false);
+    })();
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    (async () => {
+      const { data: reviewRows } = await supabase
+        .from('reviews')
+        .select('rating, comment, reviewer_id, created_at, is_private')
+        .eq('reviewed_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (!reviewRows || reviewRows.length === 0) {
+        setReviewsLoaded(true);
+        return;
+      }
+
+      const reviewerIds = reviewRows.map(r => r.reviewer_id);
+      const { data: profileRows } = await supabase
+        .from('profiles')
+        .select('id, name')
+        .in('id', reviewerIds);
+
+      const nameMap: Record<string, string> = {};
+      profileRows?.forEach(p => { nameMap[p.id] = p.name ?? 'Usuario'; });
+
+      const avg = reviewRows.reduce((s, r) => s + r.rating, 0) / reviewRows.length;
+      setAvgRating(Math.round(avg * 10) / 10);
+      setReviews(reviewRows.map(r => ({
+        rating: r.rating,
+        comment: r.comment,
+        reviewerName: nameMap[r.reviewer_id] ?? 'Usuario',
+        createdAt: r.created_at,
+        isPrivate: r.is_private,
+      })));
+      setReviewsLoaded(true);
     })();
   }, [user]);
 
@@ -177,15 +231,71 @@ export default function CoachProfileScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* ── Estadísticas (post-MVP) ───────────────────────── */}
-        <Text style={[s.sectionTitle, s.sectionSpaced]}>Estadísticas</Text>
-        <View style={s.comingSoonCard}>
-          <MaterialCommunityIcons name="chart-bar" size={30} color="rgba(255,255,255,0.25)" />
-          <Text style={s.comingSoonText}>Próximamente</Text>
-          <Text style={s.comingSoonDesc}>
-            Aquí vas a ver sesiones completadas, rating promedio, retención de usuarios y más.
-          </Text>
-        </View>
+        {/* ── Reseñas recibidas ─────────────────────────────── */}
+        <Text style={[s.sectionTitle, s.sectionSpaced]}>Reseñas recibidas</Text>
+        {!reviewsLoaded ? null : reviews.length === 0 ? (
+          <View style={s.reviewsEmpty}>
+            <MaterialCommunityIcons name="star-outline" size={28} color="rgba(255,255,255,0.25)" />
+            <Text style={s.reviewsEmptyText}>
+              Todavía no recibiste reseñas.{'\n'}Aparecerán acá después de cada sesión completada.
+            </Text>
+          </View>
+        ) : (
+          <View style={s.reviewsPanel}>
+            {/* Resumen de rating */}
+            <View style={s.ratingSummary}>
+              <Text style={s.ratingBig}>{avgRating?.toFixed(1)}</Text>
+              <View style={s.ratingSummaryRight}>
+                <View style={s.starsRow}>
+                  {[1,2,3,4,5].map(i => (
+                    <MaterialIcons
+                      key={i}
+                      name={i <= Math.round(avgRating ?? 0) ? 'star' : 'star-border'}
+                      size={16}
+                      color="#E8C547"
+                    />
+                  ))}
+                </View>
+                <Text style={s.reviewCount}>{reviews.length} {reviews.length === 1 ? 'reseña' : 'reseñas'}</Text>
+              </View>
+            </View>
+
+            {/* Lista */}
+            <View style={s.reviewsList}>
+              {reviews.map((r, i) => (
+                <View key={i} style={s.reviewCard}>
+                  <View style={s.reviewHeader}>
+                    <View style={s.reviewAvatar}>
+                      <Text style={s.reviewAvatarText}>{r.reviewerName.charAt(0).toUpperCase()}</Text>
+                    </View>
+                    <View style={s.reviewMeta}>
+                      <View style={s.reviewNameRow}>
+                        <Text style={s.reviewerName}>{r.reviewerName}</Text>
+                        {r.isPrivate && (
+                          <MaterialIcons name="lock-outline" size={12} color="rgba(255,255,255,0.4)" />
+                        )}
+                      </View>
+                      <View style={s.starsRow}>
+                        {[1,2,3,4,5].map(j => (
+                          <MaterialIcons
+                            key={j}
+                            name={j <= r.rating ? 'star' : 'star-border'}
+                            size={12}
+                            color="#E8C547"
+                          />
+                        ))}
+                      </View>
+                    </View>
+                    <Text style={s.reviewDate}>{formatReviewDate(r.createdAt)}</Text>
+                  </View>
+                  {!!r.comment && (
+                    <Text style={s.reviewComment}>{r.comment}</Text>
+                  )}
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
 
         {/* ── Cerrar sesión ─────────────────────────────────── */}
         <TouchableOpacity style={s.signOutBtn} onPress={handleSignOut} activeOpacity={0.75}>
@@ -462,8 +572,8 @@ const s = StyleSheet.create({
     color: ViveColors.primary,
   },
 
-  // Coming soon
-  comingSoonCard: {
+  // Reviews recibidas
+  reviewsEmpty: {
     backgroundColor: GLASS,
     borderRadius: 16,
     borderWidth: 1,
@@ -471,20 +581,88 @@ const s = StyleSheet.create({
     padding: 24,
     marginHorizontal: 20,
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
   },
-  comingSoonText: {
-    fontFamily: ViveFonts.semibold,
-    fontSize: 16,
-    color: 'rgba(255,255,255,0.5)',
-  },
-  comingSoonDesc: {
+  reviewsEmptyText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
     color: 'rgba(255,255,255,0.5)',
     textAlign: 'center',
     lineHeight: 20,
-    marginTop: 2,
+  },
+  reviewsPanel: {
+    marginHorizontal: 20,
+    gap: 14,
+  },
+  ratingSummary: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    backgroundColor: GLASS,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
+    padding: 16,
+  },
+  ratingBig: {
+    fontFamily: ViveFonts.bold,
+    fontSize: 40,
+    color: '#FFFFFF',
+    lineHeight: 48,
+  },
+  ratingSummaryRight: { gap: 4 },
+  starsRow: { flexDirection: 'row', gap: 2 },
+  reviewCount: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.55)',
+  },
+  reviewsList: { gap: 10 },
+  reviewCard: {
+    backgroundColor: GLASS,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
+    padding: 14,
+  },
+  reviewHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 8,
+  },
+  reviewAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  reviewAvatarText: {
+    fontFamily: ViveFonts.semibold,
+    fontSize: 14,
+    color: '#FFFFFF',
+  },
+  reviewMeta: { flex: 1, gap: 3 },
+  reviewNameRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  reviewerName: {
+    fontFamily: ViveFonts.semibold,
+    fontSize: 13,
+    color: '#FFFFFF',
+  },
+  reviewDate: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.4)',
+    flexShrink: 0,
+  },
+  reviewComment: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.7)',
+    lineHeight: 19,
   },
 
   signOutBtn: {
