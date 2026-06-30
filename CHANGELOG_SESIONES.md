@@ -5,6 +5,45 @@
 
 ---
 
+## 2026-06-30 — Andre (sesión 28)
+
+**Tocado:** `scripts/add-coach-video-upload.sql` (nuevo, corrido en Supabase), `app.json`, `lib/database.types.ts`, `screens/CoachProfileScreen.tsx`, `screens/ProfesionalScreen.tsx`, `package.json`, `SCHEMA.md`
+
+**Resumen:**
+- Feature nueva: el coach puede subir un video real (grabado o de galería) a su perfil, visible para cualquier usuario que vea su perfil público. Antes solo existía `coaches.application_video_url`, un link externo (YouTube/Drive) pegado una sola vez al postularse, nunca mostrado a nadie.
+- Era una feature greenfield: no había Supabase Storage en uso en ningún lado del proyecto, ni libs de picker/video instaladas. Se sumaron `expo-image-picker`, `expo-video` y `expo-file-system` (SDK 54, versiones resueltas con `expo install`).
+- Decisión de diseño: columna nueva `coaches.video_url`, separada de `application_video_url` — un reproductor nativo necesita una URL de archivo directa, no sirve un link de YouTube. `application_video_url` queda intacta como artefacto de revisión de postulación.
+- `CoachProfileScreen.tsx`: botón "Grabar nuevo video" (antes un placeholder con `console.log`) ahora ofrece grabar o elegir de galería, sube a Supabase Storage (`coach-videos/{uid}/video.mp4`, `upsert:true` para no dejar huérfanos) y guarda la URL pública en `coaches.video_url`. Es el primer "guardar campo" real de esa pantalla — antes era de solo lectura salvo cerrar sesión.
+- `ProfesionalScreen.tsx`: la sección "Video de introducción" (antes decorativa) ahora trae `video_url`, se oculta entera si el coach no subió nada, y reproduce con controles nativos (`expo-video`) al tocar el placeholder.
+- `scripts/add-coach-video-upload.sql` corrido en Supabase por Andre el 30/06/2026 — agregó la columna `coaches.video_url`, el bucket `coach-videos` (público, 50MB, solo mime types de video) y la RLS para que cada coach solo pueda escribir su propia carpeta (`storage.foldername(name)[1] = auth.uid()::text`). `SCHEMA.md` actualizado con la regla 12 documentando esto.
+- `app.json`: agregado el plugin `expo-image-picker` con los textos de permiso en español (cámara/galería/micrófono). El propio tooling de instalación sumó también `expo-video` al array de `plugins` — cambio de config nativa, hace falta un build nuevo de dev client (no alcanza con Expo Go ni un dev client viejo) para poder probar esto en el celular.
+- `lib/database.types.ts`: sumado `video_url` al tipo `Coach`, y de paso `application_video_url` (ya existía en la base real pero faltaba en este tipo — deuda preexistente, se corrigió de una porque ya se estaba tocando el mismo tipo).
+- Type-check limpio en los 5 archivos tocados (`npx tsc --noEmit`).
+
+**Pendiente para la próxima sesión:**
+- Generar un dev client nuevo (`eas build --profile development`) y probar en celular real (iOS y Android) — quedó explícitamente pospuesto para una sesión futura, no se hizo en esta. Probar: grabar/elegir video, ver el estado "Subiendo…", confirmar reproducción en `ProfesionalScreen`, re-subir un segundo video y confirmar en el Storage dashboard que no queda huérfano el archivo viejo.
+- No verificado en esta sesión (sin dispositivo conectado): si el manejo en memoria de un video de ~60s causa lentitud en un Android viejo — si pasa, la salida es `FileSystem.uploadAsync()` (streaming a disco) en vez de cargar todo el archivo como `Uint8Array`.
+- Confirmar adversarialmente que la RLS del bucket realmente bloquea a un coach de escribir en la carpeta de otro — es la única pieza de este cambio que no se pudo verificar sin ejecutar SQL real.
+
+---
+
+## 2026-06-30 — Andre (sesión 27)
+
+**Tocado:** `scripts/expire-pending-bookings.sql` (nuevo), `SCHEMA.md`
+
+**Resumen:**
+- Bug reportado: cuando vence el plazo de 24hs para que un coach responda una solicitud, la tarjeta "Pendientes de respuesta" sigue apareciendo en `CoachReservasScreen.tsx` en vez de desaparecer.
+- Causa: `hoursLeftToRespond()` calcula el countdown puramente en el cliente (`Math.max(0, ...)`) y nunca escribe en la base — `bookings.status` se queda en `'pendiente'` para siempre, clampeado en "0hs para responder" indefinidamente.
+- Fix: nueva función `expire_pending_bookings()` en Supabase (agendada con `pg_cron` cada 5 minutos, mismo cadence que `complete_confirmed_sessions()`), que pasa a `'cancelada'` cualquier pendiente con más de 24hs y notifica al usuario (`type='reserva_rechazada'`, sin mensaje de sala ni push, igual alcance que el rechazo manual del coach).
+- Corrida en Supabase por Andre el 30/06/2026. `SCHEMA.md` actualizado con la regla 11 documentando el comportamiento.
+- No se tocó código de la app — el filtro `status === 'pendiente'` en `CoachReservasScreen.tsx` ya excluye automáticamente lo que la función pasa a `'cancelada'`, no hacía falta cambiar nada del lado cliente.
+
+**Pendiente para la próxima sesión:**
+- Confirmar en un caso real (o esperar a que pase una solicitud vieja) que la tarjeta efectivamente desaparece de "Pendientes de respuesta" tras los 5 minutos del próximo tick del cron.
+- Evaluar si en algún momento conviene agregar push notification a este flujo (hoy no la tiene, a diferencia del rechazo manual que sí dispara push desde el cliente).
+
+---
+
 ## 2026-06-30 — Andre (sesión 26)
 
 **Tocado:** `app/(coach)/_layout.tsx`

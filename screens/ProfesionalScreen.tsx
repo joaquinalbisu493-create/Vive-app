@@ -13,6 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useVideoPlayer, VideoView } from 'expo-video';
 
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
@@ -26,6 +27,7 @@ const DEFAULT_PROFESIONAL = {
   gender: 'Mujer',
   topics: ['Ansiedad', 'Autoestima', 'Relaciones', 'Propósito', 'Estrés'],
   priceFrom: 4500,
+  video_url: null as string | null,
 };
 
 type LiveReview = { rating: number; comment: string | null; reviewerName: string };
@@ -73,13 +75,14 @@ export default function ProfesionalScreen() {
   const [liveReviews, setLiveReviews] = useState<LiveReview[]>([]);
   const [liveAvgRating, setLiveAvgRating] = useState<number | null>(null);
   const [reviewsLoaded, setReviewsLoaded] = useState(false);
+  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
 
   useEffect(() => {
     const pid = Array.isArray(params.profileId) ? params.profileId[0] : params.profileId;
     if (!pid) return;
     supabase
       .from('coaches')
-      .select('specialty, price_per_session, nationality, profiles!inner(name)')
+      .select('specialty, price_per_session, nationality, video_url, profiles!inner(name)')
       .eq('profile_id', pid)
       .single()
       .then(({ data, error }) => {
@@ -89,6 +92,7 @@ export default function ProfesionalScreen() {
           specialty: (data as any).specialty,
           nationality: (data as any).nationality ?? DEFAULT_PROFESIONAL.nationality,
           priceFrom: (data as any).price_per_session,
+          video_url: (data as any).video_url ?? null,
         });
       });
   }, [params.profileId]);
@@ -142,6 +146,8 @@ export default function ProfesionalScreen() {
 
   const displayRating = liveAvgRating ?? (params.rating ? parseFloat(params.rating) : null);
   const displayReviewCount = reviewsLoaded ? liveReviews.length : (params.reviewCount ? parseInt(params.reviewCount, 10) : 0);
+
+  const videoPlayer = useVideoPlayer(prof.video_url, p => { p.loop = false; });
 
   return (
     <AppBg>
@@ -198,17 +204,32 @@ export default function ProfesionalScreen() {
         </View>
 
         {/* ── Video de introducción ─────────────────────────────────────── */}
-        <View style={s.section}>
-          <Text style={s.sectionTitle}>Video de introducción</Text>
-          <TouchableOpacity style={s.videoPlaceholder} activeOpacity={0.8}>
-            <View style={s.playBtn}>
-              <MaterialIcons name="play-arrow" size={32} color={ViveColors.primary} />
-            </View>
-            <Text style={s.videoCaption}>
-              Conocé a {prof.name.split(' ')[0]} en 1 minuto
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {prof.video_url && (
+          <View style={s.section}>
+            <Text style={s.sectionTitle}>Video de introducción</Text>
+            {isPlayingVideo ? (
+              <VideoView
+                player={videoPlayer}
+                style={s.videoPlaceholder}
+                contentFit="cover"
+                nativeControls
+                allowsFullscreen
+              />
+            ) : (
+              <TouchableOpacity
+                style={s.videoPlaceholder}
+                activeOpacity={0.8}
+                onPress={() => { setIsPlayingVideo(true); videoPlayer.play(); }}>
+                <View style={s.playBtn}>
+                  <MaterialIcons name="play-arrow" size={32} color={ViveColors.primary} />
+                </View>
+                <Text style={s.videoCaption}>
+                  Conocé a {prof.name.split(' ')[0]} en 1 minuto
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
 
         {/* ── Reviews ──────────────────────────────────────────────────── */}
         <View style={s.section}>

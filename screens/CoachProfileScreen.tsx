@@ -6,11 +6,15 @@ import {
   StyleSheet,
   ScrollView,
   Switch,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
+import * as ImagePicker from 'expo-image-picker';
+import { useVideoPlayer, VideoView } from 'expo-video';
+import { File } from 'expo-file-system';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { ViveColors, ViveFonts, TAB_BAR_CLEARANCE } from '@/constants/theme';
@@ -25,6 +29,7 @@ type CoachProfile = {
   bio: string | null;
   price_per_session: number | null;
   nationality: string | null;
+  video_url: string | null;
 };
 
 type ReceivedReview = {
@@ -57,6 +62,7 @@ export default function CoachProfileScreen() {
   const [reviews, setReviews] = useState<ReceivedReview[]>([]);
   const [reviewsLoaded, setReviewsLoaded] = useState(false);
   const [avgRating, setAvgRating] = useState<number | null>(null);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
 
   useEffect(() => {
     if (!user) { setLoadingProfile(false); return; }
@@ -64,7 +70,7 @@ export default function CoachProfileScreen() {
     (async () => {
       const [{ data: profileRow }, { data: coachRow }] = await Promise.all([
         supabase.from('profiles').select('name').eq('id', user.id).single(),
-        supabase.from('coaches').select('specialty, bio, price_per_session, nationality').eq('profile_id', user.id).maybeSingle(),
+        supabase.from('coaches').select('specialty, bio, price_per_session, nationality, video_url').eq('profile_id', user.id).maybeSingle(),
       ]);
 
       setProfile({
@@ -73,6 +79,7 @@ export default function CoachProfileScreen() {
         bio: coachRow?.bio ?? null,
         price_per_session: coachRow?.price_per_session ?? null,
         nationality: coachRow?.nationality ?? null,
+        video_url: coachRow?.video_url ?? null,
       });
       setNoCoachProfile(!coachRow);
       setLoadingProfile(false);
@@ -120,6 +127,74 @@ export default function CoachProfileScreen() {
     await signOut();
     router.replace('/(tabs)');
   }
+
+  async function uploadVideo(uri: string, mimeType: string | null | undefined) {
+    if (!user) return;
+    setUploadingVideo(true);
+    try {
+      const file = new File(uri);
+      const bytes = await file.bytes();
+      const path = `${user.id}/video.mp4`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('coach-videos')
+        .upload(path, bytes, { contentType: mimeType ?? 'video/mp4', upsert: true });
+
+      if (uploadError) {
+        Alert.alert('No se pudo subir el video', 'Probá de nuevo en unos minutos.');
+        return;
+      }
+
+      const { data } = supabase.storage.from('coach-videos').getPublicUrl(path);
+      // cache-bust: el path es siempre el mismo (upsert), así que sin esto
+      // el celular podría seguir mostrando el video viejo desde caché.
+      const publicUrl = `${data.publicUrl}?t=${Date.now()}`;
+
+      const { error: updateError } = await supabase
+        .from('coaches')
+        .update({ video_url: publicUrl })
+        .eq('profile_id', user.id);
+
+      if (updateError) {
+        Alert.alert('Video subido', 'Pero no se pudo guardar en tu perfil. Probá de nuevo.');
+        return;
+      }
+
+      setProfile(prev => prev ? { ...prev, video_url: publicUrl } : prev);
+    } finally {
+      setUploadingVideo(false);
+    }
+  }
+
+  async function launchVideoPicker(source: 'camera' | 'library') {
+    const permission = source === 'camera'
+      ? await ImagePicker.requestCameraPermissionsAsync()
+      : await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permission.granted) {
+      Alert.alert('Permiso necesario', 'Activá el permiso desde los ajustes del celular para continuar.');
+      return;
+    }
+
+    const result = source === 'camera'
+      ? await ImagePicker.launchCameraAsync({ mediaTypes: ['videos'], videoMaxDuration: 60 })
+      : await ImagePicker.launchImageLibraryAsync({ mediaTypes: ['videos'], videoMaxDuration: 60 });
+
+    if (result.canceled || !result.assets?.[0]) return;
+
+    const asset = result.assets[0];
+    await uploadVideo(asset.uri, asset.mimeType);
+  }
+
+  function pickVideo() {
+    Alert.alert('Video de perfil', 'Elegí una opción', [
+      { text: 'Grabar video', onPress: () => launchVideoPicker('camera') },
+      { text: 'Elegir de la galería', onPress: () => launchVideoPicker('library') },
+      { text: 'Cancelar', style: 'cancel' },
+    ]);
+  }
+
+  const videoPlayer = useVideoPlayer(profile?.video_url ?? null, p => { p.loop = false; });
 
   const initials = profile?.name ? getInitials(profile.name) : loadingProfile ? '…' : '?';
 
@@ -221,13 +296,29 @@ export default function CoachProfileScreen() {
         {/* ── Video perfil ──────────────────────────────────── */}
         <Text style={[s.sectionTitle, s.sectionSpaced]}>Video de perfil</Text>
         <View style={s.videoCard}>
-          <View style={s.videoPlaceholder}>
-            <MaterialCommunityIcons name="video-outline" size={36} color="rgba(255,255,255,0.35)" />
-            <Text style={s.videoPlaceholderText}>Sin video grabado</Text>
-          </View>
-          <TouchableOpacity style={s.recordBtn} onPress={() => console.log('[Coach] grabar video')} activeOpacity={0.85}>
+          {profile?.video_url ? (
+            <VideoView
+              player={videoPlayer}
+              style={s.videoPlayerWrap}
+              contentFit="cover"
+              nativeControls
+              allowsFullscreen
+            />
+          ) : (
+            <View style={s.videoPlaceholder}>
+              <MaterialCommunityIcons name="video-outline" size={36} color="rgba(255,255,255,0.35)" />
+              <Text style={s.videoPlaceholderText}>Sin video grabado</Text>
+            </View>
+          )}
+          <TouchableOpacity
+            style={s.recordBtn}
+            onPress={pickVideo}
+            activeOpacity={0.85}
+            disabled={uploadingVideo}>
             <MaterialCommunityIcons name="record-circle-outline" size={16} color={ViveColors.primary} />
-            <Text style={s.recordBtnText}>Grabar nuevo video</Text>
+            <Text style={s.recordBtnText}>
+              {uploadingVideo ? 'Subiendo…' : profile?.video_url ? 'Cambiar video' : 'Grabar nuevo video'}
+            </Text>
           </TouchableOpacity>
         </View>
 
@@ -555,6 +646,13 @@ const s = StyleSheet.create({
     fontFamily: ViveFonts.regular,
     fontSize: 13,
     color: 'rgba(255,255,255,0.45)',
+  },
+  videoPlayerWrap: {
+    width: '100%',
+    height: 130,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#000',
   },
   recordBtn: {
     flexDirection: 'row',

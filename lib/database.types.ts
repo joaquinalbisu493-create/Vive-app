@@ -17,6 +17,8 @@ export type Coach = {
   price_per_session: number
   nationality: string
   verified: boolean
+  application_video_url?: string | null
+  video_url?: string | null
   created_at: string
 }
 

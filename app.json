@@ -48,7 +48,16 @@
         }
       ],
       "expo-web-browser",
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Vita necesita acceso a tus fotos para subir tu video de presentación.",
+          "cameraPermission": "Vita necesita acceso a tu cámara para grabar tu video de presentación.",
+          "microphonePermission": "Vita necesita acceso al micrófono para grabar tu video de presentación."
+        }
+      ],
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,
