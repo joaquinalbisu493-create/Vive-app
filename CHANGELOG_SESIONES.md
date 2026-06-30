@@ -5,6 +5,70 @@
 
 ---
 
+## 2026-06-29 — Andre (sesión 22)
+
+**Tocado:** `app/(tabs)/index.tsx`, `app/ia.tsx` (nuevo)
+
+**Resumen:**
+- Venn SVG pasó a solo contorno (`fill="none"`, `stroke="rgba(255,255,255,0.7)"`, `strokeWidth={1.5}`). Antes tenía relleno semitransparente de colores.
+- Racha de semanas activas (`🔥 X semanas`) eliminada de la tarjeta "Sobre ti" del Inicio. La racha sigue viva en `app/progreso.tsx` y `screens/ProfileOwnScreen.tsx` — no se tocaron. El import de `getSemanasActivas` y el estado `semanasActivas` fueron removidos de index.tsx.
+- El Venn se convirtió en botón que navega a `/ia` (`router.push('/ia')`). Se reemplazó la animación pulse por `activeOpacity={0.8}`. Debajo del Venn aparece el label "vita IA" en lugar de la racha.
+- Creado `app/ia.tsx` como pantalla placeholder: título "vita IA" (fuente Fraunces), texto "Próximamente", fondo `AppBg`, botón de volver atrás.
+
+**Pendiente para la próxima sesión:**
+- Definir qué va en la pantalla vita IA — flujo de chat, resumen de perfil, recomendaciones IA, etc.
+- Conectar el mensaje "Sobre ti" a datos reales (sigue hardcodeado).
+
+---
+
+## 2026-06-29 — Andre (sesión 21)
+
+**Tocado:** `lib/stats.ts` (nuevo), `app/(tabs)/index.tsx`, `app/progreso.tsx`, `screens/ProfileOwnScreen.tsx`
+
+**Resumen:**
+- Creado `lib/stats.ts` con función `getSemanasActivas(userId)`: query sobre `bookings` con `status = 'completada'`, agrupa por semana ISO (timestamp / 7 días), retorna el tamaño del Set de semanas distintas. Semana activa = semana calendario con al menos una sesión completada.
+- Reemplazados los tres hardcodeados (`🔥 0 semanas` en index, `value: 12` en progreso, `WEEKS_ON_STREAK = 12` en ProfileOwnScreen) por el número real proveniente de `getSemanasActivas`. Constante `WEEKS_ON_STREAK` eliminada.
+- Los tres puntos de llamada usan la misma función utilitaria — la definición de "semana activa" vive en un solo lugar.
+
+**Pendiente para la próxima sesión:**
+- Conectar el mensaje "Sobre ti" a datos reales — actualmente sigue siendo texto hardcodeado en ambas pantallas. Requiere definir qué tabla/campo lo alimenta.
+- Confirmar que `complete_confirmed_sessions()` incluye `type` y `booking_id` en el payload del push (pendiente sesiones anteriores).
+
+---
+
+## 2026-06-29 — Andre (sesión 20)
+
+**Tocado:** `app/(tabs)/index.tsx`
+
+**Resumen:**
+- Tarjeta "Sobre ti" hardcodeada del Inicio **reemplazada** por tarjeta con Venn interactivo + racha + mensaje. Layout horizontal: zona izquierda con diagrama de Venn SVG (3 círculos Cuerpo/Mente/Alma, colores naranja/verde/azul de la paleta) + "🔥 0 días" debajo; zona derecha con label "SOBRE TI" y mensaje.
+- El Venn tiene animación pulse (scale 1.15 → spring back) al tocarlo — único elemento interactivo de la tarjeta.
+- Racha muestra **"🔥 0 semanas"** como placeholder. La unidad es semanas activas, no días. La lógica real se calculará desde `bookings`: semanas consecutivas con al menos una sesión `completada` para el usuario. No existe esa query todavía.
+- `screens/ProfileOwnScreen.tsx` no se tocó — la tarjeta del perfil queda exactamente como está.
+- Nota: tanto el mensaje "Sobre ti" como las semanas en `ProfileOwnScreen` siguen siendo hardcodeados — no había datos reales de Supabase para ese campo.
+
+**Pendiente para la próxima sesión:**
+- Implementar lógica real de racha de semanas: query sobre `bookings` donde `status = 'completada'`, agrupar por semana ISO, contar semanas consecutivas hasta hoy. Mostrar "🔥 X semanas".
+- Conectar el mensaje "Sobre ti" a datos reales — actualmente hardcodeado en ambas pantallas (Inicio y Perfil). Requiere definir qué tabla/campo lo alimenta antes de implementar.
+- Confirmar que `complete_confirmed_sessions()` incluye `type` y `booking_id` en el payload del push (pendiente sesiones anteriores).
+
+---
+
+## 2026-06-29 — Andre (sesión 19)
+
+**Tocado:** `app/(tabs)/index.tsx`, `screens/ProfileOwnScreen.tsx`
+
+**Resumen:**
+- "Tu progreso" (selector Hoy/Mes + tarjeta "Sobre ti") movido del Inicio al Perfil del usuario. Se insertó entre la sección de identidad y "Mi actividad". Constantes `WEEKS_ON_STREAK` y `SOBRE_TI_TEXT` definidas como módulo-level en `ProfileOwnScreen.tsx`, no como globales movidas.
+- "Frase del día" eliminada como card independiente. La frase ahora aparece como texto integrado debajo del saludo (sin tarjeta, sin ícono), con `ViveFonts.regular` a 15px y opacidad 0.55.
+- Código muerto en `index.tsx` eliminado completo: constantes, state `progressTab`, animaciones a2/a3 (renumeradas), ambos bloques JSX de progreso y frase, y todos los estilos asociados. No se tocó la base de datos.
+
+**Pendiente para la próxima sesión:**
+- `WEEKS_ON_STREAK` y `SOBRE_TI_TEXT` siguen hardcodeados — cuando se construya la lógica real de progreso, hay que reemplazarlos con queries reales.
+- Confirmar que `complete_confirmed_sessions()` incluye `type` y `booking_id` en el payload del push (pendiente de sesión 18).
+
+---
+
 ## 2026-06-29 — Joaquín (sesión 18)
 
 **Tocado:** `app/(tabs)/index.tsx`, `screens/CoachProfileScreen.tsx`

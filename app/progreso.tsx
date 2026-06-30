@@ -14,6 +14,7 @@ import { VitaHeader } from '@/components/ui/VitaHeader';
 import { ProgressToggle } from '@/components/ui/ProgressToggle';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { getSemanasActivas } from '@/lib/stats';
 
 // ─── Tipos ───────────────────────────────────────────────────────────────────
 
@@ -61,6 +62,7 @@ export default function ProgresoScreen() {
   const [pastSessions, setPastSessions] = useState<PastSession[]>([]);
   const [loadingSessions, setLoadingSessions] = useState(true);
   const [sessionCount, setSessionCount] = useState<number | null>(null);
+  const [semanasActivas, setSemanasActivas] = useState<number>(0);
 
   function toggleHabito(id: string) {
     setHabitosDone(prev => ({ ...prev, [id]: !prev[id] }));
@@ -69,6 +71,8 @@ export default function ProgresoScreen() {
   useEffect(() => {
     if (!user) return;
     const today = new Date().toISOString().split('T')[0];
+
+    getSemanasActivas(user!.id).then(setSemanasActivas);
 
     async function fetchData() {
       // Sesiones pasadas (confirmadas con fecha ya pasada, o completadas)
@@ -117,11 +121,9 @@ export default function ProgresoScreen() {
     fetchData();
   }, [user]);
 
-  // Stats: semanas y áreas son placeholders; sesiones viene de Supabase
-  // TODO: calcular semanas activas desde fecha de primer booking (analytics_events)
   // TODO: calcular áreas trabajadas desde topics de bookings cuando exista el campo
   const stats = [
-    { value: 12,                              label: 'Semanas\nactivas'      },
+    { value: semanasActivas,                  label: 'Semanas\nactivas'      },
     { value: 3,                               label: 'Áreas\ntrabajadas'     },
     { value: sessionCount ?? '—',             label: 'Sesiones\ncompletadas' },
   ];

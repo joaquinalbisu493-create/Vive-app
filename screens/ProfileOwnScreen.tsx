@@ -16,6 +16,7 @@ import { ViveColors, ViveFonts } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { AppBg } from '@/components/ui/AppBg';
+import { getSemanasActivas } from '@/lib/stats';
 
 type Profesional = {
   id: string;
@@ -38,13 +39,18 @@ type ConfigItem = {
   onPress: () => void;
 };
 
+const SOBRE_TI_TEXT =
+  'Vas por buen camino tomando acciones que te hacen cada vez más efectivo. Los retos y la constancia construyen más balance en tu vida.';
+
 export default function ProfileOwnScreen() {
   const router = useRouter();
   const { user, signOut } = useAuth();
 
+  const [progressTab, setProgressTab] = useState<'hoy' | 'mes'>('hoy');
   const [activity, setActivity] = useState<ActivityData>({ sesiones: 0, recursos: 0, racha: 0 });
   const [profesionales, setProfesionales] = useState<Profesional[]>([]);
   const [loadingData, setLoadingData] = useState(true);
+  const [semanasActivas, setSemanasActivas] = useState(0);
 
   const displayName = user?.user_metadata?.name ?? user?.email?.split('@')[0] ?? 'Usuario';
   const displayEmail = user?.email ?? '';
@@ -62,7 +68,12 @@ export default function ProfileOwnScreen() {
   async function loadProfileData() {
     setLoadingData(true);
     try {
-      await Promise.all([loadActivity(), loadProfesionales()]);
+      const [semanas] = await Promise.all([
+        getSemanasActivas(user!.id),
+        loadActivity(),
+        loadProfesionales(),
+      ]);
+      setSemanasActivas(semanas);
     } finally {
       setLoadingData(false);
     }
@@ -142,6 +153,7 @@ export default function ProfileOwnScreen() {
 
   const headerAnim = useRef(new Animated.Value(0)).current;
   const identityAnim = useRef(new Animated.Value(0)).current;
+  const progresoAnim = useRef(new Animated.Value(0)).current;
   const activityAnim = useRef(new Animated.Value(0)).current;
   const profAnim = useRef(new Animated.Value(0)).current;
   const configAnim = useRef(new Animated.Value(0)).current;
@@ -150,6 +162,7 @@ export default function ProfileOwnScreen() {
     Animated.stagger(80, [
       Animated.timing(headerAnim, { toValue: 1, duration: 300, useNativeDriver: true }),
       Animated.timing(identityAnim, { toValue: 1, duration: 360, useNativeDriver: true }),
+      Animated.timing(progresoAnim, { toValue: 1, duration: 360, useNativeDriver: true }),
       Animated.timing(activityAnim, { toValue: 1, duration: 360, useNativeDriver: true }),
       Animated.timing(profAnim, { toValue: 1, duration: 360, useNativeDriver: true }),
       Animated.timing(configAnim, { toValue: 1, duration: 360, useNativeDriver: true }),
@@ -263,6 +276,46 @@ export default function ProfileOwnScreen() {
               onPress={() => router.push('/edit-profile')}
             >
               <Text style={styles.editBtnText}>Editar perfil</Text>
+            </TouchableOpacity>
+          </Animated.View>
+
+          {/* Tu progreso */}
+          <Animated.View style={fadeUp(progresoAnim)}>
+            <View style={styles.progresoHeader}>
+              <Text style={styles.progresoLabel}>Tu progreso</Text>
+              <View style={styles.toggle}>
+                <TouchableOpacity
+                  style={[styles.toggleBtn, progressTab === 'hoy' && styles.toggleBtnActive]}
+                  onPress={() => setProgressTab('hoy')}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.toggleBtnText, progressTab === 'hoy' && styles.toggleBtnTextActive]}>Hoy</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.toggleBtn, progressTab === 'mes' && styles.toggleBtnActive]}
+                  onPress={() => setProgressTab('mes')}
+                  activeOpacity={0.8}
+                >
+                  <Text style={[styles.toggleBtnText, progressTab === 'mes' && styles.toggleBtnTextActive]}>Mes</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            <TouchableOpacity
+              style={styles.sobreTiCard}
+              onPress={() => router.push('/progreso')}
+              activeOpacity={0.82}
+            >
+              <View style={styles.sobreTiLeft}>
+                <Text style={styles.sobreTiNumber}>{semanasActivas}</Text>
+                <Text style={styles.sobreTiUnit}>Semanas</Text>
+              </View>
+              <View style={styles.sobreTiRight}>
+                <View style={styles.sobreTiTitleRow}>
+                  <Text style={styles.sobreTiTitle}>Sobre ti</Text>
+                  <MaterialCommunityIcons name="information-outline" size={16} color="rgba(255,255,255,0.45)" />
+                </View>
+                <Text style={styles.sobreTiText}>{SOBRE_TI_TEXT}</Text>
+              </View>
             </TouchableOpacity>
           </Animated.View>
 
@@ -538,6 +591,95 @@ const styles = StyleSheet.create({
     fontFamily: ViveFonts.medium,
     fontSize: 13,
     color: '#FFFFFF',
+  },
+
+  // Tu progreso
+  progresoHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    marginBottom: 12,
+  },
+  progresoLabel: {
+    fontFamily: ViveFonts.medium,
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.75)',
+  },
+  toggle: {
+    flexDirection: 'row',
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.18)',
+    padding: 3,
+    gap: 2,
+  },
+  toggleBtn: {
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 17,
+  },
+  toggleBtnActive: {
+    backgroundColor: 'rgba(255,255,255,0.9)',
+  },
+  toggleBtnText: {
+    fontFamily: ViveFonts.medium,
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.6)',
+  },
+  toggleBtnTextActive: {
+    color: '#1A0A26',
+  },
+  sobreTiCard: {
+    marginHorizontal: 20,
+    marginBottom: 20,
+    backgroundColor: GLASS,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: GLASS_BORDER,
+    flexDirection: 'row',
+    padding: 20,
+    gap: 16,
+    minHeight: 130,
+  },
+  sobreTiLeft: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 70,
+    flexShrink: 0,
+  },
+  sobreTiNumber: {
+    fontFamily: ViveFonts.bold,
+    fontSize: 56,
+    color: '#FFFFFF',
+    lineHeight: 60,
+  },
+  sobreTiUnit: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 13,
+    color: 'rgba(255,255,255,0.65)',
+    marginTop: 2,
+  },
+  sobreTiRight: {
+    flex: 1,
+  },
+  sobreTiTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8,
+  },
+  sobreTiTitle: {
+    fontFamily: ViveFonts.semibold,
+    fontSize: 15,
+    color: '#FFFFFF',
+  },
+  sobreTiText: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.65)',
+    lineHeight: 18,
   },
 
   // Sections

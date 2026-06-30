@@ -19,8 +19,12 @@ import { ScaleCard } from '@/components/ScaleCard';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { AppBg } from '@/components/ui/AppBg';
+import Svg, { Circle } from 'react-native-svg';
 
 const dailyPhrase = 'Todas las respuestas están en vos.';
+
+const SOBRE_TI_MSG =
+  'Vas por buen camino tomando acciones que te hacen cada vez más efectivo. Los retos y la constancia construyen más balance en tu vida.';
 
 const pinnedResources = [
   { id: '1', title: 'Respiración\n4-7-8', icon: 'weather-windy', route: undefined as string | undefined },
@@ -54,11 +58,6 @@ const GLASS_BORDER = 'rgba(255,255,255,0.28)';
 const RESOURCE_ICON_COLOR = [ViveColors.primary, ViveColors.accent];
 const RESOURCE_BUBBLE_BG  = ['rgba(232,116,59,0.18)', 'rgba(107,191,138,0.18)'];
 
-const WEEKS_ON_STREAK = 12;
-
-const SOBRE_TI_TEXT =
-  'Vas por buen camino tomando acciones que te hacen cada vez más efectivo. Los retos y la constancia construyen más balance en tu vida.';
-
 interface NextSession {
   id: string;
   coach_id: string;
@@ -78,7 +77,6 @@ export default function InicioScreen() {
   const router = useRouter();
   const { user } = useAuth();
   const [nextSession, setNextSession] = useState<NextSession | null>(null);
-  const [progressTab, setProgressTab] = useState<'hoy' | 'mes'>('hoy');
   const [unreadNotifCount, setUnreadNotifCount] = useState(0);
 
   const a1 = useRef(new Animated.Value(0)).current;
@@ -86,7 +84,6 @@ export default function InicioScreen() {
   const a3 = useRef(new Animated.Value(0)).current;
   const a4 = useRef(new Animated.Value(0)).current;
   const a5 = useRef(new Animated.Value(0)).current;
-  const a6 = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.stagger(90, [
@@ -95,9 +92,8 @@ export default function InicioScreen() {
       Animated.timing(a3, { toValue: 1, duration: 380, useNativeDriver: true }),
       Animated.timing(a4, { toValue: 1, duration: 380, useNativeDriver: true }),
       Animated.timing(a5, { toValue: 1, duration: 380, useNativeDriver: true }),
-      Animated.timing(a6, { toValue: 1, duration: 380, useNativeDriver: true }),
     ]).start();
-  }, [a1, a2, a3, a4, a5, a6]);
+  }, [a1, a2, a3, a4, a5]);
 
   useEffect(() => {
     if (!user) return;
@@ -211,89 +207,30 @@ export default function InicioScreen() {
             </View>
           </Animated.View>
 
-          {/* ── 2. SALUDO ── */}
+          {/* ── 2. SALUDO + FRASE ── */}
           <Animated.View style={[s.greetingBlock, fadeUp(a1)]}>
             <Text style={s.greetingLine1}>{getGreeting()}</Text>
             <Text style={s.greetingLine2}>¿cómo estás hoy?</Text>
+            <Text style={s.dailyPhrase}>{dailyPhrase}</Text>
           </Animated.View>
 
-          {/* ── 3. TU PROGRESO + TOGGLE ── */}
-          <Animated.View style={[s.progressRow, fadeUp(a2)]}>
-            <Text style={s.progressLabel}>Tu progreso</Text>
-            <View style={s.toggle}>
-              <TouchableOpacity
-                style={[s.toggleBtn, progressTab === 'hoy' && s.toggleBtnActive]}
-                onPress={() => setProgressTab('hoy')}
-                activeOpacity={0.8}
-              >
-                <Text style={[s.toggleBtnText, progressTab === 'hoy' && s.toggleBtnTextActive]}>Hoy</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[s.toggleBtn, progressTab === 'mes' && s.toggleBtnActive]}
-                onPress={() => setProgressTab('mes')}
-                activeOpacity={0.8}
-              >
-                <Text style={[s.toggleBtnText, progressTab === 'mes' && s.toggleBtnTextActive]}>Mes</Text>
-              </TouchableOpacity>
-            </View>
-          </Animated.View>
-
-          {/* ── 4. SOBRE TI (tarjeta grande) ── */}
+          {/* ── 3. SOBRE TI ── */}
           <Animated.View style={fadeUp(a2)}>
-            <TouchableOpacity
-              style={s.sobreTiCard}
-              onPress={() => router.push('/progreso')}
-              activeOpacity={0.82}
-            >
+            <View style={s.sobreTiCard}>
               <View style={s.sobreTiLeft}>
-                <Text style={s.sobreTiNumber}>{WEEKS_ON_STREAK}</Text>
-                <Text style={s.sobreTiUnit}>Semanas</Text>
+                <TouchableOpacity onPress={() => router.push('/ia')} activeOpacity={0.8} hitSlop={6}>
+                  <VennSvg />
+                </TouchableOpacity>
               </View>
               <View style={s.sobreTiRight}>
-                <View style={s.sobreTiTitleRow}>
-                  <Text style={s.sobreTiTitle}>Sobre ti</Text>
-                  <MaterialCommunityIcons name="information-outline" size={16} color="rgba(255,255,255,0.45)" />
-                </View>
-                <Text style={s.sobreTiText}>{SOBRE_TI_TEXT}</Text>
+                <Text style={s.sobreTiTitle}>Sobre ti</Text>
+                <Text style={s.sobreTiText}>{SOBRE_TI_MSG}</Text>
               </View>
-            </TouchableOpacity>
+            </View>
           </Animated.View>
 
-          {/* ── 5. FRASE DEL DÍA ── */}
+          {/* ── 4. TU PRÓXIMA SESIÓN ── */}
           <Animated.View style={fadeUp(a3)}>
-            <View style={s.phraseCard}>
-              <View style={s.phraseInner}>
-                <Text style={s.phraseLabel}>Frase del día</Text>
-                <Text style={s.phraseText}>{dailyPhrase}</Text>
-              </View>
-              <MaterialCommunityIcons name="shimmer" size={26} color="rgba(255,255,255,0.65)" style={s.phraseIcon} />
-            </View>
-          </Animated.View>
-
-          {/* ── 6. RECURSOS ÚTILES ── */}
-          <Animated.View style={fadeUp(a4)}>
-            <Text style={s.sectionTitle}>Recursos útiles</Text>
-            <View style={s.resourcesRow}>
-              {pinnedResources.map((r, i) => (
-                <ScaleCard
-                  key={r.id}
-                  style={s.resourceCard}
-                  onPress={r.route ? () => router.push(r.route as any) : undefined}
-                >
-                  <View style={[s.resourceIconCircle, { backgroundColor: RESOURCE_BUBBLE_BG[i] }]}>
-                    <MaterialCommunityIcons name={r.icon as any} size={22} color={RESOURCE_ICON_COLOR[i]} />
-                  </View>
-                  <Text style={s.resourceLabel} numberOfLines={2}>{r.title}</Text>
-                  <View style={s.resourcePlusBtn}>
-                    <MaterialCommunityIcons name="plus" size={14} color="rgba(255,255,255,0.6)" />
-                  </View>
-                </ScaleCard>
-              ))}
-            </View>
-          </Animated.View>
-
-          {/* ── 7. TU PRÓXIMA SESIÓN ── */}
-          <Animated.View style={fadeUp(a5)}>
             <Text style={s.sectionTitle}>Tu próxima sesión</Text>
             {nextSession ? (
               <View style={s.sessionCard}>
@@ -338,8 +275,30 @@ export default function InicioScreen() {
             )}
           </Animated.View>
 
-          {/* ── 8. PARA VOS HOY ── */}
-          <Animated.View style={fadeUp(a6)}>
+          {/* ── 5. RECURSOS ÚTILES ── */}
+          <Animated.View style={fadeUp(a4)}>
+            <Text style={[s.sectionTitle, { marginTop: 20 }]}>Recursos útiles</Text>
+            <View style={s.resourcesRow}>
+              {pinnedResources.map((r, i) => (
+                <ScaleCard
+                  key={r.id}
+                  style={s.resourceCard}
+                  onPress={r.route ? () => router.push(r.route as any) : undefined}
+                >
+                  <View style={[s.resourceIconCircle, { backgroundColor: RESOURCE_BUBBLE_BG[i] }]}>
+                    <MaterialCommunityIcons name={r.icon as any} size={22} color={RESOURCE_ICON_COLOR[i]} />
+                  </View>
+                  <Text style={s.resourceLabel} numberOfLines={2}>{r.title}</Text>
+                  <View style={s.resourcePlusBtn}>
+                    <MaterialCommunityIcons name="plus" size={14} color="rgba(255,255,255,0.6)" />
+                  </View>
+                </ScaleCard>
+              ))}
+            </View>
+          </Animated.View>
+
+          {/* ── 6. PARA VOS HOY ── */}
+          <Animated.View style={fadeUp(a5)}>
             <Text style={[s.sectionTitle, { marginTop: 22 }]}>Para vos hoy</Text>
             <View style={s.recCard}>
               <View style={s.recInfo}>
@@ -432,100 +391,16 @@ const s = StyleSheet.create({
     color: 'rgba(255,255,255,0.85)',
     lineHeight: 36,
   },
-
-  // ── 3. Progreso + toggle ───────────────────────────────────────────────────
-  progressRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    marginBottom: 12,
-  },
-  progressLabel: {
-    fontFamily: ViveFonts.medium,
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.75)',
-  },
-  toggle: {
-    flexDirection: 'row',
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.18)',
-    padding: 3,
-    gap: 2,
-  },
-  toggleBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    borderRadius: 17,
-  },
-  toggleBtnActive: {
-    backgroundColor: 'rgba(255,255,255,0.9)',
-  },
-  toggleBtnText: {
-    fontFamily: ViveFonts.medium,
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.6)',
-  },
-  toggleBtnTextActive: {
-    color: '#1A0A26',
-  },
-
-  // ── 4. Sobre ti ────────────────────────────────────────────────────────────
-  sobreTiCard: {
-    marginHorizontal: 18,
-    marginBottom: 14,
-    backgroundColor: GLASS,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: GLASS_BORDER,
-    flexDirection: 'row',
-    padding: 20,
-    gap: 16,
-    minHeight: 130,
-  },
-  sobreTiLeft: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 70,
-    flexShrink: 0,
-  },
-  sobreTiNumber: {
-    fontFamily: ViveFonts.bold,
-    fontSize: 56,
-    color: '#FFFFFF',
-    lineHeight: 60,
-  },
-  sobreTiUnit: {
+  dailyPhrase: {
     fontFamily: ViveFonts.regular,
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.65)',
-    marginTop: 2,
-  },
-  sobreTiRight: {
-    flex: 1,
-  },
-  sobreTiTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 8,
-  },
-  sobreTiTitle: {
-    fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
-  },
-  sobreTiText: {
-    fontFamily: ViveFonts.regular,
-    fontSize: 12,
-    color: 'rgba(255,255,255,0.65)',
-    lineHeight: 18,
+    color: 'rgba(255,255,255,0.55)',
+    marginTop: 8,
+    lineHeight: 22,
   },
 
-  // ── 5. Frase del día ───────────────────────────────────────────────────────
-  phraseCard: {
+  // ── 3. Sobre ti ────────────────────────────────────────────────────────────
+  sobreTiCard: {
     marginHorizontal: 18,
     marginBottom: 22,
     backgroundColor: GLASS,
@@ -535,28 +410,38 @@ const s = StyleSheet.create({
     padding: 18,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 14,
   },
-  phraseInner: { flex: 1 },
-  phraseLabel: {
-    fontFamily: ViveFonts.regular,
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.55)',
-    marginBottom: 6,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  phraseText: {
-    fontFamily: ViveFonts.semibold,
-    fontSize: 16,
-    color: '#FFFFFF',
-    lineHeight: 24,
-  },
-  phraseIcon: {
+  sobreTiLeft: {
+    width: 80,
     flexShrink: 0,
+    alignItems: 'center',
+    gap: 6,
+  },
+  vitaIaLabel: {
+    fontFamily: ViveFonts.medium,
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.65)',
+  },
+  sobreTiRight: {
+    flex: 1,
+  },
+  sobreTiTitle: {
+    fontFamily: ViveFonts.semibold,
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.5)',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+    marginBottom: 6,
+  },
+  sobreTiText: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.75)',
+    lineHeight: 18,
   },
 
-  // ── 6. Recursos útiles ─────────────────────────────────────────────────────
+  // ── 4. Recursos útiles ─────────────────────────────────────────────────────
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
@@ -741,3 +626,13 @@ const s = StyleSheet.create({
     flexShrink: 0,
   },
 });
+
+function VennSvg() {
+  return (
+    <Svg width={72} height={64} viewBox="-2 -2 72 66">
+      <Circle cx={21} cy={21} r={20} fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth={1.5} />
+      <Circle cx={47} cy={21} r={20} fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth={1.5} />
+      <Circle cx={34} cy={40} r={20} fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth={1.5} />
+    </Svg>
+  );
+}
