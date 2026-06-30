@@ -83,9 +83,12 @@ export default function LoginScreen() {
 
     if (error) {
       setServerError(error);
-      return;
     }
-    router.replace('/(tabs)');
+    // Sin navegar acá: AuthRedirect (app/_layout.tsx) ya escucha el cambio
+    // de `user`/`role` y manda a (tabs) o (coach) según corresponda. Navegar
+    // acá también generaba una carrera de dos `router.replace()` casi
+    // simultáneos (este y el de AuthRedirect corrigiendo a coach) que
+    // crasheaba con "Attempted to navigate before mounting the Root Layout".
   }
 
   async function handleGoogle() {

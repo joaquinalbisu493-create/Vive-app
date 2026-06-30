@@ -5,6 +5,47 @@
 
 ---
 
+## 2026-06-30 — Andre (sesión 30)
+
+**Tocado:** `context/AuthContext.tsx`, `screens/LoginScreen.tsx`, `components/AuthModal.tsx`
+
+**Resumen:**
+- Bug reportado: explorando la app como usuario (botón "Quiero explorar la app" → `(tabs)` sin login) y después iniciando sesión con el email de un coach, la app crasheaba. Reproducido con captura del LogBox: `Uncaught (in promise) Error: Attempted to navigate before mounting the Root Layout component` en `LoginScreen.tsx:88`, más dos `Render Error` secundarios ("cannot add `postgres_changes` callbacks ... after `subscribe()`") en `(tabs)/_layout.tsx:112` y `(tabs)/index.tsx:114`.
+- Causa raíz: `LoginScreen.tsx` y `AuthModal.tsx` hacían `router.replace('/(tabs)')` apenas el login era exitoso, sin mirar el rol de la cuenta. `app/_layout.tsx` tiene un `AuthRedirect` separado que escucha `user`/`role` y corrige a `/(coach)` si corresponde — pero como `AuthContext` actualizaba `user` y `role` en dos pasos (`setUser` primero, `await fetchRole()` después), `AuthRedirect` podía disparar su propio `replace('/(coach)')` casi al mismo tiempo que el `replace('/(tabs)')` explícito de la pantalla de login, dos navegaciones a destinos distintos pisándose. Los errores de `postgres_changes` eran consecuencia en cascada: el doble montaje/desmontaje de `(tabs)` por la pelea de navegación hacía que sus canales realtime (`'user-tab-dot'`, `notif-bell-*`) se intentaran resuscribir sobre un canal que ya estaba `subscribe()`d.
+- Fix de raíz, no parche puntual:
+  1. `AuthContext.tsx`: en el efecto inicial (`getSession`) y en `onAuthStateChange`, ahora se resuelve el rol (`await fetchRole(u.id)`) **antes** de llamar a `setRole`/`setUser`, y ambos se setean en el mismo tick — React los batchea en un solo render, así que `AuthRedirect` nunca ve un `user` ya logueado con un `role` todavía desactualizado.
+  2. `LoginScreen.tsx` y `AuthModal.tsx`: se sacó el `router.replace('/(tabs)')` explícito post-login en ambos. Ahora `AuthRedirect` es la única fuente de verdad para a dónde navegar después de loguearse — ya tenía toda la lógica necesaria (`destination = role === 'coach' ? '/(coach)' : '/(tabs)'`), solo hacía falta dejar de competir con ella.
+- `CoachLoginScreen.tsx` (login desde el flujo de postulación a coach) no tenía este bug — ya hace su propio chequeo de `profile.role` antes de navegar, en vez de delegar en `AuthRedirect`. No se tocó.
+- Type-check limpio en los 3 archivos (`npx tsc --noEmit`).
+
+**Pendiente para la próxima sesión:**
+- No probado todavía en dispositivo real con un mail de coach real desde el flujo "explorar como usuario" — confirmar que ya no crashea y que aterriza directo en `(coach)` sin pasar visualmente por `(tabs)`.
+- Si en el futuro vuelve a aparecer el error de `postgres_changes ... after subscribe()` en algún `_layout.tsx` sin que haya un crash de navegación de por medio, sospechar de Fast Refresh o de StrictMode montando el efecto dos veces — los nombres de canal (`'user-tab-dot'`, `'coach-tab-badge'`) no son únicos por instancia de mount, así que un doble-montaje real (no solo el de este bug) los rompería de la misma forma.
+
+---
+
+## 2026-06-30 — Andre (sesión 29)
+
+**Tocado:** `screens/CoachProfileScreen.tsx`, `scripts/add-coaches-update-policy.sql` (nuevo, corrido en Supabase por Andre el 30/06/2026), `SCHEMA.md`
+
+**Resumen:**
+- Feature: el coach ahora puede fijar su precio por sesión desde su propio perfil. La sección "Precio y paquetes" antes solo mostraba `coaches.price_per_session` en modo lectura. Tocar la fila entra en modo edición inline (`TextInput` numérico con `$`, botones Guardar/Cancelar) y hace `update` a Supabase — mismo criterio de "edición in situ sin navegar a otra pantalla" que el video de perfil de la sesión 28.
+- **Bug crítico encontrado al verificar el flujo completo (reportado por Andre: precio seteado en $10000 desde el perfil, pero en Conexiones seguía viendo $4500 para "Coach Prueba")**: la tabla `coaches` tiene RLS activado pero **nunca tuvo una política de UPDATE** — solo existía `coaches_insert_own` (FOR INSERT). Cualquier `update()` a `coaches` desde el cliente (precio, y también `video_url` de la sesión 28) afectaba 0 filas en silencio: Postgrest no devuelve `error` cuando RLS filtra todas las filas de un UPDATE sin `.select()` encadenado, así que el cliente creía haber guardado y actualizaba su estado local, pero la base nunca cambiaba. Confirmado con un script de diagnóstico (anon key, sin auth) que hizo `SELECT` directo a `coaches` y encontró `price_per_session: 4500` para "Coach Prueba" pese al cambio hecho desde la app.
+- Fix de dos partes:
+  1. `scripts/add-coaches-update-policy.sql` agrega `coaches_update_own` (FOR UPDATE, USING + WITH CHECK `profile_id = auth.uid()`). Corrido en Supabase por Andre el 30/06/2026.
+  2. `savePrice()` y el `update` de `video_url` en `uploadVideo()` ahora encadenan `.select()` y chequean que `data` no esté vacío antes de considerar el guardado exitoso — así un futuro bloqueo de RLS se ve como error en la UI en vez de fallar en silencio.
+- El precio no es editable si `noCoachProfile` es `true` (no existe fila en `coaches` para hacer `update`).
+- `ProfesionalScreen.tsx` y `Conexiones` ya leen `price_per_session` fresco de Supabase en cada carga — no necesitaron cambios.
+- `SCHEMA.md` regla 7 actualizada documentando el agujero de RLS y el fix.
+- Type-check limpio (`npx tsc --noEmit`; los errores que tira el comando son preexistentes, de la carpeta duplicada `node_modules 2/wonka`, no relacionados).
+- **Verificado end-to-end**: Andre seteó el precio en $11000 desde `CoachProfileScreen` con la cuenta de Coach Prueba; confirmado con un `SELECT` directo a Supabase (anon key, sin filtro) que `price_per_session` quedó en 11000 en la base — la política nueva funciona y el guardado ya persiste de verdad.
+
+**Pendiente para la próxima sesión:**
+- Mismo chequeo para video de perfil — re-subir un video y confirmar que `coaches.video_url` cambió de verdad en la base, no solo en el estado local (nunca se había verificado en dispositivo real desde que se agregó en la sesión 28, y tenía el mismo bug de RLS).
+- El botón "Editar perfil" de esta misma pantalla sigue sin funcionalidad (no tiene `onPress`) — fuera de alcance de esta sesión.
+
+---
+
 ## 2026-06-30 — Andre (sesión 28)
 
 **Tocado:** `scripts/add-coach-video-upload.sql` (nuevo, corrido en Supabase), `app.json`, `lib/database.types.ts`, `screens/CoachProfileScreen.tsx`, `screens/ProfesionalScreen.tsx`, `package.json`, `SCHEMA.md`

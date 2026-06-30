@@ -72,7 +72,9 @@ export function AuthModal({ visible, onDismiss, onLogin, signInWithEmail, signIn
     }
     reset();
     onLogin();
-    router.replace('/(tabs)');
+    // Sin navegar acá: AuthRedirect (app/_layout.tsx) ya manda a (tabs) o
+    // (coach) según el rol resuelto. Forzar (tabs) acá generaba una carrera
+    // con esa corrección que crasheaba la app al loguearse con un mail de coach.
   }
 
   async function handleGoogle() {
