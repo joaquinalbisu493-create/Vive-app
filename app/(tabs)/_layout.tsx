@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Tabs } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
-import { View, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { BlurView } from 'expo-blur';
 
 import { HapticTab } from '@/components/haptic-tab';
@@ -88,11 +88,24 @@ async function checkDot(userId: string, setHasDot: (v: boolean) => void) {
   setHasDot((count ?? 0) > 0);
 }
 
-function TabIcon({ focused, children }: { focused: boolean; children: React.ReactNode }) {
+function TabIcon({ focused, color, label, children }: { focused: boolean; color: string; label: string; children: React.ReactNode }) {
   return (
-    <View style={styles.iconWrap}>
+    <View
+      style={styles.tabItem}
+      onLayout={(e) => {
+        const { width, height } = e.nativeEvent.layout;
+        console.log(`[TABDEBUG] tabItem "${label}" w=${width} h=${height}`);
+      }}>
       {focused && <View style={styles.activeBubble} />}
       {children}
+      <Text
+        style={[styles.tabLabel, { color }]}
+        onLayout={(e) => {
+          const { width, height } = e.nativeEvent.layout;
+          console.log(`[TABDEBUG] label "${label}" w=${width} h=${height}`);
+        }}>
+        {label}
+      </Text>
     </View>
   );
 }
@@ -128,19 +141,24 @@ export default function TabLayout() {
         tabBarInactiveTintColor: TAB_INACTIVE,
         tabBarStyle: styles.tabBar,
         tabBarBackground: () => (
-          <BlurView intensity={60} tint="light" style={StyleSheet.absoluteFill} />
+          <View
+            style={styles.blurWrap}
+            onLayout={(e) => {
+              const { width, height } = e.nativeEvent.layout;
+              console.log(`[TABDEBUG] tabBar container w=${width} h=${height}`);
+            }}>
+            <BlurView intensity={60} tint="light" style={StyleSheet.absoluteFill} />
+          </View>
         ),
-        tabBarLabelStyle: {
-          fontFamily: ViveFonts.medium,
-          fontSize: 11,
-        },
+        tabBarShowLabel: false,
+        tabBarIconStyle: { width: '100%', height: 52, justifyContent: 'center', alignItems: 'center' },
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Inicio',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
+            <TabIcon focused={focused} color={color} label="Inicio">
               <Feather name="home" size={22} color={color} />
             </TabIcon>
           ),
@@ -151,7 +169,7 @@ export default function TabLayout() {
         options={{
           title: 'Mis salas',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
+            <TabIcon focused={focused} color={color} label="Mis salas">
               <View>
                 <Feather name="message-square" size={22} color={color} />
                 {hasDot && <View style={styles.notifDot} />}
@@ -165,7 +183,7 @@ export default function TabLayout() {
         options={{
           title: 'Recursos',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
+            <TabIcon focused={focused} color={color} label="Recursos">
               <Feather name="book-open" size={22} color={color} />
             </TabIcon>
           ),
@@ -176,7 +194,7 @@ export default function TabLayout() {
         options={{
           title: 'Conexiones',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
+            <TabIcon focused={focused} color={color} label="Conexiones">
               <Feather name="users" size={22} color={color} />
             </TabIcon>
           ),
@@ -197,27 +215,40 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   tabBar: {
     position: 'absolute',
-    bottom: 24,
-    left: 16,
-    right: 16,
+    bottom: 60,
+    left: 44,
+    right: 44,
     height: 64,
     borderRadius: 32,
     backgroundColor: 'transparent',
     borderTopWidth: 0,
+    // overflow: 'hidden', // TEMP: removido para diagnosticar recorte de texto
+  },
+  blurWrap: {
+    ...StyleSheet.absoluteFillObject,
+    borderRadius: 32,
     overflow: 'hidden',
   },
-  iconWrap: {
+  tabItem: {
+    alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 52,
-    height: 36,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
   },
   activeBubble: {
     position: 'absolute',
-    width: 52,
-    height: 36,
-    borderRadius: 18,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 24,
     backgroundColor: 'rgba(255,255,255,0.25)',
+  },
+  tabLabel: {
+    fontFamily: ViveFonts.medium,
+    fontSize: 11,
+    marginTop: 3,
   },
   notifDot: {
     position: 'absolute',

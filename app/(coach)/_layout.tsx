@@ -12,11 +12,12 @@ import { useAuth } from '@/context/AuthContext';
 const TAB_ACTIVE   = '#FFFFFF';
 const TAB_INACTIVE = 'rgba(255,255,255,0.45)';
 
-function TabIcon({ focused, children }: { focused: boolean; children: React.ReactNode }) {
+function TabIcon({ focused, color, label, children }: { focused: boolean; color: string; label: string; children: React.ReactNode }) {
   return (
-    <View style={styles.iconWrap}>
+    <View style={styles.tabItem}>
       {focused && <View style={styles.activeBubble} />}
       {children}
+      <Text style={[styles.tabLabel, { color }]}>{label}</Text>
     </View>
   );
 }
@@ -84,19 +85,19 @@ export default function CoachTabLayout() {
         tabBarInactiveTintColor: TAB_INACTIVE,
         tabBarStyle: styles.tabBar,
         tabBarBackground: () => (
-          <BlurView intensity={60} tint="light" style={StyleSheet.absoluteFill} />
+          <View style={styles.blurWrap}>
+            <BlurView intensity={60} tint="light" style={StyleSheet.absoluteFill} />
+          </View>
         ),
-        tabBarLabelStyle: {
-          fontFamily: ViveFonts.medium,
-          fontSize: 11,
-        },
+        tabBarShowLabel: false,
+        tabBarIconStyle: { width: '100%', height: 52, justifyContent: 'center', alignItems: 'center' },
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: 'Inicio',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
+            <TabIcon focused={focused} color={color} label="Inicio">
               <Feather name="calendar" size={22} color={color} />
             </TabIcon>
           ),
@@ -107,7 +108,7 @@ export default function CoachTabLayout() {
         options={{
           title: 'Reservas',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
+            <TabIcon focused={focused} color={color} label="Reservas">
               <View>
                 <Feather name="clipboard" size={22} color={color} />
                 <PendingBadge count={pendingCount} />
@@ -121,7 +122,7 @@ export default function CoachTabLayout() {
         options={{
           title: 'Chats',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
+            <TabIcon focused={focused} color={color} label="Chats">
               <Feather name="message-circle" size={22} color={color} />
             </TabIcon>
           ),
@@ -132,7 +133,7 @@ export default function CoachTabLayout() {
         options={{
           title: 'Recursos',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
+            <TabIcon focused={focused} color={color} label="Recursos">
               <Feather name="book-open" size={22} color={color} />
             </TabIcon>
           ),
@@ -143,7 +144,7 @@ export default function CoachTabLayout() {
         options={{
           title: 'Perfil',
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused}>
+            <TabIcon focused={focused} color={color} label="Perfil">
               <Feather name="user" size={22} color={color} />
             </TabIcon>
           ),
@@ -157,26 +158,43 @@ const styles = StyleSheet.create({
   tabBar: {
     position: 'absolute',
     bottom: 24,
-    left: 16,
-    right: 16,
+    left: 44,
+    right: 44,
     height: 64,
     borderRadius: 32,
     backgroundColor: 'transparent',
     borderTopWidth: 0,
     overflow: 'hidden',
   },
-  iconWrap: {
+  blurWrap: {
+    position: 'absolute',
+    bottom: 24,
+    left: 44,
+    right: 44,
+    height: 64,
+    borderRadius: 32,
+    overflow: 'hidden',
+  },
+  tabItem: {
+    alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 52,
-    height: 36,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
   },
   activeBubble: {
     position: 'absolute',
-    width: 52,
-    height: 36,
-    borderRadius: 18,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 24,
     backgroundColor: 'rgba(255,255,255,0.25)',
+  },
+  tabLabel: {
+    fontFamily: ViveFonts.medium,
+    fontSize: 11,
+    marginTop: 3,
   },
 });
 

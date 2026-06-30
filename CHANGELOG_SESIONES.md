@@ -5,6 +5,40 @@
 
 ---
 
+## 2026-06-30 — Andre (sesión 24)
+
+**Tocado:** `app/(tabs)/_layout.tsx`, `app/(coach)/_layout.tsx`
+
+**Resumen:**
+- Bug: tras agregar labels debajo de los íconos del tab bar (`TabIcon` ahora renderiza ícono + `<Text>{label}</Text>`), el ancho del ícono no cambiaba aunque se probó `alignSelf: 'stretch'` y luego `width: '100%'` en `tabBarIconContainerStyle`. Logs `[TABDEBUG]` mostraban siempre `w=30.999996185302734`, idéntico en cada corrida.
+- Primer sospechoso descartado: procesos zombies de `expo start` (3 corriendo en paralelo desde hacía más de 2 semanas, uno de ellos en el puerto 8081 con `--no-dev`, sirviendo bundle de producción al celular sin recargar). Se mataron los 3 y se confirmó un único proceso limpio — el bug persistió igual, así que no era esto.
+- Causa real: `tabBarIconContainerStyle` **no existe** como prop en `@react-navigation/bottom-tabs@7.18.0` (la librería detrás de `<Tabs>` de expo-router). Se verificó contra `node_modules/@react-navigation/bottom-tabs/src/types.tsx` — la prop válida es `tabBarIconStyle`. Como TS/JS no tira error por una key extra en un objeto, el valor nunca se conectaba a ningún `style` array de la librería; por eso ningún cambio (`stretch`, `100%`) tenía efecto.
+- Fix: renombrado a `tabBarIconStyle` en `(tabs)/_layout.tsx`. Confirmado por el usuario que ahora sí funciona. Se encontró el mismo bug duplicado en `(coach)/_layout.tsx` (mismo patrón de `tabBarIconContainerStyle`) y se corrigió también ahí antes de commitear, para no dejarlo vivo en el otro layout.
+- De paso, dentro de este mismo cambio se sacaron los labels nativos (`tabBarShowLabel: false`) y se renderizan manualmente dentro de `TabIcon` (ícono + `<Text>` con `ViveFonts.medium`), y se movió `tabBarStyle` (`bottom: 60`, `left/right: 44`) — pendiente confirmar visualmente que el pill quedó bien posicionado tras este ajuste.
+
+**Pendiente para la próxima sesión:**
+- Confirmar visualmente en el celular que los labels debajo de los íconos se ven bien (tamaño, recorte, espaciado) y que el pill con los nuevos márgenes (`bottom: 60`, `left/right: 44`) no rompió el layout de la sesión 23.
+- Quitar los `console.log('[TABDEBUG]...')` una vez confirmado visualmente — son solo diagnóstico, no deberían quedar en el código final.
+- Si vuelve a aparecer un caso de "cambié el estilo y no pasa nada", chequear primero si la prop existe de verdad en el tipo de la librería antes de sospechar de cache/procesos — los tipos de `screenOptions` en este archivo no parecen estar forzando error de compilación ante keys inválidas, vale la pena revisar por qué.
+
+---
+
+## 2026-06-30 — Andre (sesión 23)
+
+**Tocado:** `app/(tabs)/_layout.tsx`, `app/(coach)/_layout.tsx`
+
+**Resumen:**
+- Bug: la tab bar flotante (pill con blur) tocaba los bordes de la pantalla a pesar de tener `left: 44, right: 44` en `tabBarStyle`. Los márgenes no se aplicaban visualmente.
+- Diagnóstico: test con `backgroundColor: 'rgba(100,0,200,0.8)'` confirmó que `tabBarStyle` posiciona correctamente el contenedor — el problema era exclusivamente el `BlurView` pasado a `tabBarBackground`. En React Navigation v7 (Expo Router v4 / SDK 54), `tabBarBackground` se renderiza en un layer separado que NO hereda los bounds del contenedor que tiene `tabBarStyle`; por eso `StyleSheet.absoluteFill` en el BlurView cubría el ancho total de pantalla en vez de confinarse al pill.
+- Solución: envolver el `BlurView` en un `View` con `styles.blurWrap` — mismo `position: 'absolute'`, `bottom: 24`, `left: 44`, `right: 44`, `height: 64`, `borderRadius: 32`, `overflow: 'hidden'` — posicionado de forma absoluta dentro del layer de `tabBarBackground`, coincidiendo exactamente con los bounds del pill.
+- Aplicado en ambos layouts (`(tabs)` y `(coach)`) ya que comparten el mismo patrón.
+
+**Pendiente para la próxima sesión:**
+- Confirmar visualmente en celu que el blur ahora aparece con los márgenes correctos (y no full-width).
+- Si en alguna pantalla futura se usa `tabBarBackground`, recordar aplicar el mismo wrapper en vez de pasar `absoluteFill` directo al BlurView.
+
+---
+
 ## 2026-06-29 — Andre (sesión 22)
 
 **Tocado:** `app/(tabs)/index.tsx`, `app/ia.tsx` (nuevo)
