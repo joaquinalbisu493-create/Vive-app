@@ -198,14 +198,14 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   tabBar: {
     position: 'absolute',
-    bottom: 60,
+    bottom: 24,
     left: 44,
     right: 44,
     height: 64,
     borderRadius: 32,
     backgroundColor: 'transparent',
     borderTopWidth: 0,
-    // overflow: 'hidden', // TEMP: removido para diagnosticar recorte de texto
+    overflow: 'hidden',
   },
   blurWrap: {
     ...StyleSheet.absoluteFillObject,
