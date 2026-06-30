@@ -178,11 +178,11 @@ const styles = StyleSheet.create({
   },
   activeBubble: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderRadius: 24,
+    top: -4,
+    left: -4,
+    right: -4,
+    bottom: -4,
+    borderRadius: 26,
     backgroundColor: 'rgba(255,255,255,0.25)',
   },
   tabLabel: {
