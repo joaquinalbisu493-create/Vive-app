@@ -5,6 +5,26 @@
 
 ---
 
+## 2026-07-01 — Joaquín (sesión 34)
+
+**Tocado:** `scripts/create-mood-entries.sql` (nuevo, corrido en Supabase), `constants/theme.ts`, `hooks/useMoodHistory.ts` (nuevo), `lib/moodInsights.ts` (nuevo), `components/MoodCheckIn.tsx` (nuevo), `app/(tabs)/index.tsx`
+
+**Resumen:**
+- Implementado widget "Check-in de hoy" en la home: 5 círculos de color sólido con animaciones de escala y opacidad, microcopy de confirmación con fade+slide, preload del estado de hoy desde Supabase al montar.
+- Nueva tabla `mood_entries` con constraint UNIQUE (user_id, entry_date) — upsert para que re-tocar un círculo actualice el mismo row, no duplique. RLS con 4 políticas. SQL en `scripts/create-mood-entries.sql`.
+- `useMoodHistory(userId, days)` en `hooks/` — hook reutilizable para cualquier pantalla que necesite historial de mood.
+- `lib/moodInsights.ts` con variantes de copy en `MOOD_COPY` (ajustables sin tocar lógica) y `getSobreTiInsight()` que genera texto dinámico según streak, tendencia y promedio de los últimos 7 días.
+- "Sobre ti" en home reemplaza texto estático por insight generado del historial real. Fallback si hay menos de 3 check-ins.
+- `ViveMoodColors` agregado a `constants/theme.ts` (global, disponible para otras pantallas).
+
+**Pendiente para la próxima sesión:**
+- Verificar comportamiento del widget cuando el usuario no está logueado (debe llamar `requestAuth()` al tocar, no crashear).
+- Considerar mostrar un mini historial de los últimos 7 días de mood en alguna pantalla de progreso o perfil.
+- Google OAuth sigue pendiente (dev build).
+- Botón "Editar perfil" en CoachProfileScreen sin `onPress`.
+
+---
+
 ## 2026-07-01 — Joaquín (sesión 33)
 
 **Tocado:** `scripts/add-saved-resources-rls.sql` (corrido en Supabase), SQL en `coach_availability` (INSERT directo desde SQL Editor), `app/diario.tsx`, `app/gratitud.tsx`, `app/search3.tsx`, `screens/BookingScreen_Calendar.tsx`, `app/(tabs)/_layout.tsx`, `app/(tabs)/recursos.tsx`
