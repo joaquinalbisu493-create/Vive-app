@@ -5,6 +5,22 @@
 
 ---
 
+## 2026-07-01 — Joaquín (sesión 35)
+
+**Tocado:** `app/progreso.tsx`, `app/(tabs)/index.tsx`
+
+**Resumen:**
+- Agregada sección "Estado de ánimo" en `progreso.tsx`: gráfico de línea SVG de 14 días (puntos coloreados por `ViveMoodColors`, línea que salta días sin dato) + 3 métricas (promedio de mood, racha actual, mejor día de la semana).
+- Card "Sobre ti" en la home es ahora un `TouchableOpacity` que navega a `/progreso`. Se eliminó el `onPress` separado que tenía el ícono Venn — toda la card actúa como una unidad.
+
+**Pendiente para la próxima sesión:**
+- Con más días de check-in acumulados, verificar que el gráfico se lea bien en distintos tamaños de pantalla.
+- Considerar agregar una leyenda de los 5 colores de mood al costado del gráfico.
+- Google OAuth pendiente (dev build).
+- Botón "Editar perfil" en CoachProfileScreen sin `onPress`.
+
+---
+
 ## 2026-07-01 — Joaquín (sesión 34)
 
 **Tocado:** `scripts/create-mood-entries.sql` (nuevo, corrido en Supabase), `constants/theme.ts`, `hooks/useMoodHistory.ts` (nuevo), `lib/moodInsights.ts` (nuevo), `components/MoodCheckIn.tsx` (nuevo), `app/(tabs)/index.tsx`
