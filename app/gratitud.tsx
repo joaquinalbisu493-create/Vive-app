@@ -222,7 +222,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#565E32',
+    backgroundColor: '#F7EFE4',
   },
   backBtn: { padding: 4 },
   backIcon: {
@@ -281,8 +281,10 @@ const s = StyleSheet.create({
 
   // Gratitude fields
   fieldCard: {
-    backgroundColor: '#565E32',
+    backgroundColor: 'rgba(255,248,240,0.80)',
     borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(193,105,79,0.25)',
     padding: 16,
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -364,8 +366,10 @@ const s = StyleSheet.create({
     marginBottom: 12,
   },
   entryCard: {
-    backgroundColor: '#565E32',
+    backgroundColor: 'rgba(255,248,240,0.80)',
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.65)',
     padding: 14,
     marginBottom: 10,
     gap: 8,

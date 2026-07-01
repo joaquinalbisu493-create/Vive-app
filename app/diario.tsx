@@ -301,7 +301,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#565E32',
+    backgroundColor: '#F7EFE4',
   },
   backBtn: { padding: 4 },
   headerTitle: {
@@ -348,9 +348,9 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderRadius: 14,
-    backgroundColor: '#565E32',
+    backgroundColor: 'rgba(255,248,240,0.80)',
     borderWidth: 1.5,
-    borderColor: 'transparent',
+    borderColor: 'rgba(255,255,255,0.65)',
     gap: 5,
     ...shadow,
   },
@@ -374,11 +374,11 @@ const s = StyleSheet.create({
 
   // Prompt card
   promptCard: {
-    backgroundColor: '#565E32',
+    backgroundColor: 'rgba(255,248,240,0.80)',
     borderRadius: 18,
     padding: 10,
     borderWidth: 1,
-    borderColor: `${ViveColors.text}0F`,
+    borderColor: 'rgba(255,255,255,0.65)',
     ...shadow,
   },
   quoteChar: {
@@ -404,8 +404,10 @@ const s = StyleSheet.create({
 
   // Write area
   writeCard: {
-    backgroundColor: '#565E32',
+    backgroundColor: 'rgba(255,248,240,0.80)',
     borderRadius: 18,
+    borderWidth: 1,
+    borderColor: 'rgba(193,105,79,0.25)',
     padding: 16,
     ...shadow,
   },
@@ -479,8 +481,10 @@ const s = StyleSheet.create({
     marginBottom: 12,
   },
   entryCard: {
-    backgroundColor: '#565E32',
+    backgroundColor: 'rgba(255,248,240,0.80)',
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.65)',
     padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
@@ -519,9 +523,9 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: '#565E32',
+    backgroundColor: '#F7EFE4',
     borderBottomWidth: 1,
-    borderBottomColor: `${ViveColors.text}0D`,
+    borderBottomColor: 'rgba(86,94,50,0.10)',
     gap: 12,
   },
   modalCloseBtn: { padding: 4 },
