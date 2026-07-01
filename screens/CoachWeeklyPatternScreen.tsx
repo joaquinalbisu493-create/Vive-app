@@ -185,7 +185,7 @@ export default function CoachWeeklyPatternScreen() {
       <SafeAreaView style={s.safe} edges={['top']}>
         <View style={s.header}>
           <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8}>
-            <MaterialCommunityIcons name="arrow-left" size={22} color="rgba(255,255,255,0.8)" />
+            <MaterialCommunityIcons name="arrow-left" size={22} color="#565E32" />
           </TouchableOpacity>
           <Text style={s.headerTitle}>Horario semanal</Text>
           <View style={{ width: 36 }} />
@@ -202,7 +202,7 @@ export default function CoachWeeklyPatternScreen() {
     <SafeAreaView style={s.safe} edges={['top']}>
       <View style={s.header}>
         <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8} activeOpacity={0.7}>
-          <MaterialCommunityIcons name="arrow-left" size={22} color="rgba(255,255,255,0.8)" />
+          <MaterialCommunityIcons name="arrow-left" size={22} color="#565E32" />
         </TouchableOpacity>
         <Text style={s.headerTitle}>Horario semanal</Text>
         <View style={{ width: 36 }} />
@@ -248,7 +248,7 @@ export default function CoachWeeklyPatternScreen() {
                         <MaterialCommunityIcons
                           name="trash-can-outline"
                           size={18}
-                          color="rgba(255,255,255,0.35)"
+                          color="rgba(135,131,92,0.52)"
                         />
                       </TouchableOpacity>
                     </View>
@@ -347,7 +347,7 @@ export default function CoachWeeklyPatternScreen() {
                       disabled={!canSave || saving}
                     >
                       {saving ? (
-                        <ActivityIndicator size="small" color="#FFFFFF" />
+                        <ActivityIndicator size="small" color="#565E32" />
                       ) : (
                         <Text style={s.saveBtnText}>Guardar bloque</Text>
                       )}
@@ -389,8 +389,8 @@ export default function CoachWeeklyPatternScreen() {
   );
 }
 
-const GLASS = 'rgba(255,255,255,0.14)';
-const GLASS_BORDER = 'rgba(255,255,255,0.28)';
+const GLASS = 'rgba(255,248,240,0.55)';
+const GLASS_BORDER = 'rgba(255,255,255,0.65)';
 
 const s = StyleSheet.create({
   safe: { flex: 1 },
@@ -400,9 +400,9 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.15)',
+    borderBottomColor: 'rgba(86,94,50,0.14)',
     gap: 12,
   },
   backBtn: { padding: 4 },
@@ -410,11 +410,11 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     marginRight: 36,
   },
-  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
+  divider: { height: 1, backgroundColor: 'rgba(86,94,50,0.08)' },
 
   generatingBar: {
     flexDirection: 'row',
@@ -437,7 +437,7 @@ const s = StyleSheet.create({
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
     lineHeight: 20,
     marginHorizontal: 16,
     marginBottom: 16,
@@ -455,7 +455,7 @@ const s = StyleSheet.create({
   dayName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 10,
   },
 
@@ -470,15 +470,15 @@ const s = StyleSheet.create({
     paddingHorizontal: 12,
   },
   blockInfo: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  blockTime: { fontFamily: ViveFonts.medium, fontSize: 13, color: 'rgba(255,255,255,0.9)' },
-  blockDuration: { fontFamily: ViveFonts.regular, fontSize: 12, color: 'rgba(255,255,255,0.5)' },
+  blockTime: { fontFamily: ViveFonts.medium, fontSize: 13, color: '#565E32' },
+  blockDuration: { fontFamily: ViveFonts.regular, fontSize: 12, color: 'rgba(135,131,92,0.72)' },
 
   addBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingTop: 4 },
   addBtnText: { fontFamily: ViveFonts.medium, fontSize: 13, color: ViveColors.primary },
 
   addForm: {
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255,255,255,0.1)',
+    borderTopColor: 'rgba(86,94,50,0.10)',
     marginTop: 4,
     paddingTop: 12,
   },
@@ -489,7 +489,7 @@ const s = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 6,
   },
-  timeLabel: { fontFamily: ViveFonts.medium, fontSize: 14, color: 'rgba(255,255,255,0.85)' },
+  timeLabel: { fontFamily: ViveFonts.medium, fontSize: 14, color: '#565E32' },
   timeBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -498,13 +498,13 @@ const s = StyleSheet.create({
     paddingHorizontal: 14,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.25)',
+    borderColor: 'rgba(255,255,255,0.60)',
   },
   timeBtnSet: {
     borderColor: `${ViveColors.primary}55`,
     backgroundColor: `${ViveColors.primary}0D`,
   },
-  timeBtnText: { fontFamily: ViveFonts.medium, fontSize: 14, color: 'rgba(255,255,255,0.5)' },
+  timeBtnText: { fontFamily: ViveFonts.medium, fontSize: 14, color: 'rgba(135,131,92,0.72)' },
   timeBtnTextSet: { color: ViveColors.primary },
 
   validationHint: {
@@ -518,7 +518,7 @@ const s = StyleSheet.create({
   durationLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.85)',
+    color: '#565E32',
     marginTop: 14,
     marginBottom: 8,
   },
@@ -528,11 +528,11 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.25)',
+    borderColor: 'rgba(255,255,255,0.60)',
   },
   durationChipActive: { backgroundColor: ViveColors.primary, borderColor: ViveColors.primary },
-  durationChipText: { fontFamily: ViveFonts.medium, fontSize: 13, color: 'rgba(255,255,255,0.6)' },
-  durationChipTextActive: { color: '#FFFFFF' },
+  durationChipText: { fontFamily: ViveFonts.medium, fontSize: 13, color: '#87835C' },
+  durationChipTextActive: { color: '#565E32' },
 
   formActions: { flexDirection: 'row', gap: 10, marginTop: 16 },
   cancelBtn: {
@@ -540,10 +540,10 @@ const s = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.25)',
+    borderColor: 'rgba(255,255,255,0.60)',
     alignItems: 'center',
   },
-  cancelBtnText: { fontFamily: ViveFonts.medium, fontSize: 14, color: 'rgba(255,255,255,0.6)' },
+  cancelBtnText: { fontFamily: ViveFonts.medium, fontSize: 14, color: '#87835C' },
   saveBtn: {
     flex: 1.5,
     paddingVertical: 12,
@@ -553,5 +553,5 @@ const s = StyleSheet.create({
     justifyContent: 'center',
   },
   saveBtnDisabled: { backgroundColor: `${ViveColors.primary}55` },
-  saveBtnText: { fontFamily: ViveFonts.semibold, fontSize: 14, color: '#FFFFFF' },
+  saveBtnText: { fontFamily: ViveFonts.semibold, fontSize: 14, color: '#565E32' },
 });

@@ -1,5 +1,6 @@
 import { Platform, StyleSheet, View, ViewStyle } from 'react-native';
 import { BlurView } from 'expo-blur';
+import { colors, radii, blur } from '@/theme/tokens';
 
 type Props = {
   children: React.ReactNode;
@@ -7,7 +8,7 @@ type Props = {
   intensity?: number;
 };
 
-export function GlassCard({ children, style, intensity = 36 }: Props) {
+export function GlassCard({ children, style, intensity = blur.card }: Props) {
   const flat = StyleSheet.flatten([s.base, style]) as ViewStyle;
 
   if (Platform.OS === 'ios') {
@@ -26,12 +27,12 @@ export function GlassCard({ children, style, intensity = 36 }: Props) {
 
 const s = StyleSheet.create({
   base: {
-    borderRadius: 22,
+    borderRadius: radii.card,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.38)',
+    borderColor: colors.glassBorder,
     overflow: 'hidden',
   },
   android: {
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: colors.glassBg,
   },
 });

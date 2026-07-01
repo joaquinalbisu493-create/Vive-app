@@ -193,7 +193,7 @@ export default function ProfileOwnScreen() {
       {/* Header */}
       <Animated.View style={[styles.header, fadeUp(headerAnim)]}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-          <MaterialCommunityIcons name="arrow-left" size={22} color="rgba(255,255,255,0.8)" />
+          <MaterialCommunityIcons name="arrow-left" size={22} color="#565E32" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Mi perfil</Text>
         <View style={styles.headerSpacer} />
@@ -209,7 +209,7 @@ export default function ProfileOwnScreen() {
         >
           <Animated.View style={[styles.guestSection, fadeUp(identityAnim)]}>
             <View style={styles.guestAvatar}>
-              <MaterialCommunityIcons name="account" size={44} color="rgba(255,255,255,0.35)" />
+              <MaterialCommunityIcons name="account" size={44} color="rgba(135,131,92,0.52)" />
             </View>
             <Text style={styles.guestTitle}>¿Sos nuevo por acá?</Text>
             <Text style={styles.guestSubtitle}>
@@ -244,11 +244,11 @@ export default function ProfileOwnScreen() {
                   <MaterialCommunityIcons
                     name={item.icon as any}
                     size={20}
-                    color="rgba(255,255,255,0.75)"
+                    color="#87835C"
                     style={styles.configIcon}
                   />
                   <Text style={styles.configLabel}>{item.label}</Text>
-                  <MaterialCommunityIcons name="chevron-right" size={20} color="rgba(255,255,255,0.35)" />
+                  <MaterialCommunityIcons name="chevron-right" size={20} color="rgba(135,131,92,0.52)" />
                 </TouchableOpacity>
               ))}
             </View>
@@ -312,7 +312,7 @@ export default function ProfileOwnScreen() {
               <View style={styles.sobreTiRight}>
                 <View style={styles.sobreTiTitleRow}>
                   <Text style={styles.sobreTiTitle}>Sobre ti</Text>
-                  <MaterialCommunityIcons name="information-outline" size={16} color="rgba(255,255,255,0.45)" />
+                  <MaterialCommunityIcons name="information-outline" size={16} color="rgba(135,131,92,0.65)" />
                 </View>
                 <Text style={styles.sobreTiText}>{SOBRE_TI_TEXT}</Text>
               </View>
@@ -391,7 +391,7 @@ export default function ProfileOwnScreen() {
                       <Text style={styles.profName}>{p.name}</Text>
                       <Text style={styles.profSpecialty}>{p.specialty}</Text>
                     </View>
-                    <MaterialCommunityIcons name="chevron-right" size={20} color="rgba(255,255,255,0.35)" />
+                    <MaterialCommunityIcons name="chevron-right" size={20} color="rgba(135,131,92,0.52)" />
                   </TouchableOpacity>
                 ))}
               </View>
@@ -419,7 +419,7 @@ export default function ProfileOwnScreen() {
                     {item.label}
                   </Text>
                   {!item.danger && (
-                    <MaterialCommunityIcons name="chevron-right" size={20} color="rgba(255,255,255,0.35)" />
+                    <MaterialCommunityIcons name="chevron-right" size={20} color="rgba(135,131,92,0.52)" />
                   )}
                 </TouchableOpacity>
               ))}
@@ -444,8 +444,8 @@ function MetricCard({ emoji, value, label }: { emoji: string; value: string; lab
   );
 }
 
-const GLASS = 'rgba(255,255,255,0.14)';
-const GLASS_BORDER = 'rgba(255,255,255,0.28)';
+const GLASS = 'rgba(255,248,240,0.55)';
+const GLASS_BORDER = 'rgba(255,255,255,0.65)';
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -456,9 +456,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.15)',
+    borderBottomColor: 'rgba(86,94,50,0.14)',
     gap: 12,
   },
   backBtn: { padding: 4 },
@@ -466,14 +466,14 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     marginRight: 30,
   },
   headerSpacer: { width: 30 },
   headerDivider: {
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(86,94,50,0.08)',
   },
 
   scroll: { flex: 1 },
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
@@ -502,14 +502,14 @@ const styles = StyleSheet.create({
   guestTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 22,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     marginBottom: 10,
   },
   guestSubtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
     textAlign: 'center',
     lineHeight: 21,
     marginBottom: 28,
@@ -525,12 +525,12 @@ const styles = StyleSheet.create({
   guestBtnPrimaryText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   guestBtnSecondary: {
     width: '100%',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.5)',
+    borderColor: 'rgba(255,255,255,0.72)',
     borderRadius: 14,
     paddingVertical: 14,
     alignItems: 'center',
@@ -538,7 +538,7 @@ const styles = StyleSheet.create({
   guestBtnSecondaryText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   // Identidad
@@ -556,9 +556,9 @@ const styles = StyleSheet.create({
     width: 76,
     height: 76,
     borderRadius: 38,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'rgba(255,248,240,0.65)',
     borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.5)',
+    borderColor: 'rgba(255,255,255,0.72)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
@@ -566,23 +566,23 @@ const styles = StyleSheet.create({
   avatarLargeText: {
     fontFamily: ViveFonts.bold,
     fontSize: 28,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   userName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 20,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 4,
   },
   userEmail: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
     marginBottom: 16,
   },
   editBtn: {
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.5)',
+    borderColor: 'rgba(255,255,255,0.72)',
     borderRadius: 20,
     paddingVertical: 7,
     paddingHorizontal: 20,
@@ -590,7 +590,7 @@ const styles = StyleSheet.create({
   editBtnText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   // Tu progreso
@@ -604,14 +604,14 @@ const styles = StyleSheet.create({
   progresoLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.75)',
+    color: '#87835C',
   },
   toggle: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(86,94,50,0.08)',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.18)',
+    borderColor: 'rgba(86,94,50,0.14)',
     padding: 3,
     gap: 2,
   },
@@ -626,7 +626,7 @@ const styles = StyleSheet.create({
   toggleBtnText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
   },
   toggleBtnTextActive: {
     color: '#1A0A26',
@@ -652,13 +652,13 @@ const styles = StyleSheet.create({
   sobreTiNumber: {
     fontFamily: ViveFonts.bold,
     fontSize: 56,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 60,
   },
   sobreTiUnit: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
     marginTop: 2,
   },
   sobreTiRight: {
@@ -673,12 +673,12 @@ const styles = StyleSheet.create({
   sobreTiTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   sobreTiText: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
     lineHeight: 18,
   },
 
@@ -686,7 +686,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 10,
     paddingHorizontal: 20,
   },
@@ -719,13 +719,13 @@ const styles = StyleSheet.create({
   metricValue: {
     fontFamily: ViveFonts.semibold,
     fontSize: 12,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
   },
   metricLabel: {
     fontFamily: ViveFonts.regular,
     fontSize: 10,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
     textAlign: 'center',
   },
 
@@ -759,7 +759,7 @@ const styles = StyleSheet.create({
   profEmptyText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
     textAlign: 'center',
     lineHeight: 21,
   },
@@ -772,7 +772,7 @@ const styles = StyleSheet.create({
   profEmptyBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   profRow: {
     flexDirection: 'row',
@@ -783,15 +783,15 @@ const styles = StyleSheet.create({
   },
   profRowDivider: {
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    borderBottomColor: 'rgba(86,94,50,0.10)',
   },
   profAvatar: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'rgba(255,248,240,0.65)',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.45)',
+    borderColor: 'rgba(255,255,255,0.70)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -799,19 +799,19 @@ const styles = StyleSheet.create({
   profAvatarText: {
     fontFamily: ViveFonts.bold,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   profInfo: { flex: 1 },
   profName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 2,
   },
   profSpecialty: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
   },
 
   // Configuración
@@ -832,14 +832,14 @@ const styles = StyleSheet.create({
   },
   configRowDivider: {
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    borderBottomColor: 'rgba(86,94,50,0.10)',
   },
   configIcon: { flexShrink: 0 },
   configLabel: {
     flex: 1,
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   configLabelDanger: { color: '#FF7070' },
 

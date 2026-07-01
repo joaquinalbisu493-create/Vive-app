@@ -22,8 +22,8 @@ import { supabase } from '@/lib/supabase';
 import { ViveColors, ViveFonts, TAB_BAR_CLEARANCE } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
 
-const GLASS = 'rgba(255,255,255,0.14)';
-const GLASS_BORDER = 'rgba(255,255,255,0.28)';
+const GLASS = 'rgba(255,248,240,0.55)';
+const GLASS_BORDER = 'rgba(255,255,255,0.65)';
 
 type CoachProfile = {
   name: string;
@@ -249,7 +249,7 @@ export default function CoachProfileScreen() {
               <Text style={s.photoInitials}>{initials}</Text>
             </View>
             <TouchableOpacity style={s.editPhotoBtn} activeOpacity={0.8}>
-              <MaterialCommunityIcons name="camera-outline" size={16} color="#FFFFFF" />
+              <MaterialCommunityIcons name="camera-outline" size={16} color="#565E32" />
             </TouchableOpacity>
           </View>
 
@@ -301,7 +301,7 @@ export default function CoachProfileScreen() {
                   onChangeText={t => setPriceInput(t.replace(/[^0-9]/g, ''))}
                   keyboardType="number-pad"
                   placeholder="0"
-                  placeholderTextColor="rgba(255,255,255,0.35)"
+                  placeholderTextColor="rgba(135,131,92,0.45)"
                   autoFocus
                   maxLength={7}
                 />
@@ -322,7 +322,7 @@ export default function CoachProfileScreen() {
                   activeOpacity={0.85}
                 >
                   {savingPrice ? (
-                    <ActivityIndicator size="small" color="#FFFFFF" />
+                    <ActivityIndicator size="small" color="#565E32" />
                   ) : (
                     <Text style={s.priceSaveBtnText}>Guardar</Text>
                   )}
@@ -380,7 +380,7 @@ export default function CoachProfileScreen() {
         >
           <MaterialCommunityIcons name="calendar-clock" size={18} color={ViveColors.primary} />
           <Text style={s.availBtnText}>Gestionar disponibilidad</Text>
-          <MaterialCommunityIcons name="chevron-right" size={18} color="rgba(255,255,255,0.4)" />
+          <MaterialCommunityIcons name="chevron-right" size={18} color="rgba(135,131,92,0.58)" />
         </TouchableOpacity>
 
         {/* ── Video perfil ──────────────────────────────────── */}
@@ -396,7 +396,7 @@ export default function CoachProfileScreen() {
             />
           ) : (
             <View style={s.videoPlaceholder}>
-              <MaterialCommunityIcons name="video-outline" size={36} color="rgba(255,255,255,0.35)" />
+              <MaterialCommunityIcons name="video-outline" size={36} color="rgba(135,131,92,0.52)" />
               <Text style={s.videoPlaceholderText}>Sin video grabado</Text>
             </View>
           )}
@@ -416,7 +416,7 @@ export default function CoachProfileScreen() {
         <Text style={[s.sectionTitle, s.sectionSpaced]}>Reseñas recibidas</Text>
         {!reviewsLoaded ? null : reviews.length === 0 ? (
           <View style={s.reviewsEmpty}>
-            <MaterialCommunityIcons name="star-outline" size={28} color="rgba(255,255,255,0.25)" />
+            <MaterialCommunityIcons name="star-outline" size={28} color="rgba(135,131,92,0.38)" />
             <Text style={s.reviewsEmptyText}>
               Todavía no recibiste reseñas.{'\n'}Aparecerán acá después de cada sesión completada.
             </Text>
@@ -453,7 +453,7 @@ export default function CoachProfileScreen() {
                       <View style={s.reviewNameRow}>
                         <Text style={s.reviewerName}>{r.reviewerName}</Text>
                         {r.isPrivate && (
-                          <MaterialIcons name="lock-outline" size={12} color="rgba(255,255,255,0.4)" />
+                          <MaterialIcons name="lock-outline" size={12} color="rgba(135,131,92,0.58)" />
                         )}
                       </View>
                       <View style={s.starsRow}>
@@ -520,7 +520,7 @@ const s = StyleSheet.create({
   photoInitials: {
     fontFamily: ViveFonts.bold,
     fontSize: 30,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   editPhotoBtn: {
     position: 'absolute',
@@ -533,12 +533,12 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: '#FFFFFF',
+    borderColor: 'rgba(255,255,255,0.70)',
   },
   coachName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 22,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 4,
   },
   coachSpecialty: {
@@ -550,7 +550,7 @@ const s = StyleSheet.create({
   coachBio: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
     textAlign: 'center',
     lineHeight: 19,
     marginBottom: 4,
@@ -559,13 +559,13 @@ const s = StyleSheet.create({
   coachMeta: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
     marginBottom: 18,
   },
   emptyCoachText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
     textAlign: 'center',
     marginBottom: 18,
     marginTop: 4,
@@ -589,7 +589,7 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 12,
     paddingHorizontal: 20,
   },
@@ -606,12 +606,12 @@ const s = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 13,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(86,94,50,0.08)',
   },
   topicChipText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   addChip: {
     flexDirection: 'row',
@@ -645,13 +645,13 @@ const s = StyleSheet.create({
   },
   priceDivider: {
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(86,94,50,0.08)',
     marginVertical: 12,
   },
   priceLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.85)',
+    color: '#565E32',
   },
   priceSaving: {
     fontFamily: ViveFonts.regular,
@@ -662,7 +662,7 @@ const s = StyleSheet.create({
   priceValue: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   priceValueRow: {
     flexDirection: 'row',
@@ -680,14 +680,14 @@ const s = StyleSheet.create({
   priceCurrency: {
     fontFamily: ViveFonts.semibold,
     fontSize: 20,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginRight: 4,
   },
   priceInput: {
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 20,
-    color: '#FFFFFF',
+    color: '#565E32',
     padding: 0,
   },
   priceEditActions: {
@@ -704,7 +704,7 @@ const s = StyleSheet.create({
   priceCancelBtnText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
   },
   priceSaveBtn: {
     backgroundColor: ViveColors.primary,
@@ -717,7 +717,7 @@ const s = StyleSheet.create({
   priceSaveBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   // Toggle
@@ -736,13 +736,13 @@ const s = StyleSheet.create({
   toggleTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 3,
   },
   toggleDesc: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
     lineHeight: 18,
   },
 
@@ -761,7 +761,7 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   // Video
@@ -779,18 +779,18 @@ const s = StyleSheet.create({
     width: '100%',
     height: 130,
     borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,248,240,0.32)',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
+    borderColor: 'rgba(86,94,50,0.14)',
     borderStyle: 'dashed',
   },
   videoPlaceholderText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.45)',
+    color: 'rgba(135,131,92,0.65)',
   },
   videoPlayerWrap: {
     width: '100%',
@@ -829,7 +829,7 @@ const s = StyleSheet.create({
   reviewsEmptyText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.5)',
+    color: 'rgba(135,131,92,0.72)',
     textAlign: 'center',
     lineHeight: 20,
   },
@@ -850,7 +850,7 @@ const s = StyleSheet.create({
   ratingBig: {
     fontFamily: ViveFonts.bold,
     fontSize: 40,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 48,
   },
   ratingSummaryRight: { gap: 4 },
@@ -858,7 +858,7 @@ const s = StyleSheet.create({
   reviewCount: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
   },
   reviewsList: { gap: 10 },
   reviewCard: {
@@ -878,7 +878,7 @@ const s = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -886,25 +886,25 @@ const s = StyleSheet.create({
   reviewAvatarText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   reviewMeta: { flex: 1, gap: 3 },
   reviewNameRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   reviewerName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   reviewDate: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.4)',
+    color: 'rgba(135,131,92,0.58)',
     flexShrink: 0,
   },
   reviewComment: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
     lineHeight: 19,
   },
 

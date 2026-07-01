@@ -133,7 +133,7 @@ export default function EditProfileScreen() {
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-          <MaterialCommunityIcons name="arrow-left" size={22} color="rgba(255,255,255,0.8)" />
+          <MaterialCommunityIcons name="arrow-left" size={22} color="#565E32" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Editar perfil</Text>
         <View style={styles.headerSpacer} />
@@ -170,7 +170,7 @@ export default function EditProfileScreen() {
                 value={name}
                 onChangeText={setName}
                 placeholder="Tu nombre"
-                placeholderTextColor="rgba(255,255,255,0.4)"
+                placeholderTextColor="rgba(135,131,92,0.45)"
                 autoCapitalize="words"
                 returnKeyType="next"
               />
@@ -198,7 +198,7 @@ export default function EditProfileScreen() {
                 value={birthDate}
                 onChangeText={handleBirthDateChange}
                 placeholder="DD/MM/AAAA"
-                placeholderTextColor="rgba(255,255,255,0.4)"
+                placeholderTextColor="rgba(135,131,92,0.45)"
                 keyboardType="numeric"
                 maxLength={10}
                 returnKeyType="next"
@@ -239,7 +239,7 @@ export default function EditProfileScreen() {
                 value={nationality}
                 onChangeText={setNationality}
                 placeholder="Tu nacionalidad"
-                placeholderTextColor="rgba(255,255,255,0.4)"
+                placeholderTextColor="rgba(135,131,92,0.45)"
                 autoCapitalize="words"
                 returnKeyType="done"
               />
@@ -267,7 +267,7 @@ export default function EditProfileScreen() {
             disabled={saving}
           >
             {saving ? (
-              <ActivityIndicator size="small" color="#FFFFFF" />
+              <ActivityIndicator size="small" color="#565E32" />
             ) : (
               <Text style={styles.saveBtnText}>Guardar cambios</Text>
             )}
@@ -281,9 +281,9 @@ export default function EditProfileScreen() {
   );
 }
 
-const GLASS = 'rgba(255,255,255,0.14)';
-const GLASS_BORDER = 'rgba(255,255,255,0.28)';
-const INPUT_BG = 'rgba(255,255,255,0.12)';
+const GLASS = 'rgba(255,248,240,0.55)';
+const GLASS_BORDER = 'rgba(255,255,255,0.65)';
+const INPUT_BG = 'rgba(255,248,240,0.48)';
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1 },
@@ -292,9 +292,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.15)',
+    borderBottomColor: 'rgba(86,94,50,0.14)',
     gap: 12,
   },
   backBtn: { padding: 4 },
@@ -302,12 +302,12 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     marginRight: 30,
   },
   headerSpacer: { width: 30 },
-  headerDivider: { height: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
+  headerDivider: { height: 1, backgroundColor: 'rgba(86,94,50,0.08)' },
 
   loadingContainer: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 
@@ -327,9 +327,9 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'rgba(255,248,240,0.65)',
     borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.5)',
+    borderColor: 'rgba(255,255,255,0.72)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 14,
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
   },
   changePhotoBtn: {
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.5)',
+    borderColor: 'rgba(255,255,255,0.72)',
     borderRadius: 20,
     paddingVertical: 7,
     paddingHorizontal: 20,
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
   changePhotoText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   formCard: {
@@ -367,13 +367,13 @@ const styles = StyleSheet.create({
   },
   fieldDivider: {
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(86,94,50,0.08)',
     marginHorizontal: 16,
   },
   fieldLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
     marginBottom: 6,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -381,16 +381,16 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     paddingVertical: 0,
   },
   inputDisabled: {
-    color: 'rgba(255,255,255,0.4)',
+    color: 'rgba(135,131,92,0.58)',
   },
   fieldNote: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.45)',
+    color: 'rgba(135,131,92,0.65)',
     marginTop: 4,
   },
 
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
   },
   genderChip: {
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.3)',
+    borderColor: 'rgba(255,255,255,0.60)',
     borderRadius: 20,
     paddingVertical: 6,
     paddingHorizontal: 14,
@@ -410,16 +410,16 @@ const styles = StyleSheet.create({
   },
   genderChipSelected: {
     borderColor: 'rgba(255,255,255,0.7)',
-    backgroundColor: 'rgba(255,255,255,0.22)',
+    backgroundColor: 'rgba(255,248,240,0.68)',
   },
   genderChipText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
   },
   genderChipTextSelected: {
     fontFamily: ViveFonts.medium,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   successBanner: {
@@ -470,6 +470,6 @@ const styles = StyleSheet.create({
   saveBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 });

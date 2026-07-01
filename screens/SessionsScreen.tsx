@@ -170,7 +170,7 @@ export default function SessionsScreen() {
         </RNScrollView>
       ) : (
         <Animated.View style={[styles.emptyState, { opacity: listAnim }]}>
-          <MaterialCommunityIcons name="message-outline" size={52} color="rgba(255,255,255,0.3)" />
+          <MaterialCommunityIcons name="message-outline" size={52} color="rgba(135,131,92,0.45)" />
           <Text style={styles.emptyTitle}>Todavía no armaste tu sala</Text>
           <Text style={styles.emptySubtitle}>
             Dale, animate a buscar la persona que te acompañe y arrancamos.{'\n'}
@@ -242,17 +242,17 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.15)',
+    borderBottomColor: 'rgba(86,94,50,0.14)',
   },
   headerTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
   },
-  headerDivider: { height: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
+  headerDivider: { height: 1, backgroundColor: 'rgba(86,94,50,0.08)' },
 
   loadingState: {
     flex: 1,
@@ -295,14 +295,14 @@ const styles = StyleSheet.create({
   coachName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     flex: 1,
     marginRight: 8,
   },
   dateText: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.5)',
+    color: 'rgba(135,131,92,0.72)',
     flexShrink: 0,
   },
   specialtyText: {
@@ -314,12 +314,12 @@ const styles = StyleSheet.create({
   lastMessage: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
     lineHeight: 18,
   },
   rowDivider: {
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,248,240,0.32)',
     marginLeft: 84,
     marginRight: 20,
   },
@@ -334,14 +334,14 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     marginTop: 16,
   },
   emptySubtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
     textAlign: 'center',
     marginBottom: 8,
   },
@@ -355,6 +355,6 @@ const styles = StyleSheet.create({
   emptyBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 });

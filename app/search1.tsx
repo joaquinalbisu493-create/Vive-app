@@ -123,7 +123,7 @@ const s = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: Platform.OS === 'ios' ? 11 : 6,
@@ -174,7 +174,7 @@ const s = StyleSheet.create({
   axisCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 16,
     paddingVertical: 22,
     paddingHorizontal: 16,

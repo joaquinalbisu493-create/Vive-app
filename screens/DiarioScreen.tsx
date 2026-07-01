@@ -125,7 +125,7 @@ export default function DiarioScreen() {
           <View style={styles.entryHeaderRight}>
             {moodEmoji ? <Text style={styles.entryMood}>{moodEmoji}</Text> : null}
             <TouchableOpacity onPress={() => confirmDelete(item.id)} hitSlop={10}>
-              <MaterialCommunityIcons name="trash-can-outline" size={17} color="rgba(255,255,255,0.35)" />
+              <MaterialCommunityIcons name="trash-can-outline" size={17} color="rgba(135,131,92,0.52)" />
             </TouchableOpacity>
           </View>
         </View>
@@ -136,14 +136,14 @@ export default function DiarioScreen() {
 
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.safeArea} edges={['top']}>
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={0}>
 
           {/* Header */}
           <View style={styles.header}>
             <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-              <MaterialCommunityIcons name="arrow-left" size={20} color="rgba(255,255,255,0.85)" />
+              <MaterialCommunityIcons name="arrow-left" size={20} color="#565E32" />
               <Text style={styles.backText}>Atrás</Text>
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Diario</Text>
@@ -158,7 +158,7 @@ export default function DiarioScreen() {
               value={text}
               onChangeText={setText}
               placeholder="¿Qué estás pensando hoy?"
-              placeholderTextColor="rgba(255,255,255,0.38)"
+              placeholderTextColor="rgba(135,131,92,0.45)"
               multiline
               maxLength={800}
               textAlignVertical="top"
@@ -196,11 +196,11 @@ export default function DiarioScreen() {
           {/* Body */}
           {loading ? (
             <View style={styles.centered}>
-              <ActivityIndicator size="large" color="rgba(255,255,255,0.7)" />
+              <ActivityIndicator size="large" color="#87835C" />
             </View>
           ) : error ? (
             <View style={styles.centered}>
-              <MaterialCommunityIcons name="wifi-off" size={40} color="rgba(255,255,255,0.35)" style={{ marginBottom: 14 }} />
+              <MaterialCommunityIcons name="wifi-off" size={40} color="rgba(135,131,92,0.52)" style={{ marginBottom: 14 }} />
               <Text style={styles.errorText}>{error}</Text>
               <TouchableOpacity style={styles.retryBtn} onPress={init} activeOpacity={0.8}>
                 <Text style={styles.retryBtnText}>Reintentar</Text>
@@ -208,7 +208,7 @@ export default function DiarioScreen() {
             </View>
           ) : entries.length === 0 ? (
             <View style={styles.centered}>
-              <MaterialCommunityIcons name="notebook-outline" size={48} color="rgba(255,255,255,0.35)" style={{ marginBottom: 14 }} />
+              <MaterialCommunityIcons name="notebook-outline" size={48} color="rgba(135,131,92,0.52)" style={{ marginBottom: 14 }} />
               <Text style={styles.emptyTitle}>Tu primer entrada te espera</Text>
               <Text style={styles.emptySubtitle}>Escribí lo que sentís o pensás hoy.</Text>
             </View>
@@ -249,12 +249,12 @@ const styles = StyleSheet.create({
   backText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
   },
   headerTitle: {
     fontFamily: ViveFonts.bold,
     fontSize: 22,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: -0.3,
   },
 
@@ -262,16 +262,16 @@ const styles = StyleSheet.create({
   compose: {
     marginHorizontal: 18,
     marginBottom: 4,
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
     padding: 16,
   },
   composeInput: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     minHeight: 90,
     lineHeight: 22,
     paddingTop: 0,
@@ -292,11 +292,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   moodBtnActive: {
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,248,240,0.62)',
   },
   moodEmoji: { fontSize: 20 },
   saveBtn: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 12,
     paddingVertical: 9,
     paddingHorizontal: 18,
@@ -309,12 +309,12 @@ const styles = StyleSheet.create({
   saveBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#1A1A2E',
+    color: '#F7EFE4',
   },
 
   divider: {
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
     marginHorizontal: 20,
     marginVertical: 14,
   },
@@ -330,34 +330,34 @@ const styles = StyleSheet.create({
   errorText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
     textAlign: 'center',
     marginBottom: 16,
   },
   retryBtn: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'rgba(255,248,240,0.65)',
     borderRadius: 12,
     paddingVertical: 10,
     paddingHorizontal: 24,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.35)',
+    borderColor: 'rgba(255,255,255,0.60)',
   },
   retryBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   emptyTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     marginBottom: 6,
   },
   emptySubtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
     textAlign: 'center',
   },
 
@@ -368,10 +368,10 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   entryCard: {
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.22)',
+    borderColor: 'rgba(255,255,255,0.60)',
     padding: 16,
   },
   entryHeader: {
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
   entryDate: {
     fontFamily: ViveFonts.medium,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.48)',
+    color: 'rgba(135,131,92,0.68)',
     letterSpacing: 0.2,
   },
   entryHeaderRight: {
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
   entryContent: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 21,
   },
 });

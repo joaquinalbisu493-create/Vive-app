@@ -131,7 +131,7 @@ export default function BookingScreen_Calendar() {
 
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safeTop} edges={['top']}>
         <View style={s.header}>
           <TouchableOpacity
@@ -139,7 +139,7 @@ export default function BookingScreen_Calendar() {
             onPress={() => router.back()}
             activeOpacity={0.7}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <MaterialIcons name="arrow-back-ios" size={18} color="#FFFFFF" />
+            <MaterialIcons name="arrow-back-ios" size={18} color="#565E32" />
           </TouchableOpacity>
           <Text style={s.headerTitle}>Elegí una fecha</Text>
           <View style={s.headerSpacer} />
@@ -159,7 +159,7 @@ export default function BookingScreen_Calendar() {
             <MaterialIcons
               name="chevron-left"
               size={28}
-              color={isCurrentMonth ? "rgba(255,255,255,0.20)" : "#FFFFFF"}
+              color={isCurrentMonth ? "rgba(135,131,92,0.30)" : "#FFFFFF"}
             />
           </TouchableOpacity>
           <Text style={s.monthLabel}>{MONTH_NAMES[month]} {year}</Text>
@@ -168,14 +168,14 @@ export default function BookingScreen_Calendar() {
             style={s.navBtn}
             activeOpacity={0.7}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <MaterialIcons name="chevron-right" size={28} color="#FFFFFF" />
+            <MaterialIcons name="chevron-right" size={28} color="#565E32" />
           </TouchableOpacity>
         </View>
 
         {loadingDates && (
           <ActivityIndicator
             size="small"
-            color="rgba(255,255,255,0.80)"
+            color="#565E32"
             style={{ marginBottom: 12 }}
           />
         )}
@@ -257,7 +257,7 @@ const s = StyleSheet.create({
   },
   backBtn: {
     width: 36, height: 36, borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,248,240,0.62)',
     alignItems: 'center', justifyContent: 'center',
     ...Platform.select({
       ios: { shadowColor: 'rgba(0,0,0,0.5)', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.12, shadowRadius: 4 },
@@ -266,7 +266,7 @@ const s = StyleSheet.create({
   },
   headerTitle: {
     flex: 1, fontFamily: ViveFonts.semibold, fontSize: 18,
-    color: '#FFFFFF', textAlign: 'center', letterSpacing: -0.2,
+    color: '#565E32', textAlign: 'center', letterSpacing: -0.2,
   },
   headerSpacer: { width: 36 },
   progressTrack: {
@@ -282,30 +282,30 @@ const s = StyleSheet.create({
   navBtn: { width: 36, height: 36, alignItems: 'center', justifyContent: 'center' },
   monthLabel: {
     fontFamily: ViveFonts.semibold, fontSize: 17,
-    color: '#FFFFFF', letterSpacing: -0.2,
+    color: '#565E32', letterSpacing: -0.2,
   },
   weekRow: { flexDirection: 'row', marginBottom: 4 },
   dayCell: { flex: 1, alignItems: 'center', paddingVertical: 3 },
   dayHeader: {
     fontFamily: ViveFonts.medium, fontSize: 12,
-    color: 'rgba(255,255,255,0.55)', paddingBottom: 8,
+    color: 'rgba(135,131,92,0.80)', paddingBottom: 8,
   },
   dayCircle: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
-  dayCircleAvailable: { backgroundColor: 'rgba(255,255,255,0.22)', ...dayShadow },
+  dayCircleAvailable: { backgroundColor: 'rgba(255,248,240,0.68)', ...dayShadow },
   dayCircleSelected: { backgroundColor: ViveColors.primary },
   dayText: { fontFamily: ViveFonts.regular, fontSize: 14, color: '#CBCBCB' },
-  dayTextAvailable: { fontFamily: ViveFonts.medium, color: '#FFFFFF' },
-  dayTextSelected: { fontFamily: ViveFonts.semibold, color: '#FFFFFF' },
+  dayTextAvailable: { fontFamily: ViveFonts.medium, color: '#565E32' },
+  dayTextSelected: { fontFamily: ViveFonts.semibold, color: '#565E32' },
   dayTextUnavailable: { color: '#CBCBCB' },
   footerSafe: {
-    backgroundColor: 'rgba(15,10,40,0.80)',
-    borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(247,239,228,0.97)',
+    borderTopWidth: 1, borderTopColor: 'rgba(86,94,50,0.12)',
   },
   footer: { paddingHorizontal: 20, paddingVertical: 16 },
   btn: {
-    backgroundColor: '#FFFFFF', borderRadius: 14,
+    backgroundColor: '#565E32', borderRadius: 14,
     paddingVertical: 16, alignItems: 'center', justifyContent: 'center',
   },
   btnDisabled: { opacity: 0.45 },
-  btnText: { fontFamily: ViveFonts.semibold, fontSize: 16, color: '#1A1A2E', letterSpacing: 0.2 },
+  btnText: { fontFamily: ViveFonts.semibold, fontSize: 16, color: '#F7EFE4', letterSpacing: 0.2 },
 });

@@ -9,8 +9,8 @@ import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 
-const TAB_ACTIVE   = '#FFFFFF';
-const TAB_INACTIVE = 'rgba(255,255,255,0.45)';
+const TAB_ACTIVE   = '#565E32';
+const TAB_INACTIVE = '#87835C';
 
 function TabIcon({ focused, color, label, children }: { focused: boolean; color: string; label: string; children: React.ReactNode }) {
   return (
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     right: -4,
     bottom: -4,
     borderRadius: 26,
-    backgroundColor: 'rgba(255,255,255,0.25)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
   },
   tabLabel: {
     fontFamily: ViveFonts.medium,

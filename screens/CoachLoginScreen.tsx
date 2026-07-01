@@ -131,7 +131,7 @@ export default function CoachLoginScreen() {
         >
           <Animated.View style={[styles.header, fadeUp(headerAnim)]}>
             <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-              <MaterialCommunityIcons name="arrow-left" size={20} color="rgba(255,255,255,0.8)" />
+              <MaterialCommunityIcons name="arrow-left" size={20} color="#565E32" />
               <Text style={styles.backText}>Atrás</Text>
             </TouchableOpacity>
           </Animated.View>
@@ -152,7 +152,7 @@ export default function CoachLoginScreen() {
                   value={email}
                   onChangeText={setEmail}
                   placeholder="tu@email.com"
-                  placeholderTextColor="rgba(255,255,255,0.4)"
+                  placeholderTextColor="rgba(135,131,92,0.45)"
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoCorrect={false}
@@ -167,7 +167,7 @@ export default function CoachLoginScreen() {
                     value={password}
                     onChangeText={setPassword}
                     placeholder="Mínimo 6 caracteres"
-                    placeholderTextColor="rgba(255,255,255,0.4)"
+                    placeholderTextColor="rgba(135,131,92,0.45)"
                     secureTextEntry={!showPassword}
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -180,7 +180,7 @@ export default function CoachLoginScreen() {
                     <MaterialCommunityIcons
                       name={showPassword ? 'eye-off-outline' : 'eye-outline'}
                       size={20}
-                      color="rgba(255,255,255,0.5)"
+                      color="rgba(135,131,92,0.72)"
                     />
                   </TouchableOpacity>
                 </View>
@@ -232,21 +232,21 @@ const styles = StyleSheet.create({
   backText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
   },
   content: { flex: 1, paddingHorizontal: 24, paddingTop: 28, gap: 28 },
   titleArea: { gap: 8 },
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 30,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: -0.5,
     lineHeight: 38,
   },
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
     lineHeight: 22,
   },
   form: { gap: 16 },
@@ -254,18 +254,18 @@ const styles = StyleSheet.create({
   label: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
   },
   input: {
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
   },
   passwordWrap: { position: 'relative' },
   passwordInput: { paddingRight: 48 },
@@ -302,13 +302,13 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: 0.3,
   },
   note: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.5)',
+    color: 'rgba(135,131,92,0.72)',
     lineHeight: 18,
     textAlign: 'center',
   },

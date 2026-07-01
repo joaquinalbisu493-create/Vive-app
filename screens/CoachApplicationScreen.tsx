@@ -145,7 +145,7 @@ export default function CoachApplicationScreen() {
         >
           <Animated.View style={[styles.header, fadeUp(headerAnim)]}>
             <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-              <MaterialCommunityIcons name="arrow-left" size={20} color="rgba(255,255,255,0.8)" />
+              <MaterialCommunityIcons name="arrow-left" size={20} color="#565E32" />
               <Text style={styles.backText}>Atrás</Text>
             </TouchableOpacity>
           </Animated.View>
@@ -194,7 +194,7 @@ export default function CoachApplicationScreen() {
                 value={bio}
                 onChangeText={(t) => setBio(t.slice(0, BIO_MAX))}
                 placeholder="Contanos sobre tu experiencia y cómo trabajás"
-                placeholderTextColor="rgba(255,255,255,0.4)"
+                placeholderTextColor="rgba(135,131,92,0.45)"
                 multiline
                 numberOfLines={5}
                 textAlignVertical="top"
@@ -210,7 +210,7 @@ export default function CoachApplicationScreen() {
                 value={price}
                 onChangeText={setPrice}
                 placeholder="Ej: 8000"
-                placeholderTextColor="rgba(255,255,255,0.4)"
+                placeholderTextColor="rgba(135,131,92,0.45)"
                 keyboardType="numeric"
               />
             </View>
@@ -223,7 +223,7 @@ export default function CoachApplicationScreen() {
                 value={nationality}
                 onChangeText={setNationality}
                 placeholder="Ej: Argentina"
-                placeholderTextColor="rgba(255,255,255,0.4)"
+                placeholderTextColor="rgba(135,131,92,0.45)"
                 autoCapitalize="words"
               />
             </View>
@@ -239,7 +239,7 @@ export default function CoachApplicationScreen() {
                 value={videoUrl}
                 onChangeText={setVideoUrl}
                 placeholder="https://..."
-                placeholderTextColor="rgba(255,255,255,0.4)"
+                placeholderTextColor="rgba(135,131,92,0.45)"
                 keyboardType="url"
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -285,28 +285,28 @@ const styles = StyleSheet.create({
   backText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
   },
   content: { paddingHorizontal: 24, paddingTop: 24, gap: 24 },
   titleArea: { gap: 8 },
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 30,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: -0.5,
     lineHeight: 38,
   },
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
     lineHeight: 21,
   },
   section: { gap: 8 },
   sectionLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
   },
   labelRow: {
     flexDirection: 'row',
@@ -316,16 +316,16 @@ const styles = StyleSheet.create({
   charCount: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.4)',
+    color: 'rgba(135,131,92,0.58)',
   },
   specialtyGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
   chip: {
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
   },
   chipSelected: {
     backgroundColor: 'rgba(107,191,138,0.22)',
@@ -334,28 +334,28 @@ const styles = StyleSheet.create({
   chipText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
   },
   chipTextSelected: {
     fontFamily: ViveFonts.medium,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   input: {
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
   },
   bioInput: { minHeight: 120, paddingTop: 14 },
   fieldHint: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.5)',
+    color: 'rgba(135,131,92,0.72)',
     lineHeight: 17,
   },
   errorBox: {
@@ -385,7 +385,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: 0.3,
   },
   successContainer: {
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
   successTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: -0.3,
     lineHeight: 34,
     textAlign: 'center',
@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
   successSubtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
     lineHeight: 22,
     textAlign: 'center',
   },

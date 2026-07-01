@@ -9,8 +9,8 @@ import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 
-const TAB_ACTIVE   = '#FFFFFF';
-const TAB_INACTIVE = 'rgba(255,255,255,0.45)';
+const TAB_ACTIVE   = '#565E32';
+const TAB_INACTIVE = '#87835C';
 const DOT_RED      = '#E05252';
 
 // Guardado para revertir Conexiones si hace falta (3 líneas en <Tabs.Screen name="conexiones">):
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     borderRadius: 24,
-    backgroundColor: 'rgba(255,255,255,0.25)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
   },
   tabLabel: {
     fontFamily: ViveFonts.medium,

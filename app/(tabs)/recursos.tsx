@@ -57,7 +57,7 @@ function ToolCard({ tool }: { tool: Tool }) {
       style={s.toolCard}
       onPress={() => { if (tool.route) router.push(tool.route as any); }}
       activeOpacity={0.88}>
-      <Ionicons name={tool.icon} size={28} color="rgba(255,255,255,0.85)" />
+      <Ionicons name={tool.icon} size={28} color="#565E32" />
       <Text style={s.toolLabel}>{tool.label}</Text>
     </ScaleCard>
   );
@@ -68,13 +68,13 @@ function CoachResourceCard({ resource }: { resource: CoachResource }) {
   return (
     <View style={s.coachCard}>
       <View style={s.coachIconWrap}>
-        <Ionicons name={resource.icon} size={20} color="rgba(255,255,255,0.80)" />
+        <Ionicons name={resource.icon} size={20} color="#565E32" />
       </View>
       <View style={s.coachInfo}>
         <Text style={s.coachTitle}>{resource.title}</Text>
         <Text style={s.coachSubtitle}>{resource.subtitle}</Text>
       </View>
-      <MaterialCommunityIcons name="chevron-right" size={18} color="rgba(255,255,255,0.35)" />
+      <MaterialCommunityIcons name="chevron-right" size={18} color="rgba(135,131,92,0.52)" />
     </View>
   );
 }
@@ -83,7 +83,7 @@ function CoachResourceCard({ resource }: { resource: CoachResource }) {
 export default function RecursosScreen() {
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
         <FirstTimeTooltip
           storageKey="vive_tooltip_recursos"
@@ -142,23 +142,23 @@ const s = StyleSheet.create({
   pageTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 20,
   },
 
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 12,
   },
   sectionSpaced: { marginTop: 28 },
 
   coachCard: {
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
     padding: 14,
     flexDirection: 'row',
     alignItems: 'center',
@@ -169,7 +169,7 @@ const s = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,248,240,0.62)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -178,14 +178,14 @@ const s = StyleSheet.create({
   coachTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 20,
     marginBottom: 2,
   },
   coachSubtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
     lineHeight: 16,
   },
 
@@ -193,10 +193,10 @@ const s = StyleSheet.create({
   gridRow: { flexDirection: 'row', gap: 10 },
   toolCard: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
     paddingVertical: 20,
     paddingHorizontal: 6,
     alignItems: 'center',
@@ -207,7 +207,7 @@ const s = StyleSheet.create({
   toolLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 11,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     lineHeight: 15,
   },

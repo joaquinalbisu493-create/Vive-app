@@ -105,7 +105,7 @@ export default function LoginScreen() {
 
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe}>
         <KeyboardAvoidingView
           style={s.flex}
@@ -143,7 +143,7 @@ export default function LoginScreen() {
 
               {/* Apple */}
               <TouchableOpacity style={s.appleBtn} onPress={handleApple} activeOpacity={0.85}>
-                <MaterialCommunityIcons name="apple" size={20} color="#FFFFFF" />
+                <MaterialCommunityIcons name="apple" size={20} color="#565E32" />
                 <Text style={s.appleBtnText}>Continuar con Apple</Text>
               </TouchableOpacity>
 
@@ -160,7 +160,7 @@ export default function LoginScreen() {
 
               {/* Usar email */}
               <TouchableOpacity style={s.emailBtn} onPress={toggleEmailForm} activeOpacity={0.85}>
-                <MaterialCommunityIcons name="email-outline" size={20} color="#FFFFFF" />
+                <MaterialCommunityIcons name="email-outline" size={20} color="#565E32" />
                 <Text style={s.emailBtnText}>Usar email</Text>
               </TouchableOpacity>
 
@@ -176,7 +176,7 @@ export default function LoginScreen() {
                     value={email}
                     onChangeText={v => { setEmail(v); setEmailError(false); }}
                     placeholder="tu@email.com"
-                    placeholderTextColor="rgba(255,255,255,0.38)"
+                    placeholderTextColor="rgba(135,131,92,0.45)"
                     keyboardType="email-address"
                     autoCapitalize="none"
                     onFocus={() => setFocused('email')}
@@ -193,7 +193,7 @@ export default function LoginScreen() {
                       value={password}
                       onChangeText={v => { setPassword(v); setPasswordError(false); }}
                       placeholder="Contraseña"
-                      placeholderTextColor="rgba(255,255,255,0.38)"
+                      placeholderTextColor="rgba(135,131,92,0.45)"
                       secureTextEntry={!showPassword}
                       onFocus={() => setFocused('pass')}
                       onBlur={() => setFocused(null)}
@@ -202,7 +202,7 @@ export default function LoginScreen() {
                       <MaterialCommunityIcons
                         name={showPassword ? 'eye-off-outline' : 'eye-outline'}
                         size={20}
-                        color="rgba(255,255,255,0.55)"
+                        color="rgba(135,131,92,0.80)"
                       />
                     </TouchableOpacity>
                   </View>
@@ -258,7 +258,7 @@ const s = StyleSheet.create({
   logo: {
     fontFamily: ViveFonts.bold,
     fontSize: 36,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: 6,
   },
 
@@ -266,14 +266,14 @@ const s = StyleSheet.create({
   heading: {
     fontFamily: ViveFonts.semibold,
     fontSize: 24,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: -0.4,
     textAlign: 'center',
   },
   subheading: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: 'rgba(255,255,255,0.60)',
+    color: '#87835C',
     textAlign: 'center',
   },
 
@@ -284,16 +284,16 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,248,240,0.62)',
     borderRadius: 16,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.35)',
+    borderColor: 'rgba(255,255,255,0.60)',
     paddingVertical: 15,
   },
   googleBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   appleBtn: {
@@ -304,7 +304,7 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.45)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.20)',
+    borderColor: 'rgba(255,255,255,0.55)',
     paddingVertical: 15,
   },
   appleBtnText: {
@@ -322,12 +322,12 @@ const s = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.20)',
+    backgroundColor: 'rgba(255,248,240,0.65)',
   },
   dividerText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.50)',
+    color: 'rgba(135,131,92,0.72)',
   },
 
   emailBtn: {
@@ -335,39 +335,39 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 16,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.38)',
+    borderColor: 'rgba(255,255,255,0.70)',
     paddingVertical: 15,
   },
   emailBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   emailForm: { gap: 12, marginTop: 4 },
   input: {
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   inputError: { borderColor: '#FFB4B4' },
   inputFocused: { borderColor: ViveColors.primary },
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
     paddingHorizontal: 16,
     paddingVertical: 14,
     gap: 10,
@@ -376,7 +376,7 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     padding: 0,
   },
   serverError: {
@@ -387,7 +387,7 @@ const s = StyleSheet.create({
     marginTop: -4,
   },
   enterBtn: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 16,
     paddingVertical: 16,
     alignItems: 'center',
@@ -398,14 +398,14 @@ const s = StyleSheet.create({
   enterBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#1A1A2E',
+    color: '#F7EFE4',
     letterSpacing: 0.2,
   },
   forgotWrap: { alignSelf: 'center' },
   forgotText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.75)',
+    color: '#87835C',
   },
 
   footer: {
@@ -416,11 +416,11 @@ const s = StyleSheet.create({
   footerText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
   },
   footerLink: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 });

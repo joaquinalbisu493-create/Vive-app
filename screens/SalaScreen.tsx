@@ -494,12 +494,12 @@ export default function SalaScreen() {
 
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.safeArea} edges={['top']}>
       <FirstTimeTooltip
         storageKey="vive_tooltip_sala"
         icon="message-outline"
-        iconColor="rgba(255,255,255,0.75)"
+        iconColor="#87835C"
         title="La Sala"
         description="Tu espacio de comunicación. Escribí mensajes y coordiná tus sesiones."
         delay={1000}
@@ -516,7 +516,7 @@ export default function SalaScreen() {
         ]}
       >
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn} hitSlop={8}>
-          <MaterialCommunityIcons name="arrow-left" size={22} color="#FFFFFF" />
+          <MaterialCommunityIcons name="arrow-left" size={22} color="#565E32" />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -556,7 +556,7 @@ export default function SalaScreen() {
           <MaterialCommunityIcons
             name="video-outline"
             size={24}
-            color={roomUrl && isInVideoWindow ? ViveColors.primary : "rgba(255,255,255,0.30)"}
+            color={roomUrl && isInVideoWindow ? ViveColors.primary : "rgba(135,131,92,0.52)"}
           />
         </TouchableOpacity>
       </Animated.View>
@@ -706,7 +706,7 @@ export default function SalaScreen() {
             value={inputText}
             onChangeText={setInputText}
             placeholder="Escribí un mensaje..."
-            placeholderTextColor="rgba(255,255,255,0.45)"
+            placeholderTextColor="rgba(135,131,92,0.55)"
             multiline
             maxLength={500}
           />
@@ -716,7 +716,7 @@ export default function SalaScreen() {
             disabled={!canSend}
             activeOpacity={0.75}
           >
-            <MaterialCommunityIcons name="send" size={19} color="#FFFFFF" style={{ marginLeft: 2 }} />
+            <MaterialCommunityIcons name="send" size={19} color="#565E32" style={{ marginLeft: 2 }} />
           </TouchableOpacity>
         </Animated.View>
       </KeyboardAvoidingView>
@@ -738,7 +738,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: 'rgba(15,10,40,0.65)',
+    backgroundColor: 'rgba(247,239,228,0.92)',
     gap: 12,
   },
   backBtn: {
@@ -771,44 +771,44 @@ const styles = StyleSheet.create({
     width: 110,
     height: 13,
     borderRadius: 6,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
     marginBottom: 5,
   },
   skeletonSpecialty: {
     width: 70,
     height: 10,
     borderRadius: 5,
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,248,240,0.32)',
   },
   coachName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 20,
   },
   coachSpecialty: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
     marginTop: 1,
   },
   videoBtn: {
     width: 40,
     height: 40,
     borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   videoBtnDisabled: {
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,248,240,0.32)',
   },
   headerDivider: {
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
   },
   bannerDefault: {
-    backgroundColor: 'rgba(255,255,255,0.10)',
+    backgroundColor: 'rgba(255,248,240,0.40)',
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
@@ -820,7 +820,7 @@ const styles = StyleSheet.create({
   bannerText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 18,
   },
   bannerBold: {
@@ -829,7 +829,7 @@ const styles = StyleSheet.create({
   bannerNote: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.60)',
+    color: '#87835C',
     marginTop: 3,
     fontStyle: 'italic',
   },
@@ -840,7 +840,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   cancelBtnTextDisabled: {
-    color: 'rgba(255,255,255,0.30)',
+    color: 'rgba(135,131,92,0.45)',
   },
   scroll: {
     flex: 1,
@@ -854,7 +854,7 @@ const styles = StyleSheet.create({
   emptyText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
     textAlign: 'center',
     marginTop: 60,
     lineHeight: 22,
@@ -883,7 +883,7 @@ const styles = StyleSheet.create({
   avatarSmallText: {
     fontFamily: ViveFonts.bold,
     fontSize: 9,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: 0.3,
   },
   bubble: {
@@ -907,7 +907,7 @@ const styles = StyleSheet.create({
     }),
   },
   bubbleCoach: {
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,248,240,0.62)',
     borderRadius: 18,
     borderBottomLeftRadius: 4,
     ...Platform.select({
@@ -926,10 +926,10 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   bubbleTextUser: {
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   bubbleTextCoach: {
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   bubbleTime: {
     fontFamily: ViveFonts.regular,
@@ -937,10 +937,10 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
   },
   bubbleTimeUser: {
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
   },
   bubbleTimeCoach: {
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
   },
   systemRow: {
     alignItems: 'center',
@@ -949,7 +949,7 @@ const styles = StyleSheet.create({
   systemText: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
     fontStyle: 'italic',
     textAlign: 'center',
   },
@@ -977,13 +977,13 @@ const styles = StyleSheet.create({
   systemPillLine1: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 18,
   },
   systemPillLine2: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.60)',
+    color: '#87835C',
     lineHeight: 17,
   },
   inputArea: {
@@ -992,17 +992,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     paddingBottom: Platform.OS === 'ios' ? 20 : 14,
-    backgroundColor: 'rgba(15,10,40,0.80)',
+    backgroundColor: 'rgba(247,239,228,0.97)',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255,255,255,0.12)',
+    borderTopColor: 'rgba(86,94,50,0.12)',
     gap: 10,
   },
   input: {
     flex: 1,
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: '#FFFFFF',
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    color: '#565E32',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderRadius: 22,
     paddingHorizontal: 16,
     paddingTop: 11,
@@ -1029,7 +1029,7 @@ const styles = StyleSheet.create({
     }),
   },
   sendBtnDisabled: {
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,248,240,0.62)',
     shadowOpacity: 0,
     elevation: 0,
   },

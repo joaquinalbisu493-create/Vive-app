@@ -7,7 +7,7 @@ import { AppBg } from '@/components/ui/AppBg';
 export default function ExploreScreen() {
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
         <View style={s.center}>
           <Text style={s.title}>Comunidad</Text>
@@ -30,13 +30,13 @@ const s = StyleSheet.create({
   title: {
     fontFamily: ViveFonts.bold,
     fontSize: 32,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: -0.3,
     marginBottom: 8,
   },
   sub: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
   },
 });

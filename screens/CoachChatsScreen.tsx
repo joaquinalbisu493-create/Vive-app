@@ -178,7 +178,7 @@ const s = StyleSheet.create({
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   container: {
     paddingHorizontal: 0,
@@ -198,7 +198,7 @@ const s = StyleSheet.create({
   emptyText: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
     textAlign: 'center',
     lineHeight: 24,
   },
@@ -209,12 +209,12 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 14,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(86,94,50,0.08)',
     gap: 14,
   },
   chatRowBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.1)',
+    borderBottomColor: 'rgba(86,94,50,0.10)',
   },
 
   // Avatar
@@ -244,16 +244,16 @@ const s = StyleSheet.create({
   chatName: {
     fontFamily: ViveFonts.medium,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   chatDate: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.5)',
+    color: 'rgba(135,131,92,0.72)',
   },
   lastMessage: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
   },
 });

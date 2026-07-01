@@ -30,8 +30,8 @@ type DayEntry = { abbr: string; sessions: Session[] };
 
 const WEEK_ABBRS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
-const GLASS = 'rgba(255,255,255,0.14)';
-const GLASS_BORDER = 'rgba(255,255,255,0.28)';
+const GLASS = 'rgba(255,248,240,0.55)';
+const GLASS_BORDER = 'rgba(255,255,255,0.65)';
 
 function toDateStr(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -202,7 +202,7 @@ export default function CoachHomeScreen() {
               onPress={() => router.push('/coach-notifications')}
               hitSlop={8}
               activeOpacity={0.7}>
-              <Feather name="bell" size={22} color="rgba(255,255,255,0.8)" />
+              <Feather name="bell" size={22} color="#565E32" />
               {unreadCount > 0 && <View style={s.bellDot} />}
             </TouchableOpacity>
             <TouchableOpacity
@@ -232,7 +232,7 @@ export default function CoachHomeScreen() {
               <Text style={s.alertBold}>{pendingCount} solicitudes pendientes</Text>
               {' '}— tenés 24hs para responder
             </Text>
-            <Feather name="chevron-right" size={15} color="rgba(255,255,255,0.7)" />
+            <Feather name="chevron-right" size={15} color="#87835C" />
           </TouchableOpacity>
         )}
 
@@ -260,7 +260,7 @@ export default function CoachHomeScreen() {
                 }
                 activeOpacity={0.75}
                 hitSlop={6}>
-                <Feather name="message-circle" size={20} color="rgba(255,255,255,0.75)" />
+                <Feather name="message-circle" size={20} color="#87835C" />
               </TouchableOpacity>
             </View>
           ))
@@ -306,7 +306,7 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   topRight: {
     flexDirection: 'row',
@@ -323,7 +323,7 @@ const s = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: ViveColors.primary,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.3)',
+    borderColor: 'rgba(255,255,255,0.60)',
   },
   avatarCircle: {
     width: 40,
@@ -356,7 +356,7 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.85)',
+    color: '#565E32',
     lineHeight: 19,
   },
   alertBold: {
@@ -367,7 +367,7 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 12,
   },
   sectionSpaced: { marginTop: 28 },
@@ -399,13 +399,13 @@ const s = StyleSheet.create({
   sessionUser: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 2,
   },
   sessionType: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
   },
   chatBtn: { padding: 4, flexShrink: 0 },
 
@@ -422,7 +422,7 @@ const s = StyleSheet.create({
   emptyTodayText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
     textAlign: 'center',
     lineHeight: 22,
   },
@@ -441,18 +441,18 @@ const s = StyleSheet.create({
   dayAbbr: {
     fontFamily: ViveFonts.medium,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
   },
   dayDot: {
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   dayDotActive: { backgroundColor: ViveColors.primary },
-  dayCount: { fontFamily: ViveFonts.bold, fontSize: 11, color: '#FFFFFF' },
+  dayCount: { fontFamily: ViveFonts.bold, fontSize: 11, color: '#565E32' },
   dayTime: {
     fontFamily: ViveFonts.regular,
     fontSize: 9,

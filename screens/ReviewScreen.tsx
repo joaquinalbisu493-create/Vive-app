@@ -19,8 +19,8 @@ import { AppBg } from '@/components/ui/AppBg';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 
-const GLASS = 'rgba(255,255,255,0.14)';
-const GLASS_BORDER = 'rgba(255,255,255,0.28)';
+const GLASS = 'rgba(255,248,240,0.55)';
+const GLASS_BORDER = 'rgba(255,255,255,0.65)';
 
 const RATING_LABELS = ['', 'Muy mala', 'Mala', 'Regular', 'Buena', 'Excelente'];
 
@@ -155,7 +155,7 @@ export default function ReviewScreen() {
       <SafeAreaView style={s.safe} edges={['top']}>
         <View style={s.header}>
           <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8} activeOpacity={0.7}>
-            <MaterialIcons name="arrow-back-ios" size={18} color="rgba(255,255,255,0.8)" />
+            <MaterialIcons name="arrow-back-ios" size={18} color="#565E32" />
           </TouchableOpacity>
           <Text style={s.headerTitle}>{existingReviewId ? 'Editar reseña' : 'Dejar reseña'}</Text>
           <View style={{ width: 36 }} />
@@ -195,7 +195,7 @@ export default function ReviewScreen() {
             <TextInput
               style={s.textInput}
               placeholder="¿Qué fue lo más valioso de la sesión?"
-              placeholderTextColor="rgba(255,255,255,0.35)"
+              placeholderTextColor="rgba(135,131,92,0.45)"
               multiline
               value={comment}
               onChangeText={setComment}
@@ -226,27 +226,27 @@ export default function ReviewScreen() {
 const s = StyleSheet.create({
   safe: { flex: 1 },
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  errorText: { fontFamily: ViveFonts.regular, fontSize: 15, color: 'rgba(255,255,255,0.6)' },
+  errorText: { fontFamily: ViveFonts.regular, fontSize: 15, color: '#87835C' },
 
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.15)',
+    borderBottomColor: 'rgba(86,94,50,0.14)',
   },
   backBtn: { padding: 4 },
   headerTitle: {
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     marginRight: 36,
   },
-  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
+  divider: { height: 1, backgroundColor: 'rgba(86,94,50,0.08)' },
 
   content: {
     padding: 20,
@@ -280,7 +280,7 @@ const s = StyleSheet.create({
   coachName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   coachSpecialty: {
     fontFamily: ViveFonts.regular,
@@ -292,7 +292,7 @@ const s = StyleSheet.create({
   label: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 14,
   },
 
@@ -316,21 +316,21 @@ const s = StyleSheet.create({
     padding: 14,
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     minHeight: 110,
     textAlignVertical: 'top',
   },
   charCount: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.35)',
+    color: 'rgba(135,131,92,0.52)',
     textAlign: 'right',
     marginTop: 4,
     marginBottom: 28,
   },
 
   submitBtn: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
@@ -342,6 +342,6 @@ const s = StyleSheet.create({
   submitBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#1A1A2E',
+    color: '#F7EFE4',
   },
 });

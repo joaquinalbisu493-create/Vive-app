@@ -1,26 +1,25 @@
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { ViveFonts } from '@/constants/theme';
-import { colors } from '@/theme/tokens';
+import { colors, radii } from '@/theme/tokens';
 
-type Tab = 'hoy' | 'mes';
-
-type Props = {
-  value: Tab;
-  onChange: (v: Tab) => void;
+type Props<T extends string> = {
+  options: { label: string; value: T }[];
+  value: T;
+  onChange: (v: T) => void;
 };
 
-export function ProgressToggle({ value, onChange }: Props) {
+export function SegmentedPill<T extends string>({ options, value, onChange }: Props<T>) {
   return (
     <View style={s.wrap}>
-      {(['hoy', 'mes'] as Tab[]).map(t => (
+      {options.map(opt => (
         <TouchableOpacity
-          key={t}
-          style={[s.btn, value === t && s.btnActive]}
-          onPress={() => onChange(t)}
+          key={opt.value}
+          style={[s.btn, value === opt.value && s.btnActive]}
+          onPress={() => onChange(opt.value)}
           activeOpacity={0.8}
         >
-          <Text style={[s.text, value === t && s.textActive]}>
-            {t === 'hoy' ? 'Hoy' : 'Mes'}
+          <Text style={[s.text, value === opt.value && s.textActive]}>
+            {opt.label}
           </Text>
         </TouchableOpacity>
       ))}
@@ -32,15 +31,17 @@ const s = StyleSheet.create({
   wrap: {
     flexDirection: 'row',
     backgroundColor: colors.pillBg,
-    borderRadius: 20,
+    borderRadius: radii.pill,
     borderWidth: 1,
     borderColor: colors.glassBorder,
     padding: 3,
   },
   btn: {
+    flex: 1,
     paddingHorizontal: 14,
-    paddingVertical: 5,
-    borderRadius: 16,
+    paddingVertical: 6,
+    borderRadius: radii.pill - 4,
+    alignItems: 'center',
   },
   btnActive: { backgroundColor: colors.pillActiveBg },
   text: {
@@ -50,5 +51,6 @@ const s = StyleSheet.create({
   },
   textActive: {
     color: colors.pillActiveText,
+    fontFamily: ViveFonts.semibold,
   },
 });

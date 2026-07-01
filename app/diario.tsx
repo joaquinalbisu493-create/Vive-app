@@ -206,7 +206,7 @@ export default function DiarioScreen() {
             >
               {saved ? (
                 <View style={s.savedRow}>
-                  <MaterialCommunityIcons name="check-circle-outline" size={18} color="#FFFFFF" />
+                  <MaterialCommunityIcons name="check-circle-outline" size={18} color="#565E32" />
                   <Text style={s.saveBtnText}>Guardado 🌱</Text>
                 </View>
               ) : (
@@ -301,7 +301,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
   },
   backBtn: { padding: 4 },
   headerTitle: {
@@ -348,7 +348,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderRadius: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderWidth: 1.5,
     borderColor: 'transparent',
     gap: 5,
@@ -374,7 +374,7 @@ const s = StyleSheet.create({
 
   // Prompt card
   promptCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 18,
     padding: 10,
     borderWidth: 1,
@@ -404,7 +404,7 @@ const s = StyleSheet.create({
 
   // Write area
   writeCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 18,
     padding: 16,
     ...shadow,
@@ -463,7 +463,7 @@ const s = StyleSheet.create({
   saveBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   savedRow: {
     flexDirection: 'row',
@@ -479,7 +479,7 @@ const s = StyleSheet.create({
     marginBottom: 12,
   },
   entryCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 14,
     padding: 14,
     flexDirection: 'row',
@@ -519,7 +519,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderBottomWidth: 1,
     borderBottomColor: `${ViveColors.text}0D`,
     gap: 12,

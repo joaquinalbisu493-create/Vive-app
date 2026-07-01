@@ -1,25 +1,22 @@
-import { View, StyleSheet } from 'react-native';
-// import { ImageBackground } from 'react-native'; // ORIGINAL — fondo aurora con blur
+import { StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '@/theme/tokens';
 
 type Props = { children: React.ReactNode };
 
 export function AppBg({ children }: Props) {
-  // TEMPORAL — fondo sólido oscuro mientras se define el diseño visual final
-  return <View style={styles.root}>{children}</View>;
-
-  // ORIGINAL — descomentar para restaurar
-  // return (
-  //   <ImageBackground
-  //     source={require('@/assets/bg-aurora.jpg')}
-  //     style={styles.root}
-  //     resizeMode="cover"
-  //     blurRadius={18}
-  //   >
-  //     {children}
-  //   </ImageBackground>
-  // );
+  return (
+    <LinearGradient
+      colors={colors.bgGrad}
+      start={{ x: 0.1, y: 0 }}
+      end={{ x: 0.9, y: 1 }}
+      style={s.root}
+    >
+      {children}
+    </LinearGradient>
+  );
 }
 
-const styles = StyleSheet.create({
-  root: { flex: 1, width: '100%', height: '100%', backgroundColor: '#0D0D0D' },
+const s = StyleSheet.create({
+  root: { flex: 1, width: '100%', height: '100%' },
 });

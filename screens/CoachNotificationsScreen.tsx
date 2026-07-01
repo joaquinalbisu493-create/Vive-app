@@ -36,8 +36,8 @@ function formatTimeAgo(isoString: string): string {
   return `hace ${diffD} ${diffD === 1 ? 'día' : 'días'}`;
 }
 
-const GLASS = 'rgba(255,255,255,0.14)';
-const GLASS_BORDER = 'rgba(255,255,255,0.28)';
+const GLASS = 'rgba(255,248,240,0.55)';
+const GLASS_BORDER = 'rgba(255,255,255,0.65)';
 
 export default function CoachNotificationsScreen() {
   const router = useRouter();
@@ -76,7 +76,7 @@ export default function CoachNotificationsScreen() {
       {/* Header */}
       <View style={s.header}>
         <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8} activeOpacity={0.7}>
-          <Feather name="arrow-left" size={22} color="rgba(255,255,255,0.8)" />
+          <Feather name="arrow-left" size={22} color="#565E32" />
         </TouchableOpacity>
         <Text style={s.headerTitle}>Notificaciones</Text>
         <View style={s.headerSpacer} />
@@ -89,7 +89,7 @@ export default function CoachNotificationsScreen() {
         </View>
       ) : notifs.length === 0 ? (
         <View style={s.emptyState}>
-          <Feather name="bell-off" size={36} color="rgba(255,255,255,0.25)" />
+          <Feather name="bell-off" size={36} color="rgba(135,131,92,0.38)" />
           <Text style={s.emptyText}>No tenés notificaciones todavía.</Text>
         </View>
       ) : (
@@ -108,7 +108,7 @@ export default function CoachNotificationsScreen() {
                 <Text style={s.itemTime}>{formatTimeAgo(n.created_at)}</Text>
               </View>
               {n.booking_id && (
-                <Feather name="chevron-right" size={16} color="rgba(255,255,255,0.35)" style={s.chevron} />
+                <Feather name="chevron-right" size={16} color="rgba(135,131,92,0.52)" style={s.chevron} />
               )}
             </TouchableOpacity>
           ))}
@@ -128,9 +128,9 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 14,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.15)',
+    borderBottomColor: 'rgba(86,94,50,0.14)',
     gap: 12,
   },
   backBtn: { padding: 4 },
@@ -138,12 +138,12 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     marginRight: 30,
   },
   headerSpacer: { width: 30 },
-  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.1)' },
+  divider: { height: 1, backgroundColor: 'rgba(86,94,50,0.08)' },
 
   loadingState: { flex: 1, alignItems: 'center', justifyContent: 'center' },
 
@@ -156,7 +156,7 @@ const s = StyleSheet.create({
   emptyText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
   },
 
   list: {
@@ -193,18 +193,18 @@ const s = StyleSheet.create({
   itemTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   itemBody: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
     lineHeight: 18,
   },
   itemTime: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.45)',
+    color: 'rgba(135,131,92,0.65)',
     marginTop: 2,
   },
   chevron: {

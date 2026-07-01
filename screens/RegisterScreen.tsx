@@ -131,7 +131,7 @@ export default function RegisterScreen() {
 
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe}>
       <KeyboardAvoidingView
         style={s.flex}
@@ -172,7 +172,7 @@ export default function RegisterScreen() {
 
             {/* Apple */}
             <TouchableOpacity style={s.appleBtn} onPress={handleApple} activeOpacity={0.85}>
-              <MaterialCommunityIcons name="apple" size={20} color="#FFFFFF" />
+              <MaterialCommunityIcons name="apple" size={20} color="#565E32" />
               <Text style={s.appleBtnText}>Continuar con Apple</Text>
             </TouchableOpacity>
 
@@ -189,7 +189,7 @@ export default function RegisterScreen() {
 
             {/* Usar email */}
             <TouchableOpacity style={s.emailBtn} onPress={toggleEmailForm} activeOpacity={0.85}>
-              <MaterialCommunityIcons name="email-outline" size={20} color="#FFFFFF" />
+              <MaterialCommunityIcons name="email-outline" size={20} color="#565E32" />
               <Text style={s.emailBtnText}>Usar email</Text>
             </TouchableOpacity>
 
@@ -206,7 +206,7 @@ export default function RegisterScreen() {
                   value={name}
                   onChangeText={v => { setName(v); clearError('name'); }}
                   placeholder="Tu nombre"
-                  placeholderTextColor="rgba(255,255,255,0.38)"
+                  placeholderTextColor="rgba(135,131,92,0.45)"
                   autoCapitalize="words"
                   onFocus={() => setFocused('name')}
                   onBlur={() => setFocused(null)}
@@ -222,7 +222,7 @@ export default function RegisterScreen() {
                   value={email}
                   onChangeText={v => { setEmail(v); clearError('email'); }}
                   placeholder="tu@email.com"
-                  placeholderTextColor="rgba(255,255,255,0.38)"
+                  placeholderTextColor="rgba(135,131,92,0.45)"
                   keyboardType="email-address"
                   autoCapitalize="none"
                   onFocus={() => setFocused('email')}
@@ -240,7 +240,7 @@ export default function RegisterScreen() {
                     value={password}
                     onChangeText={v => { setPassword(v); clearError('password'); clearError('confirm'); }}
                     placeholder="Contraseña (mín. 6 caracteres)"
-                    placeholderTextColor="rgba(255,255,255,0.38)"
+                    placeholderTextColor="rgba(135,131,92,0.45)"
                     secureTextEntry={!showPassword}
                     onFocus={() => setFocused('pass')}
                     onBlur={() => setFocused(null)}
@@ -249,7 +249,7 @@ export default function RegisterScreen() {
                     <MaterialCommunityIcons
                       name={showPassword ? 'eye-off-outline' : 'eye-outline'}
                       size={20}
-                      color="rgba(255,255,255,0.45)"
+                      color="rgba(135,131,92,0.65)"
                     />
                   </TouchableOpacity>
                 </View>
@@ -265,7 +265,7 @@ export default function RegisterScreen() {
                     value={confirmPassword}
                     onChangeText={v => { setConfirmPassword(v); clearError('confirm'); }}
                     placeholder="Confirmá tu contraseña"
-                    placeholderTextColor="rgba(255,255,255,0.38)"
+                    placeholderTextColor="rgba(135,131,92,0.45)"
                     secureTextEntry={!showConfirm}
                     onFocus={() => setFocused('confirm')}
                     onBlur={() => setFocused(null)}
@@ -274,7 +274,7 @@ export default function RegisterScreen() {
                     <MaterialCommunityIcons
                       name={showConfirm ? 'eye-off-outline' : 'eye-outline'}
                       size={20}
-                      color="rgba(255,255,255,0.45)"
+                      color="rgba(135,131,92,0.65)"
                     />
                   </TouchableOpacity>
                 </View>
@@ -295,7 +295,7 @@ export default function RegisterScreen() {
                   <MaterialCommunityIcons
                     name={acceptedTerms ? 'checkbox-marked' : 'checkbox-blank-outline'}
                     size={22}
-                    color={acceptedTerms ? ViveColors.primary : "rgba(255,255,255,0.45)"}
+                    color={acceptedTerms ? ViveColors.primary : "rgba(135,131,92,0.55)"}
                   />
                   <Text style={s.termsText}>
                     {'Leí y acepto los '}
@@ -323,7 +323,7 @@ export default function RegisterScreen() {
                   disabled={!acceptedTerms || loading}
                 >
                   {loading
-                    ? <ActivityIndicator size="small" color="#FFFFFF" />
+                    ? <ActivityIndicator size="small" color="#565E32" />
                     : <Text style={s.enterBtnText}>Crear cuenta</Text>
                   }
                 </TouchableOpacity>
@@ -350,7 +350,7 @@ export default function RegisterScreen() {
             <View style={s.modalHeader}>
               <Text style={s.modalTitle}>Términos y condiciones</Text>
               <TouchableOpacity onPress={() => setShowTermsModal(false)} hitSlop={10}>
-                <MaterialCommunityIcons name="close" size={22} color="rgba(255,255,255,0.55)" />
+                <MaterialCommunityIcons name="close" size={22} color="rgba(135,131,92,0.80)" />
               </TouchableOpacity>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={s.modalBody}>
@@ -395,7 +395,7 @@ export default function RegisterScreen() {
             <View style={s.modalHeader}>
               <Text style={s.modalTitle}>Política de privacidad</Text>
               <TouchableOpacity onPress={() => setShowPrivacyModal(false)} hitSlop={10}>
-                <MaterialCommunityIcons name="close" size={22} color="rgba(255,255,255,0.55)" />
+                <MaterialCommunityIcons name="close" size={22} color="rgba(135,131,92,0.80)" />
               </TouchableOpacity>
             </View>
             <ScrollView showsVerticalScrollIndicator={false} style={s.modalBody}>
@@ -456,7 +456,7 @@ const s = StyleSheet.create({
   logo: {
     fontFamily: ViveFonts.bold,
     fontSize: 42,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: 6,
   },
 
@@ -468,14 +468,14 @@ const s = StyleSheet.create({
   heading: {
     fontFamily: ViveFonts.semibold,
     fontSize: 24,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: -0.4,
     textAlign: 'center',
   },
   subheading: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     opacity: 0.6,
     textAlign: 'center',
   },
@@ -491,10 +491,10 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
     borderRadius: 16,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.22)',
+    borderColor: 'rgba(255,255,255,0.60)',
     paddingVertical: 15,
     ...Platform.select({
       ios: {
@@ -509,7 +509,7 @@ const s = StyleSheet.create({
   googleBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   // Apple button
@@ -538,12 +538,12 @@ const s = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
   },
   dividerText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.38)',
+    color: 'rgba(135,131,92,0.52)',
   },
 
   // Email button
@@ -552,7 +552,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
     borderRadius: 16,
     borderWidth: 1.5,
     borderColor: ViveColors.primary,
@@ -561,7 +561,7 @@ const s = StyleSheet.create({
   emailBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   // Email form
@@ -570,15 +570,15 @@ const s = StyleSheet.create({
     marginTop: 4,
   },
   input: {
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.22)',
+    borderColor: 'rgba(255,255,255,0.60)',
     paddingHorizontal: 16,
     paddingVertical: 14,
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   inputError: {
     borderColor: '#E05C5C',
@@ -589,10 +589,10 @@ const s = StyleSheet.create({
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.22)',
+    borderColor: 'rgba(255,255,255,0.60)',
     paddingHorizontal: 16,
     paddingVertical: 14,
     gap: 10,
@@ -601,7 +601,7 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     padding: 0,
   },
   errorHint: {
@@ -618,7 +618,7 @@ const s = StyleSheet.create({
     marginTop: -2,
   },
   enterBtn: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 16,
     paddingVertical: 16,
     alignItems: 'center',
@@ -644,7 +644,7 @@ const s = StyleSheet.create({
   enterBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#1A1A2E',
+    color: '#F7EFE4',
     letterSpacing: 0.2,
   },
 
@@ -659,7 +659,7 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.75)',
+    color: '#87835C',
     lineHeight: 19,
   },
   termsLink: {
@@ -680,7 +680,7 @@ const s = StyleSheet.create({
   footerText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
   },
   footerLink: {
     fontFamily: ViveFonts.semibold,
@@ -712,7 +712,7 @@ const s = StyleSheet.create({
   modalTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 18,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: -0.3,
   },
   modalBody: {
@@ -721,26 +721,26 @@ const s = StyleSheet.create({
   modalSection: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginTop: 16,
     marginBottom: 4,
   },
   modalText: {
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: 'rgba(255,255,255,0.80)',
+    color: '#565E32',
     lineHeight: 22,
   },
   modalFooterNote: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.38)',
+    color: 'rgba(135,131,92,0.52)',
     marginTop: 20,
     marginBottom: 8,
     textAlign: 'center',
   },
   modalBtn: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 14,
     paddingVertical: 14,
     alignItems: 'center',
@@ -748,6 +748,6 @@ const s = StyleSheet.create({
   modalBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#1A1A2E',
+    color: '#F7EFE4',
   },
 });

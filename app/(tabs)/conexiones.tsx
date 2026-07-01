@@ -153,12 +153,12 @@ export default function ConexionesScreen() {
 
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
       <FirstTimeTooltip
         storageKey="vive_tooltip_conexiones"
         icon="account-group-outline"
-        iconColor="rgba(255,255,255,0.75)"
+        iconColor="#87835C"
         title="Encontrá a tu guía"
         description="Explorá coaches y profesionales según lo que estás viviendo. Filtrá por tema o buscá por nombre."
         delay={800}
@@ -172,7 +172,7 @@ export default function ConexionesScreen() {
             <Text style={s.subtitle}>Las personas indicadas para lo que estás viviendo.</Text>
           </View>
           <TouchableOpacity style={s.bellBtn} activeOpacity={0.7}>
-            <MaterialIcons name="notifications-none" size={24} color="#FFFFFF" />
+            <MaterialIcons name="notifications-none" size={24} color="#565E32" />
           </TouchableOpacity>
         </View>
 
@@ -181,9 +181,9 @@ export default function ConexionesScreen() {
           style={s.searchBar}
           onPress={() => router.push('/search1')}
           activeOpacity={0.85}>
-          <MaterialIcons name="search" size={18} color="rgba(255,255,255,0.65)" />
+          <MaterialIcons name="search" size={18} color="#87835C" />
           <Text style={s.searchPlaceholder}>Buscá por nombre, especialidad o tema...</Text>
-          <MaterialIcons name="tune" size={18} color="rgba(255,255,255,0.65)" />
+          <MaterialIcons name="tune" size={18} color="#87835C" />
         </TouchableOpacity>
 
         {/* ── Temas ────────────────────────────────────────────────────── */}
@@ -248,7 +248,7 @@ export default function ConexionesScreen() {
               <ScaleCard key={coach.profileId} style={s.coachCard} onPress={() => goToPerfil(coach)}>
                 {/* Foto placeholder */}
                 <View style={s.coachPhoto}>
-                  <MaterialIcons name="person" size={42} color="rgba(255,255,255,0.50)" />
+                  <MaterialIcons name="person" size={42} color="rgba(135,131,92,0.72)" />
                   <TouchableOpacity
                     style={s.favBtn}
                     onPress={() => toggleFav(coach.profileId)}
@@ -326,14 +326,14 @@ const s = StyleSheet.create({
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 32,
     marginBottom: 2,
   },
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.60)',
+    color: '#87835C',
     lineHeight: 19,
   },
   bellBtn: {
@@ -345,10 +345,10 @@ const s = StyleSheet.create({
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
     marginHorizontal: 20,
     marginBottom: 28,
     paddingHorizontal: 12,
@@ -360,7 +360,7 @@ const s = StyleSheet.create({
     flex: 1,
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
   },
 
   // Secciones
@@ -377,7 +377,7 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
     flex: 1,
   },
   seeAll: {
@@ -394,10 +394,10 @@ const s = StyleSheet.create({
   topicCard: {
     width: TOPIC_W,
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.22)',
+    borderColor: 'rgba(255,255,255,0.60)',
     paddingTop: 14,
     paddingBottom: 12,
     paddingHorizontal: 6,
@@ -415,7 +415,7 @@ const s = StyleSheet.create({
   topicLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 10,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     lineHeight: 14,
   },
@@ -427,17 +427,17 @@ const s = StyleSheet.create({
   },
   coachCard: {
     width: COACH_W,
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.22)',
+    borderColor: 'rgba(255,255,255,0.60)',
     marginRight: COACH_GAP,
     ...shadow,
   },
   coachPhoto: {
     width: COACH_W,
     height: 82,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,248,240,0.62)',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     alignItems: 'center',
@@ -447,7 +447,7 @@ const s = StyleSheet.create({
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: 'rgba(0,0,0,0.22)',
+    backgroundColor: 'rgba(86,94,50,0.18)',
     borderRadius: 14,
     padding: 4,
   },
@@ -457,7 +457,7 @@ const s = StyleSheet.create({
   coachName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 2,
   },
   coachSpecialty: {
@@ -469,7 +469,7 @@ const s = StyleSheet.create({
   coachPrice: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.75)',
+    color: '#87835C',
     marginBottom: 5,
   },
   ratingRow: {
@@ -480,7 +480,7 @@ const s = StyleSheet.create({
   ratingText: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.60)',
+    color: '#87835C',
   },
 
   // Sofía
@@ -491,10 +491,10 @@ const s = StyleSheet.create({
     right: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
     paddingVertical: 16,
     paddingHorizontal: 18,
     ...shadow,
@@ -507,13 +507,13 @@ const s = StyleSheet.create({
   sofiaQ: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 2,
   },
   sofiaA: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.70)',
+    color: '#87835C',
   },
 });
 
@@ -529,11 +529,11 @@ const dot = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: 'rgba(255,255,255,0.25)',
+    backgroundColor: 'rgba(86,94,50,0.10)',
   },
   active: {
     width: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
   },
 });
 

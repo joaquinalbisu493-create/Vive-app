@@ -95,7 +95,7 @@ export default function SearchScreen2() {
           <Text style={s.ctaText}>
             {selected ? `Ver profesionales en ${selected}` : 'Ver profesionales'}
           </Text>
-          <MaterialIcons name="arrow-forward" size={18} color="#FFFFFF" />
+          <MaterialIcons name="arrow-forward" size={18} color="#565E32" />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -172,7 +172,7 @@ const s = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     ...shadow,
   },
   chipActive: {
@@ -217,6 +217,6 @@ const s = StyleSheet.create({
   ctaText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 });

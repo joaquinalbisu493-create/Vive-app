@@ -53,8 +53,8 @@ function getGreeting(): string {
   return '¡Buenas noches!';
 }
 
-const GLASS = 'rgba(255,255,255,0.14)';
-const GLASS_BORDER = 'rgba(255,255,255,0.28)';
+const GLASS = 'rgba(255,248,240,0.55)';
+const GLASS_BORDER = 'rgba(255,255,255,0.65)';
 const RESOURCE_ICON_COLOR = [ViveColors.primary, ViveColors.accent];
 const RESOURCE_BUBBLE_BG  = ['rgba(232,116,59,0.18)', 'rgba(107,191,138,0.18)'];
 
@@ -158,7 +158,7 @@ export default function InicioScreen() {
 
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safeArea} edges={['top']}>
         <FirstTimeTooltip
           storageKey="vive_tooltip_inicio"
@@ -186,7 +186,7 @@ export default function InicioScreen() {
                 <MaterialCommunityIcons
                   name={unreadNotifCount > 0 ? 'bell' : 'bell-outline'}
                   size={24}
-                  color="#FFFFFF"
+                  color="#565E32"
                 />
                 {unreadNotifCount > 0 && <View style={s.bellDot} />}
               </TouchableOpacity>
@@ -270,7 +270,7 @@ export default function InicioScreen() {
                   <Text style={s.noSessionTitle}>Sin sesiones agendadas</Text>
                   <Text style={s.noSessionSub}>Reservá una sesión con tu coach</Text>
                 </View>
-                <MaterialCommunityIcons name="chevron-right" size={18} color="rgba(255,255,255,0.30)" />
+                <MaterialCommunityIcons name="chevron-right" size={18} color="rgba(135,131,92,0.45)" />
               </TouchableOpacity>
             )}
           </Animated.View>
@@ -290,7 +290,7 @@ export default function InicioScreen() {
                   </View>
                   <Text style={s.resourceLabel} numberOfLines={2}>{r.title}</Text>
                   <View style={s.resourcePlusBtn}>
-                    <MaterialCommunityIcons name="plus" size={14} color="rgba(255,255,255,0.6)" />
+                    <MaterialCommunityIcons name="plus" size={14} color="#87835C" />
                   </View>
                 </ScaleCard>
               ))}
@@ -307,7 +307,7 @@ export default function InicioScreen() {
                 <Text style={s.recType}>{mockRecommendation.type}</Text>
               </View>
               <View style={s.recArrowBtn}>
-                <MaterialCommunityIcons name="arrow-right" size={18} color="rgba(255,255,255,0.75)" />
+                <MaterialCommunityIcons name="arrow-right" size={18} color="#87835C" />
               </View>
             </View>
           </Animated.View>
@@ -336,7 +336,7 @@ const s = StyleSheet.create({
   logo: {
     fontFamily: ViveFonts.frauncesSerif,
     fontSize: 22,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: 4,
   },
   topRight: {
@@ -382,19 +382,19 @@ const s = StyleSheet.create({
   greetingLine1: {
     fontFamily: ViveFonts.semibold,
     fontSize: 30,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 38,
   },
   greetingLine2: {
     fontFamily: ViveFonts.regular,
     fontSize: 28,
-    color: 'rgba(255,255,255,0.85)',
+    color: '#565E32',
     lineHeight: 36,
   },
   dailyPhrase: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
     marginTop: 8,
     lineHeight: 22,
   },
@@ -421,7 +421,7 @@ const s = StyleSheet.create({
   vitaIaLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
   },
   sobreTiRight: {
     flex: 1,
@@ -429,7 +429,7 @@ const s = StyleSheet.create({
   sobreTiTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.5)',
+    color: 'rgba(135,131,92,0.72)',
     letterSpacing: 0.8,
     textTransform: 'uppercase',
     marginBottom: 6,
@@ -437,7 +437,7 @@ const s = StyleSheet.create({
   sobreTiText: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.75)',
+    color: '#87835C',
     lineHeight: 18,
   },
 
@@ -445,7 +445,7 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     paddingHorizontal: 20,
     marginBottom: 12,
   },
@@ -477,7 +477,7 @@ const s = StyleSheet.create({
   resourceLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 12,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     lineHeight: 17,
   },
@@ -485,9 +485,9 @@ const s = StyleSheet.create({
     width: 26,
     height: 26,
     borderRadius: 13,
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -523,20 +523,20 @@ const s = StyleSheet.create({
   sessionName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 20,
   },
   sessionRole: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
     lineHeight: 17,
     marginTop: 1,
   },
   sessionSub: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.5)',
+    color: 'rgba(135,131,92,0.72)',
     lineHeight: 17,
     marginTop: 1,
   },
@@ -544,9 +544,9 @@ const s = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 14,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,248,240,0.62)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.4)',
+    borderColor: 'rgba(255,255,255,0.68)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -554,7 +554,7 @@ const s = StyleSheet.create({
   verSalaButtonText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 12,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   // No session
@@ -573,13 +573,13 @@ const s = StyleSheet.create({
   noSessionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 2,
   },
   noSessionSub: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
   },
 
   // ── 8. Para vos hoy ────────────────────────────────────────────────────────
@@ -605,22 +605,22 @@ const s = StyleSheet.create({
   recTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 20,
     marginBottom: 4,
   },
   recType: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
   },
   recArrowBtn: {
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.25)',
+    borderColor: 'rgba(255,255,255,0.60)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -630,9 +630,9 @@ const s = StyleSheet.create({
 function VennSvg() {
   return (
     <Svg width={72} height={64} viewBox="-2 -2 72 66">
-      <Circle cx={21} cy={21} r={20} fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth={1.5} />
-      <Circle cx={47} cy={21} r={20} fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth={1.5} />
-      <Circle cx={34} cy={40} r={20} fill="none" stroke="rgba(255,255,255,0.7)" strokeWidth={1.5} />
+      <Circle cx={21} cy={21} r={20} fill="none" stroke="rgba(86,94,50,0.55)" strokeWidth={1.5} />
+      <Circle cx={47} cy={21} r={20} fill="none" stroke="rgba(86,94,50,0.55)" strokeWidth={1.5} />
+      <Circle cx={34} cy={40} r={20} fill="none" stroke="rgba(86,94,50,0.55)" strokeWidth={1.5} />
     </Svg>
   );
 }

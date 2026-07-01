@@ -1,10 +1,10 @@
 // VIVE Design System
 export const ViveColors = {
-  primary: '#E8743B',    // Terracota — botones, logo, acciones clave
-  background: '#FBF6EF', // Crema cálido — fondo de toda la app
-  text: '#1F4A43',       // Verde profundo — texto principal
-  accent: '#6BBF8A',     // Verde brote — progreso, confirmaciones
-  calm: '#5B8DB8',       // Azul sereno — secciones de calma
+  primary: '#C1694F',    // Terracota
+  background: '#F7EFE4', // Crema cálido
+  text: '#565E32',       // Oliva — texto principal
+  accent: '#2D4A3E',     // Forest — progreso, confirmaciones
+  calm: '#87835C',       // Oliva muted
 };
 
 export const ViveFonts = {

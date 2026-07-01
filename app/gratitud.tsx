@@ -222,7 +222,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
   },
   backBtn: { padding: 4 },
   backIcon: {
@@ -281,7 +281,7 @@ const s = StyleSheet.create({
 
   // Gratitude fields
   fieldCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 18,
     padding: 16,
     flexDirection: 'row',
@@ -351,7 +351,7 @@ const s = StyleSheet.create({
   saveBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     lineHeight: 22,
   },
@@ -364,7 +364,7 @@ const s = StyleSheet.create({
     marginBottom: 12,
   },
   entryCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 14,
     padding: 14,
     marginBottom: 10,

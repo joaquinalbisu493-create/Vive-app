@@ -70,14 +70,14 @@ export default function BookingScreen_Success() {
 
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top', 'bottom']}>
 
         {/* Centro — ícono + texto */}
         <View style={s.center}>
 
           <Animated.View style={[s.checkCircle, { transform: [{ scale: checkScale }] }]}>
-            <MaterialIcons name="check" size={48} color="#FFFFFF" />
+            <MaterialIcons name="check" size={48} color="#565E32" />
           </Animated.View>
 
           <Animated.View style={[s.textBlock, { opacity: contentOpacity }]}>
@@ -94,7 +94,7 @@ export default function BookingScreen_Success() {
           <Animated.View style={[s.card, { opacity: contentOpacity }]}>
             <View style={s.coachRow}>
               <View style={s.avatar}>
-                <MaterialIcons name="person" size={28} color="rgba(255,255,255,0.55)" />
+                <MaterialIcons name="person" size={28} color="rgba(135,131,92,0.80)" />
               </View>
               <View style={s.coachInfo}>
                 <Text style={s.coachName}>{coachName}</Text>
@@ -192,7 +192,7 @@ const s = StyleSheet.create({
   title: {
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
     marginBottom: 10,
     letterSpacing: -0.3,
@@ -200,7 +200,7 @@ const s = StyleSheet.create({
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: 'rgba(255,255,255,0.75)',
+    color: '#87835C',
     textAlign: 'center',
     lineHeight: 23,
     marginBottom: 8,
@@ -221,10 +221,10 @@ const s = StyleSheet.create({
   },
 
   card: {
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
     padding: 18,
     width: '100%',
     ...cardShadow,
@@ -238,7 +238,7 @@ const s = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,248,240,0.62)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -247,7 +247,7 @@ const s = StyleSheet.create({
   coachName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 2,
   },
   coachSpecialty: {
@@ -258,7 +258,7 @@ const s = StyleSheet.create({
 
   divider: {
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     marginBottom: 14,
   },
 
@@ -271,7 +271,7 @@ const s = StyleSheet.create({
   detailText: {
     fontFamily: ViveFonts.medium,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   footer: {
@@ -279,7 +279,7 @@ const s = StyleSheet.create({
     paddingBottom: 8,
   },
   btnPrimary: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
@@ -287,7 +287,7 @@ const s = StyleSheet.create({
   btnPrimaryText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#1A1A2E',
+    color: '#F7EFE4',
     letterSpacing: 0.2,
   },
   btnSecondary: {
@@ -300,7 +300,7 @@ const s = StyleSheet.create({
   btnSecondaryText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: 0.2,
   },
 });

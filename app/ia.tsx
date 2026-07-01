@@ -13,7 +13,7 @@ export default function IaScreen() {
       <SafeAreaView style={s.safe} edges={['top']}>
         <View style={s.header}>
           <TouchableOpacity onPress={() => router.back()} hitSlop={8} activeOpacity={0.7}>
-            <MaterialCommunityIcons name="arrow-left" size={24} color="#FFFFFF" />
+            <MaterialCommunityIcons name="arrow-left" size={24} color="#565E32" />
           </TouchableOpacity>
         </View>
         <View style={s.body}>
@@ -41,12 +41,12 @@ const s = StyleSheet.create({
   title: {
     fontFamily: ViveFonts.frauncesSerif,
     fontSize: 36,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: 4,
   },
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 16,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
   },
 });

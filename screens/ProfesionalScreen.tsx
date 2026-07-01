@@ -151,7 +151,7 @@ export default function ProfesionalScreen() {
 
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
 
         {/* ── Botón atrás flotante ─────────────────────────────────────── */}
@@ -160,7 +160,7 @@ export default function ProfesionalScreen() {
           onPress={() => router.back()}
           activeOpacity={0.7}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <MaterialIcons name="arrow-back-ios" size={18} color="#FFFFFF" />
+          <MaterialIcons name="arrow-back-ios" size={18} color="#565E32" />
         </TouchableOpacity>
 
       </SafeAreaView>
@@ -174,12 +174,12 @@ export default function ProfesionalScreen() {
         {/* ── Foto grande ──────────────────────────────────────────────── */}
         <View style={s.photoContainer}>
           <View style={s.photoPlaceholder}>
-            <MaterialIcons name="person" size={90} color="rgba(255,255,255,0.45)" />
+            <MaterialIcons name="person" size={90} color="rgba(135,131,92,0.65)" />
           </View>
 
           {/* Badge verificado */}
           <View style={s.verifiedBadge}>
-            <MaterialIcons name="verified" size={14} color="#FFFFFF" />
+            <MaterialIcons name="verified" size={14} color="#565E32" />
             <Text style={s.verifiedText}>Verificado por VIVE</Text>
           </View>
         </View>
@@ -352,7 +352,7 @@ const s = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.20)',
+    backgroundColor: 'rgba(255,248,240,0.65)',
     alignItems: 'center',
     justifyContent: 'center',
     ...shadow,
@@ -371,7 +371,7 @@ const s = StyleSheet.create({
   },
   photoPlaceholder: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: 'rgba(86,94,50,0.12)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -390,7 +390,7 @@ const s = StyleSheet.create({
   verifiedText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 12,
-    color: '#FFFFFF',
+    color: '#565E32',
     letterSpacing: 0.2,
   },
 
@@ -403,7 +403,7 @@ const s = StyleSheet.create({
   name: {
     fontFamily: ViveFonts.semibold,
     fontSize: 28,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 36,
     letterSpacing: -0.3,
     marginBottom: 4,
@@ -417,7 +417,7 @@ const s = StyleSheet.create({
   metaLine: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.60)',
+    color: '#87835C',
     marginBottom: 14,
   },
   chipsRow: {
@@ -446,16 +446,16 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 14,
   },
 
   // ── Video ─────────────────────────────────────────────────────────────
   videoPlaceholder: {
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
     height: 160,
     alignItems: 'center',
     justifyContent: 'center',
@@ -475,17 +475,17 @@ const s = StyleSheet.create({
   videoCaption: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.65)',
+    color: '#87835C',
   },
 
   // ── Rating general ────────────────────────────────────────────────────
   ratingOverall: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
     padding: 16,
     marginBottom: 14,
     gap: 14,
@@ -494,7 +494,7 @@ const s = StyleSheet.create({
   ratingNumber: {
     fontFamily: ViveFonts.bold,
     fontSize: 40,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 48,
   },
   ratingRight: {
@@ -503,12 +503,12 @@ const s = StyleSheet.create({
   ratingCount: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
   },
 
   // ── Reviews ───────────────────────────────────────────────────────────
   noReviews: {
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,248,240,0.32)',
     borderRadius: 14,
     padding: 16,
     alignItems: 'center',
@@ -516,17 +516,17 @@ const s = StyleSheet.create({
   noReviewsText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.45)',
+    color: 'rgba(135,131,92,0.65)',
     textAlign: 'center',
   },
   reviewsList: {
     gap: 12,
   },
   reviewCard: {
-    backgroundColor: 'rgba(255,255,255,0.14)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.22)',
+    borderColor: 'rgba(255,255,255,0.60)',
     padding: 14,
     ...shadow,
   },
@@ -540,16 +540,16 @@ const s = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.18)',
+    backgroundColor: 'rgba(255,248,240,0.62)',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.25)',
+    borderColor: 'rgba(255,255,255,0.60)',
     alignItems: 'center',
     justifyContent: 'center',
   },
   reviewAvatarText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   reviewMeta: {
     gap: 3,
@@ -557,20 +557,20 @@ const s = StyleSheet.create({
   reviewName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   reviewText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.70)',
+    color: '#87835C',
     lineHeight: 20,
   },
 
   // ── Footer sticky ─────────────────────────────────────────────────────
   footerSafe: {
-    backgroundColor: 'rgba(15,10,40,0.90)',
+    backgroundColor: 'rgba(247,239,228,0.97)',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(255,255,255,0.12)',
+    borderTopColor: 'rgba(86,94,50,0.12)',
     ...Platform.select({
       ios: {
         shadowColor: 'rgba(0,0,0,0.5)',
@@ -591,13 +591,13 @@ const s = StyleSheet.create({
   price: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   footerButtons: {
     gap: 10,
   },
   btnPrimary: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#565E32',
     borderRadius: 14,
     paddingVertical: 15,
     alignItems: 'center',
@@ -606,7 +606,7 @@ const s = StyleSheet.create({
   btnPrimaryText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 16,
-    color: '#1A1A2E',
+    color: '#F7EFE4',
     letterSpacing: 0.2,
   },
   btnSecondary: {

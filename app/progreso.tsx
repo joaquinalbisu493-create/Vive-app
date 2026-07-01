@@ -130,7 +130,7 @@ export default function ProgresoScreen() {
 
   return (
     <AppBg>
-      <StatusBar barStyle="light-content" />
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={s.scroll}>
 
@@ -139,7 +139,7 @@ export default function ProgresoScreen() {
 
           {/* ── Atrás ── */}
           <TouchableOpacity style={s.backBtn} onPress={() => router.back()} activeOpacity={0.7}>
-            <MaterialCommunityIcons name="arrow-left" size={20} color="rgba(255,255,255,0.85)" />
+            <MaterialCommunityIcons name="arrow-left" size={20} color="#565E32" />
           </TouchableOpacity>
 
           {/* ── Título ── */}
@@ -167,7 +167,7 @@ export default function ProgresoScreen() {
                 >
                   <View style={[s.checkCircle, habitosDone[h.id] && s.checkCircleDone]}>
                     {habitosDone[h.id] && (
-                      <MaterialCommunityIcons name="check" size={14} color="#FFFFFF" />
+                      <MaterialCommunityIcons name="check" size={14} color="#565E32" />
                     )}
                   </View>
                   <Text style={[s.habitoLabel, !habitosDone[h.id] && s.habitoLabelPending]}>
@@ -183,7 +183,7 @@ export default function ProgresoScreen() {
           <Text style={s.sectionTitle}>Historial de sesiones</Text>
 
           {loadingSessions ? (
-            <ActivityIndicator size="small" color="rgba(255,255,255,0.6)" style={{ marginTop: 12 }} />
+            <ActivityIndicator size="small" color="#87835C" style={{ marginTop: 12 }} />
           ) : pastSessions.length === 0 ? (
             <GlassCard style={[s.emptyCard]}>
               <Text style={s.emptyText}>Todavía no hay sesiones completadas.</Text>
@@ -205,7 +205,7 @@ export default function ProgresoScreen() {
                   <MaterialCommunityIcons
                     name="check-circle-outline"
                     size={22}
-                    color="rgba(255,255,255,0.55)"
+                    color="rgba(135,131,92,0.80)"
                   />
                 </GlassCard>
               ))}
@@ -238,7 +238,7 @@ const s = StyleSheet.create({
   pageTitle: {
     fontFamily: ViveFonts.bold,
     fontSize: 32,
-    color: '#FFFFFF',
+    color: '#565E32',
     paddingHorizontal: 22,
     paddingTop: 10,
     paddingBottom: 20,
@@ -262,14 +262,14 @@ const s = StyleSheet.create({
   statValue: {
     fontFamily: ViveFonts.bold,
     fontSize: 36,
-    color: '#FFFFFF',
+    color: '#565E32',
     lineHeight: 42,
     letterSpacing: -1,
   },
   statLabel: {
     fontFamily: ViveFonts.regular,
     fontSize: 11,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
     textAlign: 'center',
     lineHeight: 15,
     marginTop: 4,
@@ -302,25 +302,25 @@ const s = StyleSheet.create({
     height: 26,
     borderRadius: 13,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.45)',
+    borderColor: 'rgba(255,255,255,0.70)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
   },
   checkCircleDone: {
-    backgroundColor: 'rgba(255,255,255,0.32)',
+    backgroundColor: 'rgba(86,94,50,0.14)',
     borderColor: 'rgba(255,255,255,0.6)',
   },
   habitoLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     flex: 1,
   },
-  habitoLabelPending: { color: 'rgba(255,255,255,0.5)' },
+  habitoLabelPending: { color: 'rgba(135,131,92,0.72)' },
   divider: {
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     marginHorizontal: 16,
   },
 
@@ -336,16 +336,16 @@ const s = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: 'rgba(255,255,255,0.24)',
+    backgroundColor: 'rgba(255,248,240,0.68)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.38)',
+    borderColor: 'rgba(255,255,255,0.70)',
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
   },
-  sesionAvatarText: { fontFamily: ViveFonts.semibold, fontSize: 15, color: '#FFFFFF' },
+  sesionAvatarText: { fontFamily: ViveFonts.semibold, fontSize: 15, color: '#565E32' },
   sesionInfo: { flex: 1 },
-  sesionName: { fontFamily: ViveFonts.semibold, fontSize: 13, color: '#FFFFFF', lineHeight: 18 },
+  sesionName: { fontFamily: ViveFonts.semibold, fontSize: 13, color: '#565E32', lineHeight: 18 },
   sesionSub: { fontFamily: ViveFonts.regular, fontSize: 11, color: 'rgba(255,255,255,0.62)', lineHeight: 16 },
 
   // ── Empty / loading ───────────────────────────────────────────────────────
@@ -357,7 +357,7 @@ const s = StyleSheet.create({
   emptyText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(135,131,92,0.80)',
     textAlign: 'center',
   },
 });

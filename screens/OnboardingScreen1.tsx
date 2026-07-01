@@ -385,6 +385,6 @@ const styles = StyleSheet.create({
     fontFamily: 'SpaceGrotesk_400Regular',
     fontSize: 11,
     letterSpacing: 1,
-    color: 'rgba(255,255,255,0.75)',
+    color: '#87835C',
   },
 });

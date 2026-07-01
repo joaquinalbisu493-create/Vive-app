@@ -48,8 +48,8 @@ const EXPLORE_CATS = [
   { id: 'lecturas', label: 'Lecturas', emoji: '📖' }, { id: 'herramienta', label: 'Herramientas', emoji: '🧰' },
 ];
 
-const GLASS = 'rgba(255,255,255,0.14)';
-const GLASS_BORDER = 'rgba(255,255,255,0.28)';
+const GLASS = 'rgba(255,248,240,0.55)';
+const GLASS_BORDER = 'rgba(255,255,255,0.65)';
 
 // ─── Proposal Modal ───────────────────────────────────────────────────────────
 interface ProposalModalProps {
@@ -78,7 +78,7 @@ function ProposalModal({ visible, onClose }: ProposalModalProps) {
           <View style={ms.header}>
             <Text style={ms.headerTitle}>Proponer recurso</Text>
             <TouchableOpacity onPress={onClose} hitSlop={8} activeOpacity={0.7}>
-              <MaterialCommunityIcons name="close" size={22} color="rgba(255,255,255,0.8)" />
+              <MaterialCommunityIcons name="close" size={22} color="#565E32" />
             </TouchableOpacity>
           </View>
 
@@ -91,7 +91,7 @@ function ProposalModal({ visible, onClose }: ProposalModalProps) {
               value={title}
               onChangeText={setTitle}
               placeholder="Ej: Meditación para el estrés"
-              placeholderTextColor="rgba(255,255,255,0.35)"
+              placeholderTextColor="rgba(135,131,92,0.45)"
             />
 
             {/* Tipo */}
@@ -131,7 +131,7 @@ function ProposalModal({ visible, onClose }: ProposalModalProps) {
               value={duration}
               onChangeText={setDuration}
               placeholder="Ej: 10 min"
-              placeholderTextColor="rgba(255,255,255,0.35)"
+              placeholderTextColor="rgba(135,131,92,0.45)"
             />
 
             {/* Descripción */}
@@ -141,7 +141,7 @@ function ProposalModal({ visible, onClose }: ProposalModalProps) {
               value={description}
               onChangeText={setDescription}
               placeholder="¿De qué trata este recurso? ¿Para quién es útil?"
-              placeholderTextColor="rgba(255,255,255,0.35)"
+              placeholderTextColor="rgba(135,131,92,0.45)"
               multiline
               numberOfLines={4}
               textAlignVertical="top"
@@ -179,7 +179,7 @@ export default function CoachResourcesScreen() {
           style={s.proposeBtn}
           onPress={() => setModalVisible(true)}
           activeOpacity={0.85}>
-          <MaterialCommunityIcons name="plus-circle-outline" size={18} color="#FFFFFF" />
+          <MaterialCommunityIcons name="plus-circle-outline" size={18} color="#565E32" />
           <Text style={s.proposeBtnText}>Proponer recurso a VIVE</Text>
         </TouchableOpacity>
 
@@ -232,7 +232,7 @@ const s = StyleSheet.create({
   pageTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 26,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 16,
   },
 
@@ -249,13 +249,13 @@ const s = StyleSheet.create({
   proposeBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   sectionTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 12,
   },
   sectionSpaced: { marginTop: 28 },
@@ -283,13 +283,13 @@ const s = StyleSheet.create({
   resourceTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     marginBottom: 2,
   },
   resourceMeta: {
     fontFamily: ViveFonts.regular,
     fontSize: 12,
-    color: 'rgba(255,255,255,0.6)',
+    color: '#87835C',
   },
   shareBtn: {
     borderWidth: 1.5,
@@ -324,7 +324,7 @@ const s = StyleSheet.create({
   exploreCatLabel: {
     fontFamily: ViveFonts.medium,
     fontSize: 11,
-    color: '#FFFFFF',
+    color: '#565E32',
     textAlign: 'center',
   },
 });
@@ -339,13 +339,13 @@ const ms = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.12)',
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderBottomColor: 'rgba(255,248,240,0.48)',
+    backgroundColor: 'rgba(255,248,240,0.32)',
   },
   headerTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 17,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
   body: {
     paddingHorizontal: 20,
@@ -355,21 +355,21 @@ const ms = StyleSheet.create({
   label: {
     fontFamily: ViveFonts.semibold,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.85)',
+    color: '#565E32',
     marginBottom: 8,
   },
   labelSpaced: { marginTop: 20 },
 
   input: {
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(255,248,240,0.48)',
     borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: Platform.OS === 'ios' ? 13 : 10,
     fontFamily: ViveFonts.regular,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: '#565E32',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.28)',
+    borderColor: 'rgba(255,255,255,0.65)',
   },
   inputMultiline: {
     height: 100,
@@ -385,9 +385,9 @@ const ms = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 12,
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(86,94,50,0.08)',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.22)',
+    borderColor: 'rgba(255,255,255,0.60)',
   },
   chipActive: {
     backgroundColor: 'rgba(232,116,59,0.18)',
@@ -396,7 +396,7 @@ const ms = StyleSheet.create({
   chipText: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
   },
   chipTextActive: {
     color: ViveColors.primary,
@@ -411,22 +411,22 @@ const ms = StyleSheet.create({
     paddingVertical: 7,
     paddingHorizontal: 13,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(86,94,50,0.08)',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.2)',
+    borderColor: 'rgba(255,255,255,0.55)',
   },
   topicChipActive: {
-    backgroundColor: 'rgba(255,255,255,0.22)',
+    backgroundColor: 'rgba(255,248,240,0.68)',
     borderColor: 'rgba(255,255,255,0.6)',
   },
   topicChipText: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.7)',
+    color: '#87835C',
   },
   topicChipTextActive: {
     fontFamily: ViveFonts.semibold,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 
   sendBtn: {
@@ -437,11 +437,11 @@ const ms = StyleSheet.create({
     marginTop: 28,
   },
   sendBtnDisabled: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: 'rgba(255,248,240,0.65)',
   },
   sendBtnText: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: '#565E32',
   },
 });

@@ -111,7 +111,7 @@ export default function BookingScreen_Time() {
             onPress={() => router.back()}
             activeOpacity={0.7}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <MaterialIcons name="arrow-back-ios" size={18} color="#FFFFFF" />
+            <MaterialIcons name="arrow-back-ios" size={18} color="#565E32" />
           </TouchableOpacity>
           <Text style={s.headerTitle}>Elegí un horario</Text>
           <View style={s.headerSpacer} />
@@ -142,7 +142,7 @@ export default function BookingScreen_Time() {
         <Text style={s.sectionLabel}>Horarios disponibles</Text>
 
         {loading ? (
-          <ActivityIndicator color="rgba(255,255,255,0.80)" style={{ marginVertical: 24 }} />
+          <ActivityIndicator color="#565E32" style={{ marginVertical: 24 }} />
         ) : times.length === 0 ? (
           <Text style={s.emptyTimes}>Sin horarios disponibles para esta fecha.</Text>
         ) : (
@@ -176,7 +176,7 @@ export default function BookingScreen_Time() {
         )}
 
         <View style={s.timezoneNote}>
-          <MaterialIcons name="access-time" size={13} color="rgba(255,255,255,0.55)" />
+          <MaterialIcons name="access-time" size={13} color="rgba(135,131,92,0.80)" />
           <Text style={s.timezoneText}>Horarios en zona horaria Argentina (ART)</Text>
         </View>
 
@@ -212,7 +212,7 @@ const s = StyleSheet.create({
   },
   backBtn: {
     width: 36, height: 36, borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.18)', alignItems: 'center', justifyContent: 'center',
+    backgroundColor: 'rgba(255,248,240,0.62)', alignItems: 'center', justifyContent: 'center',
     ...Platform.select({
       ios: { shadowColor: 'rgba(0,0,0,0.5)', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.12, shadowRadius: 4 },
       android: { elevation: 2 },
@@ -220,7 +220,7 @@ const s = StyleSheet.create({
   },
   headerTitle: {
     flex: 1, fontFamily: ViveFonts.semibold, fontSize: 18,
-    color: '#FFFFFF', textAlign: 'center', letterSpacing: -0.2,
+    color: '#565E32', textAlign: 'center', letterSpacing: -0.2,
   },
   headerSpacer: { width: 36 },
   progressTrack: {
@@ -232,7 +232,7 @@ const s = StyleSheet.create({
   scrollContent: { paddingHorizontal: 20, paddingTop: 24, paddingBottom: 24 },
   coachReminder: {
     flexDirection: 'row', alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.14)', borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.28)', padding: 14,
+    backgroundColor: 'rgba(255,248,240,0.55)', borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.65)', padding: 14,
     marginBottom: 28, ...cardShadow,
   },
   coachAvatar: {
@@ -241,41 +241,41 @@ const s = StyleSheet.create({
     justifyContent: 'center', marginRight: 14,
   },
   coachInfo: { flex: 1 },
-  coachName: { fontFamily: ViveFonts.semibold, fontSize: 15, color: '#FFFFFF', marginBottom: 2 },
+  coachName: { fontFamily: ViveFonts.semibold, fontSize: 15, color: '#565E32', marginBottom: 2 },
   coachSpecialty: { fontFamily: ViveFonts.medium, fontSize: 12, color: ViveColors.primary, marginBottom: 4 },
-  coachDate: { fontFamily: ViveFonts.regular, fontSize: 13, color: 'rgba(255,255,255,0.65)' },
-  sectionLabel: { fontFamily: ViveFonts.semibold, fontSize: 16, color: '#FFFFFF', marginBottom: 16 },
+  coachDate: { fontFamily: ViveFonts.regular, fontSize: 13, color: '#87835C' },
+  sectionLabel: { fontFamily: ViveFonts.semibold, fontSize: 16, color: '#565E32', marginBottom: 16 },
   chipsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 24 },
   chip: { paddingVertical: 13, paddingHorizontal: 22, borderRadius: 12, borderWidth: 1.5, borderColor: 'transparent' },
   chipAvailable: {
-    backgroundColor: 'rgba(255,255,255,0.14)',
-    borderColor: 'rgba(255,255,255,0.28)',
+    backgroundColor: 'rgba(255,248,240,0.55)',
+    borderColor: 'rgba(255,255,255,0.65)',
     ...Platform.select({
       ios: { shadowColor: 'rgba(0,0,0,0.3)', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.10, shadowRadius: 4 },
       android: { elevation: 1 },
     }),
   },
   chipSelected: { backgroundColor: ViveColors.primary, borderColor: ViveColors.primary },
-  chipUnavailable: { backgroundColor: 'rgba(255,255,255,0.06)', borderColor: 'transparent' },
+  chipUnavailable: { backgroundColor: 'rgba(86,94,50,0.06)', borderColor: 'transparent' },
   chipText: { fontFamily: ViveFonts.medium, fontSize: 15, color: '#FFFFFF' },
-  chipTextAvailable: { color: '#FFFFFF' },
-  chipTextSelected: { color: '#FFFFFF', fontFamily: ViveFonts.semibold },
+  chipTextAvailable: { color: '#565E32' },
+  chipTextSelected: { color: '#F7EFE4', fontFamily: ViveFonts.semibold },
   chipTextUnavailable: { color: '#CBCBCB' },
   emptyTimes: {
     fontFamily: ViveFonts.regular, fontSize: 14,
-    color: 'rgba(255,255,255,0.50)', textAlign: 'center', marginVertical: 24,
+    color: 'rgba(135,131,92,0.72)', textAlign: 'center', marginVertical: 24,
   },
   timezoneNote: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  timezoneText: { fontFamily: ViveFonts.regular, fontSize: 12, color: 'rgba(255,255,255,0.50)' },
+  timezoneText: { fontFamily: ViveFonts.regular, fontSize: 12, color: 'rgba(135,131,92,0.72)' },
   footerSafe: {
-    backgroundColor: 'rgba(15,10,40,0.80)',
-    borderTopWidth: 1, borderTopColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: 'rgba(247,239,228,0.97)',
+    borderTopWidth: 1, borderTopColor: 'rgba(86,94,50,0.12)',
   },
   footer: { paddingHorizontal: 20, paddingVertical: 16 },
   btn: {
-    backgroundColor: '#FFFFFF', borderRadius: 14,
+    backgroundColor: '#565E32', borderRadius: 14,
     paddingVertical: 16, alignItems: 'center', justifyContent: 'center',
   },
   btnDisabled: { opacity: 0.45 },
-  btnText: { fontFamily: ViveFonts.semibold, fontSize: 16, color: '#1A1A2E', letterSpacing: 0.2 },
+  btnText: { fontFamily: ViveFonts.semibold, fontSize: 16, color: '#F7EFE4', letterSpacing: 0.2 },
 });
