@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 import {
   ScrollView, View, Text, TouchableOpacity,
-  StyleSheet, StatusBar, ActivityIndicator,
+  StyleSheet, StatusBar, ActivityIndicator, useWindowDimensions,
 } from 'react-native';
+import Svg, {
+  Circle as SvgCircle, Line as SvgLine, Polyline, Text as SvgText,
+} from 'react-native-svg';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-import { ViveFonts } from '@/constants/theme';
+import { ViveFonts, ViveMoodColors } from '@/constants/theme';
+import { useMoodHistory } from '@/hooks/useMoodHistory';
+import type { MoodEntry } from '@/hooks/useMoodHistory';
 import { AppBg } from '@/components/ui/AppBg';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { VitaHeader } from '@/components/ui/VitaHeader';
@@ -52,6 +57,12 @@ const CARD_MX = 18;
 
 // ─── Pantalla ─────────────────────────────────────────────────────────────────
 
+const MOOD_LABELS: Record<number, string> = {
+  1: 'Bajón', 2: 'Cansado', 3: 'Neutral', 4: 'Bien', 5: 'Genial',
+};
+const DAY_NAMES_SHORT = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+const DAY_LETTERS     = ['D',   'L',   'M',   'M',   'J',   'V',   'S'];
+
 export default function ProgresoScreen() {
   const router = useRouter();
   const { user } = useAuth();
@@ -63,6 +74,47 @@ export default function ProgresoScreen() {
   const [loadingSessions, setLoadingSessions] = useState(true);
   const [sessionCount, setSessionCount] = useState<number | null>(null);
   const [semanasActivas, setSemanasActivas] = useState<number>(0);
+
+  const { entries: moodEntries, loading: moodLoading } = useMoodHistory(user?.id, 14);
+
+  // ── Métricas de mood ───────────────────────────────────────────────────────
+  const avgMoodLabel = (() => {
+    if (!moodEntries.length) return '—';
+    const avg = moodEntries.reduce((s, e) => s + e.mood_id, 0) / moodEntries.length;
+    return MOOD_LABELS[Math.round(avg)];
+  })();
+
+  const moodStreak = (() => {
+    const today = new Date().toISOString().split('T')[0];
+    let streak = 0;
+    const sorted = [...moodEntries].sort((a, b) => b.entry_date.localeCompare(a.entry_date));
+    let expected = today;
+    for (const e of sorted) {
+      if (e.entry_date === expected) {
+        streak++;
+        const d = new Date(expected);
+        d.setDate(d.getDate() - 1);
+        expected = d.toISOString().split('T')[0];
+      } else break;
+    }
+    return streak;
+  })();
+
+  const bestDayLabel = (() => {
+    if (!moodEntries.length) return '—';
+    const byDow: Record<number, { sum: number; count: number }> = {};
+    moodEntries.forEach(e => {
+      const [y, m, d] = e.entry_date.split('-').map(Number);
+      const dow = new Date(y, m - 1, d).getDay();
+      if (!byDow[dow]) byDow[dow] = { sum: 0, count: 0 };
+      byDow[dow].sum += e.mood_id;
+      byDow[dow].count += 1;
+    });
+    const best = Object.entries(byDow)
+      .map(([dow, { sum, count }]) => ({ dow: Number(dow), avg: sum / count }))
+      .sort((a, b) => b.avg - a.avg)[0];
+    return best ? DAY_NAMES_SHORT[best.dow] : '—';
+  })();
 
   function toggleHabito(id: string) {
     setHabitosDone(prev => ({ ...prev, [id]: !prev[id] }));
@@ -154,6 +206,34 @@ export default function ProgresoScreen() {
               </GlassCard>
             ))}
           </View>
+
+          {/* ── Estado de ánimo ── */}
+          <Text style={s.sectionTitle}>Estado de ánimo</Text>
+          <View style={s.moodStatsRow}>
+            <GlassCard style={s.moodStatCard}>
+              <Text style={s.moodStatValue}>{avgMoodLabel}</Text>
+              <Text style={s.moodStatLabel}>{'Promedio\n14 días'}</Text>
+            </GlassCard>
+            <GlassCard style={s.moodStatCard}>
+              <Text style={s.moodStatValue}>{moodStreak > 0 ? `${moodStreak}d` : '—'}</Text>
+              <Text style={s.moodStatLabel}>{'Racha\nactual'}</Text>
+            </GlassCard>
+            <GlassCard style={s.moodStatCard}>
+              <Text style={s.moodStatValue}>{bestDayLabel}</Text>
+              <Text style={s.moodStatLabel}>{'Mejor\ndía'}</Text>
+            </GlassCard>
+          </View>
+          <GlassCard style={s.moodChartCard}>
+            {moodLoading ? (
+              <ActivityIndicator size="small" color="#87835C" />
+            ) : moodEntries.length === 0 ? (
+              <Text style={s.emptyText}>
+                Hacé tu primer check-in en la pantalla de inicio.
+              </Text>
+            ) : (
+              <MoodLineChart entries={moodEntries} />
+            )}
+          </GlassCard>
 
           {/* ── Hábitos de hoy ── */}
           <Text style={s.sectionTitle}>Hábitos de hoy</Text>
@@ -284,6 +364,45 @@ const s = StyleSheet.create({
     marginBottom: 10,
   },
 
+  // ── Mood ──────────────────────────────────────────────────────────────────
+  moodStatsRow: {
+    flexDirection: 'row',
+    gap: 10,
+    paddingHorizontal: CARD_MX,
+    marginBottom: 10,
+  },
+  moodStatCard: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 4,
+  },
+  moodStatValue: {
+    fontFamily: ViveFonts.bold,
+    fontSize: 18,
+    color: '#565E32',
+    letterSpacing: -0.3,
+    textAlign: 'center',
+  },
+  moodStatLabel: {
+    fontFamily: ViveFonts.regular,
+    fontSize: 10,
+    color: '#87835C',
+    textAlign: 'center',
+    lineHeight: 14,
+    marginTop: 4,
+  },
+  moodChartCard: {
+    marginHorizontal: CARD_MX,
+    marginBottom: 24,
+    paddingVertical: 14,
+    paddingHorizontal: 4,
+    alignItems: 'center',
+    minHeight: 80,
+    justifyContent: 'center',
+  },
+
   // ── Hábitos ───────────────────────────────────────────────────────────────
   habitosCard: {
     marginHorizontal: CARD_MX,
@@ -361,3 +480,111 @@ const s = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+// ─── Gráfico de línea de mood ─────────────────────────────────────────────────
+
+function MoodLineChart({ entries }: { entries: MoodEntry[] }) {
+  const { width: screenW } = useWindowDimensions();
+  const chartW = screenW - 36;
+
+  const NUM_DAYS  = 14;
+  const PAD_TOP   = 10;
+  const PAD_BOT   = 28;
+  const PAD_H     = 14;
+  const CHART_H   = 110;
+  const plotH     = CHART_H - PAD_TOP - PAD_BOT;
+  const plotW     = chartW - PAD_H * 2;
+
+  // Array de últimos 14 días (del más antiguo al más reciente)
+  const dates: string[] = [];
+  for (let i = NUM_DAYS - 1; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    dates.push(d.toISOString().split('T')[0]);
+  }
+
+  const entryMap: Record<string, number> = {};
+  entries.forEach(e => { entryMap[e.entry_date] = e.mood_id; });
+
+  const pts = dates.map((date, i) => {
+    const moodId = entryMap[date];
+    const x = PAD_H + (i / (NUM_DAYS - 1)) * plotW;
+    const y = moodId != null
+      ? PAD_TOP + (1 - (moodId - 1) / 4) * plotH
+      : null;
+    return { x, y, moodId, date };
+  });
+
+  // Segmentos continuos (se cortan donde no hay dato)
+  const segments: string[][] = [];
+  let seg: string[] = [];
+  pts.forEach(p => {
+    if (p.y !== null) {
+      seg.push(`${p.x},${p.y}`);
+    } else {
+      if (seg.length) { segments.push(seg); seg = []; }
+    }
+  });
+  if (seg.length) segments.push(seg);
+
+  return (
+    <Svg width={chartW} height={CHART_H}>
+      {/* Guías horizontales por nivel de mood */}
+      {[1, 2, 3, 4, 5].map(mood => {
+        const gy = PAD_TOP + (1 - (mood - 1) / 4) * plotH;
+        return (
+          <SvgLine
+            key={mood}
+            x1={PAD_H} y1={gy} x2={chartW - PAD_H} y2={gy}
+            stroke="rgba(86,94,50,0.07)"
+            strokeWidth={1}
+          />
+        );
+      })}
+
+      {/* Línea conectando los puntos (salta días sin dato) */}
+      {segments.filter(s => s.length > 1).map((s, i) => (
+        <Polyline
+          key={i}
+          points={s.join(' ')}
+          fill="none"
+          stroke="rgba(86,94,50,0.28)"
+          strokeWidth={1.5}
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        />
+      ))}
+
+      {/* Puntos coloreados por mood */}
+      {pts.filter(p => p.y !== null).map((p, i) => (
+        <SvgCircle
+          key={i}
+          cx={p.x}
+          cy={p.y!}
+          r={4.5}
+          fill={ViveMoodColors[p.moodId!]}
+        />
+      ))}
+
+      {/* Etiquetas de día — cada 2 para 14 días */}
+      {dates.map((date, i) => {
+        if (i % 2 !== 0) return null;
+        const x = PAD_H + (i / (NUM_DAYS - 1)) * plotW;
+        const [y, m, d] = date.split('-').map(Number);
+        const dow = new Date(y, m - 1, d).getDay();
+        return (
+          <SvgText
+            key={i}
+            x={x}
+            y={CHART_H - 6}
+            textAnchor="middle"
+            fontSize={9}
+            fill="rgba(86,94,50,0.38)"
+          >
+            {DAY_LETTERS[dow]}
+          </SvgText>
+        );
+      })}
+    </Svg>
+  );
+}
