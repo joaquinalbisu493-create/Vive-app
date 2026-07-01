@@ -108,7 +108,7 @@ export default function TabLayout() {
     checkDot(user.id, setHasDot);
 
     const channel = supabase
-      .channel(`user-tab-dot-${user.id}`)
+      .channel(`user-tab-dot-${user.id}-${Math.random().toString(36).slice(2)}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' },
         () => checkDot(user.id, setHasDot))
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'salas' },
