@@ -72,7 +72,7 @@ function ToolCard({
         <Ionicons
           name={saved ? 'bookmark' : 'bookmark-outline'}
           size={15}
-          color={saved ? '#C1694F' : 'rgba(135,131,92,0.45)'}
+          color={saved ? '#C1694F' : '#87835C'}
         />
       </TouchableOpacity>
       <Ionicons name={tool.icon} size={28} color="#565E32" />
@@ -100,7 +100,7 @@ function CoachResourceCard({ resource }: { resource: CoachResource }) {
 // ─── Screen ───────────────────────────────────────────────────────────────────
 export default function RecursosScreen() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, requestAuth } = useAuth();
   const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export default function RecursosScreen() {
   }, [user]);
 
   async function toggleSave(resourceId: string) {
-    if (!user) return;
+    if (!user) { requestAuth(); return; }
     const isSaved = savedIds.has(resourceId);
     setSavedIds(prev => {
       const next = new Set(prev);
