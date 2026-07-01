@@ -295,7 +295,7 @@ const s = StyleSheet.create({
   dayCircleSelected: { backgroundColor: ViveColors.primary },
   dayText: { fontFamily: ViveFonts.regular, fontSize: 14, color: '#CBCBCB' },
   dayTextAvailable: { fontFamily: ViveFonts.medium, color: '#565E32' },
-  dayTextSelected: { fontFamily: ViveFonts.semibold, color: '#565E32' },
+  dayTextSelected: { fontFamily: ViveFonts.semibold, color: '#F7EFE4' },
   dayTextUnavailable: { color: '#CBCBCB' },
   footerSafe: {
     backgroundColor: 'rgba(247,239,228,0.97)',
