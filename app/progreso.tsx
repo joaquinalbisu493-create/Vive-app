@@ -346,7 +346,7 @@ const s = StyleSheet.create({
   sesionAvatarText: { fontFamily: ViveFonts.semibold, fontSize: 15, color: '#565E32' },
   sesionInfo: { flex: 1 },
   sesionName: { fontFamily: ViveFonts.semibold, fontSize: 13, color: '#565E32', lineHeight: 18 },
-  sesionSub: { fontFamily: ViveFonts.regular, fontSize: 11, color: 'rgba(255,255,255,0.62)', lineHeight: 16 },
+  sesionSub: { fontFamily: ViveFonts.regular, fontSize: 11, color: '#87835C', lineHeight: 16 },
 
   // ── Empty / loading ───────────────────────────────────────────────────────
   emptyCard: {

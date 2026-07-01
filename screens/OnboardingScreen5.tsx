@@ -169,7 +169,7 @@ export default function OnboardingScreen5() {
               });
               const animTextColor = anim.interpolate({
                 inputRange: [0, 1],
-                outputRange: ['rgba(255,255,255,0.85)', '#FFFFFF'],
+                outputRange: ['#565E32', '#FFFFFF'],
               });
 
               const pressAnim = getPressAnim(tema);
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: 'rgba(255,255,255,0.62)',
+    color: '#87835C',
     lineHeight: 22,
     textAlign: 'center',
   },

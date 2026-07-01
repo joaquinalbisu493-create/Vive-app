@@ -122,7 +122,7 @@ export default function OnboardingScreen3() {
                   key={u.id}
                   style={[
                     styles.card,
-                    { borderColor: isSelected ? u.accent : 'rgba(255,255,255,0.60)' },
+                    { borderColor: isSelected ? u.accent : 'rgba(86,94,50,0.14)' },
                     isSelected && {
                       backgroundColor: u.accentLight,
                       shadowColor: u.accent,
@@ -133,7 +133,7 @@ export default function OnboardingScreen3() {
                   ]}
                   onPress={() => setSelected(u.id)}
                 >
-                  <View style={[styles.iconBubble, { backgroundColor: isSelected ? 'rgba(255,255,255,0.60)' : 'rgba(255,248,240,0.48)' }]}>
+                  <View style={[styles.iconBubble, { backgroundColor: isSelected ? 'rgba(86,94,50,0.14)' : 'rgba(255,248,240,0.48)' }]}>
                     <MaterialCommunityIcons name={u.icon} size={26} color={isSelected ? u.accent : 'rgba(255,255,255,0.75)'} />
                   </View>
                   <View style={styles.cardText}>
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontFamily: ViveFonts.regular,
     fontSize: 15,
-    color: 'rgba(255,255,255,0.62)',
+    color: '#87835C',
     lineHeight: 22,
     textAlign: 'center',
   },
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.60)',
+    borderColor: 'rgba(86,94,50,0.14)',
   },
   iconBubble: {
     width: 52,
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   cardDesc: {
     fontFamily: ViveFonts.regular,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.62)',
+    color: '#87835C',
     lineHeight: 18,
     textAlign: 'center',
   },
