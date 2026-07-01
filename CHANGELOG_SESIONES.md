@@ -5,6 +5,23 @@
 
 ---
 
+## 2026-07-01 — Joaquín (sesión 32)
+
+**Tocado:** `app/(tabs)/recursos.tsx`, `app/(tabs)/index.tsx`, `scripts/add-saved-resources-rls.sql` (nuevo)
+
+**Resumen:**
+- Implementado `saved_resources`: cada herramienta en Recursos tiene ahora un botón bookmark (outline → filled al guardar). Optimistic update — respuesta inmediata sin esperar DB.
+- Nueva sección "Mis recursos" en Recursos: aparece solo si hay algo guardado, con chips horizontales que muestran ícono + nombre + botón para quitar.
+- Home ahora muestra los 2 últimos recursos guardados en "Recursos útiles" (dinámico desde Supabase). Si no hay ninguno guardado, sigue mostrando los defaults (Respiración + Gratitud). El botón "+" navega a la pestaña Recursos.
+- Script `scripts/add-saved-resources-rls.sql` con las 4 políticas RLS necesarias — **hay que correrlo en el SQL Editor de Supabase antes de probar en producción**.
+
+**Pendiente para la próxima sesión:**
+- Correr `scripts/add-saved-resources-rls.sql` en Supabase Dashboard (aún no ejecutado).
+- Probar en dispositivo físico: verificar que el bookmark dentro de la ScaleCard no dispara el onPress de la tarjeta.
+- Home: si el usuario tiene exactamente 1 recurso guardado, "Recursos útiles" muestra 1 card (full width). Decidir si se prefiere completar con un default o dejarlo así.
+
+---
+
 ## 2026-07-01 — Joaquín (sesión 31)
 
 **Tocado:** `theme/tokens.ts` (nuevo), `constants/theme.ts`, `components/ui/AppBg.tsx`, `components/ui/GlassCard.tsx`, `components/ui/ProgressToggle.tsx`, `components/ui/VitaHeader.tsx`, `components/ui/SegmentedPill.tsx` (nuevo), `components/ui/IconChip.tsx` (nuevo), `components/ui/SectionTitle.tsx` (nuevo), `app/(tabs)/_layout.tsx`, `app/(coach)/_layout.tsx`, `app/(tabs)/index.tsx`, `app/(tabs)/recursos.tsx`, `app/(tabs)/conexiones.tsx`, todos los screens en `screens/` (31 archivos), `app/progreso.tsx`, `app/search1.tsx`, `app/search2.tsx`, `app/search3.tsx`, `app/diario.tsx`, `app/gratitud.tsx`, `app/ia.tsx`, `scripts/apply_vita_theme.py` y v2/v3/v4.
