@@ -5,6 +5,21 @@
 
 ---
 
+## 2026-07-01 — Joaquín (sesión 36)
+
+**Tocado:** `app/(tabs)/index.tsx`, `app/(tabs)/_layout.tsx`
+
+**Resumen:**
+- Fix recurrente de canal realtime: al volver a home después de un booking, `notif-bell` y `user-tab-dot` crasheaban con "cannot add postgres_changes callbacks after subscribe()". Solución: sufijo aleatorio (`Math.random().toString(36).slice(2)`) en ambos nombres de canal para que cada montaje cree un canal único.
+
+**Pendiente para la próxima sesión:**
+- Con más días de check-in acumulados, verificar que el gráfico de mood en progreso se lea bien.
+- Considerar leyenda de colores de mood al costado del gráfico.
+- Google OAuth pendiente (dev build).
+- Botón "Editar perfil" en CoachProfileScreen sin `onPress`.
+
+---
+
 ## 2026-07-01 — Joaquín (sesión 35)
 
 **Tocado:** `app/progreso.tsx`, `app/(tabs)/index.tsx`
