@@ -26,9 +26,23 @@ const dailyPhrase = 'Todas las respuestas están en vos.';
 const SOBRE_TI_MSG =
   'Vas por buen camino tomando acciones que te hacen cada vez más efectivo. Los retos y la constancia construyen más balance en tu vida.';
 
-const pinnedResources = [
-  { id: '1', title: 'Respiración\n4-7-8', icon: 'weather-windy', route: undefined as string | undefined },
-  { id: '2', title: 'Diario de\ngratitud', icon: 'notebook-outline', route: '/gratitud' as string | undefined },
+type PinnedResource = { id: string; title: string; icon: string; route: string | undefined };
+
+const RESOURCE_MAP: Record<string, PinnedResource> = {
+  diario:      { id: 'diario',      title: 'Diario',             icon: 'notebook-outline',    route: '/diario'   },
+  gratitud:    { id: 'gratitud',    title: 'Diario de\ngratitud', icon: 'heart-outline',       route: '/gratitud' },
+  sueno:       { id: 'sueno',       title: 'Sueño',              icon: 'weather-night',        route: undefined   },
+  respiracion: { id: 'respiracion', title: 'Respiración\n4-7-8', icon: 'weather-windy',        route: undefined   },
+  meditacion:  { id: 'meditacion',  title: 'Meditación',         icon: 'leaf',                route: undefined   },
+  escaner:     { id: 'escaner',     title: 'Escáner\ncorporal',  icon: 'human',               route: undefined   },
+  relajacion:  { id: 'relajacion',  title: 'Relajación',         icon: 'music-note',          route: undefined   },
+  ruido:       { id: 'ruido',       title: 'Ruido\nblanco',      icon: 'volume-high',         route: undefined   },
+  lecturas:    { id: 'lecturas',    title: 'Lecturas\nbreves',   icon: 'book-open-variant',   route: undefined   },
+};
+
+const DEFAULT_RESOURCES: PinnedResource[] = [
+  RESOURCE_MAP.respiracion,
+  RESOURCE_MAP.gratitud,
 ];
 
 const mockRecommendation = {
@@ -78,6 +92,7 @@ export default function InicioScreen() {
   const { user } = useAuth();
   const [nextSession, setNextSession] = useState<NextSession | null>(null);
   const [unreadNotifCount, setUnreadNotifCount] = useState(0);
+  const [displayResources, setDisplayResources] = useState<PinnedResource[]>(DEFAULT_RESOURCES);
 
   const a1 = useRef(new Animated.Value(0)).current;
   const a2 = useRef(new Animated.Value(0)).current;
@@ -119,6 +134,23 @@ export default function InicioScreen() {
       .subscribe();
 
     return () => { supabase.removeChannel(channel); };
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('saved_resources')
+      .select('resource_id')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(2)
+      .then(({ data }) => {
+        if (!data || data.length === 0) return;
+        const mapped = data
+          .map(r => RESOURCE_MAP[r.resource_id as string])
+          .filter(Boolean) as PinnedResource[];
+        if (mapped.length > 0) setDisplayResources(mapped);
+      });
   }, [user]);
 
   useEffect(() => {
@@ -279,19 +311,22 @@ export default function InicioScreen() {
           <Animated.View style={fadeUp(a4)}>
             <Text style={[s.sectionTitle, { marginTop: 20 }]}>Recursos útiles</Text>
             <View style={s.resourcesRow}>
-              {pinnedResources.map((r, i) => (
+              {displayResources.map((r, i) => (
                 <ScaleCard
                   key={r.id}
                   style={s.resourceCard}
                   onPress={r.route ? () => router.push(r.route as any) : undefined}
                 >
-                  <View style={[s.resourceIconCircle, { backgroundColor: RESOURCE_BUBBLE_BG[i] }]}>
-                    <MaterialCommunityIcons name={r.icon as any} size={22} color={RESOURCE_ICON_COLOR[i]} />
+                  <View style={[s.resourceIconCircle, { backgroundColor: RESOURCE_BUBBLE_BG[i % 2] }]}>
+                    <MaterialCommunityIcons name={r.icon as any} size={22} color={RESOURCE_ICON_COLOR[i % 2]} />
                   </View>
                   <Text style={s.resourceLabel} numberOfLines={2}>{r.title}</Text>
-                  <View style={s.resourcePlusBtn}>
+                  <TouchableOpacity
+                    style={s.resourcePlusBtn}
+                    onPress={() => router.push('/(tabs)/recursos')}
+                    hitSlop={6}>
                     <MaterialCommunityIcons name="plus" size={14} color="#87835C" />
-                  </View>
+                  </TouchableOpacity>
                 </ScaleCard>
               ))}
             </View>

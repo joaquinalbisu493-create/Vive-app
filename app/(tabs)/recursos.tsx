@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -13,6 +14,8 @@ import { ViveFonts, TAB_BAR_CLEARANCE } from '@/constants/theme';
 import { ScaleCard } from '@/components/ScaleCard';
 import { FirstTimeTooltip } from '@/components/FirstTimeTooltip';
 import { AppBg } from '@/components/ui/AppBg';
+import { useAuth } from '@/context/AuthContext';
+import { supabase } from '@/lib/supabase';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
@@ -50,13 +53,28 @@ const COACH_RESOURCES: CoachResource[] = [
 ];
 
 // ─── ToolCard ─────────────────────────────────────────────────────────────────
-function ToolCard({ tool }: { tool: Tool }) {
+function ToolCard({
+  tool,
+  saved,
+  onSave,
+}: {
+  tool: Tool;
+  saved: boolean;
+  onSave: () => void;
+}) {
   const router = useRouter();
   return (
     <ScaleCard
       style={s.toolCard}
       onPress={() => { if (tool.route) router.push(tool.route as any); }}
       activeOpacity={0.88}>
+      <TouchableOpacity style={s.bookmarkBtn} onPress={onSave} hitSlop={8}>
+        <Ionicons
+          name={saved ? 'bookmark' : 'bookmark-outline'}
+          size={15}
+          color={saved ? '#C1694F' : 'rgba(135,131,92,0.45)'}
+        />
+      </TouchableOpacity>
       <Ionicons name={tool.icon} size={28} color="#565E32" />
       <Text style={s.toolLabel}>{tool.label}</Text>
     </ScaleCard>
@@ -81,6 +99,44 @@ function CoachResourceCard({ resource }: { resource: CoachResource }) {
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 export default function RecursosScreen() {
+  const router = useRouter();
+  const { user } = useAuth();
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from('saved_resources')
+      .select('resource_id')
+      .eq('user_id', user.id)
+      .then(({ data }) => {
+        if (data) setSavedIds(new Set(data.map(r => r.resource_id as string)));
+      });
+  }, [user]);
+
+  async function toggleSave(resourceId: string) {
+    if (!user) return;
+    const isSaved = savedIds.has(resourceId);
+    setSavedIds(prev => {
+      const next = new Set(prev);
+      if (isSaved) next.delete(resourceId); else next.add(resourceId);
+      return next;
+    });
+    if (isSaved) {
+      await supabase
+        .from('saved_resources')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('resource_id', resourceId);
+    } else {
+      await supabase
+        .from('saved_resources')
+        .insert({ user_id: user.id, resource_id: resourceId });
+    }
+  }
+
+  const savedTools = TOOLS.filter(t => savedIds.has(t.id));
+
   return (
     <AppBg>
       <StatusBar barStyle="dark-content" />
@@ -98,6 +154,33 @@ export default function RecursosScreen() {
           showsVerticalScrollIndicator={false}>
 
           <Text style={s.pageTitle}>Recursos</Text>
+
+          {/* Mis recursos */}
+          {savedTools.length > 0 && (
+            <>
+              <Text style={s.sectionTitle}>Mis recursos</Text>
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={s.savedScroll}
+                contentContainerStyle={s.savedContent}>
+                {savedTools.map(tool => (
+                  <TouchableOpacity
+                    key={tool.id}
+                    style={s.savedChip}
+                    onPress={() => { if (tool.route) router.push(tool.route as any); }}
+                    activeOpacity={0.8}>
+                    <Ionicons name={tool.icon} size={14} color="#C1694F" />
+                    <Text style={s.savedChipLabel}>{tool.label}</Text>
+                    <TouchableOpacity onPress={() => toggleSave(tool.id)} hitSlop={6}>
+                      <Ionicons name="close-circle" size={15} color="rgba(135,131,92,0.40)" />
+                    </TouchableOpacity>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+              <View style={{ height: 24 }} />
+            </>
+          )}
 
           {/* Recomendados por tu coach */}
           {COACH_RESOURCES.length > 0 && (
@@ -117,7 +200,12 @@ export default function RecursosScreen() {
             {[0, 1, 2].map(row => (
               <View key={row} style={s.gridRow}>
                 {TOOLS.slice(row * 3, row * 3 + 3).map(tool => (
-                  <ToolCard key={tool.id} tool={tool} />
+                  <ToolCard
+                    key={tool.id}
+                    tool={tool}
+                    saved={savedIds.has(tool.id)}
+                    onSave={() => toggleSave(tool.id)}
+                  />
                 ))}
               </View>
             ))}
@@ -189,6 +277,27 @@ const s = StyleSheet.create({
     lineHeight: 16,
   },
 
+  // ── Mis recursos ──────────────────────────────────────────────────────────
+  savedScroll: { marginHorizontal: -20 },
+  savedContent: { paddingHorizontal: 20, gap: 8, flexDirection: 'row' },
+  savedChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: 'rgba(255,248,240,0.55)',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(193,105,79,0.25)',
+  },
+  savedChipLabel: {
+    fontFamily: ViveFonts.medium,
+    fontSize: 12,
+    color: '#565E32',
+  },
+
+  // ── Herramientas grid ─────────────────────────────────────────────────────
   grid: { gap: 10 },
   gridRow: { flexDirection: 'row', gap: 10 },
   toolCard: {
@@ -210,5 +319,14 @@ const s = StyleSheet.create({
     color: '#565E32',
     textAlign: 'center',
     lineHeight: 15,
+  },
+  bookmarkBtn: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    width: 22,
+    height: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
