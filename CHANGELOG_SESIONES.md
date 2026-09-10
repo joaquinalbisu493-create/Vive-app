@@ -19,7 +19,7 @@
 - 📌 **SCHEMA.md ya no tiene la sección PENDIENTE**: `ai_usage` quedó marcada CORRIDA y VERIFICADA el 10/09/2026. Era la única sección del archivo que describía algo inexistente.
 
 **Pendiente para la próxima sesión:**
-- 🔴 **Prender el CAPTCHA (paso A.3)** — lo único que falta del anti-abuso, y necesita mano de Joaquín: (1) confirmar que la build distribuida lleva la site key (ya está en EAS), (2) tener la Secret Key de Turnstile a mano, (3) prenderlo (dashboard o el `curl` de Management API que quedó en el runbook: `security_captcha_enabled+provider=turnstile+secret`), (4) correr el `curl` de A.4 que tiene que dar **400**. El orden es sagrado: prenderlo antes de la build con token deja a la gente sin poder entrar.
+- 🔴 **Prender el CAPTCHA (paso A.3) — ANDRE.** Es lo único que falta del anti-abuso, y las dos piezas las tiene él: la **Secret Key de Turnstile** (vive en Cloudflare, no en el repo) y el estado de la **build distribuida** (que ya lleve la site key de EAS). Pasos: (1) confirmar la build distribuida con la site key, (2) prenderlo —dashboard, o el `curl` de Management API que quedó en el runbook: `security_captcha_enabled+provider=turnstile+secret`—, (3) correr el `curl` de A.4 que tiene que dar **400**. El orden es sagrado: prenderlo antes de que la gente esté en la build con token la deja sin poder entrar.
 - 📌 Siguen en pie los tres avisos asumidos del muro del mail y la decisión de `CHECKOUT_HABILITADO` cuando vuelvan las pruebas de A5.
 
 ---
