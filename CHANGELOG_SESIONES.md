@@ -4,6 +4,22 @@
 > Al terminar tu sesión, agregá tu propia entrada arriba de todo (orden cronológico inverso).
 
 ---
+## 2026-09-10 — Joaquín (el tope de la IA queda VIVO: SQL corrido y función deployada)
+
+**Tocado:** `SCHEMA.md`, `CHANGELOG_SESIONES.md`. En producción: `scripts/add-ai-usage.sql` corrido y `weekly-reflection` deployada (v28). Ningún cambio de código de app.
+
+**Resumen — se cerró el pendiente 🔴 #1 de la sesión 223 cont. 4: hasta hoy la IA no tenía tope.**
+
+- 🟢 **`scripts/add-ai-usage.sql` corrido contra la base** con `supabase db query --linked`, y verificado con sus 4 chequeos: tabla `ai_usage` con RLS prendido, **0 políticas**, **0 permisos** para `anon`/`authenticated`, y `registrar_uso_ia()` sumando y cortando —`(true,1)` en la 1ra llamada y `(false,2)` en la 2da con tope 1—. La fila de prueba quedó borrada.
+- 🟢 **`weekly-reflection` deployada (v27 → v28)** con `--use-api` (no hay Docker/Deno local). **El orden se respetó**: SQL primero, función después. Al revés, la v28 sin la RPC daba 503 y la tarjeta perdía la IA para todos.
+- 📌 **El tope quedó en el default 20/día**: `REFLECTION_TOPE_DIARIO` no está seteado como secret, así que la función usa su default. Se ajusta con `supabase secrets set` sin redeploy cuando se quiera.
+- 📌 **SCHEMA.md ya no tiene la sección PENDIENTE**: `ai_usage` quedó marcada CORRIDA y VERIFICADA el 10/09/2026. Era la única sección del archivo que describía algo inexistente.
+
+**Pendiente para la próxima sesión:**
+- 🔴 **CAPTCHA — falta la parte de dashboard** (viene de la sesión 223 cont. 3), en orden: build distribuido → prender en Supabase con la Secret Key → bajar rate limits. El `curl` de verificación tiene que dar **400**. Todo en `docs/anti-abuso-altas.md`.
+- 📌 Siguen en pie los tres avisos asumidos del muro del mail y la decisión de `CHECKOUT_HABILITADO` cuando vuelvan las pruebas de A5.
+
+---
 ## 2026-09-09 — Andre (sesión 223 cont. 4 · el tope de la IA: lo que se cae no es el servidor, es la factura)
 
 **Tocado:** `scripts/add-ai-usage.sql` (nuevo), `supabase/functions/weekly-reflection/index.ts`, `SCHEMA.md`. **575 tests**, `tsc` limpio. ⚠️ **SQL sin correr y función sin deployar.**
