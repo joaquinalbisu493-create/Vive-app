@@ -4,11 +4,14 @@
 > Al terminar tu sesión, agregá tu propia entrada arriba de todo (orden cronológico inverso).
 
 ---
-## 2026-09-10 — Joaquín (el tope de la IA queda VIVO: SQL corrido y función deployada)
+## 2026-09-10 — Joaquín (el tope de la IA queda VIVO + rate limits del anti-abuso aplicados)
 
-**Tocado:** `SCHEMA.md`, `CHANGELOG_SESIONES.md`. En producción: `scripts/add-ai-usage.sql` corrido y `weekly-reflection` deployada (v28). Ningún cambio de código de app.
+**Tocado:** `SCHEMA.md`, `docs/anti-abuso-altas.md`, `CHANGELOG_SESIONES.md`. En producción: `scripts/add-ai-usage.sql` corrido, `weekly-reflection` deployada (v28), y config de auth ajustada (rate limits + anónimos). Ningún cambio de código de app.
 
-**Resumen — se cerró el pendiente 🔴 #1 de la sesión 223 cont. 4: hasta hoy la IA no tenía tope.**
+**Resumen — se cerró el pendiente 🔴 #1 de la sesión 223 cont. 4 (tope de la IA) y avanzó el paso B del anti-abuso.**
+
+- 🟢 **Rate limits del alta APLICADOS** (paso B de `docs/anti-abuso-altas.md`), vía Management API: `rate_limit_verify 30→10`, `rate_limit_otp 30→6`. 🔴 **Corrección al plan**: la API rechaza `rate_limit_anonymous_users=0` (mínimo 1); el "0 anónimos" se logró **apagando la feature** (`external_anonymous_users_enabled=false`), que es más fuerte. Todo verificado contra la config.
+- 📌 **El CAPTCHA sigue APAGADO a propósito** (paso A.3): necesita la Secret Key de Turnstile + confirmar la build distribuida. La site key ya está en EAS. El runbook quedó con el `curl` exacto para prenderlo por Management API cuando estén las dos cosas.
 
 - 🟢 **`scripts/add-ai-usage.sql` corrido contra la base** con `supabase db query --linked`, y verificado con sus 4 chequeos: tabla `ai_usage` con RLS prendido, **0 políticas**, **0 permisos** para `anon`/`authenticated`, y `registrar_uso_ia()` sumando y cortando —`(true,1)` en la 1ra llamada y `(false,2)` en la 2da con tope 1—. La fila de prueba quedó borrada.
 - 🟢 **`weekly-reflection` deployada (v27 → v28)** con `--use-api` (no hay Docker/Deno local). **El orden se respetó**: SQL primero, función después. Al revés, la v28 sin la RPC daba 503 y la tarjeta perdía la IA para todos.
@@ -16,7 +19,7 @@
 - 📌 **SCHEMA.md ya no tiene la sección PENDIENTE**: `ai_usage` quedó marcada CORRIDA y VERIFICADA el 10/09/2026. Era la única sección del archivo que describía algo inexistente.
 
 **Pendiente para la próxima sesión:**
-- 🔴 **CAPTCHA — falta la parte de dashboard** (viene de la sesión 223 cont. 3), en orden: build distribuido → prender en Supabase con la Secret Key → bajar rate limits. El `curl` de verificación tiene que dar **400**. Todo en `docs/anti-abuso-altas.md`.
+- 🔴 **Prender el CAPTCHA (paso A.3)** — lo único que falta del anti-abuso, y necesita mano de Joaquín: (1) confirmar que la build distribuida lleva la site key (ya está en EAS), (2) tener la Secret Key de Turnstile a mano, (3) prenderlo (dashboard o el `curl` de Management API que quedó en el runbook: `security_captcha_enabled+provider=turnstile+secret`), (4) correr el `curl` de A.4 que tiene que dar **400**. El orden es sagrado: prenderlo antes de la build con token deja a la gente sin poder entrar.
 - 📌 Siguen en pie los tres avisos asumidos del muro del mail y la decisión de `CHECKOUT_HABILITADO` cuando vuelvan las pruebas de A5.
 
 ---
