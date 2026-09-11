@@ -85,6 +85,17 @@ conflicto de `SCHEMA.md`/`CHANGELOG` contra main, sin force-push).
 
 ---
 
+## 5. 🟡 Leer un borrador de copy (voz de Sofía) — NO bloqueante
+
+Salió de una consulta al council: los recursos de **respiración y sonidos** se
+sentían flacos. En vez de armar una "biblioteca" (que el council marcó como peso
+/ riesgo de volverse enciclopedia), la propuesta barata es sumar **una frase de
+contexto** a cada uno + un puente suave al coach. Dejé un borrador para que le des
+el ok a la voz antes de aplicarlo: **`docs/borrador-copy-recursos.md`**. No corre
+prisa ni depende de accesos — es solo tu criterio de voz.
+
+---
+
 ## Lo que ya quedó cerrado hoy (para contexto)
 
 - ✅ IA con tope por persona/día + rate limits (en producción; PR #1 en main).
