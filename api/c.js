@@ -3,7 +3,7 @@
 // 🔴 Por qué existe: el link de cada profesional se manda por WhatsApp, y
 // WhatsApp arma la vista previa leyendo el HTML del servidor, sin ejecutar
 // JavaScript. La página pinta el nombre y la foto con JavaScript, así que la
-// vista previa salía igual para todos ("Reservá tu sesión en Vita") y sin
+// vista previa salía igual para todos ("Reservá tu sesión en Sere") y sin
 // imagen. Un link que llega por chat pidiendo datos y no muestra de quién es
 // se parece demasiado a una estafa.
 //
@@ -98,10 +98,10 @@ module.exports = async function handler(req, res) {
       const perfil = Array.isArray(coach.profiles) ? coach.profiles[0] : coach.profiles;
       const nombre = (perfil && perfil.name) || 'Profesional';
       const prof = profesion(coach.profesion, perfil && perfil.gender);
-      const titulo = `${nombre} · ${prof} en Vita`;
+      const titulo = `${nombre} · ${prof} en Sere`;
       const desc = 'Sesiones online por videollamada. Conocé cómo trabaja, elegí un horario y reservá, con garantía de primera sesión.';
 
-      html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapar(`${nombre} — Vita`)}</title>`);
+      html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapar(`${nombre} — Sere`)}</title>`);
       html = cambiarMeta(html, 'name', 'description', `${titulo}. ${desc}`);
       html = cambiarMeta(html, 'property', 'og:title', titulo);
       html = cambiarMeta(html, 'property', 'og:description', desc);

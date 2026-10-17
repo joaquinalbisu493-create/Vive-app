@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F7EFE4">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<title>Reservá tu sesión — Vita</title>
+<title>Reservá tu sesión — Sere</title>
 
 <!-- 🔴 La vista previa de WhatsApp es parte del producto, no un detalle de SEO.
      El link llega por chat pidiendo datos, y en Argentina eso tiene la forma
@@ -16,13 +16,13 @@
      personalizarlas, `api/c.js` (01/10/2026) devuelve este mismo HTML con
      título, descripción e imagen del profesional ya resueltos. Estas de acá
      son las de reserva: las usa si la base no contesta o el slug no existe. -->
-<meta name="description" content="Reservá una sesión online con un profesional del bienestar en Vita.">
+<meta name="description" content="Reservá una sesión online con un profesional del bienestar en Sere.">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Vita">
-<meta property="og:title" content="Reservá tu sesión en Vita">
+<meta property="og:site_name" content="Sere">
+<meta property="og:title" content="Reservá tu sesión en Sere">
 <meta property="og:description" content="Sesiones online con profesionales del bienestar. Elegís horario y reservás.">
 <meta property="og:url" content="https://www.vitaapp.com.ar/c">
-<meta property="og:image" content="https://www.vitaapp.com.ar/img/og-vita.jpg">
+<meta property="og:image" content="https://www.vitaapp.com.ar/img/og-sere.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -207,7 +207,7 @@
 <body>
 
 <header class="top">
-  <a class="wordmark" href="/" aria-label="Vita, ir al inicio"><svg class="vmark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="34" r="26"/><circle cx="31.52" cy="66" r="26"/><circle cx="68.48" cy="66" r="26"/></svg>vita</a>
+  <a class="wordmark" href="/" aria-label="Sere, ir al inicio"><svg class="vmark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="34" r="26"/><circle cx="31.52" cy="66" r="26"/><circle cx="68.48" cy="66" r="26"/></svg>sere</a>
 </header>
 
 <main>
@@ -224,7 +224,7 @@
    <div class="principal">
     <!-- ── Portada: quién es y por qué confiar ──────────────────────────────
          Mismo orden que el perfil de la app (ProfesionalScreen): identidad,
-         reseñas, lo que Vita revisó y la garantía. Antes eran nombre, $1 y
+         reseñas, lo que Sere revisó y la garantía. Antes eran nombre, $1 y
          horarios: nada que le dijera a un cliente nuevo por qué confiar. -->
     <section class="tarjeta">
       <div class="perfil">
@@ -239,7 +239,7 @@
       </div>
 
       <div class="sellos">
-        <span class="sello"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m23 12-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.69 3.1 5.5l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82L8.6 22.5l3.4-1.47 3.4 1.46 1.89-3.19 3.61-.82-.34-3.69L23 12zm-12.91 4.72-3.8-3.81 1.48-1.48 2.32 2.33 5.85-5.87 1.48 1.48-7.33 7.35z"/></svg>Perfil revisado por Vita</span>
+        <span class="sello"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m23 12-2.44-2.79.34-3.69-3.61-.82-1.89-3.2L12 2.96 8.6 1.5 6.71 4.69 3.1 5.5l.34 3.7L1 12l2.44 2.79-.34 3.7 3.61.82L8.6 22.5l3.4-1.47 3.4 1.46 1.89-3.19 3.61-.82-.34-3.69L23 12zm-12.91 4.72-3.8-3.81 1.48-1.48 2.32 2.33 5.85-5.87 1.48 1.48-7.33 7.35z"/></svg>Perfil revisado por Sere</span>
         <span class="sello" id="encuadre" hidden><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg><span id="encuadreTxt"></span></span>
       </div>
       <details class="encuadre" id="encuadreInfo" hidden>
@@ -367,7 +367,7 @@
   </article>
 
   <p class="pie">
-    <a href="/">Sobre Vita</a> ·
+    <a href="/">Sobre Sere</a> ·
     <a href="/legal/terminos">Términos</a> ·
     <a href="/legal/privacidad">Privacidad</a>
   </p>
@@ -507,7 +507,7 @@ async function cargar() {
   const nombre = (perfil && perfil.name) || 'Profesional';
   nombreCoach = nombre.split(' ')[0] || nombre;
 
-  document.title = `${nombre} — Vita`;
+  document.title = `${nombre} — Sere`;
 
   if (perfil && perfil.avatar_url) {
     $('foto').src = perfil.avatar_url;
@@ -587,8 +587,8 @@ async function cargarFormacion(coachId) {
   $('encuadre').className = conMatricula ? 'sello pro' : 'sello';
   $('encuadreTxt').textContent = conMatricula ? 'Matrícula verificada' : 'Sesiones de acompañamiento';
   $('encuadreTexto').textContent = conMatricula
-    ? 'Vita chequeó su matrícula habilitante. El número está más abajo, en Formación, y podés verificarlo por tu cuenta en el colegio profesional que corresponda.'
-    : 'Vita no verificó una matrícula habilitante para este profesional, así que sus sesiones son de acompañamiento. Más abajo, en Formación, está todo lo que sí verificamos.';
+    ? 'Sere chequeó su matrícula habilitante. El número está más abajo, en Formación, y podés verificarlo por tu cuenta en el colegio profesional que corresponda.'
+    : 'Sere no verificó una matrícula habilitante para este profesional, así que sus sesiones son de acompañamiento. Más abajo, en Formación, está todo lo que sí verificamos.';
   mostrar('encuadre'); mostrar('encuadreInfo');
 
   if (!creds.length) return;
@@ -618,10 +618,10 @@ async function cargarResenas(profileId) {
       '&is_private=eq.false&select=rating,comment&order=created_at.desc', { headers: { apikey: SUPABASE_ANON_KEY } });
     if (r.ok) rs = await r.json();
   } catch (e) { console.error('[resenas]', e); }
-  // Si la consulta falló no se dice nada: "Nuevo en Vita" sobre alguien con
+  // Si la consulta falló no se dice nada: "Nuevo en Sere" sobre alguien con
   // veinte reseñas sería falso.
   if (!rs) return;
-  if (!rs.length) { $('resenasLinea').textContent = 'Nuevo en Vita'; mostrar('resenasLinea'); return; }
+  if (!rs.length) { $('resenasLinea').textContent = 'Nuevo en Sere'; mostrar('resenasLinea'); return; }
   const prom = rs.reduce((a, r) => a + r.rating, 0) / rs.length;
   $('resenasLinea').innerHTML = '';
   const st = document.createElement('span'); st.className = 'estrella'; st.textContent = '★';

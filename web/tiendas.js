@@ -27,7 +27,7 @@
   var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdneWdpaWhobmtqcmVycGluaGhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1Mjc5NjEsImV4cCI6MjA5NzEwMzk2MX0.lHPjyKjJIYD_lUTCF7uMBCKj9tCK_67OyrIFkCLQ-BI';
   var REF = (new URLSearchParams(location.search).get('ref') || '').slice(0, 32) || null;
   var AVISO = {
-    persona: { boton: 'Avisame', nota: 'Solo para avisarte cuando Vita esté en las tiendas.', listo: 'Listo. Te escribimos a {mail} cuando Vita esté en las tiendas.' },
+    persona: { boton: 'Avisame', nota: 'Solo para avisarte cuando Sere esté en las tiendas.', listo: 'Listo. Te escribimos a {mail} cuando Sere esté en las tiendas.' },
     profesional: { boton: 'Quiero sumarme', nota: 'Solo lo usamos para eso, no te mandamos publicidad.', listo: 'Gracias. Te escribimos a {mail} para contarte cómo sumarte.' }
   };
   var nAviso = 0;
