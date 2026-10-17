@@ -203,7 +203,7 @@ export default function OnboardingScreen2() {
     // 🔴 La elección se guardaba en ningún lado: era estado local que solo
     // servía para elegir la ruta y se perdía al salir de la pantalla. Le
     // pedíamos a la persona que se declarara en el peor momento —antes de saber
-    // qué es Vita— y después la app no se acordaba de nada. Ahora decide si le
+    // qué es Sere— y después la app no se acordaba de nada. Ahora decide si le
     // mostramos la guía contextual.
     //
     // ⚠️ Los tres universos se guardan como 'guide' y no como tres caminos

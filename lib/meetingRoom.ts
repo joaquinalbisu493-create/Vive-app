@@ -91,7 +91,7 @@ export async function getJoinUrl(bookingId: string): Promise<Entrada> {
  * si vale la pena recuperar el "no salir de la app".
  *
  * Así que en iOS se abre **Safari de verdad** con `Linking.openURL`. El costo es
- * real y conocido: la persona sale de Vita y vuelve sola. Se paga igual, porque
+ * real y conocido: la persona sale de Sere y vuelve sola. Se paga igual, porque
  * una sesión de terapia muda es peor que un cambio de app — es, textual, la
  * queja técnica más repetida contra el competidor que hace lo mismo
  * (`docs/competencia-selia.md` §24.3).

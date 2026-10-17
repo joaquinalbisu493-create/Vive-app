@@ -13,7 +13,7 @@
 // están bien para lo que son. Lo que no había era el punto donde la app admite
 // su límite.
 //
-// 📌 Segunda razón, de la investigación del 01/09: si Vita integra la cadena de
+// 📌 Segunda razón, de la investigación del 01/09: si Sere integra la cadena de
 // comercialización del art. 40 de la Ley 24.240 —y el precedente Mercado Libre
 // dice que probablemente sí—, este mecanismo es parte de la **diligencia**, no
 // un detalle de tono. Ver `docs/encuadre-salud-y-responsabilidad.md`.
@@ -21,7 +21,7 @@
 // ── 🔴 Por qué el umbral NO sale de un instrumento clínico ───────────────────
 // La tentación era tomar el corte de una escala estándar (el PHQ-9 usa "más de
 // la mitad de los días durante dos semanas"). **Sería un error**, y no por
-// prolijidad: un umbral derivado de un instrumento diagnóstico convierte a Vita
+// prolijidad: un umbral derivado de un instrumento diagnóstico convierte a Sere
 // en una herramienta de screening, que es exactamente la línea que
 // `encuadre-salud-y-responsabilidad.md` dice no cruzar — ahí la derivación se
 // vuelve triage.

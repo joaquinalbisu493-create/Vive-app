@@ -407,7 +407,7 @@ export default function CoachRecursoNuevoScreen() {
               {declared && <Ionicons name="checkmark" size={14} color="#fff" />}
             </View>
             <Text style={s.declaredText}>
-              Declaro que este contenido es de mi autoría y acepto las reglas de contenido de Vita.
+              Declaro que este contenido es de mi autoría y acepto las reglas de contenido de Sere.
             </Text>
           </TouchableOpacity>
 

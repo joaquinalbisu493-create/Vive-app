@@ -50,7 +50,7 @@ describe('recomendarDesdeQuiz', () => {
     const r = recomendarDesdeQuiz([sinMatricula], PIDE);
     expect(r.hayCoincidenciaExacta).toBe(false);
     const rec = r.recomendaciones[0];
-    expect(rec.razones).not.toContain('Tiene matrícula verificada por Vita');
+    expect(rec.razones).not.toContain('Tiene matrícula verificada por Sere');
     expect(rec.diferencias).toContain('No figura como psicólogo/a con matrícula verificada');
   });
 

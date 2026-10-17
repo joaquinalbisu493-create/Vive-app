@@ -115,7 +115,7 @@ const fadeUp = (anim: Animated.Value) => ({
  *   · quien se equivoca al tipear su dirección queda con una cuenta que **no
  *     puede recuperar nunca** —`resetPassword` manda el mail a una casilla que
  *     no existe— y sin forma de enterarse;
- *   · Vita aprueba profesionales sin haber comprobado que la casilla desde la
+ *   · Sere aprueba profesionales sin haber comprobado que la casilla desde la
  *     que se postulan sea suya.
  *
  * 🔴 "Confirm email" DE SUPABASE, PRENDIDO DESDE EL 24/09/2026. Antes estaba

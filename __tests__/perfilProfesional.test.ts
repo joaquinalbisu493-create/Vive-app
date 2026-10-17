@@ -12,9 +12,9 @@ describe('firmaDeResena', () => {
   });
 
   it('sin nombre usable firma genérico', () => {
-    expect(firmaDeResena(null)).toBe('Alguien de Vita');
-    expect(firmaDeResena('   ')).toBe('Alguien de Vita');
-    expect(firmaDeResena('Usuario eliminado')).toBe('Alguien de Vita');
+    expect(firmaDeResena(null)).toBe('Alguien de Sere');
+    expect(firmaDeResena('   ')).toBe('Alguien de Sere');
+    expect(firmaDeResena('Usuario eliminado')).toBe('Alguien de Sere');
   });
 });
 

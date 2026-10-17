@@ -371,7 +371,7 @@ export default function CoachProfileScreen() {
     if (trimmed && hasContactInfo(trimmed)) {
       Alert.alert(
         'Sacá los datos de contacto',
-        'Para tu seguridad y la de los usuarios, la presentación no puede incluir teléfono, redes, mail, links ni datos para pagar por fuera. Mantené la conversación y las reservas dentro de Vita.',
+        'Para tu seguridad y la de los usuarios, la presentación no puede incluir teléfono, redes, mail, links ni datos para pagar por fuera. Mantené la conversación y las reservas dentro de Sere.',
       );
       return;
     }

@@ -1,4 +1,4 @@
-// Isotipo concéntrico de Vita: tres juegos de aros, uno dentro del otro, tejidos
+// Isotipo concéntrico de Sere: tres juegos de aros, uno dentro del otro, tejidos
 // entre sí. Es un dibujo calcado (un solo trazado relleno, regla par-impar), no
 // círculos sueltos: los aros pasan por arriba y por abajo y tienen cortes, así
 // que no se puede rearmar con <Circle>. Sale tal cual de

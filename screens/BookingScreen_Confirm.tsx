@@ -96,7 +96,7 @@ export default function BookingScreen_Confirm() {
   const [metodoPago, setMetodoPago] = useState<'mp' | 'usdt' | 'paypal'>('mp');
   // Pago abierto FUERA de la app (app nativa de Mercado Pago, o el browser con
   // PayPal). Guarda la URL del checkout, no solo un booleano, para poder
-  // reabrirla si la persona volvió a Vita sin querer — ver el overlay de espera
+  // reabrirla si la persona volvió a Sere sin querer — ver el overlay de espera
   // más abajo. `null` = no hay ningún pago en curso.
   const [pagoEnCurso, setPagoEnCurso] = useState<string | null>(null);
   // La persona ya volvió del checkout. Cambia lo que dice el cartel de espera:
@@ -319,7 +319,7 @@ export default function BookingScreen_Confirm() {
     const par = { role: 'user', canal: 'mensaje_reserva', senal, coach_id: coachProfileIdParam ?? null, user_id: user?.id ?? null };
     Alert.alert(
       '¿Compartir datos de contacto?',
-      'Tu mensaje parece incluir datos de contacto o de pago. Si arreglás por fuera de Vita, perdés las protecciones de la app: el reembolso, la garantía y el registro de la sesión.',
+      'Tu mensaje parece incluir datos de contacto o de pago. Si arreglás por fuera de Sere, perdés las protecciones de la app: el reembolso, la garantía y el registro de la sesión.',
       [
         { text: 'Editar', style: 'cancel', onPress: () => registrarEvento('mensaje_contacto_detectado', { ...par, sent_anyway: false }) },
         {
@@ -1396,11 +1396,11 @@ export default function BookingScreen_Confirm() {
                 <>
                   <Text style={s.esperaTitle}>Terminá el pago en {nombrePasarela}</Text>
                   <Text style={s.esperaDesc}>
-                    Cuando lo completes, volvé a Vita y tu reserva ya va a estar confirmada.
+                    Cuando lo completes, volvé a Sere y tu reserva ya va a estar confirmada.
                   </Text>
                 </>
               )}
-              {/* La app de MP a veces vuelve a Vita sin pagar (un back de más, una
+              {/* La app de MP a veces vuelve a Sere sin pagar (un back de más, una
                   notificación en el medio). Sin esto, la única salida era
                   abandonar la reserva y empezarla de nuevo. */}
               <TouchableOpacity

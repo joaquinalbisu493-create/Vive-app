@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveFonts } from '@/constants/theme';
 
-// La marca de "matrícula verificada por Vita".
+// La marca de "matrícula verificada por Sere".
 //
 // Un componente y no cuatro copias: aparece en el buscador, en el deck de
 // Conexiones, en su lista de resultados y en la confirmación de reserva. Con

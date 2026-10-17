@@ -120,7 +120,7 @@ describe('encuadreDeSesion', () => {
     expect(e.etiqueta).toBe('Matrícula verificada');
   });
 
-  it('nunca dice "tratamiento" — Vita no caracteriza la prestación (T&C §5)', () => {
+  it('nunca dice "tratamiento" — Sere no caracteriza la prestación (T&C §5)', () => {
     for (const e of [encuadreDeSesion([]), encuadreDeSesion([cred('matricula')])]) {
       expect(e.etiqueta.toLowerCase()).not.toContain('tratamiento');
     }

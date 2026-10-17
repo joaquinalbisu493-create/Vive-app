@@ -228,7 +228,7 @@ export function alertasDeAbuso(input: {
   const { otrasCuentas, garantiasDeOtrasCuentas } = input;
   if (garantiasDeOtrasCuentas > 0) {
     return [
-      `la misma cuenta de Mercado Pago ya pagó reservas de ${otrasCuentas} ${otrasCuentas === 1 ? 'otra cuenta' : 'otras cuentas'} de Vita, que ya ${garantiasDeOtrasCuentas === 1 ? 'usó la garantía una vez' : `usaron la garantía ${garantiasDeOtrasCuentas} veces`}. Puede ser alguien con varias cuentas, o una familia que comparte la tarjeta`,
+      `la misma cuenta de Mercado Pago ya pagó reservas de ${otrasCuentas} ${otrasCuentas === 1 ? 'otra cuenta' : 'otras cuentas'} de Sere, que ya ${garantiasDeOtrasCuentas === 1 ? 'usó la garantía una vez' : `usaron la garantía ${garantiasDeOtrasCuentas} veces`}. Puede ser alguien con varias cuentas, o una familia que comparte la tarjeta`,
     ];
   }
   return [];

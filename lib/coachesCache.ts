@@ -15,10 +15,10 @@ export type CachedCoach = {
   // Extended fields — present when loaded via prefetchCoaches, optional for
   // screens that build CachedCoach inline (e.g. search3 fallback query)
   verified?: boolean;
-  /** Tiene una matrícula VERIFICADA por Vita (`coaches.has_matricula`, derivada
+  /** Tiene una matrícula VERIFICADA por Sere (`coaches.has_matricula`, derivada
    *  por trigger de `coach_credentials`). NO dice de qué profesión: el título es
    *  texto libre y una matrícula puede ser de psicología, nutrición u otra cosa.
-   *  Solo dice que hay una y que Vita la chequeó. */
+   *  Solo dice que hay una y que Sere la chequeó. */
   hasMatricula?: boolean;
   /** De qué profesión es la matrícula verificada (`coaches.profesion`, derivada
    *  por la base). Lo único que decide "Psicólogo"/"Nutricionista". */

@@ -26,7 +26,7 @@ import { anotar, cronometro } from '@/lib/analytics';
 
 // Bienvenida "el puente" (07/10/2026, idea de Andre). Son las dos diapositivas
 // del pitch de Feria 21 ("La ayuda existe. Falta el puente." y "Ese puente es
-// Vita"), en una sola pantalla y con el toque como bisagra:
+// Sere"), en una sola pantalla y con el toque como bisagra:
 //
 //   1. Fondo verde bosque. "La ayuda existe. Falta el puente." Dos orillas,
 //      "Vos" (terracota) y "La ayuda" (durazno). Entre las dos, una soga floja
@@ -56,7 +56,7 @@ import { anotar, cronometro } from '@/lib/analytics';
 //      dibujaba aparte. Ahora el arco ES el círculo: es una sola línea que
 //      cambia de forma. También es más lento y sin rebote.
 //
-// 📌 Colores, geometría y tiempos salen del artifact "Pitch Vita · Feria 21"
+// 📌 Colores, geometría y tiempos salen del artifact "Pitch Sere · Feria 21"
 // (diapositivas `puente` y `puentevita`). Si cambian allá, cambian acá. Lo que
 // se adaptó: el arco es más alto (un teléfono es angosto), no hay espera antes
 // de que empiece a dibujarse (acá responde a un toque), se suma el lema, y el
@@ -541,7 +541,7 @@ export default function OnboardingPuente() {
         onPressIn={alApoyar}
         accessible
         accessibilityRole="button"
-        accessibilityLabel="La ayuda existe, falta el puente. Ese puente es Vita. Empezar"
+        accessibilityLabel="La ayuda existe, falta el puente. Ese puente es Sere. Empezar"
         accessibilityActions={[{ name: 'activate' }]}
         onAccessibilityAction={alActivar}
       >
@@ -638,7 +638,7 @@ export default function OnboardingPuente() {
         {/* Un solo lugar para leer: la frase → "vita / te acompaña". */}
         <View style={[styles.arriba, { top: textoY }]} pointerEvents="none">
           <Animated.Text numberOfLines={1} style={[styles.frase, styles.encima, { fontSize: fraseSize }, fraseStyle]}>{FRASE_1}</Animated.Text>
-          <Animated.Text style={[styles.marca, marcaStyle]}>vita</Animated.Text>
+          <Animated.Text style={[styles.marca, marcaStyle]}>sere</Animated.Text>
           <Animated.Text style={[styles.lema, lemaStyle]}>te acompaña</Animated.Text>
         </View>
 

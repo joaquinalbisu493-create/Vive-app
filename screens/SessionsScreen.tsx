@@ -488,7 +488,7 @@ export default function SessionsScreen() {
       const startDate = new Date(scheduledAtMs(ses.scheduled_date, ses.scheduled_time));
       const dur = ses.duration_minutes ?? 60;
       const endDate = new Date(startDate.getTime() + dur * 60_000);
-      const title = `Sesión con ${ses.coachName} · Vita`;
+      const title = `Sesión con ${ses.coachName} · Sere`;
 
       // Evitar duplicados: si ya existe un evento igual en ese rango, no re-agregar.
       const existing = await Calendar.getEventsAsync([writable.id], startDate, endDate);
@@ -506,7 +506,7 @@ export default function SessionsScreen() {
         endDate,
         // Ver la nota en `SalaScreen`: la URL de una sala privada no deja
         // entrar sin token, y un link que falla es peor que no ponerlo.
-        notes: 'Entrá a la videollamada desde la app Vita, en tu sala con el profesional.',
+        notes: 'Entrá a la videollamada desde la app Sere, en tu sala con el profesional.',
       });
       Alert.alert('Listo', 'La sesión fue agregada a tu calendario');
     } finally {

@@ -7,7 +7,7 @@
  * ✅ **ENCENDIDA el 04/09/2026**, sin consulta paga. El análisis está en
  * `docs/transferencias-internacionales.md` §5 bis y se resume así: **al proveedor
  * no le llega ningún identificador ni seudónimo**, y nada se almacena que ligue
- * una llamada con una persona — pasada la llamada, ni Vita puede reconstruir de
+ * una llamada con una persona — pasada la llamada, ni Sere puede reconstruir de
  * quién era. La Ley 25.326 art. 2 define dato personal como el referido a
  * personas *determinadas o determinables*; una etiqueta de categoría y tres
  * enteros no describen a nadie determinable, así que el art. 12 no se activa.

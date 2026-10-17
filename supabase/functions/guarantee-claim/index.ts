@@ -13,7 +13,7 @@
 // La comisión se resuelve sola y no hay nada que calcular acá: el refund va sin
 // `amount` con el token del coach, así que MP revierte el pago entero incluido
 // el application_fee. Es exactamente lo que §9.3 promete ("se debita de los
-// fondos del Profesional", "Vita no percibe comisión sobre lo reintegrado").
+// fondos del Profesional", "Sere no percibe comisión sobre lo reintegrado").
 //
 // Uso:
 //   POST /guarantee-claim

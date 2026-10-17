@@ -6,7 +6,7 @@ import type { CachedCoach } from './coachesCache';
 // cada uno hacía `sort(...)[0]`, o sea el máximo. Eso tenía tres consecuencias
 // malas, todas del mismo error:
 //
-//   1. El mismo coach ocupaba "Recomendado por Vita" durante semanas, porque el
+//   1. El mismo coach ocupaba "Recomendado por Sere" durante semanas, porque el
 //      criterio era determinístico y no rotaba nunca. El deck dejaba de repartir
 //      exposición y pasaba a ser una tabla de posiciones.
 //   2. Pagaba muchísimo hacer trampa: subir de 4.7 a 4.9 te daba el monopolio de
@@ -21,7 +21,7 @@ import type { CachedCoach } from './coachesCache';
 // mecanismo principal: dos personas distintas ven coaches distintos el mismo día,
 // y la misma persona ve otros al día siguiente.
 //
-// Las barras son PISOS, no podios. "Recomendado" significa "cumple lo que Vita
+// Las barras son PISOS, no podios. "Recomendado" significa "cumple lo que Sere
 // recomienda", que es lo que la etiqueta siempre prometió.
 //
 // `eligible` ya viene gateado por disponibilidad: coachesCache filtra verified +
@@ -32,7 +32,7 @@ export const NEW_MAX_REVIEWS      = 5;   // "nuevo" mientras tenga menos de 5 re
 export const NEW_MAX_AGE_DAYS     = 28;  // …Y menos de 4 semanas. Es un AND, ver isNewCoach.
 export const MIN_REBOOKING_SAMPLE = 5;   // piso de muestra para que rebooking_rate cuente
 
-// Barra de "Recomendado por Vita".
+// Barra de "Recomendado por Sere".
 export const MIN_RECOMMEND_RATING    = 4.5;
 export const MIN_RECOMMEND_REVIEWS   = 3;
 export const MIN_RECOMMEND_REBOOKING = 0.3;  // 30% de los clientes vuelve a reservar
@@ -92,7 +92,7 @@ export function isNewCoach(c: CachedCoach, now: Date = new Date()): boolean {
 }
 
 /**
- * Barra de calidad de "Recomendado por Vita".
+ * Barra de calidad de "Recomendado por Sere".
  *
  * Con muestra suficiente de sesiones completadas, el REAGENDAMIENTO es la señal
  * que manda: una cuenta falsa puede dejar 5★, pero no puede volver a reservar y
@@ -143,9 +143,9 @@ export type DeckEntry = {
 export type AjusteQuiz = (c: CachedCoach) => { encaja: boolean; motivo: string | null };
 
 export const DECK_SLOTS: Record<DeckSlotKey, DeckSlot> = {
-  recomendado: { key: 'recomendado', label: 'Recomendado por Vita', sublabel: 'Cumple la barra de calidad', icon: 'award' },
+  recomendado: { key: 'recomendado', label: 'Recomendado por Sere', sublabel: 'Cumple la barra de calidad', icon: 'award' },
   tendencia:   { key: 'tendencia',   label: 'En tendencia',         sublabel: 'De los más elegidos este mes', icon: 'trending-up' },
-  nuevo:       { key: 'nuevo',       label: 'Nuevo en Vita',        sublabel: 'Recién sumado a la comunidad', icon: 'feather' },
+  nuevo:       { key: 'nuevo',       label: 'Nuevo en Sere',        sublabel: 'Recién sumado a la comunidad', icon: 'feather' },
   economico:   { key: 'economico',   label: 'Opción económica',     sublabel: 'De los más accesibles del tema', icon: 'tag' },
 };
 

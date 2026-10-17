@@ -114,7 +114,7 @@ serve(async (req) => {
     if (g.resultado !== 'avisada') { omitidos += 1; continue }
 
     const title = `Sobre ${g.nombre}`
-    const body = `${g.nombre} volvió a atender en Vita. Si querés, ya podés reservarle de nuevo.`
+    const body = `${g.nombre} volvió a atender en Sere. Si querés, ya podés reservarle de nuevo.`
     const { error: insErr } = await admin.from('notifications').insert({
       recipient_id: g.userId, type: 'profesional_disponible', title, body,
     })

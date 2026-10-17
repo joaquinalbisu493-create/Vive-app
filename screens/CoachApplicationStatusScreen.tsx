@@ -42,7 +42,7 @@ export default function CoachApplicationStatusScreen() {
                 <Text style={s.body}>
                   {specialty === 'Psicólogo/a' || specialty === 'Nutricionista'
                     ? 'Para aprobar tu solicitud necesitamos verificar tu matrícula. Podés subirla ahora desde Formación.'
-                    : 'Podés cargar tu formación y las certificaciones que quieras que Vita verifique.'}
+                    : 'Podés cargar tu formación y las certificaciones que quieras que Sere verifique.'}
                 </Text>
                 <TouchableOpacity style={s.primary} onPress={() => router.push('/coach-credenciales')}>
                   <Text style={s.primaryText}>Cargar formación y credenciales</Text>

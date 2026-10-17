@@ -108,7 +108,7 @@ function MisPagosContent({ userId }: { userId: string | null }) {
               {loading && rows.length > 0 && <ActivityIndicator color={ViveColors.primary} />}
               {rows.length > 0 && (
                 <Text style={s.intro}>
-                  El estado de cada pago y cada devolución, tal como figura en Vita. Esto no es una factura: la sesión la factura tu profesional.
+                  El estado de cada pago y cada devolución, tal como figura en Sere. Esto no es una factura: la sesión la factura tu profesional.
                 </Text>
               )}
             </View>

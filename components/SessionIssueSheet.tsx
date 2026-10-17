@@ -116,7 +116,7 @@ export default function SessionIssueSheet({ visible, onClose, bookingId, rol, es
 
                     {caso.respuesta ? (
                       <View style={s.respuestaBox}>
-                        <Text style={s.respuestaLabel}>Respuesta de Vita</Text>
+                        <Text style={s.respuestaLabel}>Respuesta de Sere</Text>
                         <Text style={s.respuesta}>{caso.respuesta}</Text>
                       </View>
                     ) : (
@@ -135,7 +135,7 @@ export default function SessionIssueSheet({ visible, onClose, bookingId, rol, es
                   <>
                     <Text style={s.title}>¿Qué pasó con esta sesión?</Text>
                     <Text style={s.hint}>
-                      Lo lee el equipo de Vita, no {rol === 'cliente' ? 'tu profesional' : 'la persona'}. Te respondemos en {PLAZO_RESPUESTA}.
+                      Lo lee el equipo de Sere, no {rol === 'cliente' ? 'tu profesional' : 'la persona'}. Te respondemos en {PLAZO_RESPUESTA}.
                     </Text>
 
                     {motivos.map(m => {

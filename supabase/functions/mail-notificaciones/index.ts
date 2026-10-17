@@ -53,11 +53,11 @@ const PLANTILLAS: Record<string, { titulo: string; pie?: string; conLinkSala?: b
   // avisamos" mentía: la notificación quedaba esperando adentro de una cuenta a
   // la que no podía entrar hasta que la aprobaran.
   postulacion_aprobada: {
-    titulo: 'Aprobamos tu postulación a Vita',
+    titulo: 'Aprobamos tu postulación a Sere',
     pie: 'Entrá a la app con el mismo mail para cargar tus horarios, tu precio y cómo querés cobrar.',
   },
   postulacion_rechazada: {
-    titulo: 'Sobre tu postulación a Vita',
+    titulo: 'Sobre tu postulación a Sere',
     pie: 'Podés corregir lo que falte y volver a enviarla desde la app: vuelve a la cola de revisión.',
   },
   reserva_confirmada: {

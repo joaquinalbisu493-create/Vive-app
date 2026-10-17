@@ -10,14 +10,14 @@ import { COMMISSION_LOCAL_FIRST } from '@/lib/pricing';
  *     a los dos (que es lo que hace Selia).
  *   · **10% de la sesión**, una sola vez, en su primera sesión pagada.
  *
- * 🔴 **Sale de la comisión de Vita, NUNCA del bolsillo del profesional.** Él
+ * 🔴 **Sale de la comisión de Sere, NUNCA del bolsillo del profesional.** Él
  * cobra lo mismo que cobraría sin el descuento; de hecho cobra unos pesos más,
  * porque la tarifa de Mercado Pago se calcula sobre un monto menor. Si esto se
  * implementara bajándole el precio al coach, sería pedirle a él que pague
  * nuestro marketing.
  *
  * 📌 **Por qué 10 y no 20.** La comisión de la primera sesión es 20%, así que
- * 10 deja a Vita con la mitad. Con 20 Vita trabajaría gratis esa sesión, y con
+ * 10 deja a Sere con la mitad. Con 20 Sere trabajaría gratis esa sesión, y con
  * cero usuarios eso es regalar el único ingreso que existe.
  */
 
@@ -25,13 +25,13 @@ import { COMMISSION_LOCAL_FIRST } from '@/lib/pricing';
 export const DESCUENTO_REFERIDO_PCT = 10;
 
 /**
- * 🔴 El tope que hace que esto no pueda costarle plata a Vita.
+ * 🔴 El tope que hace que esto no pueda costarle plata a Sere.
  *
  * El descuento se paga con la comisión, así que **nunca puede ser mayor que la
  * comisión de esa reserva**. Hoy la más baja es 15% (tramo recurrente) y el
  * descuento es 10, así que no se alcanza nunca; existe igual porque el día que
  * alguien baje una comisión o suba el descuento, esto tiene que fallar del lado
- * seguro y no emitir un cobro donde Vita ponga plata.
+ * seguro y no emitir un cobro donde Sere ponga plata.
  */
 export function descuentoAplicable(precio: number, comisionPct: number): number {
   if (!(precio > 0)) return 0;
@@ -46,13 +46,13 @@ export type CuentaReferido = {
   cliente: number;
   /** Lo que se descontó. */
   descuento: number;
-  /** La comisión que Vita cobra igual, ya sin el descuento adentro. */
+  /** La comisión que Sere cobra igual, ya sin el descuento adentro. */
   vive: number;
 };
 
 /**
- * ⚠️ `vive` puede dar 0 y eso es válido: significa que Vita regaló toda su
- * comisión en esa sesión. Lo que NO puede dar es negativo, que sería Vita
+ * ⚠️ `vive` puede dar 0 y eso es válido: significa que Sere regaló toda su
+ * comisión en esa sesión. Lo que NO puede dar es negativo, que sería Sere
  * poniendo plata. Hay un test parado en ese borde.
  */
 export function cuentaConReferido(precio: number, comisionPct: number): CuentaReferido {

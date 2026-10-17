@@ -950,8 +950,8 @@ export default function AdminScreen() {
                             comisión se descontó al pagarle al profesional. */}
                         <Text style={s.cardMeta}>
                           {g.riel === 'mp'
-                            ? 'Mercado Pago — la retuvo el procesador, no pasó por una cuenta de Vita'
-                            : 'Internacional — entró todo a Vita y se descontó al pagarle'}
+                            ? 'Mercado Pago — la retuvo el procesador, no pasó por una cuenta de Sere'
+                            : 'Internacional — entró todo a Sere y se descontó al pagarle'}
                         </Text>
                       </View>
                     ))
@@ -1206,7 +1206,7 @@ function UsdtReviewPanel({ onChanged }: { onChanged: () => void }) {
       c.reservaVencida ? 'Aprobar para reintegro' : 'Acreditar el pago',
       c.reservaVencida
         ? 'La reserva venció esperando el pago. No se reactiva: queda en la lista de reintegros para que le devuelvas el dinero.'
-        : `Se confirma la sesión y se avisa al profesional.${diferencia ? ` Llegaron ${c.recibido.toFixed(2)} y se esperaban ${c.esperado!.toFixed(2)}: la diferencia la absorbe Vita.` : ''}`,
+        : `Se confirma la sesión y se avisa al profesional.${diferencia ? ` Llegaron ${c.recibido.toFixed(2)} y se esperaban ${c.esperado!.toFixed(2)}: la diferencia la absorbe Sere.` : ''}`,
       [
         { text: 'Cancelar', style: 'cancel' },
         { text: c.reservaVencida ? 'Aprobar' : 'Acreditar', onPress: () => { void resolver(c, true); } },
@@ -1218,7 +1218,7 @@ function UsdtReviewPanel({ onChanged }: { onChanged: () => void }) {
     const diferencia = c.esperado != null && Math.abs(c.recibido - c.esperado) >= 0.005;
     Alert.alert(
       'Acreditar y volver a dar la sesión',
-      `El horario sigue libre. Se crea de nuevo la reserva, ya pagada, y se avisa al profesional.${diferencia ? ` Llegaron ${c.recibido.toFixed(2)} y se esperaban ${c.esperado!.toFixed(2)}: la diferencia la absorbe Vita.` : ''}`,
+      `El horario sigue libre. Se crea de nuevo la reserva, ya pagada, y se avisa al profesional.${diferencia ? ` Llegaron ${c.recibido.toFixed(2)} y se esperaban ${c.esperado!.toFixed(2)}: la diferencia la absorbe Sere.` : ''}`,
       [
         { text: 'Cancelar', style: 'cancel' },
         { text: 'Acreditar', onPress: () => { void resolver(c, true, true); } },

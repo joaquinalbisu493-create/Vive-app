@@ -1,7 +1,7 @@
 import Svg, { Circle } from 'react-native-svg';
 
 /**
- * Isotipo de Vita — tres círculos superpuestos en trébol.
+ * Isotipo de Sere — tres círculos superpuestos en trébol.
  *
  * Geometría tomada de la imagen de referencia: un círculo arriba y dos abajo,
  * con los centros en triángulo y un solapamiento tal que los tres se cruzan en

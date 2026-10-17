@@ -452,7 +452,7 @@ serve(async (req) => {
           coach.profile_id,
           'sancion_levantada',
           'Tu perfil vuelve a estar publicado',
-          'Ya volvés a aparecer en Vita y a recibir reservas.',
+          'Ya volvés a aparecer en Sere y a recibir reservas.',
         )
       } else if (body.verified) {
         await notifyProfile(
@@ -651,7 +651,7 @@ serve(async (req) => {
         const ddmm = (iso: string) => `${iso.slice(8, 10)}/${iso.slice(5, 7)}`
         for (const [uid, { proxima }] of porPersona) {
           const que = nivel === 'baja'
-            ? `${nombre} dejó de atender en Vita.`
+            ? `${nombre} dejó de atender en Sere.`
             : `${nombre} no está tomando reservas nuevas por un tiempo.`
           const siguiente = proxima
             ? ` Tu sesión del ${ddmm(proxima.fecha)} sigue en pie.`

@@ -123,7 +123,7 @@ export default function SessionNotesSheet({ visible, onClose, bookingId, userId,
         role: 'coach', canal: 'nota_compartida', senal: 'datos_de_cobro', bloqueado: true,
         booking_id: bookingId, coach_id: user.id, user_id: userId,
       });
-      Alert.alert('No se pueden mandar datos para cobrar', 'Los pagos van siempre por Vita: así la persona tiene reembolso y garantía, y vos cobrás sin tener que perseguir a nadie. Sacá el CBU, el alias o el link de pago y volvé a enviar.');
+      Alert.alert('No se pueden mandar datos para cobrar', 'Los pagos van siempre por Sere: así la persona tiene reembolso y garantía, y vos cobrás sin tener que perseguir a nadie. Sacá el CBU, el alias o el link de pago y volvé a enviar.');
       return;
     }
     const senal = sharedNote.trim() ? detectContactInfo(sharedNote) : null;
@@ -132,7 +132,7 @@ export default function SessionNotesSheet({ visible, onClose, bookingId, userId,
     const par = { role: 'coach', canal: 'nota_compartida', senal, booking_id: bookingId, coach_id: user.id, user_id: userId };
     Alert.alert(
       '¿Compartir datos de contacto?',
-      `La nota que ve ${clientName || 'la persona'} parece incluir datos de contacto o de pago. Mantené la conversación y los pagos dentro de Vita.`,
+      `La nota que ve ${clientName || 'la persona'} parece incluir datos de contacto o de pago. Mantené la conversación y los pagos dentro de Sere.`,
       [
         { text: 'Editar', style: 'cancel', onPress: () => registrarEvento('mensaje_contacto_detectado', { ...par, sent_anyway: false }) },
         {

@@ -26,7 +26,7 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { anotar, cronometro } from '@/lib/analytics';
 
 // Bienvenida "abrirse" (12/10/2026, pedido de Andre): termina en el isotipo de
-// aros abiertos (`Logo Vita - aros abiertos`). Qué cuenta, en tres tiempos:
+// aros abiertos (`Logo Sere - aros abiertos`). Qué cuenta, en tres tiempos:
 //
 //   1. Los tres aros abiertos, uno adentro del otro, con el mismo centro.
 //      Cada uno gira a su ritmo y para su lado, así que los huecos se
@@ -354,7 +354,7 @@ export default function OnboardingAbrirse() {
         onPressIn={alApoyar}
         accessible
         accessibilityRole="button"
-        accessibilityLabel="Abrirse es el primer paso. Vita te acompaña. Empezar"
+        accessibilityLabel="Abrirse es el primer paso. Sere te acompaña. Empezar"
         accessibilityActions={[{ name: 'activate' }]}
         onAccessibilityAction={alActivar}
       >
@@ -377,7 +377,7 @@ export default function OnboardingAbrirse() {
         {/* Un solo lugar para leer: la frase → "vita / te acompaña". */}
         <View style={[styles.texto, { top: textoY }]} pointerEvents="none">
           <Animated.Text style={[styles.frase, styles.encima, frase1Style]}>{FRASE_1}</Animated.Text>
-          <Animated.Text style={[styles.marca, marcaStyle]}>vita</Animated.Text>
+          <Animated.Text style={[styles.marca, marcaStyle]}>sere</Animated.Text>
           <Animated.Text style={[styles.lema, lemaStyle]}>te acompaña</Animated.Text>
         </View>
 

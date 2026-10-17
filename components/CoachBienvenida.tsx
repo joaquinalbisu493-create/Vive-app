@@ -63,7 +63,7 @@ export default function CoachBienvenida({
         <View style={[sheetStyles.sheet, s.sheet]}>
           <View style={sheetStyles.handle} />
           <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
-            <Text style={s.titulo}>Te damos la bienvenida a Vita</Text>
+            <Text style={s.titulo}>Te damos la bienvenida a Sere</Text>
             <Text style={s.bajada}>Lo que tenés que saber, en un minuto.</Text>
 
             {PUNTOS.map(p => (

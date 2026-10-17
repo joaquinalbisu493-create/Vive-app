@@ -8,7 +8,7 @@
 // profesional, regenerable (`mi_link_calendario(true)`), y con tope de lecturas.
 //
 // 🔴 Qué NO sale acá: el nombre del cliente, el chat, el link de la sala. Solo
-// horarios con el título "Sesión · Vita". Ver `scripts/add-calendario-profesional.sql`.
+// horarios con el título "Sesión · Sere". Ver `scripts/add-calendario-profesional.sql`.
 //
 // 📌 Las sesiones canceladas simplemente no están: cuando la app de calendario
 // vuelve a leer, las borra sola. Una sesión movida conserva su UID (el id de la
@@ -73,10 +73,10 @@ serve(async (req) => {
   const lineas = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Vita//Sesiones//ES',
+    'PRODID:-//Sere//Sesiones//ES',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
-    'X-WR-CALNAME:Vita · Sesiones',
+    'X-WR-CALNAME:Sere · Sesiones',
     'X-WR-TIMEZONE:America/Argentina/Buenos_Aires',
     // Sugerencia de cada cuánto volver a leer (Apple la respeta; Google no).
     'REFRESH-INTERVAL;VALUE=DURATION:PT1H',
@@ -89,8 +89,8 @@ serve(async (req) => {
       `DTSTAMP:${ahora}`,
       `DTSTART:${utc(s.inicio)}`,
       `DTEND:${utc(s.fin)}`,
-      'SUMMARY:Sesión · Vita',
-      'DESCRIPTION:Abrí Vita para ver con quién es y entrar a la videollamada.',
+      'SUMMARY:Sesión · Sere',
+      'DESCRIPTION:Abrí Sere para ver con quién es y entrar a la videollamada.',
       'STATUS:CONFIRMED',
       'TRANSP:OPAQUE',
       'END:VEVENT',

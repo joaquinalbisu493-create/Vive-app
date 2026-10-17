@@ -9,7 +9,7 @@ import { ViveFonts } from '@/constants/theme';
  * (márgenes, alineación) — no para pisar tipografía/color/tamaño.
  */
 export function VitaWordmark({ style }: { style?: StyleProp<TextStyle> }) {
-  return <Text style={[s.wordmark, style]}>vita</Text>;
+  return <Text style={[s.wordmark, style]}>sere</Text>;
 }
 
 const s = StyleSheet.create({

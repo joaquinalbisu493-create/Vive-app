@@ -315,7 +315,7 @@ export default function CoachVisibilityScreen() {
           {isNewCoach(self) && (
             <Text style={s.footNote}>
               Contás como nuevo mientras tengas menos de {NEW_MAX_REVIEWS} reseñas y menos de {NEW_MAX_AGE_DAYS} días
-              en Vita. Es una ventana que se cierra sola: aprovechala para conseguir las primeras reseñas, que son
+              en Sere. Es una ventana que se cierra sola: aprovechala para conseguir las primeras reseñas, que son
               las que te abren los lugares de arriba.
             </Text>
           )}

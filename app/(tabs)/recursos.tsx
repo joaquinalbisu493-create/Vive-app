@@ -68,7 +68,7 @@ const GLASS_BG     = 'rgba(255,248,240,0.55)';
 const GLASS_BORDER = 'rgba(255,255,255,0.65)';
 
 // ─── RecommendedCard ──────────────────────────────────────────────────────────
-// Sugerencia del día dentro de "Herramientas de Vita". 3 estados de render
+// Sugerencia del día dentro de "Herramientas de Sere". 3 estados de render
 // (Ajuste 1 — el mapeo mood→sugerencia de useRecommendedResource no se toca,
 // solo cambia el envoltorio):
 //   · Sin señal (reco null)                        → línea "¿Cómo estás hoy?"
@@ -156,7 +156,7 @@ function RecommendedCard({
 // 📝 La fila "Continuar" (recurso a medias) del brief NO se construye: el
 // progreso PARCIAL no existe para `coach_resources` — el player solo loguea
 // play/complete en `resource_events`, no guarda posición. `resource_completions`
-// (con progress_seconds) es de las herramientas de Vita, y `recordCompletion`
+// (con progress_seconds) es de las herramientas de Sere, y `recordCompletion`
 // siempre escribe progreso = duración, así que ni ahí hay "a medias". Cuando el
 // player guarde posición, esto se puede reponer sin tocar el resto.
 
@@ -237,7 +237,7 @@ function CoachRecoSection({
   return (
     <View style={{ marginTop: 18, marginBottom: 4 }}>
       {/* Eyebrow, no título grande: en Fraunces competía con "Herramientas de
-          Vita", dos encabezados del mismo peso peleando por ser lo principal. */}
+          Sere", dos encabezados del mismo peso peleando por ser lo principal. */}
       <View style={s.eyebrowRow}>
         <Text style={s.eyebrow}>De tu profesional</Text>
         <Text style={s.eyebrowCount}>{recos.length}</Text>
@@ -373,7 +373,7 @@ function ToolCard({ tool }: { tool: Tool }) {
 }
 
 // ─── ToolsCarousel ────────────────────────────────────────────────────────────
-// Todas las tools de Vita en una fila fija (no scrollea — son 4, entran enteras).
+// Todas las tools de Sere en una fila fija (no scrollea — son 4, entran enteras).
 // El orden sale de TOOL_GROUPS, aplanado: Diario, Gratitud, Ruidos, Respirar.
 function ToolsCarousel() {
   const seen = new Set<string>();
@@ -542,9 +542,9 @@ export default function RecursosScreen() {
             </View>
           </View>
 
-          {/* 1. Herramientas de Vita — sub-encabezado (PJ medium 18) + descripción,
+          {/* 1. Herramientas de Sere — sub-encabezado (PJ medium 18) + descripción,
               debajo del título de la pantalla; luego la sugerencia del día + tiles */}
-          <Text style={s.herramientasTitulo}>Herramientas de Vita</Text>
+          <Text style={s.herramientasTitulo}>Herramientas de Sere</Text>
           <Text style={s.herramientasBajada}>{HERRAMIENTAS_BAJADA}</Text>
           <RecommendedCard
             reco={reco}
@@ -762,7 +762,7 @@ const s = StyleSheet.create({
   // marginTop bajó de 8 a 2 (sesión 128): Plus Jakarta Sans trae más "aire"
   // propio que Fraunces para el mismo lineHeight del título — se compensa acá,
   // trayendo el contenido hacia el título, no achicando el título en sí.
-  // "Herramientas de Vita": Plus Jakarta Sans medium 18, mismo verde que el
+  // "Herramientas de Sere": Plus Jakarta Sans medium 18, mismo verde que el
   // título de la pantalla, separado de él. (Antes era un título grande.)
   herramientasTitulo: { fontFamily: ViveFonts.titleMedium, fontSize: 18, color: '#565E32', marginTop: 2 },
   herramientasBajada: { fontFamily: ViveFonts.regular, fontSize: 14, lineHeight: 20, color: '#7A8277', marginTop: 3, marginBottom: 14 },

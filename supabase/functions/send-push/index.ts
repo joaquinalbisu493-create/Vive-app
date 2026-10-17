@@ -125,7 +125,7 @@ serve(async (req) => {
     if (!perfil?.push_token) return json({ ok: true, skipped: 'no-token' })
 
     try {
-      await enviarPush(perfil.push_token, 'Vita', 'Tenés novedades en Vita. Abrí la app para verlas.')
+      await enviarPush(perfil.push_token, 'Sere', 'Tenés novedades en Sere. Abrí la app para verlas.')
     } catch (e) {
       // Best-effort, igual que cuando era client-side: un push que no sale no es
       // un error del que llamó.

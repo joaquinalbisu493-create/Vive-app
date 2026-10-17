@@ -9,7 +9,7 @@ import { daysFromTodayAr } from './time';
  * reservas y hay chats, que son vistas de eventos sueltos, y ninguna contesta
  * "¿a quién hace mucho que no veo?".
  *
- * Y del lado de Vita es la medida anti-fuga #1 vista desde el otro lado: la
+ * Y del lado de Sere es la medida anti-fuga #1 vista desde el otro lado: la
  * "re-reserva de un toque" hoy existe SOLO para el usuario
  * (`app/(tabs)/conexiones.tsx`). El coach —que es el que se acuerda de la
  * persona— no tenía forma de iniciar nada.

@@ -42,7 +42,7 @@ const COACH_TYPE_LABEL: Record<string, string> = {
  * 🔴 Los guardados viven en TRES universos, no en uno, y esta pantalla mostraba
  * solo dos tercios del primero.
  *
- *   1. Slugs de herramientas de Vita   → `saved_resources`, se resuelven con `VITA_TOOL_MAP`
+ *   1. Slugs de herramientas de Sere   → `saved_resources`, se resuelven con `VITA_TOOL_MAP`
  *   2. uuids de la biblioteca editorial → `saved_resources`, tabla `resources`
  *   3. uuids de recursos de coaches     → `resource_saves`,  tabla `coach_resources`
  *

@@ -253,7 +253,7 @@ export default function LoginScreen() {
                 <Text style={s.legalLink} onPress={() => setLegalDoc('privacidad')}>
                   Política de privacidad
                 </Text>
-                {' de Vita.'}
+                {' de Sere.'}
               </Text>
 
               {serverError && !showEmailForm && (

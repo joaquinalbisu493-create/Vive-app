@@ -397,7 +397,7 @@ export default function ProfesionalScreen() {
         .order('created_at', { ascending: false });
 
       // Si la consulta falló no sabemos si hay reseñas: no se marca como cargado,
-      // así no aparece "Nuevo en Vita" sobre alguien que tiene veinte.
+      // así no aparece "Nuevo en Sere" sobre alguien que tiene veinte.
       if (reviewsError) return;
       if (!reviewRows || reviewRows.length === 0) {
         setReviewsLoaded(true);
@@ -529,7 +529,7 @@ export default function ProfesionalScreen() {
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
           <MaterialIcons name="arrow-back-ios" size={19} color={ViveColors.text} />
         </TouchableOpacity>
-        <Text style={s.headerTitle} accessibilityLabel="Vita">vita</Text>
+        <Text style={s.headerTitle} accessibilityLabel="Sere">sere</Text>
         <TouchableOpacity
           style={s.favoriteBtn}
           onPress={() => {
@@ -596,7 +596,7 @@ export default function ProfesionalScreen() {
             <Text style={s.nacionalidad}>{lineaNacionalidad(prof.nationality, prof.genero)}</Text>
           )}
 
-          {/* Sin reseñas todavía se dice "Nuevo en Vita" y no "no hay reseñas":
+          {/* Sin reseñas todavía se dice "Nuevo en Sere" y no "no hay reseñas":
               al lanzar es el caso de todos, y dicho en negativo se lee como un
               punto en contra de alguien que recién empieza. */}
           <View style={s.identityMeta}>
@@ -610,21 +610,21 @@ export default function ProfesionalScreen() {
           ) : reviewsLoaded ? (
             <View style={s.ratingInline}>
               <MaterialCommunityIcons name="sprout-outline" size={16} color={ViveColors.softInk} />
-              <Text style={s.ratingInlineText}>Nuevo en Vita</Text>
+              <Text style={s.ratingInlineText}>Nuevo en Sere</Text>
             </View>
           ) : null}
 
-          {/* 🔴 23/09/2026: decía "Verificado por Vita", que sobre la foto se
-              leía como que Vita responde por todo lo que hay en el perfil. Lo
+          {/* 🔴 23/09/2026: decía "Verificado por Sere", que sobre la foto se
+              leía como que Sere responde por todo lo que hay en el perfil. Lo
               que se hizo es revisar la postulación (`verified`); lo que se
               verificó de cada título o matrícula está marcado uno por uno, en
               Formación. Ver docs/investigacion-producto-2026-09-23.md, punto 1. */}
           <View style={s.verifiedBadge}>
             {/* Ícono de persona revisada y no el tilde de "cuenta verificada"
-                ni un escudo: los escudos del perfil son de documentos que Vita
+                ni un escudo: los escudos del perfil son de documentos que Sere
                 verificó (matrícula, títulos), y esto es otra cosa. */}
             <MaterialCommunityIcons name="account-check-outline" size={15} color={ViveColors.text} />
-            <Text style={s.verifiedText}>Perfil revisado por Vita</Text>
+            <Text style={s.verifiedText}>Perfil revisado por Sere</Text>
           </View>
 
           </View>
@@ -680,7 +680,7 @@ export default function ProfesionalScreen() {
               accessibilityRole="link"
               accessibilityLabel="Garantía de primera sesión. Si no te convence, te devolvemos lo que pagaste. Ver condiciones.">
               {/* Ícono de devolución y no un escudo: los escudos del perfil
-                  dicen "esto lo verificó Vita", y la garantía es otra cosa. */}
+                  dicen "esto lo verificó Sere", y la garantía es otra cosa. */}
               <MaterialCommunityIcons name="cash-refund" size={19} color={ViveColors.accent} style={s.practicoIcon} />
               <Text style={s.practicoText}>
                 <Text style={s.factStrong}>Garantía de primera sesión.</Text>
@@ -805,19 +805,19 @@ export default function ProfesionalScreen() {
         )}
 
         {/* ── Formación ─────────────────────────────────────────────────────
-            Solo credenciales verificadas por Vita. NO se muestra el documento:
+            Solo credenciales verificadas por Sere. NO se muestra el documento:
             un diploma lleva nombre completo, a veces DNI y firma, y publicarlo
             sería exponer datos personales del profesional a cualquier visitante
             — además de abrir un canal de texto que ningún filtro puede moderar.
-            Lo que se muestra es el dato que Vita chequeó. */}
+            Lo que se muestra es el dato que Sere chequeó. */}
         {credenciales.length > 0 && (
           <View style={s.section}>
-            {/* 🔴 El escudo "Verificado por Vita" estaba ACÁ, en la cabecera, y
+            {/* 🔴 El escudo "Verificado por Sere" estaba ACÁ, en la cabecera, y
                 de ahí salían los dos problemas que esta sección tenía.
 
                 Un escudo a nivel sección cubre todo lo que hay debajo por
                 igual, así que sobre un "Lic. en Psicología · UBA" se leía como
-                *Vita responde por este psicólogo* — cuando lo que Vita chequeó
+                *Sere responde por este psicólogo* — cuando lo que Sere chequeó
                 fue ese título y nada más. Para compensarlo había abajo un
                 cartel ámbar ("un título no habilita por sí solo…") que era la
                 CUARTA vez que la app decía lo mismo: ya está en la etiqueta
@@ -903,7 +903,7 @@ export default function ProfesionalScreen() {
         </Modal>
 
         {/* ── Reseñas ──────────────────────────────────────────────────────
-            Solo si hay. Sin reseñas, la portada ya dice "Nuevo en Vita"; una
+            Solo si hay. Sin reseñas, la portada ya dice "Nuevo en Sere"; una
             sección vacía al final repetía lo mismo en negativo. */}
         {hayResenas && (
           <View style={s.section}>

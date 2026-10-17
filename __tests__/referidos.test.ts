@@ -14,8 +14,8 @@ describe('la cuenta del referido', () => {
     expect(DESCUENTO_REFERIDO_PCT).toBe(10);
   });
 
-  // 🔴 Lo que nunca puede pasar: que Vita ponga plata de su bolsillo.
-  it('Vita nunca queda en negativo, ni con la comisión más baja', () => {
+  // 🔴 Lo que nunca puede pasar: que Sere ponga plata de su bolsillo.
+  it('Sere nunca queda en negativo, ni con la comisión más baja', () => {
     for (const comision of [25, 20, 15, 10, 5, 0]) {
       for (const precio of [2000, 4500, 7000, 50000]) {
         const c = cuentaConReferido(precio, comision);
@@ -25,7 +25,7 @@ describe('la cuenta del referido', () => {
     }
   });
 
-  it('con una comisión igual al descuento, Vita regala toda su comisión y no más', () => {
+  it('con una comisión igual al descuento, Sere regala toda su comisión y no más', () => {
     expect(cuentaConReferido(5000, 10)).toEqual({ cliente: 4500, descuento: 500, vive: 0 });
   });
 

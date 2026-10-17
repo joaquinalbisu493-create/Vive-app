@@ -537,7 +537,7 @@ export default function RegisterScreen() {
                 <Text style={s.termsLink} onPress={() => setShowPrivacyModal(true)}>
                   Política de privacidad
                 </Text>
-                {' de Vita'}
+                {' de Sere'}
               </Text>
             </TouchableOpacity>
 
@@ -649,7 +649,7 @@ export default function RegisterScreen() {
               <Text style={s.termsLink} onPress={() => setShowPrivacyModal(true)}>
                 Política de privacidad
               </Text>
-              {' de Vita.'}
+              {' de Sere.'}
             </Text>
           </Animated.View>
 

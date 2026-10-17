@@ -176,7 +176,7 @@ const CAMINOS: Camino[] = [
     // tiene género y es activo. El `id` y el tono siguen siendo `crecer`:
     // viajan en la analítica y en las pantallas siguientes.
     title: 'Busco\nacompañamiento',
-    // 07/10/2026 (Andre): nombra las dos cosas que hay en Vita, profesionales
+    // 07/10/2026 (Andre): nombra las dos cosas que hay en Sere, profesionales
     // primero. Antes hablaba solo de "herramientas para mi crecimiento".
     desc: 'Quiero encontrar un profesional y tener herramientas para el día a día.',
     rule: SALVIA_RULE,
@@ -411,7 +411,7 @@ export default function OnboardingBifurcacion() {
               espacio sobrante, así que acortarlo por abajo corre el centro
               hacia arriba sin sacar el título de su caja. */}
           <Animated.View style={[s.titleArea, { paddingBottom: height * TITULO_SUBE }, fadeUp(titleAnim)]}>
-            <Text style={s.title}>¿Qué buscás{'\n'}en Vita?</Text>
+            <Text style={s.title}>¿Qué buscás{'\n'}en Sere?</Text>
           </Animated.View>
         </View>
       </Animated.View>

@@ -37,7 +37,7 @@ import { anotar, cronometro } from '@/lib/analytics';
 //      El primero lo registra (se inclina, se enciende), se chocan suave y el
 //      fondo se entibia. (Sin frase: no da el tiempo para leerla.)
 //   3. Baja un tercero, el color se va y el trazo se dibuja: es el isotipo de
-//      Vita, con "vita / te acompaña" debajo.
+//      Sere, con "vita / te acompaña" debajo.
 //
 // 🔴 Reglas de esta pantalla, que son el concepto y no detalles:
 //   · Termina en el logo, con la geometría EXACTA de `VitaMark` (centros, radio
@@ -488,7 +488,7 @@ export default function OnboardingLlega() {
         onPressIn={alApoyar}
         accessible
         accessibilityRole="button"
-        accessibilityLabel="Vita te acompaña. Empezar"
+        accessibilityLabel="Sere te acompaña. Empezar"
         accessibilityActions={[{ name: 'activate' }]}
         onAccessibilityAction={alActivar}
       >
@@ -546,7 +546,7 @@ export default function OnboardingLlega() {
         {/* Un solo lugar para leer: la frase → "vita / te acompaña". */}
         <View style={[styles.texto, { top: textoY }]} pointerEvents="none">
           <Animated.Text style={[styles.frase, styles.encima, frase1Style]}>{FRASE_1}</Animated.Text>
-          <Animated.Text style={[styles.marca, marcaStyle]}>vita</Animated.Text>
+          <Animated.Text style={[styles.marca, marcaStyle]}>sere</Animated.Text>
           <Animated.Text style={[styles.lema, lemaStyle]}>te acompaña</Animated.Text>
         </View>
 

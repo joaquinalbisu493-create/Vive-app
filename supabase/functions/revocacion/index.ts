@@ -14,7 +14,7 @@
 // prohíbe pedir registro), así que no hay forma de saber con certeza de quién es
 // el pedido: darle a un formulario público el poder de cancelar y devolver plata
 // sería dejar que cualquiera cancele la sesión de otro sabiendo su correo. La
-// solicitud queda registrada, Vita recibe un aviso, y la baja y el reintegro los
+// solicitud queda registrada, Sere recibe un aviso, y la baja y el reintegro los
 // hace una persona después de ubicar la reserva.
 //
 // ── Abuso ────────────────────────────────────────────────────────────────────

@@ -104,7 +104,7 @@ export default function CoachCalendarioScreen() {
             Tus sesiones confirmadas aparecen en el calendario de tu teléfono y se actualizan solas: si una se mueve o se cancela, el calendario también cambia.
           </Text>
           <Text style={s.nota}>
-            Por privacidad, cada sesión figura como “Sesión · Vita”, sin el nombre de la persona. Para ver con quién es, entrá a Vita.
+            Por privacidad, cada sesión figura como “Sesión · Sere”, sin el nombre de la persona. Para ver con quién es, entrá a Sere.
           </Text>
 
           {cargando ? (

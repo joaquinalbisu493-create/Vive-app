@@ -2,7 +2,7 @@ import { TOOLS, TOOL_MAP, VISIBLE_TOOL_IDS, DEFAULT_HABIT_TOOL_IDS, TOOL_GROUPS 
 import { VITA_TOOLS } from '@/constants/vitaTools';
 import { MOOD_RESOURCES } from '@/constants/moodResources';
 
-// `design/recursos-v2-definiciones.md` decidió que las herramientas de Vita son
+// `design/recursos-v2-definiciones.md` decidió que las herramientas de Sere son
 // cuatro y que el resto "se retira de la vista, sin borrar su código". El recorte
 // se ejecutó en la grilla (TOOL_GROUPS) pero el flag no existía, así que cada
 // pantalla que leía el catálogo crudo volvía a ofrecer las diez por omisión:

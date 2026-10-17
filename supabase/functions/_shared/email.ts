@@ -24,7 +24,7 @@
 // perdida por un mail que no salió es un problema mucho peor.
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
-const REMITENTE = Deno.env.get('MAIL_REMITENTE') ?? 'Vita <no-responder@vitaapp.com.ar>'
+const REMITENTE = Deno.env.get('MAIL_REMITENTE') ?? 'Sere <no-responder@vitaapp.com.ar>'
 const SITIO = Deno.env.get('WEB_BASE_URL') ?? 'https://vitaapp.com.ar'
 
 const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado']
@@ -66,7 +66,7 @@ function armarHtml(titulo: string, lineas: string[], pie?: string): string {
   <tr><td align="center">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:480px;background-color:#FFFFFF;border-radius:14px;border-top:3px solid #C1694F;padding:28px">
       <tr><td>
-        <p style="margin:0 0 22px;font-size:12px;letter-spacing:.12em;color:#C1694F;text-transform:uppercase;font-weight:bold">Vita</p>
+        <p style="margin:0 0 22px;font-size:12px;letter-spacing:.12em;color:#C1694F;text-transform:uppercase;font-weight:bold">Sere</p>
         <h1 style="margin:0 0 18px;font-size:20px;line-height:1.3;color:#2D4A3E">${titulo}</h1>
         ${cuerpo}
         ${pie ? `<p style="margin:22px 0 0;font-size:12px;line-height:1.5;color:#87835C">${pie}</p>` : ''}

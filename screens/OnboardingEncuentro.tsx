@@ -355,7 +355,7 @@ export default function OnboardingEncuentro() {
         onPressIn={alApoyar}
         accessible
         accessibilityRole="button"
-        accessibilityLabel="Un lugar para encontrarse. Vita te acompaña. Empezar"
+        accessibilityLabel="Un lugar para encontrarse. Sere te acompaña. Empezar"
         accessibilityActions={[{ name: 'activate' }]}
         onAccessibilityAction={alActivar}
       >
@@ -401,7 +401,7 @@ export default function OnboardingEncuentro() {
         {/* Un solo lugar para leer: la frase → "vita / te acompaña". */}
         <View style={[styles.texto, { top: textoY }]} pointerEvents="none">
           <Animated.Text style={[styles.frase, styles.encima, frase1Style]}>{FRASE_1}</Animated.Text>
-          <Animated.Text style={[styles.marca, marcaStyle]}>vita</Animated.Text>
+          <Animated.Text style={[styles.marca, marcaStyle]}>sere</Animated.Text>
           <Animated.Text style={[styles.lema, lemaStyle]}>te acompaña</Animated.Text>
         </View>
 

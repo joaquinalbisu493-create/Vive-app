@@ -31,7 +31,7 @@ import { anotar, cronometro } from '@/lib/analytics';
 // hacen uno con "vita" al medio. La idea es la misma; cambia cómo se ve.
 //
 // Decisiones de diseño, con lo que se fue aprendiendo ese día en el iPhone:
-//   · En reposo los tres círculos SON el isotipo de Vita: misma geometría que
+//   · En reposo los tres círculos SON el isotipo de Sere: misma geometría que
 //     `VitaMark` (uno arriba, dos abajo), no un Venn invertido.
 //   · Tres tintas de la paleta (salvia, durazno, terracota), planas y nítidas,
 //     en "multiply": donde se pisan se suman, como una sobreimpresión. Es la
@@ -381,7 +381,7 @@ export default function OnboardingTresEnUno() {
         onPressOut={alSoltar}
         accessible
         accessibilityRole="button"
-        accessibilityLabel="Vita te acompaña. Empezar"
+        accessibilityLabel="Sere te acompaña. Empezar"
         accessibilityActions={[{ name: 'activate' }]}
         onAccessibilityAction={alActivar}
       >
@@ -433,7 +433,7 @@ export default function OnboardingTresEnUno() {
         <Grain opacity={0.05} />
 
         <Animated.View style={[styles.texto, { top: textoY }, grupoStyle]} pointerEvents="none">
-          <Animated.Text style={[styles.marca, { height: ALTO_MARCA }, marcaStyle]}>vita</Animated.Text>
+          <Animated.Text style={[styles.marca, { height: ALTO_MARCA }, marcaStyle]}>sere</Animated.Text>
           <Animated.Text style={[styles.lema, lemaStyle]}>te acompaña</Animated.Text>
         </Animated.View>
 

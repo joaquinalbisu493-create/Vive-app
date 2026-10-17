@@ -15,7 +15,7 @@ import { AppBg } from '@/components/ui/AppBg';
 //    Quien llega acá no viene a interactuar con una app. Cada elemento que no
 //    sea un número que se pueda tocar es un obstáculo.
 //
-// 2. NO ES CÁLIDA. El resto de Vita tiene voz; esta pantalla no. Una app que se
+// 2. NO ES CÁLIDA. El resto de Sere tiene voz; esta pantalla no. Una app que se
 //    pone tierna justo acá se está poniendo a sí misma en el medio de algo que
 //    no le corresponde. Dice lo que hay y se corre.
 //
@@ -85,7 +85,7 @@ const DIRECTORIO_INTERNACIONAL = 'https://findahelpline.com/es-ES';
 
 export default function AyudaScreen() {
   const router = useRouter();
-  // Vita atiende también a argentinos que viven afuera (riel en dólares). Para
+  // Sere atiende también a argentinos que viven afuera (riel en dólares). Para
   // ellos los números de acá no sirven, y es lo primero que tienen que leer.
   const afuera = deviceIsOffArgentina();
 
@@ -160,10 +160,10 @@ export default function AyudaScreen() {
           </View>
 
           {/* Lo mismo que declaran los T&C §5, dicho donde efectivamente
-              importa: Vita no es un servicio de emergencia y no puede
+              importa: Sere no es un servicio de emergencia y no puede
               comportarse como si lo fuera. */}
           <Text style={s.pie}>
-            Vita no es un servicio de emergencia ni reemplaza la atención profesional.
+            Sere no es un servicio de emergencia ni reemplaza la atención profesional.
             Si estás en tratamiento, tu profesional también es alguien a quien escribirle.
           </Text>
         </ScrollView>

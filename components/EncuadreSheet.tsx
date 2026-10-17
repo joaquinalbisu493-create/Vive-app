@@ -9,7 +9,7 @@ import type { Encuadre } from '@/lib/credentialRules';
 // ── Por qué existe este sheet ────────────────────────────────────────────────
 //
 // Antes esto era un cartel fijo arriba del perfil que decía "Acompañamiento, no
-// tratamiento — Vita no verificó una matrícula habilitante". Decía la verdad y
+// tratamiento — Sere no verificó una matrícula habilitante". Decía la verdad y
 // estaba mal: empezaba con una negación, tenía forma de aviso de error y se
 // leía como una acusación contra alguien que no hizo nada malo. La distinción
 // hay que hacerla igual (Ley 23.277, `docs/encuadre-salud-y-responsabilidad.md`
@@ -26,7 +26,7 @@ import type { Encuadre } from '@/lib/credentialRules';
 // dato en información para decidir en vez de en un juicio sobre la persona.
 //
 // ⚠️ Redacción, tres cuidados heredados del cartel que reemplaza:
-// · Se afirma lo que Vita verificó, no lo que la persona es. Que no haya
+// · Se afirma lo que Sere verificó, no lo que la persona es. Que no haya
 //   matrícula cargada acá no prueba que no la tenga en la realidad.
 // · No se nombra la profesión: `kind = 'matricula'` dice que hay una matrícula
 //   verificada, no de qué profesión. El título es texto libre.
@@ -58,7 +58,7 @@ export function EncuadreSheet({ visible, encuadre, onCerrar }: Props) {
             <Text style={s.title}>Qué tipo de sesión es esta</Text>
 
             <Text style={s.body}>
-              En Vita hay dos tipos de profesional, y la diferencia no la marca el tema
+              En Sere hay dos tipos de profesional, y la diferencia no la marca el tema
               del que hablan sino qué pueden hacer con vos.
             </Text>
 
@@ -92,8 +92,8 @@ export function EncuadreSheet({ visible, encuadre, onCerrar }: Props) {
             <Text style={s.subtitle}>Este profesional</Text>
             <Text style={s.body}>
               {encuadre.habilitado
-                ? 'Vita chequeó su matrícula habilitante. El número está más abajo, en Formación, y podés verificarlo por tu cuenta en el colegio profesional que corresponda.'
-                : 'Vita no verificó una matrícula habilitante para este profesional, así que sus sesiones son de acompañamiento. Más abajo, en Formación, está todo lo que sí verificamos.'}
+                ? 'Sere chequeó su matrícula habilitante. El número está más abajo, en Formación, y podés verificarlo por tu cuenta en el colegio profesional que corresponda.'
+                : 'Sere no verificó una matrícula habilitante para este profesional, así que sus sesiones son de acompañamiento. Más abajo, en Formación, está todo lo que sí verificamos.'}
             </Text>
 
             {/* Para muchas formaciones serias —coaching, sexología, mindfulness—

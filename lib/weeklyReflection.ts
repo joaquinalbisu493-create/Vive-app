@@ -33,7 +33,7 @@
 //    gentil, no menos.)
 //
 // ── Sobre la IA ──────────────────────────────────────────────────────────────
-// La idea es que en algún momento esto lo escriba un modelo con tono Vita. El
+// La idea es que en algún momento esto lo escriba un modelo con tono Sere. El
 // enganche es `Reflection.source`: la IA produciría exactamente esta misma
 // forma, y estas reglas quedan como piso para cuando no hay red, el modelo
 // falla, o la persona es nueva y no hay nada que contar. Por eso las reglas se

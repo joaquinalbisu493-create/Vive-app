@@ -1,4 +1,4 @@
-// contacto — la casilla a la que la gente le escribe a Vita, y cómo abrirla.
+// contacto — la casilla a la que la gente le escribe a Sere, y cómo abrirla.
 //
 // 🔴 Existe porque la app decía "escribinos" en varios lugares SIN decir a
 // dónde (encontrado el 17/09/2026). El caso más serio era el del coach

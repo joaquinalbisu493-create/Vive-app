@@ -76,11 +76,11 @@ export const ENFOQUES: { id: Enfoque; label: string; desc: string }[] = [
 //
 // 🔴 Afuera a propósito (investigación del 25/09, en el doc):
 //   - PNL: las dos revisiones grandes no le encuentran evidencia. Una opción de
-//     esta lista es Vita avalándola; el coach que la usa lo cuenta en su bio.
+//     esta lista es Sere avalándola; el coach que la usa lo cuenta en su bio.
 //   - Trastornos de la conducta alimentaria: se tratan en equipo (psiquiatra,
 //     psicólogo, nutricionista, clínico). Ofrecerlo atrae a quien hay que derivar.
 //   - Psiconutrición: es un equipo, no una persona; insinúa que hace terapia.
-//   - Pediátrica: los menores están fuera de Vita.
+//   - Pediátrica: los menores están fuera de Sere.
 //   - Fitoterapia, flores de Bach, "funcional", ortomolecular: sin evidencia.
 //   - Coaching ejecutivo o de vida: dicen sobre QUÉ trabaja, y eso ya lo dicen
 //     los temas. En nutrición sí van especialidades (deportiva, basada en
@@ -117,7 +117,7 @@ export const ENFOQUES_NUTRICION: Opcion<EnfoqueNutricion>[] = [
 const TODAS: Opcion<string>[] = [...ENFOQUES, ...METODOS_COACHING, ...ENFOQUES_NUTRICION];
 
 /** La lista que ve cada profesión. Sin matrícula verificada es coach, igual que
- *  en `tipoProfesional`: la profesión sale de lo que Vita verificó, no del texto. */
+ *  en `tipoProfesional`: la profesión sale de lo que Sere verificó, no del texto. */
 export function opcionesEnfoque(profesion: string | null | undefined): Opcion<string>[] {
   if (profesion === 'psicologia') return ENFOQUES;
   if (profesion === 'nutricion') return ENFOQUES_NUTRICION;

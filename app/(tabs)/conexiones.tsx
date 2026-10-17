@@ -1060,7 +1060,7 @@ const s = StyleSheet.create({
     color: FOREST,
     lineHeight: 32,
   },
-  // Mismo estilo que "Herramientas de Vita" en recursos.tsx (sectionTitle),
+  // Mismo estilo que "Herramientas de Sere" en recursos.tsx (sectionTitle),
   // pedido explícito — solo para Fase 1 ("Elegí un área de bienestar para
   // empezar"), no para el subtítulo de Fase 2, que sigue con el estilo chico.
   askSub: {

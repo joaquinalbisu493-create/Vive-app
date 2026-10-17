@@ -58,7 +58,7 @@ function formatAudioTime(seconds: number) {
   return `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, '0')}`;
 }
 
-// Paleta del lector — misma que LecturasScreen (la tool hardcodeada de Vita)
+// Paleta del lector — misma que LecturasScreen (la tool hardcodeada de Sere)
 const FOREST      = '#3A4F2A';
 const FOREST_SOFT = '#566245';
 const CREAM_LIGHT = '#F3EEDF';
@@ -69,7 +69,7 @@ export default function ResourceDetailScreen() {
   const params = useLocalSearchParams<{ id?: string }>();
   const resourceId = typeof params.id === 'string' ? params.id : undefined;
   // El 11º recurso: los de coach, con id dinámico. Mismo par abierto/completado
-  // que las herramientas de Vita, así se pueden comparar entre sí — que es la
+  // que las herramientas de Sere, así se pueden comparar entre sí — que es la
   // pregunta que importa acá (¿los recursos de coach se terminan más o menos
   // que los nuestros?).
   useRecursoAbierto(resourceId ?? 'desconocido');
@@ -467,7 +467,7 @@ export default function ResourceDetailScreen() {
             )}
             <View style={s.authorText}>
               <Text style={s.authorName}>Por {resource.coachName}</Text>
-              <Text style={s.authorHint}>{resource.coachName.split(' ')[0]} comparte esto con la comunidad de Vita</Text>
+              <Text style={s.authorHint}>{resource.coachName.split(' ')[0]} comparte esto con la comunidad de Sere</Text>
             </View>
             <View style={s.authorLink}>
               <Text style={s.authorLinkText}>Ver perfil</Text>

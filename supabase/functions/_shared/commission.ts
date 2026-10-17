@@ -13,7 +13,7 @@
 //   0% la PRIMERA sesión del par si el cliente llegó por el LINK del coach ·
 //   20% la PRIMERA sesión COMPLETADA del par coach-usuario ·
 //   15% de la 2da en adelante (permanente).
-// El 20% es el costo de adquisición: Vita aporta el cliente nuevo. El descuento
+// El 20% es el costo de adquisición: Sere aporta el cliente nuevo. El descuento
 // cae en la 2da sesión, que es el momento de máxima fuga.
 
 export const COMMISSION_FIRST = 20;
@@ -25,8 +25,8 @@ export const COMMISSION_PROMO = 0;
  *
  * 🔴 Decisión de Andre del 11/09/2026 (D13 en `docs/decisiones-pagos.md`), la
  * recomendación del consejo. **El 20% de la primera sesión es el costo de
- * ADQUISICIÓN**: cobra que Vita aportó al cliente. Cuando el cliente lo trajo el
- * coach, Vita no aportó nada que cobrar — cobrarle el 20% sería cobrarle su
+ * ADQUISICIÓN**: cobra que Sere aportó al cliente. Cuando el cliente lo trajo el
+ * coach, Sere no aportó nada que cobrar — cobrarle el 20% sería cobrarle su
  * propia cartera. Y es el incentivo para que traiga a la gente que ya atiende
  * por transferencia, que es la demanda que existe el día 1.
  *
@@ -197,9 +197,9 @@ export function commissionPctFor(
  * El redondeo va sobre `amount * pct` y recién después divide por 100, para no
  * arrastrar el error de coma flotante de calcular el porcentaje primero.
  *
- * ⚠️ Comisión PURA, sin IVA — y así se queda mientras Vita sea Monotributo
+ * ⚠️ Comisión PURA, sin IVA — y así se queda mientras Sere sea Monotributo
  * (decisión del 06/08/2026): factura C sin IVA discriminado, o sea que lo que
- * se retiene acá es exactamente lo que percibe Vita.
+ * se retiene acá es exactamente lo que percibe Sere.
  */
 export function marketplaceFeeFor(amount: number, pct: number): number {
   return Math.round(amount * pct) / 100;

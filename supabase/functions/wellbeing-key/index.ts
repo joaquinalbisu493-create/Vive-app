@@ -10,7 +10,7 @@
 // NO es cifrado de extremo a extremo. Quien tenga a la vez la base Y el secreto
 // maestro de esta función puede recalcular la clave de cualquiera. Es una
 // decisión de Andre (opción "B"), no un descuido: así el diario sobrevive a un
-// teléfono robado o cambiado, y Vita puede seguir cumpliendo un pedido de
+// teléfono robado o cambiado, y Sere puede seguir cumpliendo un pedido de
 // acceso a los datos (Ley 25.326, art. 14). Por eso la Política §8.2 dice
 // "cifrado" y sigue diciendo "no de extremo a extremo".
 //

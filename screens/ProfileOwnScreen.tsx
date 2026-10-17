@@ -393,7 +393,7 @@ export default function ProfileOwnScreen() {
                     // poder tipearlo a mano al crear la cuenta, y adentro del
                     // link, para el día que la app lo lea sola. Hoy la app no
                     // está publicada, así que el que sirve es el primero.
-                    message: `Te invito a Vita. Con mi código ${miCodigo} tu primera sesión sale ${DESCUENTO_REFERIDO_PCT}% menos.\n\nhttps://vitaapp.com.ar/?ref=${miCodigo}`,
+                    message: `Te invito a Sere. Con mi código ${miCodigo} tu primera sesión sale ${DESCUENTO_REFERIDO_PCT}% menos.\n\nhttps://vitaapp.com.ar/?ref=${miCodigo}`,
                   }).catch(() => {})}
                   activeOpacity={0.8}>
                   <Text style={styles.invitarCodigoTxt}>{miCodigo}</Text>

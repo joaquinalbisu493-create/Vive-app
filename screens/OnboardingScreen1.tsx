@@ -324,7 +324,7 @@ export default function OnboardingScreen1() {
         onPressOut={handlePressOut}
         accessible
         accessibilityRole="button"
-        accessibilityLabel="Vita te acompaña. Empezar"
+        accessibilityLabel="Sere te acompaña. Empezar"
         accessibilityActions={[{ name: 'activate' }]}
         onAccessibilityAction={handleActivate}
       >
@@ -398,7 +398,7 @@ export default function OnboardingScreen1() {
               fontWeight="800"
               fill={ViveColors.primary}
             >
-              {'vita'}
+              {'sere'}
             </AnimatedSvgText>
             <AnimatedSvgText
               animatedProps={brandProps}
@@ -408,7 +408,7 @@ export default function OnboardingScreen1() {
               fontWeight="800"
               fill={ViveColors.accent}
             >
-              {'vita'}
+              {'sere'}
             </AnimatedSvgText>
 
             {/* ── Tagline: appears near completion ── */}

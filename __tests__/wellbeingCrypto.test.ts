@@ -145,7 +145,7 @@ describe('obtenerClave', () => {
 
 // 🔴 El pedido de acceso a los datos (Ley 25.326, art. 14) se arma con
 // `scripts/decodificar-export.mjs`, que repite a mano el formato y la derivación
-// de la clave. Si la app y ese script se desalinean, Vita deja de poder
+// de la clave. Si la app y ese script se desalinean, Sere deja de poder
 // entregarle su diario a quien lo pide — y nadie se entera hasta ese día.
 describe('el script del pedido de datos abre lo que cifra la app', () => {
   it('diario y gratitud vuelven en texto', () => {

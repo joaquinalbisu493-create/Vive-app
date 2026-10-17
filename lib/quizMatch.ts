@@ -2,7 +2,7 @@
 //
 // Sale de la comparación con Selia (docs/problemas-abiertos.md M1 y M2): Selia
 // explica por qué recomienda a cada especialista y, si ninguno convence, deja
-// ver otros o rehacer el matching. Vita ya tenía una frase de "por qué", pero
+// ver otros o rehacer el matching. Sere ya tenía una frase de "por qué", pero
 // con dos defectos que esta versión cierra:
 //
 // 1. 🔴 **Decía cosas que podían no ser ciertas.** Si nadie cumplía las tres
@@ -246,7 +246,7 @@ function evaluar(coach: CachedCoach, r: RespuestasQuiz) {
       if (tipoPedido === 'Coach') razones.push('Acompaña como coach, como preferiste');
       // "Psicólogo" y "Nutricionista" solo salen con matrícula verificada
       // (`tipoProfesional`), así que decirlo es cierto.
-      else razones.push('Tiene matrícula verificada por Vita');
+      else razones.push('Tiene matrícula verificada por Sere');
     } else if (tipoPedido === 'Coach') {
       diferencias.push('No es coach: tiene matrícula profesional');
     } else {
@@ -326,7 +326,7 @@ function evaluar(coach: CachedCoach, r: RespuestasQuiz) {
     ? `Trabaja ${listar(elegidosEnComun.slice(0, 2))}, que es lo que querés trabajar`
     : null;
   const razonEje = ejes.find(e => e.razon && !e.parcial)?.razon ?? null;
-  const razonTipo = tipoPedido && cumpleTipo && tipoPedido !== 'Coach' ? 'Tiene matrícula verificada por Vita' : null;
+  const razonTipo = tipoPedido && cumpleTipo && tipoPedido !== 'Coach' ? 'Tiene matrícula verificada por Sere' : null;
   const motivo = razonSubtema ?? genero.razon ?? pago.razon ?? razonEje ?? razonTipo;
 
   return {

@@ -153,7 +153,7 @@ describe('scheduledAtMs', () => {
   });
 });
 
-describe('alertasDeAbuso — la misma cuenta de pago en otra cuenta de Vita', () => {
+describe('alertasDeAbuso — la misma cuenta de pago en otra cuenta de Sere', () => {
   it('sin otras cuentas no avisa nada', () => {
     expect(alertasDeAbuso({ otrasCuentas: 0, garantiasDeOtrasCuentas: 0 })).toEqual([]);
   });

@@ -123,7 +123,7 @@ export default function BookingScreen_Success() {
             <Text style={s.title}>
               {isInstant ? '¡Sesión confirmada!' : '¡Reserva enviada!'}
             </Text>
-            {/* 25/09/2026: "Ya tenés con quién hablar" es el "no estás solo" de Vita
+            {/* 25/09/2026: "Ya tenés con quién hablar" es el "no estás solo" de Sere
                 dicho donde es literalmente cierto. Solo en la confirmada: en la
                 pendiente todavía no lo es. */}
             <Text style={s.subtitle}>

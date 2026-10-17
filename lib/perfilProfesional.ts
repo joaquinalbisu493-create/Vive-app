@@ -17,11 +17,11 @@ import { daysFromTodayAr, deviceIsOffArgentina, deviceTz, localEquivalentLabel }
  * no alcanzan para encontrarla.
  *
  * Sin nombre usable (vacío, o la lápida de una cuenta borrada) firma
- * "Alguien de Vita": la reseña sigue valiendo, quien la escribió no se muestra.
+ * "Alguien de Sere": la reseña sigue valiendo, quien la escribió no se muestra.
  */
 export function firmaDeResena(nombre: string | null | undefined): string {
   const limpio = (nombre ?? '').trim().replace(/\s+/g, ' ');
-  if (!limpio || limpio === 'Usuario eliminado' || limpio === 'Usuario') return 'Alguien de Vita';
+  if (!limpio || limpio === 'Usuario eliminado' || limpio === 'Usuario') return 'Alguien de Sere';
   const [primero, ...resto] = limpio.split(' ');
   const pila = primero.charAt(0).toUpperCase() + primero.slice(1);
   const apellido = resto.find(p => /\p{L}/u.test(p));

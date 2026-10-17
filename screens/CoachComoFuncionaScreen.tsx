@@ -72,8 +72,8 @@ const BLOQUES: Bloque[] = [
     resumen: 'Aparecés en los temas que trabajás, y en cada tema hay cuatro lugares.',
     parrafos: [
       'En Profesionales, la persona elige un área de bienestar y adentro un tema, como Ansiedad y estrés o Relaciones. Vos aparecés en los temas que tienen que ver con lo que marcaste que trabajás. Para aparecer hace falta tener el perfil aprobado y activo, temas, precio y un medio de cobro.',
-      'Cada tema muestra hasta cuatro profesionales, uno por lugar: Recomendado por Vita, En tendencia, Nuevo en Vita y Opción económica. No competís contra todos: entrás a un lugar cumpliendo lo que pide, y si varios lo cumplen, se turnan cada día.',
-      'Nuevo en Vita: tus primeras 4 semanas, mientras tengas menos de 5 reseñas. Opción económica: tu precio está en la mitad más accesible del tema. En tendencia: te reservaron al menos 3 personas distintas en los últimos 30 días. Recomendado por Vita: 4,5 estrellas o más y al menos 3 reseñas; desde las 5 sesiones cumplidas, en vez de las 3 reseñas se pide que al menos 3 de cada 10 personas vuelvan a reservarte.',
+      'Cada tema muestra hasta cuatro profesionales, uno por lugar: Recomendado por Sere, En tendencia, Nuevo en Sere y Opción económica. No competís contra todos: entrás a un lugar cumpliendo lo que pide, y si varios lo cumplen, se turnan cada día.',
+      'Nuevo en Sere: tus primeras 4 semanas, mientras tengas menos de 5 reseñas. Opción económica: tu precio está en la mitad más accesible del tema. En tendencia: te reservaron al menos 3 personas distintas en los últimos 30 días. Recomendado por Sere: 4,5 estrellas o más y al menos 3 reseñas; desde las 5 sesiones cumplidas, en vez de las 3 reseñas se pide que al menos 3 de cada 10 personas vuelvan a reservarte.',
       'Si la persona hizo el quiz, en cada lugar se muestra primero a quien encaja con lo que contestó. Y por fuera de los temas está tu link: quien entra por ahí llega directo a tu perfil.',
     ],
     ir: { label: 'Ver en qué lugar estás hoy', ruta: '/coach-visibilidad' },
@@ -98,8 +98,8 @@ const BLOQUES: Bloque[] = [
     resumen: '20% de comisión en la primera sesión con cada persona, 15% después.',
     parrafos: [
       'La comisión es 20% en la primera sesión con cada persona y 15% de la segunda en adelante, para siempre. Si la persona llegó por tu link, la primera no paga comisión.',
-      'En las sesiones de Argentina la plata va directo a tu cuenta de Mercado Pago cuando la persona reserva; Vita nunca la toca. Las del exterior, por PayPal o USDT, las cobra Vita y te las transferimos cada semana, por las sesiones que ya ocurrieron. Ahí la comisión es 25% y 20%, porque cobrar desde afuera cuesta más.',
-      'Los comprobantes de la sesión se los emitís vos a la persona: Vita solo factura su comisión.',
+      'En las sesiones de Argentina la plata va directo a tu cuenta de Mercado Pago cuando la persona reserva; Sere nunca la toca. Las del exterior, por PayPal o USDT, las cobra Sere y te las transferimos cada semana, por las sesiones que ya ocurrieron. Ahí la comisión es 25% y 20%, porque cobrar desde afuera cuesta más.',
+      'Los comprobantes de la sesión se los emitís vos a la persona: Sere solo factura su comisión.',
       'No hay costo de alta, ni mensualidad, ni cargo por cancelar.',
     ],
     ir: { label: 'Ver tus datos de cobro', ruta: '/coach-datos-cobro' },
@@ -111,7 +111,7 @@ const BLOQUES: Bloque[] = [
     resumen: 'Si no quedó conforme con la primera sesión, la persona puede pedir la plata de vuelta.',
     parrafos: [
       'Dentro de las 48 horas después de su primera sesión con vos, la persona puede pedir el reintegro sin dar motivos. Cada persona la puede usar una sola vez en toda la app, con un solo profesional.',
-      'Si se aprueba, el reintegro sale de lo que cobraste por esa sesión, y Vita tampoco se queda con comisión. Revisamos cada pedido antes de aprobarlo, para frenar abusos.',
+      'Si se aprueba, el reintegro sale de lo que cobraste por esa sesión, y Sere tampoco se queda con comisión. Revisamos cada pedido antes de aprobarlo, para frenar abusos.',
       'Es lo que le da confianza a alguien para probar con un profesional que todavía no conoce.',
     ],
   },
@@ -145,7 +145,7 @@ const BLOQUES: Bloque[] = [
     titulo: 'Reseñas',
     resumen: 'Solo las deja la persona, y solo después de una sesión que ocurrió.',
     parrafos: [
-      'Las reseñas van de la persona hacia vos, nunca al revés, y solo después de una sesión cumplida. Son las que cuentan para el lugar de Recomendado por Vita.',
+      'Las reseñas van de la persona hacia vos, nunca al revés, y solo después de una sesión cumplida. Son las que cuentan para el lugar de Recomendado por Sere.',
       'No se pueden pedir a cambio de nada ni coordinar: las reseñas falsas o incentivadas se borran.',
     ],
   },
@@ -153,7 +153,7 @@ const BLOQUES: Bloque[] = [
     id: 'urgencias',
     icon: 'lifebuoy',
     titulo: 'Si alguien está en riesgo',
-    resumen: 'Vita no es un servicio de emergencias, y vos tampoco tenés que serlo.',
+    resumen: 'Sere no es un servicio de emergencias, y vos tampoco tenés que serlo.',
     parrafos: [
       'Ni la app ni los profesionales están para atender urgencias. Si alguien te cuenta que piensa en hacerse daño o está en peligro, indicale que llame al 911, a la Línea de Salud Mental 0800-999-0091 (las 24 horas) o al 135 del Centro de Asistencia al Suicida.',
       'Si sos coach o nutricionista, lo que es clínico no te corresponde: derivalo a un profesional de salud mental, como te comprometiste al postularte.',
@@ -165,9 +165,9 @@ const BLOQUES: Bloque[] = [
     titulo: 'Privacidad y notas',
     resumen: 'La sesión no se graba, y tus notas privadas son solo tuyas.',
     parrafos: [
-      'Vita no graba ni escucha las sesiones. De la videollamada solo guardamos quién entró y cuánto tiempo estuvo.',
+      'Sere no graba ni escucha las sesiones. De la videollamada solo guardamos quién entró y cuánto tiempo estuvo.',
       'Las notas privadas las ves solo vos; las compartidas también las ve la persona. Lo que te cuenta está alcanzado por tu deber de confidencialidad.',
-      'Si la persona elimina su cuenta de Vita, las notas que escribiste sobre ella se borran. Si necesitás conservar un registro propio, llevalo fuera de la app.',
+      'Si la persona elimina su cuenta de Sere, las notas que escribiste sobre ella se borran. Si necesitás conservar un registro propio, llevalo fuera de la app.',
       'Podés bloquear a alguien desde el chat. No se le avisa, y las sesiones ya agendadas siguen en pie.',
     ],
   },
@@ -177,9 +177,9 @@ const BLOQUES: Bloque[] = [
     titulo: 'Qué no se puede hacer',
     resumen: 'Llevarte por fuera de la app a alguien que conociste acá.',
     parrafos: [
-      'Llevarte fuera de la app a alguien que conociste acá para evitar la comisión, o pedirle que te pague por fuera de Vita. Por eso la app no deja mandar CBU, alias ni links de cobro, y avisa antes de enviar un teléfono o un mail.',
-      'La gente que ya era tuya antes de Vita es tuya: traerla por tu link no es eludir nada, y justamente por eso esa primera sesión no paga comisión.',
-      'Incumplir puede terminar en advertencia, suspensión o baja de la cuenta. Nada de eso es automático: cada caso lo revisa una persona de Vita, te avisamos el motivo y podés pedir que se revise escribiendo a vitaappar@gmail.com.',
+      'Llevarte fuera de la app a alguien que conociste acá para evitar la comisión, o pedirle que te pague por fuera de Sere. Por eso la app no deja mandar CBU, alias ni links de cobro, y avisa antes de enviar un teléfono o un mail.',
+      'La gente que ya era tuya antes de Sere es tuya: traerla por tu link no es eludir nada, y justamente por eso esa primera sesión no paga comisión.',
+      'Incumplir puede terminar en advertencia, suspensión o baja de la cuenta. Nada de eso es automático: cada caso lo revisa una persona de Sere, te avisamos el motivo y podés pedir que se revise escribiendo a vitaappar@gmail.com.',
     ],
     ir: { label: 'Leer los términos completos', ruta: '/legal?doc=terminos' },
   },

@@ -40,5 +40,5 @@ export const PARA_QUE: Record<string, ParaQue> = {
   },
 };
 
-/** La línea debajo de "Herramientas de Vita", en Recursos. */
+/** La línea debajo de "Herramientas de Sere", en Recursos. */
 export const HERRAMIENTAS_BAJADA = 'Prácticas cortas para el día a día. No reemplazan una sesión: la acompañan.';

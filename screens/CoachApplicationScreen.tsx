@@ -228,7 +228,7 @@ export default function CoachApplicationScreen() {
     (async () => {
       // 🔒 Por la RPC y no por `from('coaches')`: desde la auditoría del
       // 23/09/2026 las columnas `application_*` ya no son legibles por `anon`
-      // ni por `authenticated` (el motivo de un rechazo es texto que Vita
+      // ni por `authenticated` (el motivo de un rechazo es texto que Sere
       // escribe sobre una persona, y la policy de SELECT de `coaches` es
       // `using (true)`). `mi_postulacion()` devuelve solo la fila de quien
       // llama. Ver `scripts/cerrar-columnas-postulacion.sql`.
@@ -387,7 +387,7 @@ export default function CoachApplicationScreen() {
     // fecha de nacimiento obligatoria, así que del lado coach la mayoría de edad
     // no queda solo en la declaración de CoachLoginScreen. T&C §3.1.
     if (ageFromIso(birthDateIso) < 18) {
-      frenar('birthDate', 'Tenés que ser mayor de 18 años para ofrecer sesiones en Vita');
+      frenar('birthDate', 'Tenés que ser mayor de 18 años para ofrecer sesiones en Sere');
       return;
     }
     if (!paisAtencion) { frenar('lugar', 'Elegí desde qué país atendés'); return; }
@@ -741,7 +741,7 @@ export default function CoachApplicationScreen() {
                 lee el equipo al revisar (docs/postulacion-preguntas.md, hueco 2). */}
             <View style={styles.limitesSep} />
             <Text style={styles.limitesNota}>
-              Estas dos no se muestran en tu perfil: las lee el equipo de Vita al revisar tu postulación.
+              Estas dos no se muestran en tu perfil: las lee el equipo de Sere al revisar tu postulación.
             </Text>
 
             {pideCompromiso && (
@@ -873,7 +873,7 @@ export default function CoachApplicationScreen() {
               ) : (
                 <Campo
                   label="Tres fotos"
-                  hint="Las mira una persona del equipo de Vita y se borran apenas verificamos que coinciden. No se muestran en tu perfil."
+                  hint="Las mira una persona del equipo de Sere y se borran apenas verificamos que coinciden. No se muestran en tu perfil."
                   error={campoError === 'identidad'}>
                   {FOTOS_IDENTIDAD.map(f => {
                     const lista = fotosSubidas.has(f.id);

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Vita",
+    "name": "Sere",
     "slug": "vita",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -66,22 +66,22 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Vita necesita acceso a tus fotos para subir tu foto de perfil, tu video de presentación o las fotos de tu DNI si sos profesional.",
-          "cameraPermission": "Vita necesita acceso a tu cámara para tu foto de perfil, tu video de presentación o las fotos de tu DNI si sos profesional.",
-          "microphonePermission": "Vita necesita acceso al micrófono para grabar tu video de presentación."
+          "photosPermission": "Sere necesita acceso a tus fotos para subir tu foto de perfil, tu video de presentación o las fotos de tu DNI si sos profesional.",
+          "cameraPermission": "Sere necesita acceso a tu cámara para tu foto de perfil, tu video de presentación o las fotos de tu DNI si sos profesional.",
+          "microphonePermission": "Sere necesita acceso al micrófono para grabar tu video de presentación."
         }
       ],
       "expo-video",
       [
         "expo-calendar",
         {
-          "calendarPermission": "Vita necesita acceso al calendario para agregar tus sesiones."
+          "calendarPermission": "Sere necesita acceso al calendario para agregar tus sesiones."
         }
       ],
       [
         "expo-audio",
         {
-          "microphonePermission": "Vita necesita acceso al micrófono para grabar tus recursos de audio."
+          "microphonePermission": "Sere necesita acceso al micrófono para grabar tus recursos de audio."
         }
       ],
       "expo-asset",

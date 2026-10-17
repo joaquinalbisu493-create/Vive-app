@@ -1,4 +1,4 @@
-// Vita Design System
+// Sere Design System
 export const ViveColors = {
   primary: '#C1694F',    // Terracota
   background: '#F7EFE4', // Crema cálido
@@ -81,7 +81,7 @@ export const ViveFonts = {
   title: 'PlusJakartaSans_700Bold',
   titleSemiBold: 'PlusJakartaSans_600SemiBold',
   // Plus Jakarta Sans 500 (ya se carga en _layout). Para sub-encabezados como
-  // "Herramientas de Vita" — más liviano que un título, más que el cuerpo.
+  // "Herramientas de Sere" — más liviano que un título, más que el cuerpo.
   titleMedium: 'PlusJakartaSans_500Medium',
   // Texto de devolución/feedback generado — la card "Sobre vos", el momento de
   // pantalla completa, y cualquier otro texto de reflexión dinámica.

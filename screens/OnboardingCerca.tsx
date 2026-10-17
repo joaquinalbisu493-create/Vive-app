@@ -397,7 +397,7 @@ export default function OnboardingCerca() {
         onPressIn={alApoyar}
         accessible
         accessibilityRole="button"
-        accessibilityLabel="Siempre hay con quién hablar. Vita te acompaña. Empezar"
+        accessibilityLabel="Siempre hay con quién hablar. Sere te acompaña. Empezar"
         accessibilityActions={[{ name: 'activate' }]}
         onAccessibilityAction={alActivar}
       >
@@ -443,7 +443,7 @@ export default function OnboardingCerca() {
         {/* Un solo lugar para leer: la frase → "vita / te acompaña". */}
         <View style={[styles.texto, { top: textoY }]} pointerEvents="none">
           <Animated.Text style={[styles.frase, styles.encima, frase1Style]}>{FRASE_1}</Animated.Text>
-          <Animated.Text style={[styles.marca, marcaStyle]}>vita</Animated.Text>
+          <Animated.Text style={[styles.marca, marcaStyle]}>sere</Animated.Text>
           <Animated.Text style={[styles.lema, lemaStyle]}>te acompaña</Animated.Text>
         </View>
 

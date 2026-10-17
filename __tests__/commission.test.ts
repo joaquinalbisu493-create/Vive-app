@@ -121,7 +121,7 @@ describe('commissionPctFor', () => {
   });
 
   // D13 (11/09/2026): el cliente que trajo el coach por su link no paga
-  // comisión de adquisición en la primera — Vita no aportó ese cliente.
+  // comisión de adquisición en la primera — Sere no aportó ese cliente.
   describe('cliente traído por el link del coach', () => {
     it('🔴 la primera sesión del par va al 0%, en los tres rieles', () => {
       expect(commissionPctFor(0, now, null, 'mp', 'link')).toBe(COMMISSION_LINK_FIRST);

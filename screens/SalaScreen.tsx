@@ -861,7 +861,7 @@ export default function SalaScreen() {
       if (!abrio) {
         void logError('Sala: no se pudo abrir la videollamada');
         Alert.alert('No se pudo abrir la videollamada', 'Probá de nuevo. Si sigue sin andar, avisanos.', [
-          { text: 'Avisar a Vita', onPress: () => abrirProblema(activeBooking.id) },
+          { text: 'Avisar a Sere', onPress: () => abrirProblema(activeBooking.id) },
           { text: 'Entendido', style: 'cancel' },
         ]);
       }
@@ -872,7 +872,7 @@ export default function SalaScreen() {
     } else {
       void logError('Sala: no se pudo preparar la videollamada');
       Alert.alert('No se pudo preparar la sala', 'Intentalo de nuevo en unos segundos. Si sigue sin andar, avisanos.', [
-        { text: 'Avisar a Vita', onPress: () => abrirProblema(activeBooking.id) },
+        { text: 'Avisar a Sere', onPress: () => abrirProblema(activeBooking.id) },
         { text: 'Entendido', style: 'cancel' },
       ]);
     }
@@ -952,7 +952,7 @@ export default function SalaScreen() {
       const startDate = new Date(scheduledAtMs(activeBooking.scheduled_date, activeBooking.scheduled_time));
       const dur = activeBooking.duration_minutes ?? 60;
       const endDate = new Date(startDate.getTime() + dur * 60_000);
-      const title = `Sesión con ${recipientProfile?.name ?? 'profesional'} · Vita`;
+      const title = `Sesión con ${recipientProfile?.name ?? 'profesional'} · Sere`;
 
       // Evitar duplicados: si ya existe un evento igual (mismo título y arranque)
       // en ese rango, no lo agregamos de nuevo (bug de tap repetido).
@@ -973,8 +973,8 @@ export default function SalaScreen() {
         // no deja entrar a nadie: sin token muestra permiso denegado. Un link
         // que falla al tocarlo es peor que no ponerlo, y el token no se puede
         // pegar acá — vence con la sesión y es de una sola persona.
-        notes: 'Entrá a la videollamada desde la app Vita, en tu sala con el profesional.',
-        location: 'App Vita',
+        notes: 'Entrá a la videollamada desde la app Sere, en tu sala con el profesional.',
+        location: 'App Sere',
       });
       Alert.alert('Listo ✓', 'La sesión fue agregada a tu calendario');
     } finally {
@@ -1107,7 +1107,7 @@ export default function SalaScreen() {
         role: 'coach', canal: 'nota_recomendacion', senal: 'datos_de_cobro', bloqueado: true,
         sala_id: salaId, coach_id: user.id, user_id: recipientId,
       });
-      Alert.alert('No se pueden mandar datos para cobrar', 'Los pagos van siempre por Vita: así la persona tiene reembolso y garantía, y vos cobrás sin tener que perseguir a nadie. Sacá el CBU, el alias o el link de pago y volvé a enviar.');
+      Alert.alert('No se pueden mandar datos para cobrar', 'Los pagos van siempre por Sere: así la persona tiene reembolso y garantía, y vos cobrás sin tener que perseguir a nadie. Sacá el CBU, el alias o el link de pago y volvé a enviar.');
       return;
     }
     const senal = recoNote.trim() ? detectContactInfo(recoNote) : null;
@@ -1116,7 +1116,7 @@ export default function SalaScreen() {
     const par = { role: 'coach', canal: 'nota_recomendacion', senal, sala_id: salaId, coach_id: user.id, user_id: recipientId };
     Alert.alert(
       '¿Compartir datos de contacto?',
-      'La nota parece incluir datos de contacto o de pago. Mantené la conversación y los pagos dentro de Vita.',
+      'La nota parece incluir datos de contacto o de pago. Mantené la conversación y los pagos dentro de Sere.',
       [
         { text: 'Editar', style: 'cancel', onPress: () => registrarEvento('mensaje_contacto_detectado', { ...par, sent_anyway: false }) },
         {
@@ -1179,7 +1179,7 @@ export default function SalaScreen() {
 
       // Mismo criterio que el mensaje: el título del recurso también dice algo
       // ("Dormir mejor con ansiedad" en la pantalla bloqueada es un diagnóstico).
-      await notifyViaServer({ salaId, recipientId, title: 'Recurso recomendado', body: 'Tu profesional te recomendó algo en Vita' });
+      await notifyViaServer({ salaId, recipientId, title: 'Recurso recomendado', body: 'Tu profesional te recomendó algo en Sere' });
     } catch {
       Alert.alert('Error', 'No se pudo enviar la recomendación');
     } finally {
@@ -1217,7 +1217,7 @@ export default function SalaScreen() {
         role: 'coach', canal: 'chat', senal: 'datos_de_cobro', bloqueado: true,
         sala_id: salaId ?? null, coach_id: user?.id ?? null, user_id: recipientId,
       });
-      Alert.alert('No se pueden mandar datos para cobrar', 'Los pagos van siempre por Vita: así la persona tiene reembolso y garantía, y vos cobrás sin tener que perseguir a nadie. Sacá el CBU, el alias o el link de pago y volvé a enviar.');
+      Alert.alert('No se pueden mandar datos para cobrar', 'Los pagos van siempre por Sere: así la persona tiene reembolso y garantía, y vos cobrás sin tener que perseguir a nadie. Sacá el CBU, el alias o el link de pago y volvé a enviar.');
       return;
     }
 
@@ -1258,7 +1258,7 @@ export default function SalaScreen() {
       };
       Alert.alert(
         '¿Compartir datos de contacto?',
-        'Por tu seguridad, mantené la conversación y los pagos dentro de Vita. Si arreglás por fuera, perdés las protecciones de la app.',
+        'Por tu seguridad, mantené la conversación y los pagos dentro de Sere. Si arreglás por fuera, perdés las protecciones de la app.',
         [
           { text: 'Cancelar', style: 'cancel', onPress: () => registrarEvento('mensaje_contacto_detectado', { ...par, sent_anyway: false }) },
           {
@@ -1330,7 +1330,7 @@ export default function SalaScreen() {
     // (habla de "notificaciones relacionadas con el servicio", no de contenido).
     // En una app donde el mensaje puede decir por qué alguien no durmió, el
     // aviso tiene que avisar y nada más.
-    await notifyViaServer({ salaId, recipientId, title: 'Nuevo mensaje', body: 'Te escribieron en Vita' });
+    await notifyViaServer({ salaId, recipientId, title: 'Nuevo mensaje', body: 'Te escribieron en Sere' });
   }
 
   const isCurrentUserCoach = !recipientIsCoach;

@@ -216,12 +216,12 @@ serve(async (req) => {
         // acá no hace falta tener.
         custom_id: booking.id,
         amount: { currency_code: 'USD', value: precio.toFixed(2) },
-        description: 'Sesión en Vita',
+        description: 'Sesión en Sere',
       }],
       payment_source: {
         paypal: {
           experience_context: {
-            brand_name: 'Vita',
+            brand_name: 'Sere',
             user_action: 'PAY_NOW',
             ...(CHECKOUT_RETURN_URL ? {
               return_url: CHECKOUT_RETURN_URL,

@@ -424,7 +424,7 @@ export default function SearchScreen3() {
                 </View>
                 <View style={s.specialtyRow}>
                   <Text style={s.cardSpecialty} numberOfLines={1}>{p.specialty}</Text>
-                  {/* 🔴 La insignia solo aparece cuando Vita verificó la
+                  {/* 🔴 La insignia solo aparece cuando Sere verificó la
                       matrícula. NO se muestra nada en el caso contrario: en una
                       grilla, una marca de "sin matrícula" en cada tarjeta se
                       leería como una advertencia contra esos profesionales, y

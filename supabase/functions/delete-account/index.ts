@@ -285,7 +285,7 @@ serve(async (req) => {
         // cobros de los últimos 180 días (cubre la garantía de 48 h y los contracargos)
         admin.from('bookings').select('id', { count: 'exact', head: true })
           .eq('coach_id', coachRow.id).in('payment_status', ['aprobado', 'reembolsado', 'contracargo']).gte('scheduled_date', hace180Dias),
-        // sesiones cobradas por PayPal o USDT que Vita todavía no le transfirió
+        // sesiones cobradas por PayPal o USDT que Sere todavía no le transfirió
         admin.from('bookings').select('id', { count: 'exact', head: true })
           .eq('coach_id', coachRow.id).eq('status', 'completada').eq('payment_status', 'aprobado')
           .in('payment_provider', ['paypal', 'usdt']).is('paid_out_at', null),

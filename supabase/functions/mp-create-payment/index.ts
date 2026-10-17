@@ -24,7 +24,7 @@ const MP_WEBHOOK_URL = Deno.env.get('MP_WEBHOOK_URL')!         // URL pública d
 //
 // Desde la sesión 117 el checkout se abre en la APP NATIVA de Mercado Pago, y
 // ahí la vuelta SÍ hace falta: sin `back_urls`, quien termina de pagar queda
-// parado en la app de MP y tiene que volver a Vita a mano. El default apunta a
+// parado en la app de MP y tiene que volver a Sere a mano. El default apunta a
 // `booking-return`, que es https (requisito de MP) y hace 302 al deep link.
 //
 // Por qué ahora sí y en la sesión 107 no: aquel intento fallaba porque el
@@ -175,7 +175,7 @@ serve(async (req) => {
     // marketplace_fee = comisión pura (20/15%), SIN IVA — y así queda.
     // Figura fiscal DECIDIDA (Andre, 06/08/2026): persona humana en Monotributo.
     // Factura tipo C, sin IVA discriminado ⇒ la comisión que se retiene acá es
-    // exactamente lo que percibe Vita y lo que dice el copy del coach. Nada que sumar.
+    // exactamente lo que percibe Sere y lo que dice el copy del coach. Nada que sumar.
     // Si algún día pasa a Responsable Inscripto, ACÁ hay que decidir: o el coach
     // pasa a pagar 24,2% (20% + IVA 21%) y este cálculo lo suma, o el 20% se
     // vuelve IVA incluido y el ingreso real cae a ~16,5%. Es decisión de precio,
@@ -185,7 +185,7 @@ serve(async (req) => {
 
     // ── M7: el descuento del que llega invitado ──────────────────────────────
     //
-    // 🔴 **Sale entero de la comisión de Vita.** El coach cobra lo mismo que
+    // 🔴 **Sale entero de la comisión de Sere.** El coach cobra lo mismo que
     // cobraría sin descuento; de hecho unos pesos más, porque la tarifa de
     // Mercado Pago se calcula sobre un monto menor. Por eso se bajan LAS DOS
     // cosas a la vez: lo que paga la persona y el `marketplace_fee`. Bajar solo
@@ -193,7 +193,7 @@ serve(async (req) => {
     //
     // ⚠️ El descuento se recorta a la comisión (`Math.min`): con una comisión
     // del 0% (promo del link del coach, D13) el descuento es 0 y no hay cobro
-    // donde Vita ponga plata. Hoy es imposible que se alcance el tope, porque
+    // donde Sere ponga plata. Hoy es imposible que se alcance el tope, porque
     // el descuento es 10 y la comisión más baja que cobra es 15; existe para el
     // día que alguien mueva uno de los dos números.
     //
@@ -209,7 +209,7 @@ serve(async (req) => {
       // 🔴 **El descuento se quema al APROBARSE el pago, no al crear el
       // checkout** (a propósito: si no, un checkout abandonado se lo comería).
       // Eso deja una ventana: abrir dos checkouts antes de pagar ninguno hacía
-      // que los DOS salieran con descuento, y Vita lo regalaba dos veces por
+      // que los DOS salieran con descuento, y Sere lo regalaba dos veces por
       // una sola invitación.
       //
       // Esta lectura mejora el mensaje normal, pero no resuelve dos solicitudes
@@ -265,7 +265,7 @@ serve(async (req) => {
       // y el total observado son 25 caracteres. Por eso va **solo "VITA"** y no
       // "VITA*<coach>": lo que sobra se corta, y un nombre mutilado se lee peor
       // que ninguno. Quién dio la sesión ya está en el mail y en la app.
-      statement_descriptor: 'VITA',
+      statement_descriptor: 'SERE',
     }
     // Split: comisión VITA (tier server-side). Se puede apagar para diagnóstico.
     // Con comisión 0 (el link, o la promo fundador) no se manda: omitirlo es lo

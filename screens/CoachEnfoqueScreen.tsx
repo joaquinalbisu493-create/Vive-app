@@ -251,7 +251,7 @@ export default function CoachEnfoqueScreen() {
 
               {/* 25/09/2026: cada profesión ve su lista (escuelas de
                   psicología, metodologías de coaching, enfoques de nutrición),
-                  según la profesión que Vita verificó. La regla de verdad está
+                  según la profesión que Sere verificó. La regla de verdad está
                   en la base (`trg_enfoques_requieren_matricula`). */}
               <View style={s.block}>
                 <Text style={s.blockTitle}>{profesion === 'psicologia' ? 'Tu escuela' : 'Tu enfoque'}</Text>
@@ -279,7 +279,7 @@ export default function CoachEnfoqueScreen() {
                   })}
                 </View>
                 {/* Declarar una metodología y respaldarla son dos cosas: esto
-                    lleva a cargar el certificado, que es lo que Vita verifica. */}
+                    lleva a cargar el certificado, que es lo que Sere verifica. */}
                 {enfoques.length > 0 && profesion !== 'psicologia' && (
                   <TouchableOpacity
                     onPress={() => router.push('/coach-credenciales')}

@@ -198,7 +198,7 @@ export function AuthModal({ visible, onDismiss, onLogin, signInWithEmail, signIn
               <Text style={s.legalLink} onPress={() => setLegalDoc('privacidad')}>
                 Política de privacidad
               </Text>
-              {' de Vita.'}
+              {' de Sere.'}
             </Text>
 
             <View style={s.dividerRow}>

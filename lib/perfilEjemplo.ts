@@ -87,11 +87,11 @@ export const RESENAS_EJEMPLO = [
   {
     rating: 4,
     comment: 'Muy clara para explicar lo que me pasaba. Me ayudó a ordenar un momento de mucho cambio.',
-    reviewerName: 'Alguien de Vita',
+    reviewerName: 'Alguien de Sere',
   },
 ];
 
 export const AVISO_EJEMPLO = {
   titulo: 'Perfil de ejemplo',
-  texto: 'Así se ve un perfil en Vita. Los datos son ilustrativos: esta persona no existe, así que no se puede reservar, guardar ni reportar.',
+  texto: 'Así se ve un perfil en Sere. Los datos son ilustrativos: esta persona no existe, así que no se puede reservar, guardar ni reportar.',
 };

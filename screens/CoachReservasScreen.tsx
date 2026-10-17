@@ -409,14 +409,14 @@ export default function CoachReservasScreen() {
     const par = { role: 'coach', canal: 'motivo_rechazo', coach_id: user.id, user_id: destinatario };
     if (motivo && hasDatosDeCobro(motivo)) {
       registrarEvento('mensaje_contacto_detectado', { ...par, senal: 'datos_de_cobro', bloqueado: true });
-      Alert.alert('No se pueden mandar datos para cobrar', 'Los pagos van siempre por Vita: así la persona tiene reembolso y garantía. Sacá el CBU, el alias o el link de pago y volvé a enviar.');
+      Alert.alert('No se pueden mandar datos para cobrar', 'Los pagos van siempre por Sere: así la persona tiene reembolso y garantía. Sacá el CBU, el alias o el link de pago y volvé a enviar.');
       return;
     }
     const senal = motivo ? detectContactInfo(motivo) : null;
     if (!senal) { void enviarRechazo(motivo); return; }
     Alert.alert(
       '¿Compartir datos de contacto?',
-      'El mensaje parece incluir datos de contacto. Mantené la conversación y los pagos dentro de Vita.',
+      'El mensaje parece incluir datos de contacto. Mantené la conversación y los pagos dentro de Sere.',
       [
         { text: 'Editar', style: 'cancel', onPress: () => registrarEvento('mensaje_contacto_detectado', { ...par, senal, sent_anyway: false }) },
         {

@@ -133,7 +133,7 @@ export default function CoachLoginScreen() {
       await signOut();
       Alert.alert(
         'Solicitud en revisión',
-        'Ya enviaste tu solicitud para ser profesional. Te avisaremos cuando Vita la apruebe',
+        'Ya enviaste tu solicitud para ser profesional. Te avisaremos cuando Sere la apruebe',
         [{ text: 'OK', onPress: () => router.back() }],
       );
       return;
@@ -432,7 +432,7 @@ export default function CoachLoginScreen() {
               {/* El rol de profesional se activa al aprobar la postulación —
                   esta pantalla es login Y alta a la vez. */}
               <Text style={s.roleNote}>
-                Tu cuenta de profesional se activa cuando Vita aprueba tu solicitud.
+                Tu cuenta de profesional se activa cuando Sere aprueba tu solicitud.
               </Text>
 
               {error && !showEmailForm && <Text style={s.serverError}>{error}</Text>}
@@ -525,7 +525,7 @@ export default function CoachLoginScreen() {
                 <Text style={s.legalLink} onPress={() => setLegalDoc('privacidad')}>
                   Política de privacidad
                 </Text>
-                {' de Vita.'}
+                {' de Sere.'}
               </Text>
             </Animated.View>
 

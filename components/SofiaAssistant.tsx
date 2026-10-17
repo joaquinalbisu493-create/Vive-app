@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
       android: { elevation: 6 },
     }),
   },
-  // 📝 La letra "S" salió el 27/08/2026: el orbe lleva el isotipo de Vita en
+  // 📝 La letra "S" salió el 27/08/2026: el orbe lleva el isotipo de Sere en
   // blanco sobre el verde del fondo, o sea la marca invertida. `VitaMark` ya
   // parametriza color y grosor, así que no hubo que tocar el logo — y el día que
   // el estudio lo cierre, cambia en `components/VitaMark.tsx` y esto lo hereda.

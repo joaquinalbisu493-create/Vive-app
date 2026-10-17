@@ -50,7 +50,7 @@ const SIGNALS = [
 ]
 const TONES = ['gentle', 'neutral', 'warm']
 
-const SYSTEM = `Escribís UNA línea para la pantalla de inicio de Vita, una app argentina de bienestar y desarrollo personal. Se muestra abajo del check-in diario de ánimo.
+const SYSTEM = `Escribís UNA línea para la pantalla de inicio de Sere, una app argentina de bienestar y desarrollo personal. Se muestra abajo del check-in diario de ánimo.
 
 # La voz
 Hablás como un amigo sabio, no como un sistema. Español rioplatense real, de "vos". Frases cortas y humanas. Lenguaje cotidiano.

@@ -1003,7 +1003,7 @@ export default function CoachHomeScreen() {
               <TouchableOpacity
                 activeOpacity={0.75}
                 onPress={async () => {
-                  const ok = await escribirnos('Reclamo por la sanción de mi cuenta', `Mi nombre en Vita: ${coachName || ''}\n\n`);
+                  const ok = await escribirnos('Reclamo por la sanción de mi cuenta', `Mi nombre en Sere: ${coachName || ''}\n\n`);
                   if (!ok) Alert.alert('Escribinos a', EMAIL_CONTACTO);
                 }}>
                 <Text style={[s.sancionQue, s.sancionLink]}>Si creés que es un error, escribinos a {EMAIL_CONTACTO}</Text>
@@ -1560,7 +1560,7 @@ export default function CoachHomeScreen() {
               <Feather name="book-open" size={16} color={FOREST} />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={s.visTitle}>Cómo funciona Vita</Text>
+              <Text style={s.visTitle}>Cómo funciona Sere</Text>
               <Text style={s.visTxt} numberOfLines={2}>Comisión, cobros, ausencias y cancelaciones</Text>
             </View>
             <Feather name="chevron-right" size={16} color={FOREST_SOFT} />

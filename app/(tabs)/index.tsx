@@ -1217,7 +1217,7 @@ function SobreVosCard({
             habla en primera persona ("Contame cómo venís"). La etiqueta era lo
             único que seguía nombrándola como una devolución.
             📌 La marca que va al lado ya era suya: el orbe de Sofía es el
-            isotipo de Vita invertido, así que el sello no necesita un símbolo
+            isotipo de Sere invertido, así que el sello no necesita un símbolo
             nuevo para leerse como su firma. */}
         <Text style={s.sealText}>Sofía</Text>
       </Animated.View>

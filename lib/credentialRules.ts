@@ -185,7 +185,7 @@ export type Encuadre = {
    * que es terapia. Necesita una aclaración pegada a esa credencial.
    */
   tituloSinMatricula: boolean;
-  /** Lo que se muestra arriba. Nunca la palabra "tratamiento": Vita no sabe si
+  /** Lo que se muestra arriba. Nunca la palabra "tratamiento": Sere no sabe si
    *  esta sesión lo es —un matriculado puede dar sesiones que no son clínicas—
    *  y rotularla así sería caracterizar la prestación, justo lo que T&C §5
    *  declara que no hace. */

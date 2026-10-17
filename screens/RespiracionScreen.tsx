@@ -38,7 +38,7 @@ type Patron = {
 };
 
 // 🔴 El copy describe la práctica y cuándo usarla, SIN prometer un efecto
-// fisiológico: T&C §5 declara que Vita no presta servicios de salud (fix de copy
+// fisiológico: T&C §5 declara que Sere no presta servicios de salud (fix de copy
 // del 16/09, ver docs/encuadre-salud-y-responsabilidad.md). No re-introducir
 // "calma el sistema nervioso" ni equivalentes.
 const PATRONES: readonly Patron[] = [
