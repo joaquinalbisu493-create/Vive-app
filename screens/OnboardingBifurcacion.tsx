@@ -142,6 +142,10 @@ function curva(w: number, h: number, i: number, side: Ala): string {
   ].join(' ');
 }
 
+// (e) 17/10/2026: prolongar cada línea derecho hacia abajo desde el cuello,
+// pegada a la costura, para que no "muriera en seco". En device no convenció
+// (Andre); se volvió a como estaba.
+
 // El relleno de color: el asta de más adentro, cerrada hasta el pie.
 function pagina(w: number, h: number, side: Ala): string {
   const x0   = side === 'left' ? 0 : w;
@@ -178,7 +182,9 @@ const CAMINOS: Camino[] = [
     title: 'Busco\nacompañamiento',
     // 07/10/2026 (Andre): nombra las dos cosas que hay en Sere, profesionales
     // primero. Antes hablaba solo de "herramientas para mi crecimiento".
-    desc: 'Quiero encontrar un profesional y tener herramientas para el día a día.',
+    // 17/10/2026 (Andre): más corta, para que ocupe los mismos renglones que la
+    // de la derecha. Era "Quiero encontrar un profesional y tener herramientas…".
+    desc: 'Encontrar un profesional y herramientas para el día a día.',
     rule: SALVIA_RULE,
     accent: VERDE_ICON,
     // 📌 `/register` es desde el 07/10/2026 "entrá o creá tu cuenta": sirve
@@ -411,7 +417,10 @@ export default function OnboardingBifurcacion() {
               espacio sobrante, así que acortarlo por abajo corre el centro
               hacia arriba sin sacar el título de su caja. */}
           <Animated.View style={[s.titleArea, { paddingBottom: height * TITULO_SUBE }, fadeUp(titleAnim)]}>
-            <Text style={s.title}>¿Qué buscás{'\n'}en Sere?</Text>
+            {/* 17/10/2026 (Andre): era "¿Qué buscás en Sere?". Con el wordmark
+                justo arriba, el nombre se repetía dos veces seguidas; "¿Qué
+                buscás?" a secas sonaba seco. */}
+            <Text style={s.title}>¿Qué te trae{'\n'}por acá?</Text>
           </Animated.View>
         </View>
       </Animated.View>
@@ -505,6 +514,8 @@ const s = StyleSheet.create({
     paddingHorizontal: 16,
   },
   colTop: { alignItems: 'center', gap: 17 },
+  // 17/10/2026: se probó cambiarlo por un aro como los del isotipo y quedó raro
+  // en device (Andre). Queda el disco lleno.
   circulo: { width: 40, height: 40, borderRadius: 20 },
   colTitle: {
     fontFamily: ViveFonts.titleSemiBold,
