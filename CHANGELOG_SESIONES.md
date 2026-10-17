@@ -1,3 +1,19 @@
+## 2026-10-17 — Andre (Claude · Vita pasa a llamarse Sere)
+
+**Tocado:** 111 archivos en `app/`, `screens/`, `components/`, `lib/`, `constants/`, `hooks/`, `__tests__/`, `supabase/functions/` y `app.json` (commit `0d3ce101`). Directo en `main`.
+
+**Resumen:**
+- **Nombre nuevo: Sere.** Marca "SERE" presentada en el INPI el 17/10 (denominativa, clases 9, 41, 42 y 44, a nombre de Andre) y dominio `sere.ar` registrado. Todo texto visible con "Vita" pasa a "Sere", el wordmark pasa a "sere" (misma tipografía y color), `app.json` name = "Sere" y el descriptor de la tarjeta en Mercado Pago = "SERE".
+- **No se tocó a propósito:** bundle id / package `com.andrealbisu.viveapp`, scheme `viveapp`, slug `vita`, owner de EAS (cambiarlos rompe login con Google, pagos y deep links), nombres de componentes/archivos (`VitaMark`, `VitaWordmark`, `vitaTools`), la web, el dominio `vitaapp.com.ar` (los mails siguen saliendo de `no-responder@vitaapp.com.ar`, ahora firmados "Sere") y los legales: `constants/legal.ts` se dejó igual a propósito porque se genera desde `docs/*.md` con `npm run sync:legal`.
+- **Funciones desplegadas a producción** (Andre, desde su terminal; verificado con `functions list`, verify_jwt intacto): admin-actions, calendario, mail-notificaciones, mp-create-payment, paypal-create-payment, sanction-returns, send-push, weekly-reflection, create-meeting-room, guarantee-claim, revocacion, session-attendance.
+- Tests 979/979 verde y `tsc` limpio.
+
+**Pendiente para la próxima sesión:**
+- Si existe el secreto `MAIL_REMITENTE` en Supabase, actualizarlo a `Sere <no-responder@vitaapp.com.ar>` (no figura en `secrets list` filtrando por MAIL; confirmar).
+- Probar en device las 8 bienvenidas: el wordmark "sere" no tiene ascendentes como "vita" y puede verse distinto en las animaciones.
+- Joaquín: hacer pull antes de tocar pantallas (el cambio toca casi todas).
+- Siguientes etapas: web, mover web y mails a `sere.ar` (vitaapp.com.ar redirigiendo) y recién después T&C y Política.
+
 ## 2026-10-15 — Joaquín (Claude · headers de tabs unificados + fix nav raíz)
 
 **Tocado:** `constants/screenHeader.ts` (nuevo), `constants/theme.ts`, `app/(tabs)/conexiones.tsx`, `app/(tabs)/recursos.tsx`, `screens/SessionsScreen.tsx`, `app/index.tsx`. Directo en `main`.
