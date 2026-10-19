@@ -700,7 +700,7 @@ export default function SalaScreen() {
               body: { booking_id: bookingId, solicitar: true },
             });
             if (error) {
-              Alert.alert('No se pudo', 'Probá de nuevo, o escribinos a vitaappar@gmail.com.');
+              Alert.alert('No se pudo', 'Probá de nuevo, o escribinos a hola@sere.ar.');
               return;
             }
             setGarantiaPedida(true);

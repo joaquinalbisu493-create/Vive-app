@@ -1,6 +1,6 @@
 // guarantee-claim — resuelve una solicitud de garantía de primera sesión (T&C §9.3).
 //
-// El intake es POR MAIL: §9.3 dice que el Cliente escribe a vitaappar@gmail.com,
+// El intake es POR MAIL: §9.3 dice que el Cliente escribe a hola@sere.ar,
 // así que esta función la invoca el equipo, no la app. Lo que aporta es que
 // aprobar deje de ser editar filas a mano: valida las cinco condiciones de la
 // cláusula y, si pasan, marca el reembolso.
@@ -291,7 +291,7 @@ serve(async (req) => {
     const { data: quien } = await supabase
       .from('profiles').select('name, email').eq('id', booking.user_id).maybeSingle()
     await enviarMail({
-      para: 'vitaappar@gmail.com',
+      para: 'hola@sere.ar',
       asunto: `Garantía §9.3 pedida desde la app`,
       titulo: 'Alguien pidió el reintegro de su primera sesión',
       lineas: [

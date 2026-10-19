@@ -3,8 +3,10 @@
 // Hasta hoy era `*`: cualquier sitio. No era un agujero —las funciones piden el
 // token de la sesión en un encabezado, y otro sitio no lo tiene—, pero no había
 // motivo para aceptarlo. La app no usa CORS (no es un navegador), así que esto
-// solo afecta a la web, que corre siempre en `www` (el dominio pelado redirige).
+// solo afecta a la web, que corre siempre en `sere.ar` (el `www` y el dominio
+// viejo `vitaapp.com.ar` redirigen ahí desde el 18/10/2026; antes era
+// `https://www.vitaapp.com.ar`).
 //
 // ⚠️ Probar las páginas web desde `localhost` o una preview de Vercel va a dar
 // error de CORS contra producción. Es esperado.
-export const WEB_ORIGIN = 'https://www.vitaapp.com.ar'
+export const WEB_ORIGIN = 'https://sere.ar'

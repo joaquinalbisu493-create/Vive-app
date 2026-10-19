@@ -37,7 +37,7 @@ const VENTANA_MINUTOS = 180
 const TOPE_POR_CORRIDA = 50
 const DECISIONES = ['postulacion_aprobada', 'postulacion_rechazada']
 
-const SITIO = Deno.env.get('WEB_BASE_URL') ?? 'https://vitaapp.com.ar'
+const SITIO = Deno.env.get('WEB_BASE_URL') ?? 'https://sere.ar'
 
 /**
  * Qué se manda y con qué título. La `body` de la notificación ya está escrita

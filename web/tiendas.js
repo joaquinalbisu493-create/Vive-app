@@ -77,7 +77,7 @@
         return r.json().catch(function () { return {}; }).then(function (b) {
           if (b.message === 'email_invalido') error('Revisá el mail, parece que le falta algo.');
           else if (b.message === 'rate_limited') error('Hubo muchos intentos seguidos. Probá de nuevo en un rato.');
-          else error('No se pudo guardar. Probá de nuevo o escribinos a vitaappar@gmail.com.');
+          else error('No se pudo guardar. Probá de nuevo o escribinos a hola@sere.ar.');
           boton.disabled = false;
           boton.textContent = txt.boton;
         });

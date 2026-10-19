@@ -25,7 +25,7 @@ const path = require('path');
 // solo puede leer lo que la RLS deja leer a `anon`.
 const SUPABASE_URL = 'https://ggygiihhnkjrerpinhha.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdneWdpaWhobmtqcmVycGluaGhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1Mjc5NjEsImV4cCI6MjA5NzEwMzk2MX0.lHPjyKjJIYD_lUTCF7uMBCKj9tCK_67OyrIFkCLQ-BI';
-const SITIO = 'https://www.vitaapp.com.ar';
+const SITIO = 'https://sere.ar';
 
 let htmlBase = null;
 async function leerHtml(req) {

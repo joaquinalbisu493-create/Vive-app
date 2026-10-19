@@ -179,7 +179,7 @@ const BLOQUES: Bloque[] = [
     parrafos: [
       'Llevarte fuera de la app a alguien que conociste acá para evitar la comisión, o pedirle que te pague por fuera de Sere. Por eso la app no deja mandar CBU, alias ni links de cobro, y avisa antes de enviar un teléfono o un mail.',
       'La gente que ya era tuya antes de Sere es tuya: traerla por tu link no es eludir nada, y justamente por eso esa primera sesión no paga comisión.',
-      'Incumplir puede terminar en advertencia, suspensión o baja de la cuenta. Nada de eso es automático: cada caso lo revisa una persona de Sere, te avisamos el motivo y podés pedir que se revise escribiendo a vitaappar@gmail.com.',
+      'Incumplir puede terminar en advertencia, suspensión o baja de la cuenta. Nada de eso es automático: cada caso lo revisa una persona de Sere, te avisamos el motivo y podés pedir que se revise escribiendo a hola@sere.ar.',
     ],
     ir: { label: 'Leer los términos completos', ruta: '/legal?doc=terminos' },
   },
@@ -264,7 +264,7 @@ export default function CoachComoFuncionaScreen() {
           })}
 
           <Text style={s.pie}>
-            Si algo de esto no coincide con lo que ves en la app, escribinos a vitaappar@gmail.com: el error es
+            Si algo de esto no coincide con lo que ves en la app, escribinos a hola@sere.ar: el error es
             nuestro y queremos saberlo.
           </Text>
 

@@ -12,7 +12,7 @@
 
 import { Linking } from 'react-native';
 
-export const EMAIL_CONTACTO = 'vitaappar@gmail.com';
+export const EMAIL_CONTACTO = 'hola@sere.ar';
 
 /**
  * Abre el cliente de mail con el asunto ya puesto. Si el teléfono no tiene

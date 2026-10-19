@@ -6,7 +6,7 @@ describe('estadoDelNombre', () => {
   it('profesional aprobado: no editable, dice a dónde escribir', () => {
     const e = estadoDelNombre({ role: 'coach', name: 'Sofía Herrera', nameChangedAt: null, ahora });
     expect(e.editable).toBe(false);
-    expect(e.nota).toContain('vitaappar@gmail.com');
+    expect(e.nota).toContain('hola@sere.ar');
   });
 
   it('usuario que nunca lo cambió: editable', () => {

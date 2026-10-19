@@ -36,7 +36,7 @@ export const CAPTCHA_SITE_KEY = process.env.EXPO_PUBLIC_TURNSTILE_SITE_KEY;
  *
  *  ⚠️ Es lo ÚNICO que las claves de prueba no ejercitan — andan en cualquier
  *  dominio a propósito. Ver `docs/anti-abuso-altas.md`. */
-export const CAPTCHA_ORIGEN = 'https://vitaapp.com.ar';
+export const CAPTCHA_ORIGEN = 'https://sere.ar';
 
 export function captchaActivo(): boolean {
   return !!CAPTCHA_SITE_KEY;

@@ -3,7 +3,7 @@
 // diga antes de que la persona escriba, y traduce el rechazo si igual llega.
 
 export const DIAS_ENTRE_CAMBIOS = 30;
-export const MAIL_SOPORTE = 'vitaappar@gmail.com';
+export const MAIL_SOPORTE = 'hola@sere.ar';
 
 /** El nombre que pone el alta cuando el proveedor no trae uno. Reemplazarlo es
  *  completar el nombre, no cambiarlo: no cuenta para los 30 días. */

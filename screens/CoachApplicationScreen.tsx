@@ -529,7 +529,7 @@ export default function CoachApplicationScreen() {
 
           <Text style={styles.successNota}>
             Cerramos tu sesión mientras revisamos la solicitud. Tu perfil aparecerá cuando esté aprobado y tengas
-            configurados los medios de cobro. ¿Dudas? Escribinos a vitaappar@gmail.com.
+            configurados los medios de cobro. ¿Dudas? Escribinos a hola@sere.ar.
           </Text>
           <TouchableOpacity
             style={styles.successButton}

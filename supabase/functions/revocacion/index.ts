@@ -43,7 +43,7 @@ const json = (body: unknown, status = 200) =>
   })
 
 // Adónde llega el aviso para que una persona procese la baja y el reintegro.
-const CASILLA_VITA = 'vitaappar@gmail.com'
+const CASILLA_VITA = 'hola@sere.ar'
 
 // Sin 0/O ni 1/I: el código se dicta por teléfono y se copia a mano.
 const ALFABETO = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'

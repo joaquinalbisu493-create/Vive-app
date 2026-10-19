@@ -8,7 +8,7 @@
 // quedaba sin forma de encontrarlo. Ahora también está fijo en el Perfil, y las
 // dos pantallas lo arman con estas mismas funciones.
 
-export const SITIO_WEB = 'https://vitaapp.com.ar';
+export const SITIO_WEB = 'https://sere.ar';
 
 type CoachParaLink = {
   slug: string | null | undefined;

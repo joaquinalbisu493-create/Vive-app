@@ -26,9 +26,9 @@ const BOOKING_DEEP_LINK = Deno.env.get('BOOKING_DEEP_LINK') ?? 'viveapp://bookin
 //
 // ⚠️ Es una constante de entorno y NO un parámetro: si la página pudiera mandar
 // a dónde volver, esta function —que es pública— se convertiría en un redirector
-// abierto, y un link de `vitaapp.com.ar` mandando a cualquier lado es
+// abierto, y un link de `sere.ar` mandando a cualquier lado es
 // exactamente la forma de un phishing. El destino lo decide el servidor.
-const WEB_RETURN_URL = Deno.env.get('WEB_RETURN_URL') ?? 'https://vitaapp.com.ar/reserva'
+const WEB_RETURN_URL = Deno.env.get('WEB_RETURN_URL') ?? 'https://sere.ar/reserva'
 
 // ⚠️ Lista blanca. Esta function es PÚBLICA (`verify_jwt = false`) y su salida
 // entra a la app por un deep link, así que reenviar TODO lo que llegue —que era

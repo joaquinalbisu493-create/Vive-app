@@ -98,7 +98,7 @@ async function audit(
 // La casilla para reclamos. Misma que `lib/contacto.ts` y que los Términos: si
 // cambia, cambian las tres juntas. La notificación de una sanción ofrece
 // reclamar, y hasta el 17/09/2026 decía "escribinos" sin decir a dónde.
-const EMAIL_CONTACTO = 'vitaappar@gmail.com'
+const EMAIL_CONTACTO = 'hola@sere.ar'
 
 // Los tipos de archivo que acepta la evidencia de una sanción, y la extensión
 // con la que se guardan. Tiene que coincidir con `allowed_mime_types` del bucket

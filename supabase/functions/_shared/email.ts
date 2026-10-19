@@ -15,8 +15,8 @@
 // Por la API de Resend, no por el SMTP de Supabase Auth: ese está configurado
 // para los mails de autenticación (el código de 6 dígitos) y no se puede usar
 // para mandar cualquier cosa. Es el mismo proveedor y el mismo dominio ya
-// verificado (`vitaapp.com.ar`), así que no hay que configurar nada nuevo salvo
-// la API key.
+// verificado (`sere.ar` desde el 18/10/2026; antes `vitaapp.com.ar`), así que
+// no hay que configurar nada nuevo salvo la API key.
 //
 // ⚠️ **Nunca hace fallar lo que lo llamó.** Todas las funciones devuelven en vez
 // de tirar: esto se llama desde el camino que acredita un pago y desde el que
@@ -24,8 +24,8 @@
 // perdida por un mail que no salió es un problema mucho peor.
 
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
-const REMITENTE = Deno.env.get('MAIL_REMITENTE') ?? 'Sere <no-responder@vitaapp.com.ar>'
-const SITIO = Deno.env.get('WEB_BASE_URL') ?? 'https://vitaapp.com.ar'
+const REMITENTE = Deno.env.get('MAIL_REMITENTE') ?? 'Sere <no-responder@sere.ar>'
+const SITIO = Deno.env.get('WEB_BASE_URL') ?? 'https://sere.ar'
 
 const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado']
 const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto',

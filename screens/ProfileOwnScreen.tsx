@@ -393,7 +393,7 @@ export default function ProfileOwnScreen() {
                     // poder tipearlo a mano al crear la cuenta, y adentro del
                     // link, para el día que la app lo lea sola. Hoy la app no
                     // está publicada, así que el que sirve es el primero.
-                    message: `Te invito a Sere. Con mi código ${miCodigo} tu primera sesión sale ${DESCUENTO_REFERIDO_PCT}% menos.\n\nhttps://vitaapp.com.ar/?ref=${miCodigo}`,
+                    message: `Te invito a Sere. Con mi código ${miCodigo} tu primera sesión sale ${DESCUENTO_REFERIDO_PCT}% menos.\n\nhttps://sere.ar/?ref=${miCodigo}`,
                   }).catch(() => {})}
                   activeOpacity={0.8}>
                   <Text style={styles.invitarCodigoTxt}>{miCodigo}</Text>
@@ -421,7 +421,7 @@ export default function ProfileOwnScreen() {
                 <Text style={styles.preferenceTitle}>Guardar cómo venís</Text>
                 <Text style={styles.preferenceDesc}>
                   {consent.puede
-                    ? 'Tu ánimo, tu diario y qué recursos usás. Si lo apagás dejamos de registrarlo; para borrar lo que ya está, escribinos a vitaappar@gmail.com.'
+                    ? 'Tu ánimo, tu diario y qué recursos usás. Si lo apagás dejamos de registrarlo; para borrar lo que ya está, escribinos a hola@sere.ar.'
                     : 'Está apagado. Sin esto no podemos guardar tu check-in de ánimo ni tu diario.'}
                 </Text>
               </View>

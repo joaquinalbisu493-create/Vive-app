@@ -266,7 +266,7 @@ export function buildChecklist(self: VisibilitySelf): ChecklistItem[] {
       label: 'Cuenta suspendida',
       done: false,
       blocking: true,
-      hint: 'Mientras dure, no aparecés en la app y no podés recibir reservas nuevas. Las sesiones ya agendadas las atendés normalmente. El motivo te llegó en una notificación; si creés que es un error, escribinos a vitaappar@gmail.com.',
+      hint: 'Mientras dure, no aparecés en la app y no podés recibir reservas nuevas. Las sesiones ya agendadas las atendés normalmente. El motivo te llegó en una notificación; si creés que es un error, escribinos a hola@sere.ar.',
     } as ChecklistItem] : []),
     {
       key: 'verified',
