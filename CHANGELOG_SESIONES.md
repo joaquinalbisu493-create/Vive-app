@@ -1,3 +1,21 @@
+## 2026-10-19 — Andre (Claude · web y dominio pasan a Sere / sere.ar)
+
+**Tocado:** `web/` (salvo `web/legal`), `api/c.js`, `lib/linkCoach.ts`, `lib/captcha.ts`, `lib/contacto.ts`, `lib/cambioDeNombre.ts`, `lib/coachVisibility.ts`, varias `screens/`, `supabase/functions/_shared/{cors,email}.ts` y funciones con mail de contacto o URL, `docs/hosting.md`, `docs/plantilla-mail-codigo.{md,html}`. Commits `e2d125cd`, `ba6b6414`, `967b6d27`. Directo en `main`.
+
+**Resumen:**
+- **Web con la marca nueva** (`e2d125cd`): textos, wordmark y vista previa al compartir; imágenes OG rehechas con "sere" (`og-sere.jpg`, la de profesionales con `?v=sere` contra la caché de WhatsApp).
+- **Dominio `sere.ar` en producción** (detalle completo en `docs/hosting.md`): delegado a Vercel, `www` y `vitaapp.com.ar` redirigen con la ruta; Resend verificado para `sere.ar` (remitente `no-responder@sere.ar`); ImprovMX para recibir (`hola@sere.ar`); Turnstile con `sere.ar`; secretos `WEB_BASE_URL`/`WEB_RETURN_URL` y Site URL de Auth en `sere.ar`; plantilla del código con "sere" y asunto "Tu código de Sere".
+- **`WEB_ORIGIN` (CORS) pasa a `https://sere.ar`**: la web ya no corre en `www.vitaapp.com.ar`. 14 funciones redesplegadas y verificadas (preflight devuelve `sere.ar`).
+- **Mail de contacto `vitaappar@gmail.com` → `hola@sere.ar`** en app, web y funciones (incluidos los destinos internos de garantía y revocación). El UID del calendario queda en `@vitaapp.com.ar` a propósito (cambiarlo duplica eventos ya suscriptos).
+- Bifurcación del onboarding: título "¿Qué te trae por acá?" y descripción izquierda más corta (`ba6b6414`); se probaron aros y prolongar las líneas, no convencieron.
+- Tests 979/979 y `tsc` limpio.
+
+**Pendiente para la próxima sesión:**
+- **Etapa 4: legales** (`docs/terminos-y-condiciones.md`, `docs/politica-de-privacidad.md` y demás → `npm run sync:legal`): nombre Sere, dominio `sere.ar`, mail `hola@sere.ar`. Hasta entonces `web/legal` y `constants/legal.ts` siguen diciendo Vita / vitaapp.
+- Confirmar en device el alta con mail (CAPTCHA desde `sere.ar` + código de Supabase desde `no-responder@sere.ar`).
+- Sacar `vitaapp.com.ar` de Turnstile cuando todos los celulares de prueba tengan el JS nuevo.
+- Joaquín: pull.
+
 ## 2026-10-17 — Andre (Claude · Vita pasa a llamarse Sere)
 
 **Tocado:** 111 archivos en `app/`, `screens/`, `components/`, `lib/`, `constants/`, `hooks/`, `__tests__/`, `supabase/functions/` y `app.json` (commit `0d3ce101`). Directo en `main`.

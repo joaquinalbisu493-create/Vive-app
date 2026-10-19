@@ -25,6 +25,35 @@ instalación baja todo el árbol de dependencias de Expo para usar solo `marked`
 —un par de minutos por deploy— y para texto legal que no puede quedar viejo vale
 la pena.
 
+## 🔁 Cambio de dominio a `sere.ar` (19/10/2026)
+
+Con el cambio de nombre (Vita → Sere) el sitio pasó a **`https://sere.ar`**.
+Lo de abajo sobre `vitaapp.com.ar` queda como historia y como referencia del
+procedimiento.
+
+- **`sere.ar`** comprado en **NIC.ar directo** (no DonWeb), a nombre de Andre,
+  vence el **17/10/2027**. Delegado a `ns1/ns2.vercel-dns.com` desde el panel de
+  NIC.ar → Mis dominios → Delegar. La zona vive en Vercel.
+- En Vercel: `sere.ar` = Production; `www.sere.ar` → 301 a `sere.ar`;
+  `vitaapp.com.ar` y `www.vitaapp.com.ar` → **308 a `sere.ar`** (conservan la
+  ruta y los parámetros). ⚠️ **No dar de baja `vitaapp.com.ar`**: renovarlo en
+  DonWeb al menos hasta 08/2027 para que no se rompan links viejos.
+- **Mails salientes** (Resend): dominio `sere.ar` verificado; registros DKIM
+  (`resend._domainkey`), `send` y `rsend` (CNAME) y `_dmarc` cargados en Vercel.
+  Remitente `no-responder@sere.ar` en el código (`_shared/email.ts`) y en el SMTP
+  de Supabase Auth.
+- **Mails entrantes** (ImprovMX, plan gratis): MX `mx1/mx2.improvmx.com` + SPF en
+  la raíz. `hola@sere.ar` → `sereappp@gmail.com` (tres "p", es de Andre); además
+  `andre@`, `joaquin@` y `vita@`.
+- **Turnstile**: `sere.ar` agregado al widget. `vitaapp.com.ar` sigue en la lista
+  hasta que todos los celulares de prueba tengan la app con `CAPTCHA_ORIGEN`
+  nuevo; después se puede sacar.
+- **Supabase**: secretos `WEB_BASE_URL=https://sere.ar` y
+  `WEB_RETURN_URL=https://sere.ar/reserva`; Auth → Site URL `https://sere.ar`
+  (antes `localhost:3000`).
+- Pendiente: App Store Connect y Google Play con las URLs legales en `sere.ar`
+  cuando se carguen las fichas.
+
 ## Puesta en marcha (una sola vez)
 
 ### 1. Dominio — ✅ hecho

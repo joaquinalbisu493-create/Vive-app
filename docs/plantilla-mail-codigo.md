@@ -73,7 +73,7 @@ Se editan las dos cosas:
 **Asunto:**
 
 ```
-Tu código de Vita: {{ .Token }}
+Tu código de Sere: {{ .Token }}
 ```
 
 ⚠️ Con el texto adelante, no `{{ .Token }}` solo: la variable se reemplaza por el
@@ -123,8 +123,8 @@ Con **Resend**, que es el más simple de los tres:
 
 | Campo | Valor |
 |---|---|
-| Sender email address | `no-responder@vitaapp.com.ar` |
-| Sender name | `Vita` |
+| Sender email address | `no-responder@sere.ar` (desde el 19/10/2026; antes `no-responder@vitaapp.com.ar`) |
+| Sender name | `Sere` (antes `Vita`) |
 | Host | `smtp.resend.com` |
 | Port number | `465` |
 | Minimum interval per user | `60` (dejarlo como está, ver arriba) |
