@@ -177,20 +177,20 @@ for (const { file, line, text } of placeholders) {
 // de Privacidad para poder publicar la app; el .md del repo no sirve como tal.
 // Se generan del mismo texto que muestra la app, así no pueden divergir.
 const WEB_META = {
-  TERMS:   { file: 'terminos.html',       title: 'Términos y Condiciones — Vita', nav: 'Términos y Condiciones' },
-  PRIVACY: { file: 'privacidad.html',     title: 'Política de Privacidad — Vita', nav: 'Política de Privacidad' },
+  TERMS:   { file: 'terminos.html',       title: 'Términos y Condiciones — Sere', nav: 'Términos y Condiciones' },
+  PRIVACY: { file: 'privacidad.html',     title: 'Política de Privacidad — Sere', nav: 'Política de Privacidad' },
   // El nav lo escribe en mayúsculas y destacado porque la Res. 424/2020 pide
   // que el enlace diga literalmente "BOTÓN DE ARREPENTIMIENTO" y esté en lugar
   // destacado. Va en las tres páginas, no solo en la suya.
-  REGRET:  { file: 'arrepentimiento.html', title: 'Botón de Arrepentimiento — Vita', nav: 'BOTÓN DE ARREPENTIMIENTO' },
-  DELETE:  { file: 'eliminar-cuenta.html', title: 'Eliminar tu cuenta — Vita', nav: 'Eliminar tu cuenta' },
+  REGRET:  { file: 'arrepentimiento.html', title: 'Botón de Arrepentimiento — Sere', nav: 'BOTÓN DE ARREPENTIMIENTO' },
+  DELETE:  { file: 'eliminar-cuenta.html', title: 'Eliminar tu cuenta — Sere', nav: 'Eliminar tu cuenta' },
 };
 
 // 01/10/2026: la identidad de la portada (letra Plus Jakarta Sans, colores,
 // isotipo). Antes era letra del sistema y sin logo: parecía otro sitio, justo
 // en las páginas que la ley pide que se encuentren fácil. Solo claro, igual
 // que el resto de la web.
-const MARCA = `<a class="wordmark" href="/" aria-label="Vita, ir al inicio"><svg class="vmark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="34" r="26"/><circle cx="29.5" cy="66" r="26"/><circle cx="70.5" cy="66" r="26"/></svg>vita</a>`;
+const MARCA = `<a class="wordmark" href="/" aria-label="Sere, ir al inicio"><svg class="vmark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="34" r="26"/><circle cx="29.5" cy="66" r="26"/><circle cx="70.5" cy="66" r="26"/></svg>sere</a>`;
 
 const HEAD = `<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#F7EFE4">
@@ -358,7 +358,7 @@ const REVOCAR_FORM = `
     }).then(function (r) {
       return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; });
     }).then(function (res) {
-      if (!res.ok || !res.j.codigo) return fallo(res.j.error || 'No pudimos registrar tu solicitud. Escribinos a vitaappar@gmail.com.');
+      if (!res.ok || !res.j.codigo) return fallo(res.j.error || 'No pudimos registrar tu solicitud. Escribinos a hola@sere.ar.');
       form.hidden = true;
       listo.textContent = '';
       var p1 = document.createElement('p'); p1.textContent = 'Recibimos tu arrepentimiento. Tu código de identificación de la revocación es:';
@@ -370,7 +370,7 @@ const REVOCAR_FORM = `
       listo.appendChild(p1); listo.appendChild(c); listo.appendChild(p2);
       listo.hidden = false; listo.focus();
     }).catch(function () {
-      fallo('No pudimos conectarnos. Probá de nuevo o escribinos a vitaappar@gmail.com.');
+      fallo('No pudimos conectarnos. Probá de nuevo o escribinos a hola@sere.ar.');
     });
   });
 })();
@@ -454,8 +454,8 @@ const homeHtml = `<!doctype html>
 <head>
 <meta charset="utf-8">
 ${HEAD}
-<title>Legales — Vita</title>
-<meta name="description" content="Vita conecta personas con profesionales del bienestar para sesiones online. Términos, privacidad, botón de arrepentimiento y contacto.">
+<title>Legales — Sere</title>
+<meta name="description" content="Sere conecta personas con profesionales del bienestar para sesiones online. Términos, privacidad, botón de arrepentimiento y contacto.">
 <style>${CSS}${HOME_CSS}</style>
 </head>
 <body>
@@ -464,7 +464,7 @@ ${HEAD}
 ${draftNotice}
 <main>
 <h1>Legales</h1>
-<p class="lead">Vita conecta a personas con profesionales del bienestar para sesiones online. Acá están los documentos legales, el botón de arrepentimiento y cómo contactarnos.</p>
+<p class="lead">Sere conecta a personas con profesionales del bienestar para sesiones online. Acá están los documentos legales, el botón de arrepentimiento y cómo contactarnos.</p>
 
 ${HOME_LINKS.map(({ key, hint }) => {
   const m = WEB_META[key];
@@ -474,7 +474,7 @@ ${HOME_LINKS.map(({ key, hint }) => {
 <div class="contact">
 <h2>Contacto</h2>
 <p>
-Escribinos a <a href="mailto:vitaappar@gmail.com">vitaappar@gmail.com</a>. Respondemos consultas sobre el servicio, reportes de conducta, privacidad y bajas de cuenta.
+Escribinos a <a href="mailto:hola@sere.ar">hola@sere.ar</a>. Respondemos consultas sobre el servicio, reportes de conducta, privacidad y bajas de cuenta.
 </p>
 <p class="datos">Andre Albisu Lambertini. CUIT 20-46034087-0.<br>
 De los Extremeños 5069, Córdoba, Provincia de Córdoba, Argentina.</p>

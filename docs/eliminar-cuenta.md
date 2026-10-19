@@ -6,9 +6,9 @@
 > realmente hace la Edge Function `delete-account` — si el código cambia, esta
 > página cambia. Los campos entre corchetes `[ ]` requieren completarse.
 
-# Eliminar tu cuenta de Vita
+# Eliminar tu cuenta de Sere
 
-**Última actualización:** 3 de octubre de 2026
+**Última actualización:** 19 de octubre de 2026
 
 ## Desde la app (la vía más rápida)
 
@@ -20,7 +20,7 @@ La baja se procesa en el momento.
 
 ## Si no tenés la app
 
-Escribinos a **vitaappar@gmail.com** con el asunto **"ELIMINAR CUENTA"** desde la dirección de correo con la que te registraste, y nos ocupamos nosotros. Te confirmamos cuando esté hecho.
+Escribinos a **hola@sere.ar** con el asunto **"ELIMINAR CUENTA"** desde la dirección de correo con la que te registraste, y nos ocupamos nosotros. Te confirmamos cuando esté hecho.
 
 ## Qué se borra
 
@@ -45,7 +45,7 @@ No todo se puede borrar: parte de la información pertenece también a otra pers
 | Reservas y datos de la transacción (montos, identificadores de pago, fechas) | **10 años**, disociados de tu identidad | Obligaciones contables y fiscales |
 | Reseñas que escribiste | Indefinido, **anonimizadas** | Integran la reputación pública del profesional evaluado. Si se borraran, alguien podría darse de baja para eliminar una reseña desfavorable |
 | Mensajes y conversaciones | Mientras subsista la conversación, **anonimizados** | Pertenecen también al otro participante |
-| Reportes y avisos de problemas con una sesión | **Anonimizados** | Documentan una actuación de Vita o involucran a otra persona |
+| Reportes y avisos de problemas con una sesión | **Anonimizados** | Documentan una actuación de Sere o involucran a otra persona |
 | Datos técnicos y de uso (analítica, calidad de las videollamadas) | Disociados de tu identidad | Métricas agregadas, sin identificar a nadie |
 
 Tu ficha de perfil no se elimina del todo: queda **vaciada de todo dato personal** y muestra "Usuario eliminado" donde antes figurabas, para que las reservas, reseñas y conversaciones de terceros no queden rotas.
@@ -60,8 +60,8 @@ Si sos profesional, hay una condición: **no podés darte de baja con sesiones a
 
 ## Dudas
 
-Escribinos a **vitaappar@gmail.com**.
+Escribinos a **hola@sere.ar**.
 
 ---
 
-Vita. Andre Albisu Lambertini, CUIT 20-46034087-0, De los Extremeños 5069, Córdoba, Provincia de Córdoba. vitaappar@gmail.com
+Sere. Andre Albisu Lambertini, CUIT 20-46034087-0, De los Extremeños 5069, Córdoba, Provincia de Córdoba. hola@sere.ar

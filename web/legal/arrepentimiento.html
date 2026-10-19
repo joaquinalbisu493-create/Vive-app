@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<title>Botón de Arrepentimiento — Vita</title>
+<title>Botón de Arrepentimiento — Sere</title>
 <style>
   :root {
     color-scheme: light;
@@ -99,7 +99,7 @@
 </style>
 </head>
 <body>
-<header class="top"><a class="wordmark" href="/" aria-label="Vita, ir al inicio"><svg class="vmark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="34" r="26"/><circle cx="29.5" cy="66" r="26"/><circle cx="70.5" cy="66" r="26"/></svg>vita</a></header>
+<header class="top"><a class="wordmark" href="/" aria-label="Sere, ir al inicio"><svg class="vmark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="34" r="26"/><circle cx="29.5" cy="66" r="26"/><circle cx="70.5" cy="66" r="26"/></svg>sere</a></header>
 <nav class="nav" aria-label="Legales">
   <a class="regret" href="./arrepentimiento.html" aria-current="page">BOTÓN DE ARREPENTIMIENTO</a>
   <div class="nav-links">
@@ -112,9 +112,9 @@
 
 <main>
 <h1>Botón de arrepentimiento</h1>
-<p class="fechas"><strong>Última actualización:</strong> 13 de octubre de 2026</p>
+<p class="fechas"><strong>Última actualización:</strong> 19 de octubre de 2026</p>
 <h2>Qué es</h2>
-<p>Si contrataste una Sesión en Vita, tenés derecho a <strong>arrepentirte y dejar sin efecto la contratación dentro de los 10 (diez) días corridos</strong>, contados desde que confirmaste la reserva.</p>
+<p>Si contrataste una Sesión en Sere, tenés derecho a <strong>arrepentirte y dejar sin efecto la contratación dentro de los 10 (diez) días corridos</strong>, contados desde que confirmaste la reserva.</p>
 <p>Es un derecho <strong>irrenunciable</strong>: no hace falta que expliques por qué, no tiene ningún costo para vos, y nadie puede pedirte que renuncies a él. Está previsto en el <strong>artículo 34 de la Ley 24.240</strong> de Defensa del Consumidor y en los <strong>artículos 1110 a 1116 del Código Civil y Comercial</strong>.</p>
 <h2>Cómo lo ejercés</h2>
 <form class="revocar" id="revocar" hidden novalidate>
@@ -159,7 +159,7 @@
     }).then(function (r) {
       return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; });
     }).then(function (res) {
-      if (!res.ok || !res.j.codigo) return fallo(res.j.error || 'No pudimos registrar tu solicitud. Escribinos a vitaappar@gmail.com.');
+      if (!res.ok || !res.j.codigo) return fallo(res.j.error || 'No pudimos registrar tu solicitud. Escribinos a hola@sere.ar.');
       form.hidden = true;
       listo.textContent = '';
       var p1 = document.createElement('p'); p1.textContent = 'Recibimos tu arrepentimiento. Tu código de identificación de la revocación es:';
@@ -171,18 +171,18 @@
       listo.appendChild(p1); listo.appendChild(c); listo.appendChild(p2);
       listo.hidden = false; listo.focus();
     }).catch(function () {
-      fallo('No pudimos conectarnos. Probá de nuevo o escribinos a vitaappar@gmail.com.');
+      fallo('No pudimos conectarnos. Probá de nuevo o escribinos a hola@sere.ar.');
     });
   });
 })();
 </script>
-<p>No necesitás tener cuenta, ni estar logueado, ni hacer ningún trámite previo. Completá el formulario de esta página, en <a href="https://vitaapp.com.ar/legal/arrepentimiento">https://vitaapp.com.ar/legal/arrepentimiento</a>, con:</p>
+<p>No necesitás tener cuenta, ni estar logueado, ni hacer ningún trámite previo. Completá el formulario de esta página, en <a href="https://sere.ar/legal/arrepentimiento">https://sere.ar/legal/arrepentimiento</a>, con:</p>
 <ul>
 <li>Tu nombre y apellido.</li>
 <li>El correo electrónico con el que reservaste (o el que usaste para pagar).</li>
 <li>La fecha en que hiciste la reserva y, si lo tenés a mano, con qué profesional.</li>
 </ul>
-<p>Con eso alcanza. Si preferís, también podés escribirnos a <strong><a href="mailto:vitaappar@gmail.com">vitaappar@gmail.com</a></strong> con el asunto <strong>&quot;ARREPENTIMIENTO&quot;</strong> y esos mismos datos.</p>
+<p>Con eso alcanza. Si preferís, también podés escribirnos a <strong><a href="mailto:hola@sere.ar">hola@sere.ar</a></strong> con el asunto <strong>&quot;ARREPENTIMIENTO&quot;</strong> y esos mismos datos.</p>
 <h2>Qué pasa después</h2>
 <ol>
 <li>Al enviar el formulario te mostramos en pantalla y te mandamos por correo electrónico un <strong>código de identificación de la revocación</strong>. Si nos escribiste por correo, te lo enviamos <strong>dentro de las 24 horas</strong>. Ese código es tu constancia: guardalo.</li>
@@ -193,13 +193,13 @@
 <p>Tenés otras vías, que son independientes de este derecho:</p>
 <ul>
 <li><strong>Cancelar una Sesión</strong> que todavía no ocurrió: podés hacerlo desde la app hasta 24 horas antes del horario agendado, con reembolso total (Términos y Condiciones §9.1).</li>
-<li><strong>Garantía de primera sesión</strong>: si no quedaste conforme con la primera Sesión con un profesional, podés pedir el reintegro total <strong>desde la app, en la pantalla de esa sesión</strong>, o escribiendo a <a href="mailto:vitaappar@gmail.com">vitaappar@gmail.com</a>, dentro de las 48 horas del horario agendado (Términos y Condiciones §9.3).</li>
+<li><strong>Garantía de primera sesión</strong>: si no quedaste conforme con la primera Sesión con un profesional, podés pedir el reintegro total <strong>desde la app, en la pantalla de esa sesión</strong>, o escribiendo a <a href="mailto:hola@sere.ar">hola@sere.ar</a>, dentro de las 48 horas del horario agendado (Términos y Condiciones §9.3).</li>
 </ul>
 <h2>Ante cualquier problema</h2>
-<p>Si tenés una dificultad para ejercer este derecho, escribinos a <strong><a href="mailto:vitaappar@gmail.com">vitaappar@gmail.com</a></strong> y lo resolvemos.</p>
+<p>Si tenés una dificultad para ejercer este derecho, escribinos a <strong><a href="mailto:hola@sere.ar">hola@sere.ar</a></strong> y lo resolvemos.</p>
 <p>También podés acudir a la autoridad de aplicación en materia de defensa del consumidor de tu jurisdicción, o iniciar un reclamo en el <strong>Servicio de Conciliación Previa en las Relaciones de Consumo (COPREC)</strong>, en <a href="https://autogestion.produccion.gob.ar/consumidores">https://autogestion.produccion.gob.ar/consumidores</a>.</p>
 <hr>
-<p>Vita. Andre Albisu Lambertini, CUIT 20-46034087-0, De los Extremeños 5069, Córdoba, Provincia de Córdoba. <a href="mailto:vitaappar@gmail.com">vitaappar@gmail.com</a></p>
+<p>Sere. Andre Albisu Lambertini, CUIT 20-46034087-0, De los Extremeños 5069, Córdoba, Provincia de Córdoba. <a href="mailto:hola@sere.ar">hola@sere.ar</a></p>
 
 </main>
 </body>

@@ -1,5 +1,5 @@
 > ⚠️ **Completado y publicado por nosotros el 25/09/2026, sin revisión legal profesional todavía.** Andre lo va a revisar con un abogado; si hace falta, se amplía o modifica.
-> Primer borrador estructurado para Vita. Debe ser revisado y validado por un/a
+> Primer borrador estructurado para Sere. Debe ser revisado y validado por un/a
 > abogado/a matriculado/a en Argentina con experiencia en protección de datos antes
 > de su publicación. El tratamiento de **datos sensibles** (estado de ánimo, diario,
 > contenido de mensajes que pueda revelar información de salud) exige recaudos
@@ -8,18 +8,18 @@
 > "etiquetas de privacidad" (Apple) y el "formulario de seguridad de los datos"
 > (Google) con lo declarado aquí.
 
-# Política de Privacidad de Vita
+# Política de Privacidad de Sere
 
-**Última actualización:** 13 de octubre de 2026
-**Vigencia a partir de:** 13 de octubre de 2026
+**Última actualización:** 19 de octubre de 2026
+**Vigencia a partir de:** 19 de octubre de 2026
 
-Esta Política describe cómo Vita, operada por Andre Albisu Lambertini, CUIT 20-46034087-0, con domicilio en De los Extremeños 5069, Córdoba, Provincia de Córdoba ("**Vita**", "**nosotros**"), recolecta, usa, comparte y protege los datos personales de sus Usuarios, en el marco de la **Ley 25.326 de Protección de los Datos Personales** de la República Argentina y su reglamentación, bajo la autoridad de la Agencia de Acceso a la Información Pública (AAIP).
+Esta Política describe cómo Sere, operada por Andre Albisu Lambertini, CUIT 20-46034087-0, con domicilio en De los Extremeños 5069, Córdoba, Provincia de Córdoba ("**Sere**", "**nosotros**"), recolecta, usa, comparte y protege los datos personales de sus Usuarios, en el marco de la **Ley 25.326 de Protección de los Datos Personales** de la República Argentina y su reglamentación, bajo la autoridad de la Agencia de Acceso a la Información Pública (AAIP).
 
 Al utilizar la Plataforma, el Usuario declara haber leído y comprendido esta Política. Forma parte de los [Términos y Condiciones](./terminos-y-condiciones.md).
 
 ## 1. Responsable del Tratamiento
 
-Responsable del tratamiento: Andre Albisu Lambertini, CUIT 20-46034087-0. Contacto en materia de privacidad: vitaappar@gmail.com. No se ha designado un referente de datos distinto del Responsable; las solicitudes vinculadas a datos personales se atienden a través de esa dirección.
+Responsable del tratamiento: Andre Albisu Lambertini, CUIT 20-46034087-0. Contacto en materia de privacidad: hola@sere.ar. No se ha designado un referente de datos distinto del Responsable; las solicitudes vinculadas a datos personales se atienden a través de esa dirección.
 
 ## 2. Qué Datos Recolectamos
 
@@ -30,7 +30,7 @@ Responsable del tratamiento: Andre Albisu Lambertini, CUIT 20-46034087-0. Contac
 
 **2.2. Datos de la operación del servicio:**
 - **Reservas y Sesiones:** historial de reservas, estados, fechas y horarios.
-- **Pagos:** Vita procesa los pagos en pesos a través de Mercado Pago y, cuando se paga desde el exterior, a través de PayPal o en USDT (ver sección 6). **Vita no almacena los datos completos de las tarjetas.** Conserva información de la transacción necesaria para operar (por ejemplo, identificadores de pago, estado, montos).
+- **Pagos:** Sere procesa los pagos en pesos a través de Mercado Pago y, cuando se paga desde el exterior, a través de PayPal o en USDT (ver sección 6). **Sere no almacena los datos completos de las tarjetas.** Conserva información de la transacción necesaria para operar (por ejemplo, identificadores de pago, estado, montos).
 
 **2.3. Datos técnicos y de uso:**
 - Identificadores de dispositivo y **token de notificaciones push**; datos de uso y eventos de la aplicación (analítica); datos técnicos de conexión.
@@ -39,25 +39,25 @@ Responsable del tratamiento: Andre Albisu Lambertini, CUIT 20-46034087-0. Contac
 - **Informes de error de la aplicación**: cuando algo falla, la aplicación registra en qué pantalla ocurrió y el mensaje técnico del error, para poder corregirlo. No incluyen el contenido que el Usuario escribió.
 
 **2.4. Accesos al dispositivo que la aplicación solicita.** En todos los casos el sistema operativo pide autorización previa, el Usuario puede negarla o revocarla en cualquier momento desde los ajustes del dispositivo, y la aplicación sigue funcionando sin ellos (solo deja de estar disponible la función asociada):
-- **Fotos y cámara:** para subir la foto de perfil y, en el caso de Profesionales, el video de presentación y las imágenes de verificación de identidad. Vita accede únicamente al archivo que el Usuario elige o captura; no lee el resto de la galería.
+- **Fotos y cámara:** para subir la foto de perfil y, en el caso de Profesionales, el video de presentación y las imágenes de verificación de identidad. Sere accede únicamente al archivo que el Usuario elige o captura; no lee el resto de la galería.
 - **Micrófono:** únicamente durante la grabación del video de presentación y durante las videollamadas de las Sesiones.
-- **Calendario:** solo para *escribir* el evento de una Sesión que el Usuario decide agendar. Vita **no lee** los eventos existentes del calendario.
+- **Calendario:** solo para *escribir* el evento de una Sesión que el Usuario decide agendar. Sere **no lee** los eventos existentes del calendario.
 
-**2.5. Lista de espera del sitio web.** Quien deja su correo en vitaapp.com.ar para que le avisemos cuando Vita esté disponible nos proporciona ese correo, si se anota como persona o como Profesional y, si llegó por un enlace de invitación, su código; registramos además la fecha. Lo usamos solo para avisarle del lanzamiento y, si se anotó como Profesional, para contarle cómo postularse. No lo compartimos con terceros ni lo usamos con fines publicitarios.
+**2.5. Lista de espera del sitio web.** Quien deja su correo en sere.ar para que le avisemos cuando Sere esté disponible nos proporciona ese correo, si se anota como persona o como Profesional y, si llegó por un enlace de invitación, su código; registramos además la fecha. Lo usamos solo para avisarle del lanzamiento y, si se anotó como Profesional, para contarle cómo postularse. No lo compartimos con terceros ni lo usamos con fines publicitarios.
 
-**2.6. Verificación de identidad de Profesionales.** Al postularse, el Profesional aporta una imagen del frente y del dorso de su documento de identidad y una fotografía de su rostro sosteniendo ese documento. La finalidad es una sola: confirmar que quien ofrece Sesiones es la persona que dice ser, antes de habilitarlo. La comparación la hace **una persona del equipo de Vita**, a simple vista; **Vita no utiliza sistemas automáticos de reconocimiento facial** ni extrae plantillas biométricas. Las imágenes se guardan en un espacio de almacenamiento privado, al que solo accede el equipo de Vita, que **registra quién las abre**; no se muestran en el perfil ni se comparten con otros Usuarios. **Se suprimen apenas se confirma la identidad.** Vita conserva únicamente la constancia: que la identidad fue verificada, la fecha, quién la verificó y el nombre confirmado. Si la postulación no avanza, las imágenes se suprimen al darse de baja la cuenta, o antes si el Profesional lo pide escribiendo a vitaappar@gmail.com.
+**2.6. Verificación de identidad de Profesionales.** Al postularse, el Profesional aporta una imagen del frente y del dorso de su documento de identidad y una fotografía de su rostro sosteniendo ese documento. La finalidad es una sola: confirmar que quien ofrece Sesiones es la persona que dice ser, antes de habilitarlo. La comparación la hace **una persona del equipo de Sere**, a simple vista; **Sere no utiliza sistemas automáticos de reconocimiento facial** ni extrae plantillas biométricas. Las imágenes se guardan en un espacio de almacenamiento privado, al que solo accede el equipo de Sere, que **registra quién las abre**; no se muestran en el perfil ni se comparten con otros Usuarios. **Se suprimen apenas se confirma la identidad.** Sere conserva únicamente la constancia: que la identidad fue verificada, la fecha, quién la verificó y el nombre confirmado. Si la postulación no avanza, las imágenes se suprimen al darse de baja la cuenta, o antes si el Profesional lo pide escribiendo a hola@sere.ar.
 
-**2.7. Formulario de arrepentimiento.** Quien ejerce el derecho de revocación desde el formulario de vitaapp.com.ar/legal/arrepentimiento nos proporciona su nombre, su correo electrónico y, si quiere, los datos para ubicar la reserva. Registramos además la fecha y el código de identificación que le entregamos. Lo usamos solo para tramitar la revocación y dejar constancia de ella. El correo con el código se envía a través de Resend (ver sección 6).
+**2.7. Formulario de arrepentimiento.** Quien ejerce el derecho de revocación desde el formulario de sere.ar/legal/arrepentimiento nos proporciona su nombre, su correo electrónico y, si quiere, los datos para ubicar la reserva. Registramos además la fecha y el código de identificación que le entregamos. Lo usamos solo para tramitar la revocación y dejar constancia de ella. El correo con el código se envía a través de Resend (ver sección 6).
 
 ## 3. Datos Sensibles y Consentimiento Explícito
 
 Ciertos datos vinculados al Usuario (los registros de estado de ánimo, las entradas de diario y de gratitud, los temas que elige en el cuestionario para encontrar Profesionales, el contenido de las conversaciones o notas que pueda revelar información sobre su salud, y **el registro de qué contenidos de bienestar utiliza**) constituyen **datos sensibles** en los términos de la Ley 25.326, sea porque el Usuario los declara o porque permiten deducir información sobre su salud.
 
-3.1. Su tratamiento requiere el **consentimiento libre, expreso e informado** del Usuario. Ese consentimiento se solicita **de forma específica y separada de la aceptación de estos documentos**, la primera vez que el Usuario accede a estas funcionalidades, mostrando previamente qué datos se tratan y con qué finalidad. Vita deja constancia de la fecha y de la versión del texto informado.
+3.1. Su tratamiento requiere el **consentimiento libre, expreso e informado** del Usuario. Ese consentimiento se solicita **de forma específica y separada de la aceptación de estos documentos**, la primera vez que el Usuario accede a estas funcionalidades, mostrando previamente qué datos se tratan y con qué finalidad. Sere deja constancia de la fecha y de la versión del texto informado.
 
 3.2. **Prestarlo es voluntario y no es condición para utilizar la Plataforma.** El Usuario que no lo preste puede reservar Sesiones, comunicarse con Profesionales y acceder a los contenidos, sin las funcionalidades de registro de bienestar ni las recomendaciones basadas en su uso. Si completa el cuestionario sin haberlo prestado, ve igual sus resultados, pero sus respuestas no se guardan en su cuenta.
 
-3.3. El Usuario puede **revocar el consentimiento en cualquier momento** desde su perfil o escribiendo a vitaappar@gmail.com, y solicitar la supresión de los datos ya registrados conforme a la sección 9. La revocación no afecta la licitud del tratamiento realizado con anterioridad.
+3.3. El Usuario puede **revocar el consentimiento en cualquier momento** desde su perfil o escribiendo a hola@sere.ar, y solicitar la supresión de los datos ya registrados conforme a la sección 9. La revocación no afecta la licitud del tratamiento realizado con anterioridad.
 
 3.4. **Estos datos no se comparten con los Profesionales ni con ningún tercero**, salvo que el propio Usuario decida enviarlos, en cada caso y de forma expresa.
 
@@ -71,31 +71,31 @@ El tratamiento se basa en el consentimiento del Usuario, en la ejecución de la 
 
 ## 6. Con Quién Compartimos los Datos
 
-Vita **no vende** los datos personales de los Usuarios. Los compartimos únicamente con:
+Sere **no vende** los datos personales de los Usuarios. Los compartimos únicamente con:
 
-- **Proveedores que procesan datos por cuenta de Vita (encargados de tratamiento):**
+- **Proveedores que procesan datos por cuenta de Sere (encargados de tratamiento):**
   - **Supabase**: infraestructura de base de datos, autenticación y almacenamiento.
   - **Mercado Pago**: procesamiento de pagos (sujeto a sus propias políticas).
   - **PayPal**: procesamiento de los pagos en dólares (sujeto a sus propias políticas).
   - **Daily.co**: realización de las videollamadas de las Sesiones.
   - **Resend**: envío de los correos electrónicos de la Plataforma (por ejemplo, avisos sobre reservas y Sesiones). Recibe la dirección de correo del destinatario y el contenido del mensaje.
   - **Expo / proveedor de notificaciones push**: envío de notificaciones.
-  - **Vercel**: alojamiento de las páginas web de Vita. Recibe la dirección IP y datos técnicos del navegador de quien las visita. La aplicación móvil no pasa por este proveedor.
-  - **Cloudflare**: protección contra la creación automatizada de cuentas. Interviene al crear una cuenta y al solicitar un código de acceso, tanto en la aplicación como en las páginas web de Vita. Recibe la dirección IP y datos técnicos del dispositivo, y en el navegador coloca una cookie técnica necesaria para distinguir a una persona de un programa automatizado. **No recibe el nombre, el correo electrónico ni ningún contenido del Usuario.**
-- **Pagos en USDT, solo si el Usuario elige ese medio:** el pago se registra en una **cadena de bloques pública**. La dirección desde la que se paga, la dirección que recibe y el monto quedan visibles para cualquier persona, en forma permanente, y **no pueden borrarse**, ni siquiera a pedido del Usuario. Vita consulta esos registros públicos para confirmar el pago y guarda la dirección que el Usuario indique para un eventual reintegro.
+  - **Vercel**: alojamiento de las páginas web de Sere. Recibe la dirección IP y datos técnicos del navegador de quien las visita. La aplicación móvil no pasa por este proveedor.
+  - **Cloudflare**: protección contra la creación automatizada de cuentas. Interviene al crear una cuenta y al solicitar un código de acceso, tanto en la aplicación como en las páginas web de Sere. Recibe la dirección IP y datos técnicos del dispositivo, y en el navegador coloca una cookie técnica necesaria para distinguir a una persona de un programa automatizado. **No recibe el nombre, el correo electrónico ni ningún contenido del Usuario.**
+- **Pagos en USDT, solo si el Usuario elige ese medio:** el pago se registra en una **cadena de bloques pública**. La dirección desde la que se paga, la dirección que recibe y el monto quedan visibles para cualquier persona, en forma permanente, y **no pueden borrarse**, ni siquiera a pedido del Usuario. Sere consulta esos registros públicos para confirmar el pago y guarda la dirección que el Usuario indique para un eventual reintegro.
 - **Proveedores de identidad, solo si el Usuario elige registrarse o iniciar sesión con ellos:**
-  - **Google** y **Apple**. En ese caso, el proveedor conoce que el Usuario accede a Vita y le comunica a Vita los datos mínimos de la cuenta (nombre y correo electrónico). Si el Usuario se registra con correo y contraseña, ninguno de los dos interviene.
+  - **Google** y **Apple**. En ese caso, el proveedor conoce que el Usuario accede a Sere y le comunica a Sere los datos mínimos de la cuenta (nombre y correo electrónico). Si el Usuario se registra con correo y contraseña, ninguno de los dos interviene.
 - **Contenido embebido de terceros:** algunas fichas de recursos incluyen un reproductor de **YouTube** insertado dentro de la aplicación. Al cargarse, YouTube recibe la dirección IP y datos técnicos del dispositivo, y puede utilizar cookies o tecnologías similares conforme a sus propias políticas. Ocurre solo al abrir una ficha que contenga ese reproductor.
-- **Tipografía de las páginas web:** las páginas web de Vita cargan su tipografía desde **Google Fonts**. Al abrirlas, Google recibe la dirección IP y datos técnicos del navegador. No ocurre en la aplicación móvil, que trae la tipografía incorporada.
-- **Redacción asistida de la frase de bienestar:** la pantalla de inicio muestra una frase breve sobre cómo viene el Usuario. **Qué decir lo decide la propia aplicación en el dispositivo**, con reglas fijas; a un proveedor externo (**Anthropic**) se le pide únicamente **redactar** esa frase. Lo que se le envía es el nombre de una categoría (por ejemplo, "racha" o "tendencia en alza"), un tono, y dos o tres números enteros (días de registro consecutivos, sesiones y prácticas de la semana). **No se le envía identificador alguno del Usuario, ni sus registros de estado de ánimo, ni su historial, ni una sola palabra escrita por él**, y Vita no conserva vinculación entre ese envío y la persona. Si el proveedor no responde, o si el texto que devuelve no supera los controles de contenido de Vita, se muestra el texto redactado por la propia aplicación.
-- **Analítica:** Vita **no utiliza proveedores de analítica de terceros**. Las métricas de uso se registran en la propia base de datos de Vita (alojada en Supabase) y no se comparten con terceros con fines publicitarios ni comerciales.
+- **Tipografía de las páginas web:** las páginas web de Sere cargan su tipografía desde **Google Fonts**. Al abrirlas, Google recibe la dirección IP y datos técnicos del navegador. No ocurre en la aplicación móvil, que trae la tipografía incorporada.
+- **Redacción asistida de la frase de bienestar:** la pantalla de inicio muestra una frase breve sobre cómo viene el Usuario. **Qué decir lo decide la propia aplicación en el dispositivo**, con reglas fijas; a un proveedor externo (**Anthropic**) se le pide únicamente **redactar** esa frase. Lo que se le envía es el nombre de una categoría (por ejemplo, "racha" o "tendencia en alza"), un tono, y dos o tres números enteros (días de registro consecutivos, sesiones y prácticas de la semana). **No se le envía identificador alguno del Usuario, ni sus registros de estado de ánimo, ni su historial, ni una sola palabra escrita por él**, y Sere no conserva vinculación entre ese envío y la persona. Si el proveedor no responde, o si el texto que devuelve no supera los controles de contenido de Sere, se muestra el texto redactado por la propia aplicación.
+- **Analítica:** Sere **no utiliza proveedores de analítica de terceros**. Las métricas de uso se registran en la propia base de datos de Sere (alojada en Supabase) y no se comparten con terceros con fines publicitarios ni comerciales.
 - **Otros Usuarios:** la información necesaria para la interacción (por ejemplo, el perfil del Profesional es visible para los Clientes; el nombre/foto del Cliente puede ser visible para el Profesional con quien tiene una Sesión).
 - **Autoridades competentes:** cuando exista obligación legal o requerimiento válido.
 - **En caso de reorganización societaria** (fusión, adquisición), notificando cuando corresponda.
 
-La lista anterior comprende la totalidad de los proveedores con los que Vita comparte datos personales de sus Usuarios.
+La lista anterior comprende la totalidad de los proveedores con los que Sere comparte datos personales de sus Usuarios.
 
-**Enlaces que llevan fuera de la aplicación.** Algunos recursos son enlaces a servicios externos (por ejemplo YouTube, Spotify o Google Drive) que **se abren en el navegador o en la aplicación correspondiente del dispositivo**. En esos casos el Usuario sale de Vita y pasa a regirse por las políticas de ese servicio. Vita no le transmite ningún dato personal al abrirlos: solo abre la dirección.
+**Enlaces que llevan fuera de la aplicación.** Algunos recursos son enlaces a servicios externos (por ejemplo YouTube, Spotify o Google Drive) que **se abren en el navegador o en la aplicación correspondiente del dispositivo**. En esos casos el Usuario sale de Sere y pasa a regirse por las políticas de ese servicio. Sere no le transmite ningún dato personal al abrirlos: solo abre la dirección.
 
 ## 7. Transferencia Internacional de Datos
 
@@ -108,25 +108,25 @@ Parte de los datos se almacenan o procesan fuera de la Argentina:
 - **Anthropic** (redacción de la frase de bienestar), en los Estados Unidos, sin datos que identifiquen al Usuario, conforme a la sección 6.
 - Los demás servicios mencionados en la sección 6 (Vercel, Cloudflare, Google, Apple y YouTube) pueden procesar datos técnicos fuera del país.
 
-Brasil y los Estados Unidos no integran la nómina de países con nivel adecuado de protección de la Disposición DNPDP 60-E/2016. Con Supabase rige su acuerdo de tratamiento de datos, que se incorpora al aceptar sus términos de servicio e incluye obligaciones de confidencialidad, medidas de seguridad, control de subencargados y supresión de los datos al finalizar el servicio. Vita trabaja para que el resto de las transferencias cuente con garantías equivalentes. El Usuario puede solicitar información sobre los acuerdos vigentes escribiendo a vitaappar@gmail.com.
+Brasil y los Estados Unidos no integran la nómina de países con nivel adecuado de protección de la Disposición DNPDP 60-E/2016. Con Supabase rige su acuerdo de tratamiento de datos, que se incorpora al aceptar sus términos de servicio e incluye obligaciones de confidencialidad, medidas de seguridad, control de subencargados y supresión de los datos al finalizar el servicio. Sere trabaja para que el resto de las transferencias cuente con garantías equivalentes. El Usuario puede solicitar información sobre los acuerdos vigentes escribiendo a hola@sere.ar.
 
-**Redacción asistida de la frase de bienestar.** El envío descripto en la sección 6 **no incluye identificador ni seudónimo del Usuario**, y Vita no conserva vinculación alguna entre ese envío y su persona, por lo que no se trata de información referida a una persona determinada o determinable. Se lo declara igualmente en esta Política para que el Usuario conozca la totalidad de los servicios que intervienen en el funcionamiento de la aplicación.
+**Redacción asistida de la frase de bienestar.** El envío descripto en la sección 6 **no incluye identificador ni seudónimo del Usuario**, y Sere no conserva vinculación alguna entre ese envío y su persona, por lo que no se trata de información referida a una persona determinada o determinable. Se lo declara igualmente en esta Política para que el Usuario conozca la totalidad de los servicios que intervienen en el funcionamiento de la aplicación.
 
 ## 8. Seguridad de los Datos
 
-8.1. Vita aplica medidas técnicas y organizativas razonables para proteger los datos, incluyendo controles de acceso a nivel de base de datos que restringen el acceso a la información de cada Usuario.
+8.1. Sere aplica medidas técnicas y organizativas razonables para proteger los datos, incluyendo controles de acceso a nivel de base de datos que restringen el acceso a la información de cada Usuario.
 
-8.2. **Sobre los mensajes:** los mensajes se almacenan con controles de acceso que impiden que otros Usuarios accedan a ellos. **No cuentan con cifrado de extremo a extremo**, por lo que Vita podría técnicamente acceder a su contenido. Vita se compromete a acceder únicamente cuando sea necesario para operar el servicio, atender un reporte, cumplir la ley o un requerimiento de autoridad competente, y a no utilizar el contenido de las conversaciones con fines comerciales. El mensaje que el Cliente puede escribirle al Profesional al reservar recibe el mismo trato: va dirigido al Profesional, y Vita no lo consulta salvo en los casos indicados.
+8.2. **Sobre los mensajes:** los mensajes se almacenan con controles de acceso que impiden que otros Usuarios accedan a ellos. **No cuentan con cifrado de extremo a extremo**, por lo que Sere podría técnicamente acceder a su contenido. Sere se compromete a acceder únicamente cuando sea necesario para operar el servicio, atender un reporte, cumplir la ley o un requerimiento de autoridad competente, y a no utilizar el contenido de las conversaciones con fines comerciales. El mensaje que el Cliente puede escribirle al Profesional al reservar recibe el mismo trato: va dirigido al Profesional, y Sere no lo consulta salvo en los casos indicados.
 
-**Sobre el diario y los registros de bienestar:** las entradas de diario, de gratitud y de estado de ánimo se almacenan con controles de acceso que impiden que otros Usuarios, incluidos los Profesionales, accedan a ellas, salvo lo que el propio Usuario decida compartir conforme a la sección 3.4. **Tampoco cuentan con cifrado de extremo a extremo**, por lo que quienes administran la infraestructura de Vita podrían técnicamente acceder a su contenido. Vita se compromete a no hacerlo salvo que resulte indispensable para resolver una falla a pedido del Usuario, cumplir la ley o un requerimiento de autoridad competente, y a no utilizar ese contenido con fines comerciales. La aplicación no ofrece al equipo de Vita ninguna función para leerlos.
+**Sobre el diario y los registros de bienestar:** las entradas de diario, de gratitud y de estado de ánimo se almacenan con controles de acceso que impiden que otros Usuarios, incluidos los Profesionales, accedan a ellas, salvo lo que el propio Usuario decida compartir conforme a la sección 3.4. **Tampoco cuentan con cifrado de extremo a extremo**, por lo que quienes administran la infraestructura de Sere podrían técnicamente acceder a su contenido. Sere se compromete a no hacerlo salvo que resulte indispensable para resolver una falla a pedido del Usuario, cumplir la ley o un requerimiento de autoridad competente, y a no utilizar ese contenido con fines comerciales. La aplicación no ofrece al equipo de Sere ninguna función para leerlos.
 
-8.3. **Detección de datos de contacto y de pago.** Para hacer cumplir la cláusula de uso exclusivo de los Términos (sección 10), la aplicación analiza **en el dispositivo de quien escribe**, antes de enviarlo, si un texto incluye datos de contacto o de pago (por ejemplo, un teléfono, una red social o un CBU). **El texto no se envía a Vita para este análisis ni se almacena por este motivo.** Cuando se detecta uno de esos datos, Vita registra únicamente: el **tipo** de dato detectado, el lugar de la aplicación donde ocurrió, la fecha, las cuentas involucradas y si se decidió enviarlo igual. Vita puede revisar esos registros para evaluar un posible incumplimiento y, en su caso, aplicar las medidas previstas en los Términos; **ninguna medida se aplica en forma automática**. Cuando revisa un caso, Vita puede conservar documentación vinculada (por ejemplo, capturas aportadas en un reporte), con acceso restringido al equipo de Vita y registro de quién la consulta. Esa documentación no se comparte con otros Usuarios. Si un Profesional es suspendido o dado de baja, Vita informa a los Clientes que tenían un vínculo reciente con él que no se encuentra disponible, **sin indicar el motivo**.
+8.3. **Detección de datos de contacto y de pago.** Para hacer cumplir la cláusula de uso exclusivo de los Términos (sección 10), la aplicación analiza **en el dispositivo de quien escribe**, antes de enviarlo, si un texto incluye datos de contacto o de pago (por ejemplo, un teléfono, una red social o un CBU). **El texto no se envía a Sere para este análisis ni se almacena por este motivo.** Cuando se detecta uno de esos datos, Sere registra únicamente: el **tipo** de dato detectado, el lugar de la aplicación donde ocurrió, la fecha, las cuentas involucradas y si se decidió enviarlo igual. Sere puede revisar esos registros para evaluar un posible incumplimiento y, en su caso, aplicar las medidas previstas en los Términos; **ninguna medida se aplica en forma automática**. Cuando revisa un caso, Sere puede conservar documentación vinculada (por ejemplo, capturas aportadas en un reporte), con acceso restringido al equipo de Sere y registro de quién la consulta. Esa documentación no se comparte con otros Usuarios. Si un Profesional es suspendido o dado de baja, Sere informa a los Clientes que tenían un vínculo reciente con él que no se encuentra disponible, **sin indicar el motivo**.
 
-8.4. Ningún sistema es completamente seguro; Vita no puede garantizar seguridad absoluta.
+8.4. Ningún sistema es completamente seguro; Sere no puede garantizar seguridad absoluta.
 
 ## 9. Derechos del Titular de los Datos
 
-Conforme a la Ley 25.326, el Usuario tiene derecho a **acceder** a sus datos, **rectificarlos**, **actualizarlos** y **suprimirlos**, así como a solicitar información sobre su tratamiento. Para ejercerlos, puede escribir a vitaappar@gmail.com. Vita responderá en los plazos legales.
+Conforme a la Ley 25.326, el Usuario tiene derecho a **acceder** a sus datos, **rectificarlos**, **actualizarlos** y **suprimirlos**, así como a solicitar información sobre su tratamiento. Para ejercerlos, puede escribir a hola@sere.ar. Sere responderá en los plazos legales.
 
 El ejercicio del derecho de acceso es **gratuito**, y puede ejercerse a intervalos no inferiores a seis meses, salvo que se acredite un interés legítimo, conforme al artículo 14 inciso 3 de la Ley 25.326.
 
@@ -140,7 +140,7 @@ Conservamos los datos mientras la cuenta esté activa. Al darse de baja, el trat
 - **Reservas y datos de la transacción**: montos, identificadores de pago, fechas y estados: se conservan **diez (10) años** desde la operación, por obligaciones contables y fiscales, **disociados de la identidad** del Usuario dado de baja. El mensaje que el Usuario le escribió al Profesional al reservar y el tema por el que llegó **se suprimen**: no forman parte de la transacción.
 - **Reseñas**: se conservan de forma indefinida y **anonimizadas**, por integrar la reputación pública del Profesional evaluado. Suprimirlas permitiría que una baja de cuenta se use para eliminar una evaluación desfavorable.
 - **Mensajes y salas de conversación**: se conservan **anonimizados** mientras subsista la conversación, dado que pertenecen también al otro participante.
-- **Reportes y avisos de problemas con una Sesión**: se conservan **disociados de la identidad** del Usuario, porque documentan una actuación de Vita o involucran a otra persona.
+- **Reportes y avisos de problemas con una Sesión**: se conservan **disociados de la identidad** del Usuario, porque documentan una actuación de Sere o involucran a otra persona.
 - **Datos técnicos y de uso** (analítica y calidad de las videollamadas): se conservan **disociados de la identidad** del Usuario.
 - **Registros de detección de datos de contacto y de pago** (ver 8.3): se conservan **doce (12) meses** desde que se generan y luego se suprimen.
 - **Solicitudes de arrepentimiento** (ver 2.7): se conservan **tres (3) años** desde la solicitud, como constancia de la revocación, y luego se suprimen de forma automática.
@@ -159,25 +159,25 @@ La Plataforma está dirigida a personas mayores de 18 años. No recolectamos del
 
 ## 12. Notificaciones Push
 
-Con el consentimiento del Usuario (otorgado a nivel del sistema operativo del dispositivo), Vita envía notificaciones relacionadas con el servicio. El Usuario puede desactivarlas desde la configuración de su dispositivo.
+Con el consentimiento del Usuario (otorgado a nivel del sistema operativo del dispositivo), Sere envía notificaciones relacionadas con el servicio. El Usuario puede desactivarlas desde la configuración de su dispositivo.
 
 ## 13. Cookies y Tecnologías Similares
 
-La **aplicación móvil de Vita no utiliza cookies**. Guarda en el propio dispositivo la información técnica necesaria para funcionar (la sesión iniciada y algunas preferencias de uso), que no se comparte con terceros ni se utiliza con fines publicitarios.
+La **aplicación móvil de Sere no utiliza cookies**. Guarda en el propio dispositivo la información técnica necesaria para funcionar (la sesión iniciada y algunas preferencias de uso), que no se comparte con terceros ni se utiliza con fines publicitarios.
 
-En las **páginas web de Vita** no se utilizan cookies publicitarias, de seguimiento ni de analítica. Las únicas tecnologías de almacenamiento que intervienen son:
+En las **páginas web de Sere** no se utilizan cookies publicitarias, de seguimiento ni de analítica. Las únicas tecnologías de almacenamiento que intervienen son:
 
 - Una **cookie técnica de Cloudflare**, colocada por el sistema de protección contra la creación automatizada de cuentas descripto en §6. No se utiliza para seguir al Usuario entre sitios.
 - **Almacenamiento local del navegador**, para mantener la sesión iniciada mientras el Usuario utiliza la reserva o la sala de Sesión.
 
-Ambas son estrictamente necesarias para prestar el servicio que el Usuario solicita. Vita **no utiliza cookies de terceros con fines publicitarios ni de perfilado**, y por eso no muestra un panel de preferencias de cookies.
+Ambas son estrictamente necesarias para prestar el servicio que el Usuario solicita. Sere **no utiliza cookies de terceros con fines publicitarios ni de perfilado**, y por eso no muestra un panel de preferencias de cookies.
 
 El contenido embebido de terceros mencionado en §6 puede colocar sus propias cookies cuando el Usuario decide reproducirlo; en ese caso rigen las políticas de ese tercero.
 
 ## 14. Cambios a esta Política
 
-Vita puede actualizar esta Política. Los cambios sustanciales se notificarán por medios razonables. La versión vigente estará siempre disponible en la Plataforma.
+Sere puede actualizar esta Política. Los cambios sustanciales se notificarán por medios razonables. La versión vigente estará siempre disponible en la Plataforma.
 
 ## 15. Contacto
 
-Consultas o ejercicio de derechos: vitaappar@gmail.com. Andre Albisu Lambertini, De los Extremeños 5069, Córdoba, Provincia de Córdoba.
+Consultas o ejercicio de derechos: hola@sere.ar. Andre Albisu Lambertini, De los Extremeños 5069, Córdoba, Provincia de Córdoba.

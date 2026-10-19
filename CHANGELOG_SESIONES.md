@@ -11,8 +11,9 @@
 - Tests 979/979 y `tsc` limpio.
 
 **Pendiente para la próxima sesión:**
-- **Etapa 4: legales** (`docs/terminos-y-condiciones.md`, `docs/politica-de-privacidad.md` y demás → `npm run sync:legal`): nombre Sere, dominio `sere.ar`, mail `hola@sere.ar`. Hasta entonces `web/legal` y `constants/legal.ts` siguen diciendo Vita / vitaapp.
-- Confirmar en device el alta con mail (CAPTCHA desde `sere.ar` + código de Supabase desde `no-responder@sere.ar`).
+- ✅ **Etapa 4 hecha el mismo día: legales.** T&C, Privacidad, Arrepentimiento, Eliminar cuenta y Sobre nosotros (`docs/*.md`) con Sere, `sere.ar` y `hola@sere.ar`, fecha de actualización y vigencia 19/10/2026; `scripts/sync-legal.mjs` (títulos, wordmark, mail del índice y de los errores de arrepentimiento) también. `npm run sync:legal` → versión `18bdafe7d921`. El cambio de versión solo se registra con cada consentimiento; no obliga a re-aceptar. Cambio mecánico (nombre, dominio, mail): el titular sigue siendo Andre con el mismo CUIT y domicilio. Conviene que el abogado lo vea en su próxima revisión, sin urgencia.
+- ✅ Confirmado en device por Andre: alta con mail funciona (CAPTCHA desde `sere.ar` + código desde `no-responder@sere.ar`).
+- Cargar en App Store Connect y Google Play las URLs legales en `sere.ar` cuando se armen las fichas.
 - Sacar `vitaapp.com.ar` de Turnstile cuando todos los celulares de prueba tengan el JS nuevo.
 - Joaquín: pull.
 

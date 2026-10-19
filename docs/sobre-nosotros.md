@@ -7,7 +7,7 @@
 
 # Sobre nosotros
 
-Vita la hacemos dos hermanos, Andre y Joaquín, desde Argentina.
+Sere la hacemos dos hermanos, Andre y Joaquín, desde Argentina.
 
 ## De dónde sale Sofía
 
@@ -21,14 +21,14 @@ sostenerlo. Y si tenía algo a mano que sirviera, nos lo pasaba.
 No estaba en la habitación. No era nuestra terapeuta. No podía resolvernos nada.
 Aparecía, confiaba, y seguía. Y muchas veces eso alcanzó para seguir un día más.
 
-Vita existe para intentar hacer eso mismo entre una sesión y otra. Por eso la voz
+Sere existe para intentar hacer eso mismo entre una sesión y otra. Por eso la voz
 de la app se llama como ella.
 
 ## Lo que Sofía, en la app, NO es
 
 Esto importa más que lo de arriba, así que va sin vueltas:
 
-**Sofía, la persona, no trabaja en Vita, no lee nada de lo que escribís y no
+**Sofía, la persona, no trabaja en Sere, no lee nada de lo que escribís y no
 tiene acceso a tu cuenta ni a tus registros.** No hay nadie de nuestra familia
 del otro lado de esa tarjeta.
 
@@ -57,7 +57,7 @@ crisis.
 
 Cuando lo que estás pasando es más de lo que una app puede acompañar, la app te
 lo va a decir y te va a mostrar dónde pedir ayuda. Reconocer ese límite es parte
-de lo que hacía ella, y es lo que más nos importa que Vita haga bien.
+de lo que hacía ella, y es lo que más nos importa que Sere haga bien.
 
 Si necesitás ayuda ahora, la pantalla está siempre disponible desde tu perfil,
 con o sin cuenta.

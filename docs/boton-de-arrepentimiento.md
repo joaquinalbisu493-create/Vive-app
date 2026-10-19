@@ -8,23 +8,23 @@
 
 # Botón de arrepentimiento
 
-**Última actualización:** 13 de octubre de 2026
+**Última actualización:** 19 de octubre de 2026
 
 ## Qué es
 
-Si contrataste una Sesión en Vita, tenés derecho a **arrepentirte y dejar sin efecto la contratación dentro de los 10 (diez) días corridos**, contados desde que confirmaste la reserva.
+Si contrataste una Sesión en Sere, tenés derecho a **arrepentirte y dejar sin efecto la contratación dentro de los 10 (diez) días corridos**, contados desde que confirmaste la reserva.
 
 Es un derecho **irrenunciable**: no hace falta que expliques por qué, no tiene ningún costo para vos, y nadie puede pedirte que renuncies a él. Está previsto en el **artículo 34 de la Ley 24.240** de Defensa del Consumidor y en los **artículos 1110 a 1116 del Código Civil y Comercial**.
 
 ## Cómo lo ejercés
 
-No necesitás tener cuenta, ni estar logueado, ni hacer ningún trámite previo. Completá el formulario de esta página, en https://vitaapp.com.ar/legal/arrepentimiento, con:
+No necesitás tener cuenta, ni estar logueado, ni hacer ningún trámite previo. Completá el formulario de esta página, en https://sere.ar/legal/arrepentimiento, con:
 
 - Tu nombre y apellido.
 - El correo electrónico con el que reservaste (o el que usaste para pagar).
 - La fecha en que hiciste la reserva y, si lo tenés a mano, con qué profesional.
 
-Con eso alcanza. Si preferís, también podés escribirnos a **vitaappar@gmail.com** con el asunto **"ARREPENTIMIENTO"** y esos mismos datos.
+Con eso alcanza. Si preferís, también podés escribirnos a **hola@sere.ar** con el asunto **"ARREPENTIMIENTO"** y esos mismos datos.
 
 ## Qué pasa después
 
@@ -37,14 +37,14 @@ Con eso alcanza. Si preferís, también podés escribirnos a **vitaappar@gmail.c
 Tenés otras vías, que son independientes de este derecho:
 
 - **Cancelar una Sesión** que todavía no ocurrió: podés hacerlo desde la app hasta 24 horas antes del horario agendado, con reembolso total (Términos y Condiciones §9.1).
-- **Garantía de primera sesión**: si no quedaste conforme con la primera Sesión con un profesional, podés pedir el reintegro total **desde la app, en la pantalla de esa sesión**, o escribiendo a vitaappar@gmail.com, dentro de las 48 horas del horario agendado (Términos y Condiciones §9.3).
+- **Garantía de primera sesión**: si no quedaste conforme con la primera Sesión con un profesional, podés pedir el reintegro total **desde la app, en la pantalla de esa sesión**, o escribiendo a hola@sere.ar, dentro de las 48 horas del horario agendado (Términos y Condiciones §9.3).
 
 ## Ante cualquier problema
 
-Si tenés una dificultad para ejercer este derecho, escribinos a **vitaappar@gmail.com** y lo resolvemos.
+Si tenés una dificultad para ejercer este derecho, escribinos a **hola@sere.ar** y lo resolvemos.
 
 También podés acudir a la autoridad de aplicación en materia de defensa del consumidor de tu jurisdicción, o iniciar un reclamo en el **Servicio de Conciliación Previa en las Relaciones de Consumo (COPREC)**, en https://autogestion.produccion.gob.ar/consumidores.
 
 ---
 
-Vita. Andre Albisu Lambertini, CUIT 20-46034087-0, De los Extremeños 5069, Córdoba, Provincia de Córdoba. vitaappar@gmail.com
+Sere. Andre Albisu Lambertini, CUIT 20-46034087-0, De los Extremeños 5069, Córdoba, Provincia de Córdoba. hola@sere.ar
