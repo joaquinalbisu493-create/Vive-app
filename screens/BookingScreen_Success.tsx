@@ -16,6 +16,7 @@ import { AppBg } from '@/components/ui/AppBg';
 import { CoachAvatar } from '@/components/CoachAvatar';
 import { localEquivalentLabel } from '@/lib/time';
 import { vibrarLogro } from '@/lib/vibracion';
+import { sonarReservaConfirmada } from '@/lib/sonido';
 import { ScaleCard } from '@/components/ScaleCard';
 
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
@@ -79,13 +80,15 @@ export default function BookingScreen_Success() {
 
   // Animations
   // El tilde entra sin rebote: crece un poco mientras aparece y se queda. La
-  // vibración sale en el mismo instante, que es cuando la reserva "cae".
+  // vibración y el sonido salen en el mismo instante, que es cuando la reserva
+  // "cae".
   const checkIn = useRef(new Animated.Value(0)).current;
   const contentOpacity = useRef(new Animated.Value(0)).current;
   const checkScale = checkIn.interpolate({ inputRange: [0, 1], outputRange: [0.86, 1] });
 
   useEffect(() => {
     vibrarLogro();
+    sonarReservaConfirmada();
     Animated.sequence([
       Animated.timing(checkIn, {
         toValue: 1,

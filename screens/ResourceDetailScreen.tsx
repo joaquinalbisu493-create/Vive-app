@@ -110,6 +110,9 @@ export default function ResourceDetailScreen() {
   }, []);
 
   function toggleAudio(url: string) {
+    // También antes de cada play, no solo al montar: el sonido de reserva
+    // confirmada (lib/sonido) la vuelve a "respetar el silencio".
+    setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
     if (!audioLoaded) {
       player.replace({ uri: url });
       player.play();

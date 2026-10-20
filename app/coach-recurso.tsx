@@ -267,6 +267,9 @@ function AudioPlayer({
 
   function togglePlay() {
     if (isPlaying) { player.pause(); return; }
+    // También antes de cada play, no solo al montar: el sonido de reserva
+    // confirmada (lib/sonido) la vuelve a "respetar el silencio".
+    setAudioModeAsync({ playsInSilentMode: true }).catch(() => {});
     setPendingPlay(true);
     player.play();
   }
