@@ -18,6 +18,7 @@ import { localEquivalentLabel } from '@/lib/time';
 import { vibrarLogro } from '@/lib/vibracion';
 import { sonarReservaConfirmada } from '@/lib/sonido';
 import { ScaleCard } from '@/components/ScaleCard';
+import { LogoATilde } from '@/components/LogoATilde';
 
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTH_NAMES = [
@@ -78,31 +79,24 @@ export default function BookingScreen_Success() {
   const formattedDate = formatDate(dateStr);
   const horaLocal = time ? localEquivalentLabel(dateStr, time) : null;
 
-  // Animations
-  // El tilde entra sin rebote: crece un poco mientras aparece y se queda. La
-  // vibración y el sonido salen en el mismo instante, que es cuando la reserva
-  // "cae".
-  const checkIn = useRef(new Animated.Value(0)).current;
+  // Animación: el logo se junta en un círculo y se dibuja la tilde
+  // (LogoATilde). El sonido arranca con el movimiento; la vibración y la info
+  // de la reserva llegan cuando la tilde termina, que es cuando la reserva "cae".
   const contentOpacity = useRef(new Animated.Value(0)).current;
-  const checkScale = checkIn.interpolate({ inputRange: [0, 1], outputRange: [0.86, 1] });
 
   useEffect(() => {
-    vibrarLogro();
     sonarReservaConfirmada();
-    Animated.sequence([
-      Animated.timing(checkIn, {
-        toValue: 1,
-        duration: 420,
-        easing: Easing.out(Easing.cubic),
-        useNativeDriver: true,
-      }),
-      Animated.timing(contentOpacity, {
-        toValue: 1,
-        duration: 320,
-        useNativeDriver: true,
-      }),
-    ]).start();
   }, []);
+
+  function alTerminarTilde() {
+    vibrarLogro();
+    Animated.timing(contentOpacity, {
+      toValue: 1,
+      duration: 320,
+      easing: Easing.out(Easing.cubic),
+      useNativeDriver: true,
+    }).start();
+  }
 
   return (
     <AppBg>
@@ -112,9 +106,9 @@ export default function BookingScreen_Success() {
         {/* Centro — ícono + texto */}
         <View style={s.center}>
 
-          <Animated.View style={[s.checkCircle, { opacity: checkIn, transform: [{ scale: checkScale }] }]}>
-            <MaterialIcons name="check" size={48} color="#565E32" />
-          </Animated.View>
+          <View style={s.checkWrap}>
+            <LogoATilde size={96} onTilde={alTerminarTilde} />
+          </View>
 
           <Animated.View style={[s.textBlock, { opacity: contentOpacity }]}>
             {/* Ya no existe el estado "falta confirmar el pago" (sesión 117).
@@ -225,24 +219,7 @@ const s = StyleSheet.create({
     paddingBottom: 24,
   },
 
-  checkCircle: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
-    backgroundColor: ViveColors.accent,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 28,
-    ...Platform.select({
-      ios: {
-        shadowColor: ViveColors.accent,
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.3,
-        shadowRadius: 16,
-      },
-      android: { elevation: 6 },
-    }),
-  },
+  checkWrap: { marginBottom: 28 },
 
   textBlock: {
     alignItems: 'center',
