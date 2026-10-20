@@ -6,7 +6,7 @@
 
 ---
 
-## 0. Para qué existe la IA en Vita
+## 0. Para qué existe la IA en Sere
 
 > **Para que la gente se sienta acompañada ENTRE las sesiones.**
 
@@ -697,7 +697,7 @@ lea como que se desoyó una devolución clínica.
 ⚠️ **Lo que queda sin resolver:** el umbral sigue sin distinguir "mal tramo" de
 "riesgo", y **no sabemos cómo hacerlo sin preguntar**. Lo que se hizo fue dejar
 de afirmar la distinción que no podemos medir. La pregunta de fondo —qué hace
-Vita frente al riesgo real— sigue abierta y está atada a A.11.
+Sere frente al riesgo real— sigue abierta y está atada a A.11.
 
 ### ✅ Estado al 07/09/2026 — ENCENDIDO
 
@@ -742,7 +742,7 @@ Detrás de `SAFETY_FLOOR_ENABLED`, en `false`.
 🔴 **Y una decisión que conviene entender, porque es contraintuitiva: el umbral
 NO sale de un instrumento clínico.** La tentación era tomar el corte del PHQ-9
 ("más de la mitad de los días durante dos semanas"). Sería un error — un umbral
-derivado de un instrumento diagnóstico convierte a Vita en una herramienta de
+derivado de un instrumento diagnóstico convierte a Sere en una herramienta de
 **screening**, que es exactamente la línea que
 [`encuadre-salud-y-responsabilidad.md`](./encuadre-salud-y-responsabilidad.md)
 dice no cruzar. Ahí la derivación se vuelve triage.
@@ -807,7 +807,7 @@ y que no la persiga afuera. Al menos hasta que la voz tenga crédito ganado.
   vos" anunciaba un análisis que la card hace rato no hacía —ya hablaba en
   primera persona ("Contame cómo venís")—, así que la etiqueta era lo único que
   seguía nombrándola como una devolución. 📌 El símbolo no cambió: el orbe de
-  Sofía **es el isotipo de Vita invertido**, así que la marca que ya estaba al
+  Sofía **es el isotipo de Sere invertido**, así que la marca que ya estaba al
   lado del texto se lee como su firma sin agregar nada.
 - 📌 **08/10/2026: el momento ya no existe.** Andre lo vio en el teléfono y lo
   sacó: repetía la frase de la tarjeta y ofrecía "Ver mi progreso" aunque la
@@ -839,7 +839,7 @@ y que no la persiga afuera. Al menos hasta que la voz tenga crédito ganado.
    eligiendo cuándo y en qué tono. Sin tocar la arquitectura.
 4. **Diseñar el piso de seguridad** (§5 ter) antes de darle más voz. ⚠️ Con la
    distinción *derivación vs. triage* a la vista desde el principio — es lo que
-   mantiene a Vita fuera del encuadre de dispositivo médico (ver "Chequeo de
+   mantiene a Sere fuera del encuadre de dispositivo médico (ver "Chequeo de
    jurisdicciones" en `legal-instrucciones.md`).
 5. **Agregar el silencio** (3.3) y los guardarraíles nuevos a `rejectCopy`.
 5 bis. **Resolver cómo se declara que es IA** (3.6), en el mismo momento en que

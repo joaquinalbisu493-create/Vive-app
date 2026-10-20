@@ -114,7 +114,7 @@ La función `mood_trend_for_client` puede quedar como está —apagada— o borr
 ## 8. Lo que sigue abierto
 
 - ⚠️ **A.11 (deber de actuar) se vuelve MÁS filosa, no menos.** Mónica es
-  psicóloga: sabe qué hacer con un día malo. En Vita hay coaches de hábitos,
+  psicóloga: sabe qué hacer con un día malo. En Sere hay coaches de hábitos,
   guías y nutricionistas — **su flujo es clínico y el de ellos no**. Y acá la
   persona además **eligió deliberadamente** mostrar algo, lo que sube la
   expectativa de respuesta. Si manda un paquete duro y no le contestan en tres

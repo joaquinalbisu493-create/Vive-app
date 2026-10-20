@@ -122,10 +122,10 @@ apuntar a una URL que rebota.
 
 ### 4. Completar lo que depende de que el dominio resuelva
 
-- [x] ~~**T&C §9.4**~~ — la URL ya está escrita (`https://vitaapp.com.ar` y `https://vitaapp.com.ar/legal/arrepentimiento`). ⚠️ **El documento la declara como vía para ejercer un derecho, así que no puede entrar en vigencia antes de que el sitio esté arriba.** Con `cleanUrls` activo la URL canónica va **sin** `.html`; los enlaces internos sí llevan `.html` a propósito, para poder abrir el sitio desde el disco antes de deployar, y Vercel los redirige.
-- [ ] **App Store Connect** — `https://vitaapp.com.ar/legal/privacidad`
-- [ ] **Google Play Console** — `https://vitaapp.com.ar/legal/privacidad` **y**, como URL de solicitud de eliminación de cuenta, `https://vitaapp.com.ar/legal/eliminar-cuenta`
-- [ ] Confirmar en **incógnito** que `https://vitaapp.com.ar` abre y que el botón de arrepentimiento se alcanza **sin sesión ni registro**.
+- [x] ~~**T&C §9.4**~~ — la URL ya está escrita (`https://sere.ar` y `https://sere.ar/legal/arrepentimiento`). ⚠️ **El documento la declara como vía para ejercer un derecho, así que no puede entrar en vigencia antes de que el sitio esté arriba.** Con `cleanUrls` activo la URL canónica va **sin** `.html`; los enlaces internos sí llevan `.html` a propósito, para poder abrir el sitio desde el disco antes de deployar, y Vercel los redirige.
+- [ ] **App Store Connect** — `https://sere.ar/legal/privacidad`
+- [ ] **Google Play Console** — `https://sere.ar/legal/privacidad` **y**, como URL de solicitud de eliminación de cuenta, `https://sere.ar/legal/eliminar-cuenta`
+- [ ] Confirmar en **incógnito** que `https://sere.ar` abre y que el botón de arrepentimiento se alcanza **sin sesión ni registro**.
 - [ ] Confirmar que las 4 páginas de `legal/` cargan y que el link "Inicio" vuelve a la portada.
 
 ## Después de cada cambio en `docs/*.md`

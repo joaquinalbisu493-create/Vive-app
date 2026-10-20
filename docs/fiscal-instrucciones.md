@@ -1,4 +1,4 @@
-# Instrucciones — Situación fiscal de Vita
+# Instrucciones — Situación fiscal de Sere
 
 Guía operativa (**no es asesoramiento contable**) para llevar a la reunión con el
 contador. Reúne lo que ya está decidido, lo que está sin resolver, y por qué cada
@@ -7,7 +7,7 @@ pregunta importa. Escrito el 20/08/2026.
 > **La consulta con el contador es hoy el único bloqueante real del riel
 > internacional.** Se agotaron las salidas técnicas: PayPal no tiene pagos
 > repartidos disponibles, USDT tampoco, y Stripe Connect no paga a Argentina.
-> **La plata del exterior pasa sí o sí por la cuenta de Vita**, así que la
+> **La plata del exterior pasa sí o sí por la cuenta de Sere**, así que la
 > pregunta del tope del Monotributo ya no tiene escapatoria de arquitectura.
 
 ## Archivos relacionados
@@ -23,8 +23,8 @@ pregunta importa. Escrito el 20/08/2026.
 |---|---|
 | **Figura** | Persona humana en **Monotributo**. No sociedad. Decidido 06/08/2026. |
 | **Comprobante** | Factura tipo **C**, sin IVA discriminado. |
-| **Qué factura Vita** | **Solo su comisión**, por el servicio de intermediación — no la sesión. |
-| **Quién factura la sesión** | El profesional, al cliente. Vita no es agente de retención ni percepción. |
+| **Qué factura Sere** | **Solo su comisión**, por el servicio de intermediación — no la sesión. |
+| **Quién factura la sesión** | El profesional, al cliente. Sere no es agente de retención ni percepción. |
 | **Comisión local** | 20% la primera sesión del par, 15% de la segunda en adelante. |
 | **Comisión internacional** | **25% plano**, sin tramos. Decidido e implementado 20/08/2026. |
 
@@ -45,14 +45,14 @@ elegida fue redactar bien §5 y §18-19 de los T&C, no constituir sociedad.
 **Esta va primera aunque parezca la menos interesante, porque es la única que ya
 está corriendo con plata real.**
 
-Vita cobró con plata real desde el **09/08/2026**, y **el sistema no emite
+Sere cobró con plata real desde el **09/08/2026**, y **el sistema no emite
 ninguna factura** — no hay una sola referencia a facturación, ARCA o AFIP en todo
 el código.
 
 ⚠️ **Pero el volumen es mínimo y casi todo se revirtió.** Todos los movimientos
 fueron pruebas del pipeline de pagos, no ventas a clientes:
 
-| Fecha | Qué | Comisión de Vita | Estado |
+| Fecha | Qué | Comisión de Sere | Estado |
 |---|---|---|---|
 | 09/08 | 4 pagos de $1 ARS | ~$0,20 c/u | uno reembolsado |
 | 19/08 | Sesión $4.500, tramo 15% | ~$675 | **cancelada y reembolsada** |
@@ -77,7 +77,7 @@ depende de cómo se documente el movimiento, no de la intención con que se hizo
 Pero conviene llevar el dato exacto y no la pregunta general.
 
 **Para traer los números reales:** el panel de admin tiene una pestaña
-**Facturación** que muestra la comisión de Vita agrupada por mes, profesional,
+**Facturación** que muestra la comisión de Sere agrupada por mes, profesional,
 moneda y riel — con las reembolsadas aparte y sin netar. ⚠️ **No decide qué es
 facturable**: es material en bruto para esta conversación, justamente porque el
 criterio es lo que falta definir.
@@ -99,7 +99,7 @@ Preguntar:
 - ¿A quién se le factura exactamente — al profesional, dado que la comisión sale
   de su parte vía el split?
 - ¿Cómo se documenta una comisión **retenida por un tercero** (Mercado Pago) que
-  nunca pasó por una cuenta de Vita?
+  nunca pasó por una cuenta de Sere?
 - **¿Ese único movimiento de ~$675 hay que facturarlo?** ¿Y los reembolsados, que revirtieron la comisión?
 - Hacia adelante, cuando haya ventas de verdad: ¿desde qué momento hay que tener la emisión resuelta?
 
@@ -107,7 +107,7 @@ Preguntar:
 
 Es la que decide si el riel internacional tiene techo.
 
-En PayPal y USDT **entra el total a la cuenta de Vita** y después se le
+En PayPal y USDT **entra el total a la cuenta de Sere** y después se le
 transfiere al profesional. La pregunta es si ese total computa como ingreso
 bruto para la categoría del Monotributo, aunque la mayor parte sea de terceros.
 
@@ -136,8 +136,8 @@ su trámite. La pregunta es quién es el exportador.
 Cada profesional que tome una sesión internacional pasa a ser exportador, con su
 propio trámite. Es lo que dicen hoy los T&C §8.5.
 
-**Opción B — Vita.** Le vende la sesión al cliente del exterior y le factura;
-el profesional le factura a Vita, como cualquier trabajo local. Un solo
+**Opción B — Sere.** Le vende la sesión al cliente del exterior y le factura;
+el profesional le factura a Sere, como cualquier trabajo local. Un solo
 exportador. Es para lo que se construyó la arquitectura.
 
 🔴 **Las dos están escritas en el proyecto, en lugares distintos.** La
@@ -146,7 +146,7 @@ contradicción vive en tres lados:
 | Dice | Dónde | Qué modelo |
 |---|---|---|
 | "el Profesional emite al Cliente los comprobantes por la Sesión" | T&C §8.5 | **A** |
-| "cobra Vita para tener un solo circuito de compliance en vez de N" | CHANGELOG, sesión 101 | **B** |
+| "cobra Sere para tener un solo circuito de compliance en vez de N" | CHANGELOG, sesión 101 | **B** |
 | "él nos factura a nosotros en vez de al usuario" | `screens/CoachProfileScreen.tsx:313` | **B** |
 
 ⚠️ **No hay que llegar con una redacción para defender.** Los T&C son un
@@ -161,8 +161,8 @@ facturación bruta para el mismo margen**, con impacto inmediato en la categorí
 
 ### 2.3 bis 🔴 DECISIÓN TOMADA (25/08/2026) — y la pregunta cambia
 
-**Vita actúa como AGENTE, no como principal.** No es una preferencia: los T&C ya lo
-dicen en cuatro cláusulas (§4.1 intermediación, §4.2 "Vita no es parte de esa
+**Sere actúa como AGENTE, no como principal.** No es una preferencia: los T&C ya lo
+dicen en cuatro cláusulas (§4.1 intermediación, §4.2 "Sere no es parte de esa
 relación", §8.5 "no emite comprobantes por la Sesión", §18.1 no responde por las
 prestaciones). Elegir principal habría significado reescribir el encuadre central
 de un documento que los usuarios ya aceptan.
@@ -173,17 +173,17 @@ y el comentario de `CoachProfileScreen.tsx:313`), no los T&C.
 
 **Y de ahí salen dos preguntas nuevas, que son las que hay que llevar:**
 
-#### 🔴 a) Si Vita es agente, ¿el profesional es exportador igual?
+#### 🔴 a) Si Sere es agente, ¿el profesional es exportador igual?
 
-La arquitectura actual hace que **Vita cobre** en el riel internacional y le
+La arquitectura actual hace que **Sere cobre** en el riel internacional y le
 transfiera al profesional después. El documento que se le entrega al profesional
 justifica eso diciendo que así **él no pasa a ser exportador**.
 
 **La duda es si eso es cierto.** Si el criterio de exportación de servicios es
 **dónde se aprovecha el servicio** —y no por dónde pasó el dinero—, entonces el
 profesional que atiende a alguien en Madrid **exporta igual**, cobre él o cobre
-Vita. En ese caso el diseño actual **no evita nada: lo esconde**, y a cambio le
-mete a Vita plata de terceros en la cuenta.
+Sere. En ese caso el diseño actual **no evita nada: lo esconde**, y a cambio le
+mete a Sere plata de terceros en la cuenta.
 
 ⚠️ **Es la pregunta más cara de esta lista**, porque de la respuesta depende si el
 documento que se le va a entregar al profesional dice la verdad. **Ese documento no
@@ -191,12 +191,12 @@ se mandó a nadie todavía**, justamente por esto.
 
 #### 🔴 b) ¿Cómo se factura la comisión según dónde esté el profesional?
 
-Bajo agente, **el cliente de Vita es el profesional**: a él se le factura la
-comisión, que sale de su parte. Por lo tanto **si Vita exporta o no lo decide el
+Bajo agente, **el cliente de Sere es el profesional**: a él se le factura la
+comisión, que sale de su parte. Por lo tanto **si Sere exporta o no lo decide el
 domicilio fiscal del PROFESIONAL, no el del cliente final.**
 
 - Profesional en Argentina → comisión facturada al mercado interno (factura C).
-- Profesional en el exterior → **la comisión de Vita es exportación de servicios**
+- Profesional en el exterior → **la comisión de Sere es exportación de servicios**
   (factura E, sin IVA, y —según lo que hay que confirmar— sin sumar al tope del
   monotributo).
 
@@ -207,7 +207,7 @@ guarda su domicilio fiscal**. Antes de pedir ese dato hace falta saber para qué
 cambia.
 
 **Preguntas concretas:**
-1. ¿La comisión a un profesional del exterior es exportación de servicios para Vita?
+1. ¿La comisión a un profesional del exterior es exportación de servicios para Sere?
 2. Si sí, ¿esa facturación suma al tope de la categoría del monotributo?
 3. ¿Hay algo que impida tener profesionales no argentinos, más allá de lo operativo?
 

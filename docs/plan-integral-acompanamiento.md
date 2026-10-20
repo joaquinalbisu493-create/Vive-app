@@ -1,4 +1,4 @@
-# Plan integral — que Vita te conozca y te acompañe
+# Plan integral — que Sere te conozca y te acompañe
 
 > 2026-09-03. Escrito por Joaquín (con Claude Code). **Documento paraguas.** No
 > reemplaza a los de detalle, los ata. Nada de esto está construido; espera el OK

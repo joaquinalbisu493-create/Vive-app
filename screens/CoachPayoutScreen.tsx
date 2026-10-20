@@ -438,7 +438,7 @@ export default function CoachPayoutScreen() {
 
               <Text style={s.fiscalNote}>
                 Cobrar por acá no cambia nada de tu situación fiscal: seguís facturando normalmente,
-                pero a VIVE en vez de a la persona.
+                pero a Sere en vez de a la persona.
               </Text>
             </ScrollView>
           </KeyboardAvoidingView>

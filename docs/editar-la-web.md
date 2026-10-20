@@ -1,6 +1,6 @@
 # Editar la web (para Joaquín)
 
-> **22/09/2026.** Qué se puede tocar de `vitaapp.com.ar`, qué no, y cómo probar
+> **22/09/2026.** Qué se puede tocar de `sere.ar`, qué no, y cómo probar
 > un cambio sin romper nada que esté vivo.
 >
 > No hace falta cuenta de Vercel. **Con el acceso al repo alcanza.**
@@ -22,9 +22,9 @@ ni `lib/` llega al sitio: eso es la aplicación del teléfono.
 
 | archivo | qué es |
 |---|---|
-| `web/index.html` | **La landing**, la portada de vitaapp.com.ar. Escrita a mano, HTML y CSS, sin build. Es el archivo para mejorar. |
+| `web/index.html` | **La landing**, la portada de sere.ar. Escrita a mano, HTML y CSS, sin build. Es el archivo para mejorar. |
 | `web/img/` | Las fotos de la landing. |
-| `web/profesionales.html` | **La página para profesionales** (`vitaapp.com.ar/profesionales`): qué tienen en Vita, cuánto cuesta, cómo sumarse y la lista de espera. Lo que dice sale de `screens/CoachComoFuncionaScreen.tsx`: si cambia una regla allá, se cambia acá. |
+| `web/profesionales.html` | **La página para profesionales** (`sere.ar/profesionales`): qué tienen en Sere, cuánto cuesta, cómo sumarse y la lista de espera. Lo que dice sale de `screens/CoachComoFuncionaScreen.tsx`: si cambia una regla allá, se cambia acá. |
 | `web/tiendas.js` | Los botones de App Store / Google Play y el formulario de lista de espera, compartidos por las dos páginas. **Los links de las tiendas se pegan acá** (`TIENDAS`), una sola vez. |
 
 📌 La landing usa la paleta de la app y la fuente Plus Jakarta Sans. La aurora del
@@ -60,7 +60,7 @@ publicado** en el pie (lo exige la guideline 1.2 de Apple).
 ## 🔴 Lo que hay que tocar con cuidado
 
 `web/c/index.html` **es el checkout público y está vivo desde el 21/09/2026.** Es
-la página que se abre con el link de un profesional (`vitaapp.com.ar/c/su-nombre`)
+la página que se abre con el link de un profesional (`sere.ar/c/su-nombre`)
 y por ahí **alguien puede identificarse y pagar de verdad**. Un error ahí no
 rompe un estilo: rompe un cobro.
 

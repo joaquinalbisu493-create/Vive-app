@@ -24,7 +24,7 @@
 > del contrato. **La cláusula de prórroga de jurisdicción se tiene por no
 > escrita.**"*
 
-Vita es exactamente ese supuesto: contrato a distancia por medios electrónicos.
+Sere es exactamente ese supuesto: contrato a distancia por medios electrónicos.
 Así que:
 
 - **Poner CABA no sirve de nada.** No es que sea riesgoso: es que la cláusula se
@@ -70,7 +70,7 @@ Comercio (BO 17/01/2025). Lo que dice:
   tamaño.
 - Suma la leyenda *"precio sin impuestos nacionales"* donde corresponda.
 
-**Qué significa para Vita, caso por caso:**
+**Qué significa para Sere, caso por caso:**
 
 | Situación | Veredicto |
 |---|---|
@@ -183,7 +183,7 @@ cumplido, y eso es un argumento, no una certeza.
 📌 Un dato a favor: la retención sería la **contraprestación de un servicio
 efectivamente recibido**, no una penalidad. Enriquecimiento sin causa (CCyC
 arts. 1794-1795) juega para tu lado — quien recibió la sesión completa y recupera
-todo se enriquece sin causa a costa del profesional, que no es Vita sino un
+todo se enriquece sin causa a costa del profesional, que no es Sere sino un
 tercero.
 
 ### A.6 — La cancelación dentro de las 24hs

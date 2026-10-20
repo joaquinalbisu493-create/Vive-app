@@ -7,7 +7,7 @@
 
 ## Regla de oro
 
-**`descartada` es solo para propuestas fuera de scope** (tema/formato que VITA no publica).
+**`descartada` es solo para propuestas fuera de scope** (tema/formato que Sere no publica).
 **Nunca por calidad** — todo lo que "no está listo pero podría estarlo" va a `necesita_ajustes`,
 siempre con notas concretas y accionables. La revisión es no punitiva: el coach tiene que
 salir de cada estado sabiendo qué está bien, qué falta y que puede volver a intentar.
@@ -59,7 +59,7 @@ conserva lo que se le pidió antes — revisarlo para ver si lo resolvió.
 - [ ] Si es audio: la URL del bucket reproduce bien (abrila en el navegador) y el contenido coincide con la descripción
 - [ ] Si es guía: los pasos se entienden solos y en orden
 - [ ] Si es lectura: la fuente (si la cita) es real
-- [ ] No duplica journaling/gratitud (exclusivos de VITA) ni un recurso ya publicado
+- [ ] No duplica journaling/gratitud (exclusivos de Sere) ni un recurso ya publicado
 - [ ] `axes`/`tags`/`topic` propuestos son razonables (son pista, no vinculantes —
       el vínculo real lo definimos nosotros al publicar)
 
@@ -105,7 +105,7 @@ UPDATE resource_proposals SET status = 'aprobada' WHERE id = 'PROPOSAL_ID';
 INSERT INTO notifications (recipient_id, type, title, body)
 SELECT c.profile_id, 'propuesta_publicada',
        '🌱 Tu recurso ya está publicado',
-       'Tu recurso «' || rp.title || '» ya está en VITA. Tus clientes ya pueden usarlo desde tu perfil.'
+       'Tu recurso «' || rp.title || '» ya está en Sere. Tus clientes ya pueden usarlo desde tu perfil.'
 FROM resource_proposals rp
 JOIN coaches c ON c.id = rp.coach_id
 WHERE rp.id = 'PROPOSAL_ID';

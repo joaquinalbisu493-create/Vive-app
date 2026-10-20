@@ -7,13 +7,13 @@
 
 ---
 
-## 1. Qué es Vita
+## 1. Qué es Sere
 
 Una app de bienestar que conecta personas con **profesionales** — coaches de
 vida, de hábitos, nutricionistas, psicólogos. La persona busca a alguien, reserva
 una sesión, paga por la app y trabaja con esa persona a lo largo del tiempo.
 
-Del lado del profesional, Vita resuelve lo que un independiente no tiene: agenda,
+Del lado del profesional, Sere resuelve lo que un independiente no tiene: agenda,
 sistema de reservas y, sobre todo, **gente nueva**.
 
 Es una app de teléfono (iOS y Android), en español rioplatense, hecha en React
@@ -27,7 +27,7 @@ El principio que gobierna todas las decisiones de producto:
 
 > **"Si abruma, sobra."** Menos, pero más intencional.
 
-Vita **no** es una app de productividad. No hay rachas, no hay contadores que
+Sere **no** es una app de productividad. No hay rachas, no hay contadores que
 presionen, no hay paredes de métricas. El tono es cálido, sereno y adulto — le
 habla a alguien que la está pasando mal o que quiere cambiar algo, no a alguien
 que quiere optimizarse.
@@ -178,7 +178,7 @@ solamente en un círculo de 48px, o sea que la diferencia entre las tres áreas 
 bienestar se comunica con un 3% de la superficie.
 
 Es también **la primera pantalla de decisión real** del producto y el primer
-lugar donde alguien se hace una idea de qué es Vita. Merece tener carácter.
+lugar donde alguien se hace una idea de qué es Sere. Merece tener carácter.
 
 ---
 
@@ -238,7 +238,7 @@ rectángulo. Para cada una:
 3. **Cómo se ve la jerarquía** entre los tres ejes: ¿son iguales? ¿el emocional
    pesa más porque tiene el doble de temas?
 4. **Qué pasa al tocar.** Cómo se siente la transición hacia los temas.
-5. **Qué la vuelve Vita y no otra app.** Si la propuesta serviría igual para una
+5. **Qué la vuelve Sere y no otra app.** Si la propuesta serviría igual para una
    app de banco, no sirve.
 6. **Costo real** en React Native, según las restricciones de arriba.
 

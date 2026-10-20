@@ -4,7 +4,7 @@ Explicación para profesionales que activen **"Sesiones desde el exterior"** en 
 Es distinto de cómo cobrás las sesiones de Argentina, y la diferencia importa.
 
 > ⚠️ **BORRADOR.** La sección [§6 Qué facturás](#6-qué-facturás) está **bloqueada**
-> hasta que se resuelva la consulta con el contador (VIVE como principal o por
+> hasta que se resuelva la consulta con el contador (Sere como principal o por
 > cuenta y orden de terceros — pendiente desde la sesión 101). Es la sección que
 > más le importa al coach, así que **este documento no se manda hasta cerrar eso**.
 > Todo lo demás ya está decidido y no depende de esa respuesta.
@@ -15,16 +15,16 @@ Es distinto de cómo cobrás las sesiones de Argentina, y la diferencia importa.
 
 ## 1. Qué cambia
 
-En las sesiones de Argentina, **la plata va directo a tu Mercado Pago**. VIVE no
+En las sesiones de Argentina, **la plata va directo a tu Mercado Pago**. Sere no
 la toca: el cobro se divide en el momento del pago y tu parte ya es tuya.
 
 En las sesiones del exterior no se puede hacer eso. Mercado Pago no procesa
 tarjetas emitidas fuera del país, así que el cobro va por otro camino y
-**lo hace VIVE**. Después te transferimos lo tuyo.
+**lo hace Sere**. Después te transferimos lo tuyo.
 
 No es una preferencia nuestra: si cada profesional cobrara por su cuenta del
 exterior, cada uno pasaría a ser **exportador de servicios**, con factura E y
-registro propio por cada sesión. Cobrando VIVE, ese circuito es uno solo.
+registro propio por cada sesión. Cobrando Sere, ese circuito es uno solo.
 
 ## 2. Es opcional
 
@@ -57,7 +57,7 @@ persona y no se reinicia nunca.
 pagaron. Si alguien tomó una sesión con vos desde afuera y después te reserva
 estando en Argentina, esa segunda ya es recurrente.
 
-Los puntos de diferencia con Argentina son concretos: acá VIVE **cobra, retiene y
+Los puntos de diferencia con Argentina son concretos: acá Sere **cobra, retiene y
 te transfiere**, y ahí entran la comisión del procesador y la operación de
 pagarte. En Argentina la plata te llega sola a tu Mercado Pago y eso no cuesta.
 
@@ -123,9 +123,9 @@ el total.
 
 > 🔴 **PENDIENTE — no completar sin la respuesta del contador.**
 >
-> Depende de si VIVE actúa como **principal** (facturás a VIVE por tu servicio, y
-> VIVE le factura al cliente del exterior) o **por cuenta y orden de terceros**
-> (VIVE factura solo su comisión y el servicio se te atribuye a vos).
+> Depende de si Sere actúa como **principal** (facturás a Sere por tu servicio, y
+> Sere le factura al cliente del exterior) o **por cuenta y orden de terceros**
+> (Sere factura solo su comisión y el servicio se te atribuye a vos).
 >
 > La diferencia no es administrativa: en el segundo caso podrías ser vos el
 > exportador, que es exactamente lo que el punto 1 dice que se evita. Escribir

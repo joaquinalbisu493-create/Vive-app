@@ -53,7 +53,7 @@ verificación de identidad, medidas aplicadas y las notas que escribió.
 - **Datos de otras personas:** los mensajes que recibió, o el nombre de sus clientes.
 - **Notas privadas que un profesional escribió sobre ella.** Son del profesional.
   Si la persona las pide expresamente, consultar con el abogado antes de contestar.
-- **Registros internos de Vita:** auditoría del panel, evidencia de sanciones.
+- **Registros internos de Sere:** auditoría del panel, evidencia de sanciones.
 - **Fotos y videos:** el archivo trae la dirección; si los pide, se adjuntan aparte.
 - **Lo que guardan otros:** el detalle del pago lo tiene Mercado Pago o PayPal, y
   las videollamadas no se graban.

@@ -1,22 +1,22 @@
-# Vita: qué falta y qué conviene cambiar antes de publicar
+# Sere: qué falta y qué conviene cambiar antes de publicar
 
 Investigación del 23 de septiembre de 2026. Revisión del código local hasta `ac14d4a0`, documentación del proyecto y fuentes públicas de Selia y Terapify consultadas en esta fecha. No se modificó la app durante esta investigación.
 
-**Conclusión:** Vita ya cubre gran parte del recorrido principal. La inversión más útil ahora es hacer confiable y comprensible el servicio completo: saber con quién reservás, qué pasa con tu pago, cómo pedir ayuda y cómo continuar después. Agregar más funciones antes de observar a personas usando ese recorrido tendría menos fundamento.
+**Conclusión:** Sere ya cubre gran parte del recorrido principal. La inversión más útil ahora es hacer confiable y comprensible el servicio completo: saber con quién reservás, qué pasa con tu pago, cómo pedir ayuda y cómo continuar después. Agregar más funciones antes de observar a personas usando ese recorrido tendría menos fundamento.
 
 Todos los coaches, usuarios, recursos y transacciones actuales son de prueba, según lo aclarado por Andre. No se tomaron como profesionales reales, demanda comprobada, reseñas auténticas ni evidencia de pérdidas de clientes. Tenerlos durante el desarrollo es normal; su retiro corresponde al paso previo a abrir al público.
 
 **Qué pude comprobar y qué sigue siendo una hipótesis**
 
-Leí las rutas y partes relevantes del código de entrada, perfiles, selección, reservas, sala, reseñas, analítica, contacto y devoluciones. Contrasté el estado con el registro de pendientes. Esta es una investigación de producto basada en código y fuentes públicas: no reemplaza una prueba completa de la última build en iPhone y Android, entrevistas ni una auditoría completa nueva. La landing pública de Vita no respondió a la herramienta de navegación; para ella revisé el código local, sin dar por confirmado su estado desplegado.
+Leí las rutas y partes relevantes del código de entrada, perfiles, selección, reservas, sala, reseñas, analítica, contacto y devoluciones. Contrasté el estado con el registro de pendientes. Esta es una investigación de producto basada en código y fuentes públicas: no reemplaza una prueba completa de la última build en iPhone y Android, entrevistas ni una auditoría completa nueva. La landing pública de Sere no respondió a la herramienta de navegación; para ella revisé el código local, sin dar por confirmado su estado desplegado.
 
 Las recomendaciones de interfaz se presentan como hipótesis para probar. Los problemas de implementación identificados se señalan por separado. Las fuentes comerciales de competidores describen lo que anuncian, no una certificación independiente de cómo funciona cada servicio.
 
 **La comparación anterior necesita actualizarse**
 
-La investigación de Selia del 17/09 ya no describe bien varias capacidades actuales de Vita:
+La investigación de Selia del 17/09 ya no describe bien varias capacidades actuales de Sere:
 
-| Capacidad | Evidencia actual de Vita | Decisión |
+| Capacidad | Evidencia actual de Sere | Decisión |
 |---|---|---|
 | Recomendaciones explicadas y alternativas | `screens/QuizScreen.tsx`, `lib/quizMatch.ts` | Ya existe; probar comprensión y calidad con perfiles reales. |
 | Solicitar aviso de disponibilidad | `availability_waitlist`, función `availability-notices`, documentación M3 | Ya construida; validar recorrido visible. |
@@ -25,15 +25,15 @@ La investigación de Selia del 17/09 ya no describe bien varias capacidades actu
 | Próxima sesión sugerida | `lib/proximaSesion.ts`, tarjeta de cierre | Ya existe; medir si ayuda a volver. |
 | Referidos | Registro, `lib/referidos.ts`, checkout | Ya existe en el circuito documentado de MP; los enlaces y la cobertura por proveedor necesitan verificación. |
 | Preparar la sesión | `app/paquete.tsx`, `lib/paquete.ts` | Ya existe; no construir otro resumen paralelo. |
-| IA acotada | `supabase/functions/weekly-reflection/index.ts` y Sofía | La frase «Vita no tiene IA» está desactualizada. No equivale a un chat terapéutico. |
+| IA acotada | `supabase/functions/weekly-reflection/index.ts` y Sofía | La frase «Sere no tiene IA» está desactualizada. No equivale a un chat terapéutico. |
 
-Selia anuncia matching explicado, alternativas y orientación; son referencias útiles para evaluar claridad. Terapify también presenta matching, materiales entre sesiones y garantía. Varias de estas funciones ya son parte de Vita. [Selia: preguntas frecuentes](https://www.selia.co/faq), [Terapify](https://www.terapify.com/).
+Selia anuncia matching explicado, alternativas y orientación; son referencias útiles para evaluar claridad. Terapify también presenta matching, materiales entre sesiones y garantía. Varias de estas funciones ya son parte de Sere. [Selia: preguntas frecuentes](https://www.selia.co/faq), [Terapify](https://www.terapify.com/).
 
 ## Cambios prioritarios
 
 **1. Definir con precisión la profesión y qué se verificó. Antes del primer profesional real.**
 
-Hallazgo confirmado: `lib/tipoProfesional.ts:33` decide entre psicólogo, nutricionista y coach usando palabras de `specialty` y un indicador genérico de matrícula. El propio archivo describe la limitación: una matrícula de una profesión no demuestra otra. Además, la ficha muestra «Verificado por Vita» (`screens/ProfesionalScreen.tsx:363`), una etiqueta más amplia que la información que representa.
+Hallazgo confirmado: `lib/tipoProfesional.ts:33` decide entre psicólogo, nutricionista y coach usando palabras de `specialty` y un indicador genérico de matrícula. El propio archivo describe la limitación: una matrícula de una profesión no demuestra otra. Además, la ficha muestra «Verificado por Sere» (`screens/ProfesionalScreen.tsx:363`), una etiqueta más amplia que la información que representa.
 
 Propuesta: guardar profesión como dato estructurado, vincular la credencial revisada con esa profesión y mostrar qué se comprobó. El perfil debe explicar cómo trabaja esa persona y qué servicio ofrece. Antes de publicarlo, comprobar además precio, medio de cobro, disponibilidad y presentación.
 
@@ -93,7 +93,7 @@ Criterio de aceptación propuesto: la mayoría de los participantes identifica s
 
 **8. Mejorar continuidad con lo que ya existe. Primer mes, según uso.**
 
-Vita ya tiene diario, recursos, preparación y sugerencia de próxima sesión. Una mejora acotada sería un recordatorio opcional del diario, reutilizando el motor de recordatorios existente. En `app/diario.tsx` no encontré ese enlace; el pendiente M17 coincide.
+Sere ya tiene diario, recursos, preparación y sugerencia de próxima sesión. Una mejora acotada sería un recordatorio opcional del diario, reutilizando el motor de recordatorios existente. En `app/diario.tsx` no encontré ese enlace; el pendiente M17 coincide.
 
 Antes de sumar programas largos, observar si la persona encuentra el recurso que le dejó su profesional y puede llevar una nota a la siguiente sesión. Evitar aumentar notificaciones por defecto.
 
@@ -109,20 +109,20 @@ El acceso a ayuda urgente ya existe, pero el registro L14 todavía distingue ent
 
 ## Qué no priorizaría ahora
 
-- Otro chat de IA o transcripción automática: la necesidad de preparar la sesión ya tiene una solución en Vita; primero comprobar si se usa.
+- Otro chat de IA o transcripción automática: la necesidad de preparar la sesión ya tiene una solución en Sere; primero comprobar si se usa.
 - Paquetes, billetera y gift cards: agregan decisiones de cobro, devoluciones y operación. Investigar demanda después de comprobar que la gente vuelve.
 - Empresas, menores, familias y grupos: respetar las decisiones de alcance ya registradas; son líneas de servicio adicionales.
 - Una biblioteca enorme de contenido: empezar con recursos útiles, revisados y conectados con lo que el profesional recomienda.
-- Descuentos grandes permanentes: no hay evidencia de Vita que justifique usarlos como motor principal.
+- Descuentos grandes permanentes: no hay evidencia de Sere que justifique usarlos como motor principal.
 - Un rediseño general por parecerse a Selia: las dudas de uso deben decidir qué pantallas cambiar.
 
-La orientación humana de Selia no se recomienda automáticamente para Vita: el proyecto ya la descartó por capacidad operativa. Tampoco tomo la ausencia de menciones a IA en la muestra vieja de reseñas como prueba de que a nadie le importe.
+La orientación humana de Selia no se recomienda automáticamente para Sere: el proyecto ya la descartó por capacidad operativa. Tampoco tomo la ausencia de menciones a IA en la muestra vieja de reseñas como prueba de que a nadie le importe.
 
 ## Diferenciación que sí puede sostenerse
 
 Conviene vender una experiencia que se pueda verificar: entender quién atiende, cuánto se paga, qué pasa al cambiar de horario y cómo se responde ante un problema. La página argentina de Selia ya anuncia especialistas argentinos y latinos, de modo que «tener profesionales argentinos» por sí solo no es una exclusividad defendible. También anuncia sesiones desde USD 35 y paquetes; son precios publicados, no una comparación de checkout completada. [Selia en Argentina](https://www.selia.co/latam/argentina).
 
-La ventaja potencial de Vita está en ejecutar bien sus reglas y su experiencia local. El pago en pesos, la claridad de condiciones, las credenciales precisas y el acompañamiento entre sesiones pueden respaldarla cuando estén disponibles con profesionales reales. No usaría cifras, reseñas ni resultados de las cuentas de prueba para comunicarla.
+La ventaja potencial de Sere está en ejecutar bien sus reglas y su experiencia local. El pago en pesos, la claridad de condiciones, las credenciales precisas y el acompañamiento entre sesiones pueden respaldarla cuando estén disponibles con profesionales reales. No usaría cifras, reseñas ni resultados de las cuentas de prueba para comunicarla.
 
 ## Prueba concreta para decidir qué construir después
 
@@ -141,4 +141,4 @@ Medir primero: ingreso completado, primera reserva efectivamente pagada, entrada
 
 **Orden recomendado:** aclarar profesión/verificación → soporte ligado a la sesión → estado del dinero → medición fiable → beta cerrada → resolver sus fallos → apertura acotada. Los enlaces de la app se preparan con la distribución. El diario y otras mejoras de continuidad se priorizan con el uso observado.
 
-**Límites pendientes:** no se entrevistó a usuarios ni profesionales, no se completaron compras en competidores, no se revisaron sus apps detrás del registro, no se validaron todos los estados visuales de la build actual y no se actualizaron precios comparables por cada profesional. Las reseñas públicas son autoseleccionadas y algunas describen versiones anteriores. El informe permite ordenar trabajo; no demuestra todavía qué función aumentará la conversión de Vita.
+**Límites pendientes:** no se entrevistó a usuarios ni profesionales, no se completaron compras en competidores, no se revisaron sus apps detrás del registro, no se validaron todos los estados visuales de la build actual y no se actualizaron precios comparables por cada profesional. Las reseñas públicas son autoseleccionadas y algunas describen versiones anteriores. El informe permite ordenar trabajo; no demuestra todavía qué función aumentará la conversión de Sere.

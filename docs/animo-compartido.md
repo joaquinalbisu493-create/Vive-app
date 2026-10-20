@@ -24,7 +24,7 @@ A.10 al abogado.
   persona elige entrada por entrada y ve qué manda; ver `paquete-para-la-sesion.md` §5.
 - **§4 — el profesional no puede pedirlo.** El desnivel de autoridad no cambia
   porque cambie el mecanismo.
-- **§6 — nada de alertas push.** Una alerta implica una respuesta que Vita no
+- **§6 — nada de alertas push.** Una alerta implica una respuesta que Sere no
   puede sostener, y los profesionales no son todos clínicos.
 - **§7 — primero la lectura para la persona.** Ya se pagó (`lib/moodTrend.ts`).
 - **§8 — la vista del coach sigue APAGADA**, y con esto probablemente no vuelva.
@@ -122,7 +122,7 @@ peligroso**, por dos motivos:
 
 1. **Una alerta implica una respuesta.** Si le mandamos una notificación al
    profesional diciendo que alguien está mal, creamos la expectativa de que haga
-   algo. Vita no es un servicio de crisis y no puede sostener esa promesa.
+   algo. Sere no es un servicio de crisis y no puede sostener esa promesa.
 2. **Los profesionales no son todos clínicos.** Hay coaches, guías,
    nutricionistas. Ponerle a un coach de hábitos una alerta de salud mental
    delante es pedirle algo para lo que no está — ni formado ni contratado.
@@ -136,7 +136,7 @@ peligroso**, por dos motivos:
   que corresponde es mostrarle **a ella** recursos y, si el abogado lo indica,
   las líneas de ayuda. Es sobre ella y ella ya consintió que la app le hable.
 
-Esto es coherente con el principio del producto: **"Vita guía, no diagnostica"**.
+Esto es coherente con el principio del producto: **"Sere guía, no diagnostica"**.
 
 ## 7. La asimetría que hay que arreglar primero
 
@@ -181,7 +181,7 @@ agregar dos preguntas nuevas:
   ¿Cambia que se comparta el agregado y no las entradas?
 - **A.11 — Deber de actuar.** Si le mostramos a un profesional que una persona
   viene sostenidamente mal, y no hace nada, ¿en qué posición queda él y en cuál
-  Vita? ¿Cambia que no sea personal de salud? ¿Conviene que los T&C digan
+  Sere? ¿Cambia que no sea personal de salud? ¿Conviene que los T&C digan
   explícitamente qué se espera y qué no del profesional con este dato?
 - **A.12 — Revocar.** ¿Es suficiente que se corte el acceso hacia adelante, o hay
   que hacer algo con lo que el profesional ya vio o anotó (`session_notes`)?

@@ -28,7 +28,7 @@
 
 **Qué es:** la plataforma de salud mental en español más armada de la región. Colombiana, con Y Combinator,
 ~US$2M facturados en 2023 (proyectaba US$4M en 2024), 600 especialistas, 400.000+ sesiones, 100+ empresas.
-Mismo núcleo que Vita: matching, profesionales, sesión por video, herramientas entre sesiones, comisión.
+Mismo núcleo que Sere: matching, profesionales, sesión por video, herramientas entre sesiones, comisión.
 
 **Lo que no sabíamos hasta esta versión:**
 1. **Tiene IA en serio.** "Lía", una asistente que orienta, hace un primer chequeo de ánimo y **prepara la sesión
@@ -45,7 +45,7 @@ Mismo núcleo que Vita: matching, profesionales, sesión por video, herramientas
    de registro; les descuenta los reembolsos de sus pagos siguientes; les prohíbe hablar mal de Selia; y durante
    **12 meses después de irse** no pueden atender por fuera a nadie que conocieron ahí, con multa.
 7. **Su apuesta más fuerte fuera de Colombia son los latinos que viven afuera** (EE.UU., España, Canadá,
-   Australia), desde USD 25. Es exactamente el público del riel internacional de Vita.
+   Australia), desde USD 25. Es exactamente el público del riel internacional de Sere.
 
 **Lo que ya sabíamos y se confirma:** en Argentina está de costado (dólares, sin Mercado Pago, sin matrícula
 visible, pocos profesionales argentinos). Sus reglas con la plata son duras (sin reembolso pasadas 24 h de la
@@ -53,11 +53,11 @@ compra, saldo que vence, perdés todo si das de baja la cuenta). Por escrito dic
 títulos de sus especialistas sean auténticos.
 
 **Cómo usar este documento:** qué es Selia por dentro (§1–15), comparación (§16), FODA (§17–18), qué copiar,
-qué evitar y oportunidades (§19–21), qué vigilar (§22), y **cómo comunicar Vita** (§23).
+qué evitar y oportunidades (§19–21), qué vigilar (§22), y **cómo comunicar Sere** (§23).
 
 **El FODA en cuatro líneas** (detalle en §17–18):
-- **Fortaleza de Vita:** hecha para Argentina, con reglas justas y una propuesta mejor para el profesional.
-- **Debilidad de Vita:** cero usuarios, cero reseñas, sin IA, sin orientación humana, sin paquetes, sin empresas.
+- **Fortaleza de Sere:** hecha para Argentina, con reglas justas y una propuesta mejor para el profesional.
+- **Debilidad de Sere:** cero usuarios, cero reseñas, sin IA, sin orientación humana, sin paquetes, sin empresas.
 - **Oportunidad:** argentinos (acá y afuera) que quieren un profesional argentino, pagando como pagan acá; y
   profesionales argentinos que no aceptarían las condiciones de Selia.
 - **Amenaza:** que Selia decida venir en serio. Tiene todo armado menos lo local, y lo local se copia rápido.
@@ -98,7 +98,7 @@ qué evitar y oportunidades (§19–21), qué vigilar (§22), y **cómo comunica
 | Pieza | Qué usa | Qué significa |
 |---|---|---|
 | App | **Una web (Vue) empaquetada como app** (Capacitor), la misma para web, iOS y Android | Un solo producto para mantener. Por eso casi todo pasa en la web |
-| Video | **Agora**, dentro de la app, con sala de espera | Igual que Vita (que usa Daily.co) |
+| Video | **Agora**, dentro de la app, con sala de espera | Igual que Sere (que usa Daily.co) |
 | Pagos | **Stripe** (internacional), **Wompi, PSE y Nequi** (Colombia), **Addi y Bancolombia** (pagar después) | Cero medios argentinos. No hay Mercado Pago en ningún lado del código |
 | Datos y marketing | Amplitude, Segment, HubSpot, Sentry, Typeform | Mide cada paso del matching (hay eventos de "presupuesto", "género", "enfoque") |
 | Web pública | Webflow, con **pruebas A/B de la home** (`home-test/home-a` y `home-b`) | Optimiza la conversión |
@@ -142,8 +142,8 @@ Reconstruido de los textos de la app (y de la web, que dice lo mismo):
 7. **Tres caminos para elegir especialista** (§4).
 8. Detecta la **zona horaria** y pregunta si actualizarla.
 
-**Comparado con Vita:** mismo principio de una pregunta por pantalla. Diferencia de fondo: Selia **registra primero
-y muestra valor después**; el onboarding de Vita se pensó al revés (valor antes del registro). Selia pide teléfono,
+**Comparado con Sere:** mismo principio de una pregunta por pantalla. Diferencia de fondo: Selia **registra primero
+y muestra valor después**; el onboarding de Sere se pensó al revés (valor antes del registro). Selia pide teléfono,
 género y fecha de nacimiento de entrada: mucha fricción, pero la usa para avisar y para el matching.
 
 ---
@@ -398,16 +398,16 @@ clínica, consentimiento con firma electrónica, notas automáticas, comunidad d
 - **Terapify** (México): dice operar en Argentina y España, 30.000+ usuarios, 400+ psicólogos, recluta argentinos.
 - **Psyred**: psicólogos de la región desde USD 10–30.
 - **Directorios locales**: Tu Terapia, BuscoPsi, TerapyX, Psychology Today Argentina.
-- **Software de turnos con Mercado Pago** (Turnito y similares): compite con la parte "agenda y cobro" que Vita le da al profesional.
+- **Software de turnos con Mercado Pago** (Turnito y similares): compite con la parte "agenda y cobro" que Sere le da al profesional.
 - **Startups argentinas de salud mental**: Yerbo, Sigmind, Neomente.
 - **La alternativa más fuerte**: la obra social o prepaga, el hospital público, o el psicólogo que alguien recomienda.
 - **Precio de referencia 2026**: $20.000–55.000 por sesión en CABA, $12.000–40.000 en el interior.
 
 ---
 
-## 16. Selia contra Vita, punto por punto
+## 16. Selia contra Sere, punto por punto
 
-| | Selia | Vita |
+| | Selia | Sere |
 |---|---|---|
 | Profesiones | psicología, psiquiatría, coaching emocional, nutrición | psicología, coaching, nutrición |
 | Registro | primero la cuenta, después el valor; pide teléfono, género y nacimiento | valor antes que registro (principio de diseño) |
@@ -473,7 +473,7 @@ clínica, consentimiento con firma electrónica, notas automáticas, comunidad d
 
 ---
 
-## 18. FODA de Vita frente a Selia
+## 18. FODA de Sere frente a Selia
 
 **Fortalezas**
 1. **Argentina de punta a punta**: pesos, Mercado Pago con cuotas, voseo real, crisis local verificada.
@@ -499,7 +499,7 @@ clínica, consentimiento con firma electrónica, notas automáticas, comunidad d
 9. Equipo de dos: cada frente nuevo compite con el lanzamiento.
 
 **Oportunidades**
-1. **Argentinos que quieren un profesional argentino**, sobre todo **afuera**: Selia les ofrece "latinos"; Vita les
+1. **Argentinos que quieren un profesional argentino**, sobre todo **afuera**: Selia les ofrece "latinos"; Sere les
    puede ofrecer **argentinos con matrícula, en su propia cultura terapéutica**, pagando en dólares o USDT.
 2. **Reclutar profesionales con las condiciones de Selia como contraste**: *"vos ponés tu precio, cobrás en tu Mercado
    Pago, tus pacientes son tuyos, sin multas por irte"*.
@@ -524,28 +524,28 @@ clínica, consentimiento con firma electrónica, notas automáticas, comunidad d
 
 ## 19. Qué aprovechar de ellos
 
-Ordenado por impacto sobre costo para Vita. **Ninguna es para antes del lanzamiento.**
+Ordenado por impacto sobre costo para Sere. **Ninguna es para antes del lanzamiento.**
 
 | # | Idea | Por qué | Costo o choque |
 |---|---|---|---|
 | 1 | **Explicar por qué se recomienda a alguien** en el quiz y en Conexiones | Selia lo pone como argumento central; baja la ansiedad de elegir | Bajo: es texto sobre datos que ya existen |
 | 2 | **Salida para "no sé a quién elegir"**: rehacer el quiz, ver otras opciones, o hablar con alguien | La orientación es su red de seguridad | Una persona orientando no escala para dos; empezar por rehacer y ver 3 opciones |
 | 3 | **Cambio de profesional sin culpa**: *"¿Querés seguir con esta persona?"* después de la primera sesión | Retiene a quien no hizo match, en vez de perderlo | Choca con la garantía de reintegro: decidir si se ofrece cambio, reintegro, o elegir |
-| 4 | **Empuje a la continuidad** después de cada sesión: próxima sesión sugerida por el profesional, reservar de nuevo en un toque | Es la medida anti-fuga n.º 1 de Vita, y Selia la tiene muy pulida | Medio; ya está en la lista de anti-fuga |
+| 4 | **Empuje a la continuidad** después de cada sesión: próxima sesión sugerida por el profesional, reservar de nuevo en un toque | Es la medida anti-fuga n.º 1 de Sere, y Selia la tiene muy pulida | Medio; ya está en la lista de anti-fuga |
 | 5 | **Calificar la calidad de la videollamada** aparte del profesional | Separa "el video anduvo mal" de "no me gustó"; detecta fallas técnicas | Bajo |
 | 6 | **"Solicitar disponibilidad"** cuando no hay horarios | No perder a quien llegó al perfil | Bajo a medio |
-| 7 | **Tests validados públicos** (PHQ-9, GAD-7) en voseo, en la web | La puerta de entrada de Google de Selia | Medio; cuidar "Vita guía, no diagnostica" y derivar a crisis si el resultado es severo |
-| 8 | **Referidos** | Adquisición barata | Con MP la plata va al profesional; el descuento sale de la comisión de Vita |
-| 9 | **Paquetes** | La demanda existe | Mismo obstáculo; empezar por PayPal y USDT, donde Vita retiene |
+| 7 | **Tests validados públicos** (PHQ-9, GAD-7) en voseo, en la web | La puerta de entrada de Google de Selia | Medio; cuidar "Sere guía, no diagnostica" y derivar a crisis si el resultado es severo |
+| 8 | **Referidos** | Adquisición barata | Con MP la plata va al profesional; el descuento sale de la comisión de Sere |
+| 9 | **Paquetes** | La demanda existe | Mismo obstáculo; empezar por PayPal y USDT, donde Sere retiene |
 | 10 | **Preparar la sesión** ("qué quiero trabajar hoy"), aunque sea sin IA | El paciente llega mejor y el profesional valora el resumen | Medio; con IA, alto y con riesgo de privacidad |
-| 11 | **Aviso honesto de habilitación**: si un profesional no tiene matrícula argentina, decirlo claro | Selia lo resuelve con un tilde; Vita puede hacerlo mejor y convertirlo en confianza | Bajo |
-| 12 | **Cuentas familiares** | Padres que pagan la terapia de hijos grandes | Alto; Vita es solo 18+ |
+| 11 | **Aviso honesto de habilitación**: si un profesional no tiene matrícula argentina, decirlo claro | Selia lo resuelve con un tilde; Sere puede hacerlo mejor y convertirlo en confianza | Bajo |
+| 12 | **Cuentas familiares** | Padres que pagan la terapia de hijos grandes | Alto; Sere es solo 18+ |
 
 ---
 
 ## 20. Qué evitar
 
-1. **Fijarle el precio al profesional.** Es lo contrario de la promesa de Vita.
+1. **Fijarle el precio al profesional.** Es lo contrario de la promesa de Sere.
 2. **Quedarse con la plata del usuario**: saldo que vence o se pierde al irse, reembolsos que vuelven solo como crédito.
 3. **Prohibir críticas** o mandar los reclamos a otra jurisdicción.
 4. **No competencia posterior con multas** para el profesional: aleja a los buenos y en Argentina es discutible.
@@ -563,14 +563,14 @@ Ordenado por impacto sobre costo para Vita. **Ninguna es para antes del lanzamie
 
 1. **Lanzar.** Todo lo demás depende de cerrar la sección L. Selia no está enfocada en Argentina, y esa ventana
    no dura para siempre.
-2. **Salir a buscar profesionales argentinos con la comparación de condiciones** (§10 contra lo de Vita). Es el
+2. **Salir a buscar profesionales argentinos con la comparación de condiciones** (§10 contra lo de Sere). Es el
    diferencial más fuerte y el más fácil de comunicar. Una página de una hoja para profesionales.
-3. **Posicionar a Vita en confianza**: matrícula verificada, reembolso claro, reseñas libres.
+3. **Posicionar a Sere en confianza**: matrícula verificada, reembolso claro, reseñas libres.
 4. **Argentinos afuera** como segundo público: el riel ya existe; falta el mensaje (*"un psicólogo argentino, estés
    donde estés"*) y profesionales que acepten internacionales.
 5. **Google en voseo** después del lanzamiento: tests y temas.
 6. **Reintegro de prepagas**: averiguar qué piden y ayudar con eso.
-7. **Paquetes y referidos** por los rieles donde Vita retiene plata.
+7. **Paquetes y referidos** por los rieles donde Sere retiene plata.
 8. **Empresas**, cuando haya usuarios y reseñas para mostrar.
 
 ---
@@ -587,17 +587,17 @@ Una forma barata de seguirlo: mirar la página argentina y el mapa del sitio de 
 
 ---
 
-## 23. Cómo comunicar Vita (lo que sale de todo esto)
+## 23. Cómo comunicar Sere (lo que sale de todo esto)
 
 > Agregado en la sesión 256, a pedido de Andre: *"aprender de sus fortalezas y errores
 > para marcar nuestro camino, y para saber publicitarnos mejor"*. Las frases son
-> **puntos de partida**, no copy final: pasan por la voz de Vita y por el abogado (L5)
+> **puntos de partida**, no copy final: pasan por la voz de Sere y por el abogado (L5)
 > antes de publicarse.
 
 ### 23.1 El principio
 
 **Selia vende escala y comodidad** ("+600 especialistas", "400.000 sesiones", "desde USD 25", descuentos
-en todos lados). **Vita no puede competir en eso** (cero usuarios) **y no le conviene**: su ventaja es
+en todos lados). **Sere no puede competir en eso** (cero usuarios) **y no le conviene**: su ventaja es
 **confianza y cercanía**. Todo lo que se diga tiene que poder verificarse en la app el mismo día.
 
 Tres ideas madre, en este orden:
@@ -609,7 +609,7 @@ Tres ideas madre, en este orden:
 
 **a) La persona en Argentina que busca acompañamiento**
 
-| Qué le preocupa | Qué decir | Respaldo en Vita |
+| Qué le preocupa | Qué decir | Respaldo en Sere |
 |---|---|---|
 | "¿Y si no es un profesional de verdad?" | *Cada matrícula la revisa una persona antes de que aparezca.* | Credenciales verificadas a mano; `has_matricula`. ⚠️ No decir "si dice psicólogo, lo es": la marca dice que hay matrícula verificada, no de qué profesión (falta un campo estructurado) |
 | "¿Y si no me gusta?" | *Si tu primera sesión no te sirvió, te devolvemos la plata.* | T&C §9.3 (48 h, una vez por persona) |
@@ -622,20 +622,20 @@ las credenciales". La frase *"en pesos y con Mercado Pago"* ya marca la diferenc
 
 **b) El argentino que vive afuera**
 
-Es donde Selia pone más fuerza ("latinos en el extranjero"). Vita no le gana en precio ni en tamaño. Le gana en
+Es donde Selia pone más fuerza ("latinos en el extranjero"). Sere no le gana en precio ni en tamaño. Le gana en
 **algo que Selia no puede ofrecer: un profesional argentino**.
 - *Un psicólogo argentino, estés donde estés.*
 - *Hablá con alguien que entiende de dónde venís, sin traducir nada.*
 - *Pagás desde afuera con PayPal o USDT.*
 
 ⚠️ Antes de usarlo: que haya **profesionales que acepten internacionales** en el catálogo, y revisar qué implica
-atender a alguien en otro país con matrícula argentina (Selia lo tapa con un tilde; Vita tiene que decirlo claro).
+atender a alguien en otro país con matrícula argentina (Selia lo tapa con un tilde; Sere tiene que decirlo claro).
 
 **c) El profesional (psicólogo, coach, nutricionista)**
 
 El público donde la comparación con Selia es **más fuerte** (§10). Lo que dicen sus términos, al revés:
 
-| Selia | Vita, dicho en una frase |
+| Selia | Sere, dicho en una frase |
 |---|---|
 | El precio lo fija la plataforma | *Tu precio lo ponés vos.* |
 | Cobra y te paga semanal a mensual | *Cobrás en tu propia cuenta de Mercado Pago.* |
@@ -650,12 +650,12 @@ después."* (ya usada con coaches; memoria de pagos).
 
 ### 23.3 Dónde aparecer (lo que a Selia le funciona, a escala de dos personas)
 
-| Canal | Qué hace Selia | Versión Vita |
+| Canal | Qué hace Selia | Versión Sere |
 |---|---|---|
 | Google | miles de páginas, tests, temas | **Pocas páginas, bien hechas, en voseo**: "psicólogo online en pesos", "cuánto cuesta un psicólogo online en Argentina", 2 o 3 tests (ansiedad, ánimo) que terminen en el quiz, con derivación a ayuda si el resultado es alto |
 | Profesionales como canal | los usa como oferta, les prohíbe traer gente | **El link de cada profesional** es el canal: cada uno que se suma trae a sus pacientes y los muestra en sus redes |
 | Alianzas | banco (Falabella), podcasts | Más adelante: podcasts y cuentas argentinas de salud mental, colegios profesionales |
-| Referidos | 50% al amigo | Después del lanzamiento, pagado de la comisión de Vita |
+| Referidos | 50% al amigo | Después del lanzamiento, pagado de la comisión de Sere |
 | Campañas por fecha | mes de prevención del suicidio, el Mundial | Fechas argentinas, con cuidado: nunca usar crisis o suicidio para vender |
 | Reseñas | publica cada reseña como página | Cuando haya reseñas reales. **Nunca inventarlas** (las 24 de prueba se borran en L8) |
 
@@ -663,10 +663,10 @@ después."* (ya usada con coaches; memoria de pagos).
 
 1. **Números que no tenemos.** Nada de "+X profesionales" o "miles de sesiones" hasta que sean reales.
 2. **"Certificados" o "verificados" en general.** Decir exactamente qué se revisó: la matrícula.
-3. **"Terapia" o "psicólogo" para coaches.** La Ley 23.277 reserva el tratamiento a quien tiene matrícula; Vita
+3. **"Terapia" o "psicólogo" para coaches.** La Ley 23.277 reserva el tratamiento a quien tiene matrícula; Sere
    ya lo separa en la app, la publicidad tiene que hacer lo mismo.
-4. **Promesas de resultados** ("vas a sentirte mejor en 4 semanas", "sanar"). Vita guía, no diagnostica.
-5. **Crisis como gancho comercial.** Selia pone un cupón de 50% en su página de prevención del suicidio; Vita no.
+4. **Promesas de resultados** ("vas a sentirte mejor en 4 semanas", "sanar"). Sere guía, no diagnostica.
+5. **Crisis como gancho comercial.** Selia pone un cupón de 50% en su página de prevención del suicidio; Sere no.
 6. **Descuentos permanentes** como mensaje principal: acostumbran a no pagar precio lleno.
 7. **Páginas o anuncios por país sin revisión local**, empezando por cualquier número de ayuda.
 8. **Nombrar a Selia** en anuncios: es publicidad comparativa y la tiene que mirar el abogado. Decir lo propio
@@ -677,7 +677,7 @@ después."* (ya usada con coaches; memoria de pagos).
 
 1. **Antes de lanzar:** la página de una hoja para profesionales (§23.2 c). Es lo único que sirve sin usuarios: se
    usa para sumar profesionales, que a su vez traen gente con su link.
-2. **Al lanzar:** la página de Vita con las tres ideas madre (§23.1) y las frases para la persona en Argentina.
+2. **Al lanzar:** la página de Sere con las tres ideas madre (§23.1) y las frases para la persona en Argentina.
 3. **Después:** Google en voseo, el mensaje para argentinos afuera, referidos, alianzas.
 
 ---
@@ -749,8 +749,8 @@ furiosas, las que usan la palabra **estafa**. Los patrones concretos:
 - Paquetes comprados que no se pueden usar ni devolver.
 - *"una vez pagas ese dinero ya jamás regresará sin importar qué"*.
 
-Esto es **exactamente** el reverso de lo que Vita ya decidió (cobro al reservar + reembolso claro). La
-reseña de 1 estrella de Selia es el argumento de venta de Vita, escrito por sus propios clientes.
+Esto es **exactamente** el reverso de lo que Sere ya decidió (cobro al reservar + reembolso claro). La
+reseña de 1 estrella de Selia es el argumento de venta de Sere, escrito por sus propios clientes.
 
 **3. La política de reagendar a 24 horas.** El tema más repetido en la App Store, con reseñas largas y
 razonadas, no insultos. Dos versiones:
@@ -792,11 +792,11 @@ recent update, super slow"*.
 pagos que ni siquiera vencieron. Y una observación de fondo: *"la mayoría de los especialistas son muy
 jóvenes, todos egresados de la Universidad de los Andes"*.
 
-### 24.4 Qué se lleva Vita de esto
+### 24.4 Qué se lleva Sere de esto
 
 **Lo que hay que copiar sin vergüenza:**
 - **La simplicidad es el producto.** Lo que la gente elogia no es una feature, es no tener que pensar.
-  Si Vita agrega algo que complica agendar, está perdiendo la única batalla que Selia ganó.
+  Si Sere agrega algo que complica agendar, está perdiendo la única batalla que Selia ganó.
 - **El video de presentación del especialista.** Se elogia por nombre y resuelve el problema real de
   elegir. Es barato de hacer y ya está en el radar de §19.
 - **El diario y los chequeos de bienestar** sostienen la relación entre sesiones. Alguien pidió
@@ -807,7 +807,7 @@ jóvenes, todos egresados de la Universidad de los Andes"*.
 - **El registro tiene que funcionar en Android viejo y con poca señal.** El 17% de 1 estrella de Selia
   es, en buena parte, gente que nunca entró. Vale más que cualquier feature.
 - **Reembolso en plata, a la tarjeta, con plazo escrito.** Nunca crédito interno. Esto ya es la decisión
-  de Vita: ahora hay que **decirlo** en la página, porque es el dolor número uno del competidor.
+  de Sere: ahora hay que **decirlo** en la página, porque es el dolor número uno del competidor.
 - **Reagendar simétrico y humano.** Si el profesional reagenda, el usuario elige el nuevo horario entre
   los disponibles, o se le devuelve la plata. Y la ventana del usuario no puede ser de 24 horas rígidas.
 - **Que la sesión no se cierre sola.** Nadie en crisis se acuerda de la contraseña.

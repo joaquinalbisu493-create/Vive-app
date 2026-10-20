@@ -9,9 +9,9 @@
 
 | Sesión | Cómo paga el cliente | Adónde va la plata | Estado |
 |---|---|---|---|
-| **Argentina** | Mercado Pago, pesos | **Directo al MP del coach** (split). VIVE no la toca. | Producción, probado |
-| **Exterior** | PayPal, dólares | La cobra VIVE, le transfiere después | **Producción, probado 25/08** |
-| **Exterior** | USDT (TRC20), dólares | La cobra VIVE, le transfiere después | Producción, probado 18/08 |
+| **Argentina** | Mercado Pago, pesos | **Directo al MP del coach** (split). Sere no la toca. | Producción, probado |
+| **Exterior** | PayPal, dólares | La cobra Sere, le transfiere después | **Producción, probado 25/08** |
+| **Exterior** | USDT (TRC20), dólares | La cobra Sere, le transfiere después | Producción, probado 18/08 |
 
 El coach elige **cómo recibe** lo del exterior, en Perfil → Datos de cobro:
 **CBU** (pesos, sin costo) · **PayPal** (dólares, sin costo) · **USDT** (dólares,
@@ -35,9 +35,9 @@ era opcional.
 
 **Decidir entre dos:**
 - **(a) Exigir MP conectado para publicar.** Más simple y más seguro: con el
-  split, VIVE nunca toca la plata del coach — sin float, sin plata ajena en la
+  split, Sere nunca toca la plata del coach — sin float, sin plata ajena en la
   cuenta, sin obligación de transferir.
-- **(b) Que VIVE cobre también en pesos** y transfiera por CBU. La
+- **(b) Que Sere cobre también en pesos** y transfiera por CBU. La
   infraestructura ya existe casi entera; habría que ajustar `listCoachPayouts`,
   que excluye las reservas de MP porque ahí el split ya pagó. ⚠️ Pone plata
   ajena en la cuenta y **extiende al mercado local la pregunta fiscal** que hoy
@@ -63,7 +63,7 @@ central — probarlo en dispositivo.
 y desde el 25/08 es también el más caro: el riel internacional está en
 producción y puede entrar plata real en cualquier momento.
 
-La pregunta, ordenada en `docs/fiscal-instrucciones.md`, es si **VIVE actúa como
+La pregunta, ordenada en `docs/fiscal-instrucciones.md`, es si **Sere actúa como
 principal o por cuenta y orden**.
 
 ### 1.1 · El sistema no emite ninguna factura
@@ -84,7 +84,7 @@ Bloqueada. Hasta que se cierre, **ese documento no se le manda a ningún coach**
 🔴 **Lo que lo frena no es el código: cobrar directo convierte a cada coach en
 exportador de servicios**, que es justo lo que el diseño actual evita y lo que su
 documento le promete evitar. **Y la respuesta puede darlo vuelta entero:** si
-VIVE es por cuenta y orden, el coach termina siendo exportador igual y cobrar
+Sere es por cuenta y orden, el coach termina siendo exportador igual y cobrar
 directo sería *más* coherente. Construir cualquiera de las dos arquitecturas
 antes de esa respuesta es 50% de chance de tirarla.
 
@@ -119,13 +119,13 @@ respalde**.
 ### 2.3 · Que el coach acepte VARIOS métodos de cobro
 **Es la solución al problema de los pozos, y no cuesta un solo cliente.**
 
-El coach marca **qué métodos acepta**, no cuál usa, y **VIVE elige al pagar**
+El coach marca **qué métodos acepta**, no cuál usa, y **Sere elige al pagar**
 según qué pozo tenga saldo. Nadie es indiferente entre pesos y dólares — pero
 entre **PayPal y USDT sí puede serlo**, y ese es justo el par que causa el
 problema.
 
 - 🔴 **Resolver antes de construir:** hoy USDT le descuenta USD 1,50 al coach y
-  PayPal no. Si el que elige pasa a ser VIVE, **el costo lo absorbe VIVE** — si
+  PayPal no. Si el que elige pasa a ser Sere, **el costo lo absorbe Sere** — si
   no, el coach que aceptó los dos para ayudarnos cobra menos según qué pozo
   teníamos flojo.
 - **El código no es grande: las columnas ya existen todas.** Cambia `method` de
@@ -250,7 +250,7 @@ Tres consecuencias, y las tres son de plata:
 
 - **No se puede auditar.** Si un coach pregunta por qué recibió esos pesos, no
   hay con qué contestarle.
-- **No se puede reconciliar.** Es imposible saber si VIVE ganó o perdió en la
+- **No se puede reconciliar.** Es imposible saber si Sere ganó o perdió en la
   conversión, ni cuánto.
 - **El documento del coach dice "cobrás en pesos, sin costo" sin decir a qué
   cambio.** Es la clase de ambigüedad que se descubre en la primera discusión, y
@@ -272,7 +272,7 @@ coach reclama tres meses después.
 
 **Sobre el criterio, la recomendación es (B), una referencia pública** (MEP del día
 del pago, con fuente y horario fijados por escrito). (A) suena más justo y es
-indefendible en la práctica: depende de cuándo VIVE decidió vender, el coach no
+indefendible en la práctica: depende de cuándo Sere decidió vender, el coach no
 puede verificarlo ni anticiparlo, y si se convierte en lote para varios coaches la
 atribución por coach es arbitraria — convierte una decisión operativa nuestra en el
 ingreso de otro. Con (B) el coach sabe el lunes cuánto va a cobrar el viernes.
@@ -284,7 +284,7 @@ en cada pago. `PayPal → CBU` deja de ser una celda cara y pasa a ser una celda
 prohibida mientras la promesa sea MEP.
 
 📝 **Y el riesgo de (B) es más chico de lo que parece, si el ruteo se respeta.**
-VIVE tiene dólares, cuyo valor en pesos se mueve *con* el MEP: no hay exposición al
+Sere tiene dólares, cuyo valor en pesos se mueve *con* el MEP: no hay exposición al
 nivel del tipo de cambio, solo a la **brecha** entre el cambio realizado y el MEP.
 Fondeando con USDT esa brecha es chica; fondeando con PayPal es justamente la que
 no se controla. El criterio y el ruteo son el mismo problema.
@@ -296,10 +296,10 @@ barato, sirven para poder DRENAR el pozo de PayPal** ofreciéndolo cuando sobra.
 
 Los tres criterios, para dejarlos escritos:
 
-- **(a) El cambio al que VIVE efectivamente convirtió**, mostrando el
+- **(a) El cambio al que Sere efectivamente convirtió**, mostrando el
   comprobante. Honesto y auditable; el coach asume la variación.
 - **(b) Una referencia pública** (por ejemplo el dólar MEP del día del pago).
-  Predecible para él; VIVE se queda con la diferencia o la pone.
+  Predecible para él; Sere se queda con la diferencia o la pone.
 - **(c) Pagar en dólares y que convierta él** — que es exactamente lo que
   resuelven PayPal y USDT como métodos de cobro.
 
@@ -347,20 +347,20 @@ como el riesgo ausente. Los tres hallazgos son peores que "no está en la lista"
   `CHECKOUT.ORDER.APPROVED` y `PAYMENT.CAPTURE.COMPLETED`; cualquier otro evento
   se descarta con 200. Y el webhook registrado en producción **tiene suscritos
   exactamente esos dos eventos**, así que PayPal ni siquiera nos avisa. Una
-  disputa debita el saldo de VIVE y **nada en el sistema se entera**.
+  disputa debita el saldo de Sere y **nada en el sistema se entera**.
 - 🔴 **Nada mira `paid_out_at` cuando la plata se va para atrás.** La columna solo
   se usa para escribirla y para filtrar los pagos pendientes. Si un contracargo
-  cae sobre una sesión ya transferida al coach, **la pierde VIVE, en silencio y
+  cae sobre una sesión ya transferida al coach, **la pierde Sere, en silencio y
   sin ningún registro de que eso fue lo que pasó.**
 
 **La exposición es estructural, no un caso de borde.** PayPal le da al comprador
 hasta 180 días para disputar; el coach cobra a la semana de la sesión, sin mínimo
 de acumulación y sin reserva retenida. Cada sesión pagada es exposición neta de
-VIVE por medio año. Y sobre una videollamada, "el servicio no se prestó" es
+Sere por medio año. Y sobre una videollamada, "el servicio no se prestó" es
 dificilísimo de defender: no hay nada que enviar como prueba de entrega.
 
 ⚠️ **Sin verificar, y hay que hacerlo contra la documentación de Mercado Pago:**
-en el split, un contracargo ¿debita al coach, a VIVE, o a los dos en proporción?
+en el split, un contracargo ¿debita al coach, a Sere, o a los dos en proporción?
 Si la plata fue directo a la cuenta del coach, la pregunta de contra quién va no
 la contesta nuestro código.
 
@@ -397,7 +397,7 @@ el que se suponía:**
   distintos, no confundirlos.)
 - 🔴 **El filtro más probable es de VOLUMEN, no geográfico.** Hay plataformas
   rechazadas porque su volumen era demasiado bajo para calificar como cliente, y
-  los mínimos no se publican. **VIVE tiene cero volumen real.**
+  los mínimos no se publican. **Sere tiene cero volumen real.**
 - ⚠️ Quien recibe el platform fee **debe tener una cuenta bancaria vinculada** a
   su PayPal, y en Argentina esa cuenta tiene que ser en pesos. Cómo se liquida el
   fee en ese caso es una pregunta concreta para PayPal.
@@ -407,7 +407,7 @@ riel actual antes de tener la aprobación, y la aprobación probablemente exija 
 volumen que solo el riel actual puede generar. **El pivot no es una decisión que
 se pueda tomar hoy: es una solicitud que conviene iniciar hoy** —es gratis y
 lenta— mientras lo que existe sigue funcionando. Pedirlo no rompe nada: la
-integración actual (VIVE como comerciante) es un producto distinto y sigue igual.
+integración actual (Sere como comerciante) es un producto distinto y sigue igual.
 
 **Si Multi-party no se otorga**, la alternativa propuesta fue **dLocal for
 Platforms** (payins, payouts y split en una integración, liquidando en USD a
@@ -420,13 +420,13 @@ Segunda vuelta del análisis externo (25/08), y esta corrige el marco anterior: 
 recomendable no es "multiparty" sino **la regla espejo**. Multiparty es su mejor
 implementación, no la regla. Tiene tres implementaciones de calidad decreciente:
 
-- **A — Multiparty.** La plata nunca es de VIVE salvo la comisión. Gated por
+- **A — Multiparty.** La plata nunca es de Sere salvo la comisión. Gated por
   aprobación (ver 4ter). ⚠️ Y con un caveat que le baja el techo: la partner fee
   se liquida a una cuenta bancaria vinculada, una vez por día — con entidad
   argentina eso es **pesificación diaria al cambio de PayPal**. No elimina el
   problema PayPal→pesos: lo achica del 100% del ticket al 25%. **Sin verificar,
   es pregunta para PayPal.**
-- **B — La regla espejo dentro de la arquitectura actual.** VIVE sigue cobrando,
+- **B — La regla espejo dentro de la arquitectura actual.** Sere sigue cobrando,
   pero **solo puede pagar por el mismo riel por el que cobró**. No es integración
   nueva: es **borrar opciones y filtrar en el checkout**, un subconjunto estricto
   de lo que ya existe.
@@ -438,10 +438,10 @@ que corre mientras tanto y lo que genera los datos para saber si A vale la pena.
 **Qué implica B, en una frase:** *para atender sesiones del exterior, el coach
 tiene que elegir cobrar en dólares* (PayPal o USDT). Y con eso desaparecen, no se
 resuelven: el pozo, la regla de ruteo, el criterio de tipo de cambio del payout
-(no habría ningún pago en pesos desde VIVE) y el problema de drenar PayPal.
+(no habría ningún pago en pesos desde Sere) y el problema de drenar PayPal.
 
 **El costo residual** es que un coach que solo quiere pesos no puede atender al
-exterior. Hoy eso es **un** coach, y la conversión que hoy paga VIVE pasa a
+exterior. Hoy eso es **un** coach, y la conversión que hoy paga Sere pasa a
 hacerla el coach, explícitamente y sabiéndolo.
 
 📝 **Espejar por RESERVA es mejor que por coach**: agrupar los pagos por

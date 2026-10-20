@@ -1,4 +1,4 @@
-# Consejo de asesores — las herramientas prácticas de Vita
+# Consejo de asesores — las herramientas prácticas de Sere
 
 > 15/09/2026. Dos rondas. La primera partió de un contexto que yo armé mal (creía
 > que las 10 herramientas estaban visibles); Andre corrigió —son 4— y la segunda
@@ -87,9 +87,9 @@ unánime de las dos rondas. Los argumentos se suman en vez de repetirse:
   DELETE, no escribas lógica de compatibilidad para datos que no existen."*
 - **Expansionista**, que en la ronda 1 las quería vivas, converge en (b) pero con
   un reencuadre que es el mejor que produjo: **las 6 no son producto muerto, son
-  un spec de formato.** *"El día que firma el coach número uno, Vita no le dice
+  un spec de formato.** *"El día que firma el coach número uno, Sere no le dice
   'grabá algo'. Le dice: acá está el guion de escáner corporal de 8 minutos, leelo
-  con tu voz, la pantalla ya está construida, se publica mañana. Guion de Vita,
+  con tu voz, la pantalla ya está construida, se publica mañana. Guion de Sere,
   grabación del coach: si se va, se lleva su audio y el slot queda."*
 
 ### Q3. ¿Qué herramienta falta?
@@ -97,7 +97,7 @@ unánime de las dos rondas. Los argumentos se suman en vez de repetirse:
 | Asesor | Propuesta |
 |---|---|
 | Contrarian | **"Para tu próxima sesión"** — durante la semana anotás lo que querés llevar; el día de la sesión la app te lo entrega hecho lista, y con tu consentimiento se lo pasa al coach antes de empezar. Sin coach todavía: termina en *"esto conviene hablarlo con alguien"* → perfiles. |
-| First Principles | **La bitácora de sesión** — antes: "qué llevo hoy", armado con tus últimos check-ins y entradas. Después: "qué me llevo" + la tarea del coach, que pasa a ser hábito tildado por uso real. *"Es lo único de esta lista que exige un coach del otro lado — o sea, lo único que es de Vita y no de cualquiera."* |
+| First Principles | **La bitácora de sesión** — antes: "qué llevo hoy", armado con tus últimos check-ins y entradas. Después: "qué me llevo" + la tarea del coach, que pasa a ser hábito tildado por uso real. *"Es lo único de esta lista que exige un coach del otro lado — o sea, lo único que es de Sere y no de cualquiera."* |
 | Expansionista | **"Tu patrón"** — lectura semanal que cruza el historial de ánimo con las completions reales: *"las semanas que escribiste tres veces o más, tu ánimo promedio fue un punto más alto"*. Funciona el día 1 con cero coaches, mejora con cada uso, y es el mejor pase a un profesional que existe: *"mostrale esto a alguien"*. Los dos datasets ya existen; falta cruzarlos. |
 | Outsider | **Algo para el minuto malo.** *"De las diez, ninguna dura un minuto. Todas asumen que tengo entre 3 y 30 minutos y un lugar tranquilo. No hay nada para el mensaje que acabo de leer, el colectivo, las tres de la mañana."* |
 | Ejecutor | **La salida al coach al final de cada práctica** — *"¿Querés trabajar esto con alguien?"* → perfiles filtrados por el eje cuerpo/mente/alma que ya existe. 1 día. Antes de lanzar, porque es lo único que instrumenta `recurso → perfil → reserva`. |

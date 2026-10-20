@@ -915,7 +915,7 @@ export default function AdminScreen() {
               ) : (
                 <>
                   <Text style={s.note}>
-                    Comisión de VIVE por mes y profesional. Es material para el contador, no una
+                    Comisión de Sere por mes y profesional. Es material para el contador, no una
                     factura: qué corresponde facturar, a quién y cada cuánto todavía está sin
                     definir.
                   </Text>

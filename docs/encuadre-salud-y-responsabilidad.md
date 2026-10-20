@@ -1,4 +1,4 @@
-# Qué es Vita frente a la ley — el encuadre de salud y la responsabilidad
+# Qué es Sere frente a la ley — el encuadre de salud y la responsabilidad
 
 > **01/09/2026.** Investigación para **A.4** y **A.7** de `paquete-abogado.md`.
 > **No es asesoramiento legal.**
@@ -25,14 +25,14 @@ referencia es **Mercado Libre**: el tribunal sostuvo que **no actuó como mero
 intermediario neutral** sino que tuvo un **rol activo**, y por eso integró la
 cadena de comercialización del art. 40. Los indicadores que pesaron:
 
-| Lo que hacía Mercado Libre | Lo que hace Vita |
+| Lo que hacía Mercado Libre | Lo que hace Sere |
 |---|---|
 | Compra Protegida | **Garantía de primera sesión** (T&C §9.3) — funcionalmente lo mismo |
 | Mercado Pago | Opera el cobro; y en PayPal y USDT **tiene los fondos** |
 | Mercado Envíos | **Provee la sala de video**, que es donde el servicio se presta |
 | Percibía comisión | Comisión del 20% / 15% |
 
-**Vita marca en las cuatro.** Y suma dos que Mercado Libre no tenía:
+**Sere marca en las cuatro.** Y suma dos que Mercado Libre no tenía:
 
 - 🔴 **Cura y verifica a los prestadores.** Aprueba postulaciones, revisa
   credenciales, verifica matrículas. Eso es control de calidad sobre quién presta
@@ -44,12 +44,12 @@ cadena de comercialización del art. 40. Los indicadores que pesaron:
   a esa relación.
 
 **Conclusión honesta:** la declaración de intermediario de T&C §4 **no decide
-nada por sí sola**. Un juez mira el rol real, y el rol real de Vita es más activo
+nada por sí sola**. Un juez mira el rol real, y el rol real de Sere es más activo
 que el de la plataforma que ya fue condenada. Escribir "soy intermediaria" en el
 contrato es necesario pero no suficiente, y construir toda la postura de riesgo
 sobre esa frase es apoyarse en algo que probablemente ceda.
 
-⚠️ **Esto empeoró con los rieles en dólares.** Con solo Mercado Pago, Vita nunca
+⚠️ **Esto empeoró con los rieles en dólares.** Con solo Mercado Pago, Sere nunca
 tocaba los fondos y eso era un argumento real. Con PayPal y USDT **cobra ella y
 transfiere después**. La decisión fue correcta por lo fiscal —evita que cada
 coach sea exportador de servicios— pero tiene este costo, y hasta ahora no
@@ -81,7 +81,7 @@ lado.
 
 ### Lo que está bien y no hay que tocar
 
-T&C §5 declara que Vita no presta servicios de salud, no diagnostica y no
+T&C §5 declara que Sere no presta servicios de salud, no diagnostica y no
 reemplaza atención profesional, e incluye las líneas de crisis (911, 135,
 0800-345-1435), con la vigencia verificada al escribirlas. Eso es correcto y
 está por encima de lo que hace la mayoría.
@@ -97,14 +97,14 @@ Un **coach no puede hacer nada de eso**. Y la ley mira **lo que se hace**, no
 cómo se lo llama: rebautizar el tratamiento como "acompañamiento" no lo saca del
 ámbito reservado si el acto es el mismo.
 
-**Dónde queda expuesta Vita:** la plataforma tiene coaches **y** psicólogos/as
+**Dónde queda expuesta Sere:** la plataforma tiene coaches **y** psicólogos/as
 juntos, bajo el mismo rótulo de "profesional", en la misma grilla, con el mismo
 flujo de reserva y el mismo tipo de perfil. Alguien que la está pasando mal
 **puede no distinguir** si está reservando terapia o coaching. Si termina en un
-coach creyendo que es tratamiento, el problema es de Vita: ella diseñó la
+coach creyendo que es tratamiento, el problema es de Sere: ella diseñó la
 presentación que los volvió indistinguibles.
 
-Y esto **se compone con la sección 1**: si Vita integra la cadena del art. 40, no
+Y esto **se compone con la sección 1**: si Sere integra la cadena del art. 40, no
 es espectadora de esa confusión.
 
 ### Lo que ya está construido a favor
@@ -142,7 +142,7 @@ Los cimientos están. **Lo que falta es que la distinción llegue a la pantalla.
 Tres cosas que este documento cambia de lugar:
 
 - **El piso de seguridad de `la-voz-de-sofia.md` §5 ter deja de ser una cuestión
-  de tono.** Si Vita integra la cadena y no distingue bien los roles, el
+  de tono.** Si Sere integra la cadena y no distingue bien los roles, el
   mecanismo que reacciona ante alguien que registra el fondo varios días seguidos
   es parte de la diligencia, no un detalle de producto.
 - **La detección de crisis determinística antes del modelo**, que ya estaba
@@ -155,7 +155,7 @@ Tres cosas que este documento cambia de lugar:
 
 En orden, y estas dos valen más que cualquiera de los otros documentos:
 
-1. 🔴 **¿Vita integra la cadena de comercialización del art. 40?** Y si sí, qué
+1. 🔴 **¿Sere integra la cadena de comercialización del art. 40?** Y si sí, qué
    mitigación real existe: seguro, exigencia de seguro al profesional, otra cosa.
 2. 🔴 **¿Tener coaches sin matrícula junto a psicólogos/as matriculados/as, bajo
    la misma presentación, genera exposición propia** por facilitar el ejercicio

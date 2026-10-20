@@ -79,9 +79,9 @@ invalidada por el reencuadre. La segunda, con el criterio de pre-lanzamiento,
 se movió a un lugar distinto y **casi unánime**:
 
 - 🔴 **El link público del coach dejó de ser idea #12 y pasó a ser el centro.**
-  Los cinco asesores lo nombraron sin coordinarse. La tesis: el día 1 VIVE no
+  Los cinco asesores lo nombraron sin coordinarse. La tesis: el día 1 Sere no
   tiene demanda propia, pero cada coach llega con 4-10 clientes que ya le pagan
-  por transferencia. Dicho crudo: *"el día 1 VIVE no es un marketplace, es un
+  por transferencia. Dicho crudo: *"el día 1 Sere no es un marketplace, es un
   riel de cobro + video + notas para transacciones que ya existían afuera"*.
 - **`instant_booking = true` por default** (4 de 5). Si el cliente lo trae el
   coach, `pendiente` no protege nada: mete 24hs de espera y un reembolso en el
@@ -185,11 +185,11 @@ no es esta pantalla.
    ✅ **Y la card "Reservas esperando tu respuesta" ya está hecha** (sesión 203).
 3. ~~La comisión sobre clientes que trae el coach~~ → ✅ **RESUELTA el
    08/09/2026: no se toca la comisión, el link ofrece un DESCUENTO a quien entra
-   por él, lo absorbe VIVE, y vale solo la primera sesión de esa persona.** El
+   por él, lo absorbe Sere, y vale solo la primera sesión de esa persona.** El
    beneficio cambia de sujeto: paga menos la persona invitada, y el coach gana un
    motivo para compartir el link en vez de un motivo para evitarlo. Falta solo
    **el porcentaje**: el techo local es 20% (la comisión de MP no toca la porción
-   de VIVE), pero el que manda es el riel internacional, donde PayPal cobra
+   de Sere), pero el que manda es el riel internacional, donde PayPal cobra
    5,40% + USD 0,30. Ver `docs/camino-del-cliente-1.md` §2.1.
 
 
@@ -215,18 +215,18 @@ agendada: no es que falte contenido, es que lo que hay no le da nada que hacer.
 
 De la estrategia anti-fuga viene el insight que debería gobernar esta pantalla:
 
-> Para el coach, lo que Vita le da **no es el cliente que ya tiene, es el cliente
+> Para el coach, lo que Sere le da **no es el cliente que ya tiene, es el cliente
 > nuevo**. La comisión es su costo de adquisición.
 
 Si eso es cierto, entonces:
 
-**La Home no es un dashboard. Es el recibo permanente de lo que Vita le está
+**La Home no es un dashboard. Es el recibo permanente de lo que Sere le está
 dando.**
 
 Hoy el coach siente la comisión todos los meses y no ve nunca lo que compró con
 ella. Esa asimetría es exactamente el combustible de la fuga: lo que se cobra es
 visible y recurrente, lo que se entrega es invisible. Cualquier bloque que
-agreguemos debería poder contestar *"¿esto me lo trajo Vita?"*.
+agreguemos debería poder contestar *"¿esto me lo trajo Sere?"*.
 
 ⚠️ **Y hay una tensión que no se puede ignorar.** El producto se define como *"si
 abruma, sobra"*, *"menos pero más intencional"*, explícitamente **no**
@@ -263,12 +263,12 @@ Datos que ya están: sesiones `completada`, sin reserva futura, N días desde la
 Por qué importa tanto:
 
 - Es el problema de negocio más caro del coach (la fuga de clientes propios).
-- Es plata para el coach y para Vita al mismo tiempo.
+- Es plata para el coach y para Sere al mismo tiempo.
 - **Es la medida anti-fuga #1 vista desde el otro lado.** "Re-reserva de un
   toque" hoy existe solo del lado del usuario (`rebookData` en
   `app/(tabs)/conexiones.tsx`). El coach no tiene ninguna forma de iniciar una
   re-reserva — y es el que se acuerda de la persona.
-- Si Vita le recupera un cliente que se estaba cayendo, la comisión deja de
+- Si Sere le recupera un cliente que se estaba cayendo, la comisión deja de
   discutirse sola.
 
 ### C. "Tus personas" — el modelo mental que la app no tiene 🔴
@@ -304,7 +304,7 @@ Así que esto **no se puede hacer en silencio**. Requiere:
 - **Nunca el diario ni la gratitud.** Eso es contenido, no metadato.
 - Revisión del abogado antes de escribir una línea.
 
-Bien hecho, es una razón para elegir Vita. Mal hecho, es un problema legal y una
+Bien hecho, es una razón para elegir Sere. Mal hecho, es un problema legal y una
 traición a la confianza del usuario, que es el activo entero del producto.
 
 ### E. Cerrar la sesión que ya pasó
@@ -341,14 +341,14 @@ sin ese marco.
 **Un bloque de "cuánto ganaste".** Es lo primero que pide un dashboard y acá está
 mal por dos motivos:
 
-1. **En pesos, Vita no tiene el dato.** El split de Mercado Pago deposita en la
+1. **En pesos, Sere no tiene el dato.** El split de Mercado Pago deposita en la
    cuenta propia del coach. Mostrar "ganaste X" duplica —y puede contradecir— lo
    que él ya ve en su app de MP.
 2. **Es el encuadre equivocado.** Un contador de plata en la pantalla de inicio
    empuja al coach a pensar en volumen, que es exactamente la productividad
    tóxica que el producto dice no ser.
 
-Lo que sí tiene sentido mostrar es **lo que Vita le debe** (riel internacional,
+Lo que sí tiene sentido mostrar es **lo que Sere le debe** (riel internacional,
 donde no tiene otra fuente): *"USD 120 a transferirte el lunes"*. Preciso,
 accionable, y solo donde somos la única fuente.
 
@@ -356,7 +356,7 @@ accionable, y solo donde somos la única fuente.
 
 1. **Un solo siguiente paso** (A) — chico, muy alineado, y destapa lo accionable
    que hoy está escondido en un puntito.
-2. **Quién se está por caer** (B) — el mayor retorno para coach y para Vita.
+2. **Quién se está por caer** (B) — el mayor retorno para coach y para Sere.
 3. **Tus personas** (C) — el modelo mental que falta.
 4. **Cerrar la sesión** (E) y **reputación** (F) — baratos, pegajosos.
 5. **El arco del cliente** (D) — el diferencial, detrás de consentimiento y del

@@ -21,22 +21,22 @@ ve el coach, y ninguna sobre lo que le pasa a la persona que llega.
 
 ## 2. La tesis, y su objeción
 
-**La tesis.** El día 1 VIVE no tiene demanda propia. El único que tiene clientes
+**La tesis.** El día 1 Sere no tiene demanda propia. El único que tiene clientes
 reales es el coach: sus 4-10 personas que ya le pagan por transferencia. Eso no
 es tráfico futuro, es GMV que existe hoy y está a un link de distancia. Con 10
 coaches iniciales son decenas de transacciones reales en el mes 1, sin pauta y
-sin SEO. Dicho crudo: **el día 1 VIVE no es un marketplace, es un riel de cobro +
+sin SEO. Dicho crudo: **el día 1 Sere no es un marketplace, es un riel de cobro +
 video + notas para transacciones que ya existían afuera.**
 
 El upside que lo hace algo más que un Calendly: **los clientes que el coach trae
-son usuarios de VIVE desde el minuto uno.** Reservan con su coach y después ven
+son usuarios de Sere desde el minuto uno.** Reservan con su coach y después ven
 la app; esa persona vuelve a buscar para otro tema, otro momento. El coach paga
 su propia adquisición y encima regala demanda cruzada. Es el playbook de
 Calendly/Cal.com: la herramienta individual bootstrapea el marketplace, no al
 revés.
 
 **La objeción, que no tuvo respuesta en el consejo.** Si la jugada es que el
-coach traiga su propia gente, entonces VIVE es un Calendly con comisión — y
+coach traiga su propia gente, entonces Sere es un Calendly con comisión — y
 🔴 **la comisión decreciente cobra el máximo justo en la primera sesión con
 clientes que él ya tenía y que hoy le pagan el 100%.** Ese coach hace la cuenta
 en la sesión 2 y se va. Es la medida anti-fuga #3 aplicada al usuario
@@ -51,14 +51,14 @@ coach que comparta el link.**
 > un motivo para compartirlo (*"si venís por acá te sale más barato"*) en lugar
 > de un motivo para evitarlo.
 >
-> ✅ **Lo absorbe VIVE** (decisión de Andre, 08/09/2026): sale de la comisión, no
+> ✅ **Lo absorbe Sere** (decisión de Andre, 08/09/2026): sale de la comisión, no
 > del precio del coach. El coach cobra su neto de siempre y **la persona invitada
 > paga menos**. Que lo absorbiera el coach era la otra opción y habría empeorado
 > el problema: cobrar menos *y* pagar comisión alta por gente que ya era suya es
 > justamente la cuenta que lo hace irse.
 >
-> ✅ **Vale solo la PRIMERA sesión de esa persona en VIVE** (decisión de Andre,
-> misma fecha). Acota la fuga clásica —que VIVE subsidie transacciones que iban a
+> ✅ **Vale solo la PRIMERA sesión de esa persona en Sere** (decisión de Andre,
+> misma fecha). Acota la fuga clásica —que Sere subsidie transacciones que iban a
 > ocurrir igual— y encaja con la escalera: el descuento vive exactamente donde la
 > comisión es más alta.
 
@@ -72,27 +72,27 @@ riel.**
 con `marketplace_fee`, y el comentario de `mp-create-payment/index.ts:173` es
 explícito: *"marketplace_fee = comisión pura (20/15%), SIN IVA"*, porque la
 figura fiscal es Monotributo y la factura C no discrimina IVA. **La tarifa de
-Mercado Pago se descuenta del lado del cobrador, no de la porción de VIVE.** O
+Mercado Pago se descuenta del lado del cobrador, no de la porción de Sere.** O
 sea que en Argentina el 20% de la primera sesión es margen limpio y el descuento
 sale entero de ahí.
 
 La aritmética, con el neto del coach intacto (precio 100):
 
-| | Cliente paga | Coach cobra | VIVE se lleva |
+| | Cliente paga | Coach cobra | Sere se lleva |
 |---|---|---|---|
 | Normal, 1.ª sesión | 100 | 80 | **20** |
 | Con 10% de descuento | 90 | 80 | **10** |
 | Con 20% de descuento | 80 | 80 | **0** |
 
-**El techo duro es 20%**, y ahí VIVE no gana nada en esa operación. Un descuento
+**El techo duro es 20%**, y ahí Sere no gana nada en esa operación. Un descuento
 del 10% deja 10% — y hay algo que parece una anomalía y no lo es: **la primera
 sesión pasaría a rendir menos que las recurrentes (15%)**. Es coherente con la
 lógica de la escalera y no en contra: el 20% de la primera existe porque
 *"recupera el costo de ADQUISICIÓN del cliente"*
-(`_shared/commission.ts`) — y en una reserva por link del coach **VIVE no pagó
+(`_shared/commission.ts`) — y en una reserva por link del coach **Sere no pagó
 ninguna adquisición**. Cobrar ahí como si la hubiera pagado es lo que no cierra.
 
-**Riel INTERNACIONAL — acá sí hay piso, y es real.** En PayPal/USDT cobra VIVE,
+**Riel INTERNACIONAL — acá sí hay piso, y es real.** En PayPal/USDT cobra Sere,
 así que paga la tarifa: **5,40% + USD 0,30** (tarifa oficial confirmada el
 19/08/2026, en `lib/pricing.ts`), sin contar el spread de conversión, que se
 evita manteniendo saldo en dólares. Y `commission.ts` dice que el costo operativo
@@ -105,7 +105,7 @@ local.** Un 10% funciona en los dos; más que eso empieza a comerse el margen
 internacional antes que el local.
 
 ⚠️ **Un supuesto a confirmar antes de fijarlo:** que la tarifa de MP efectivamente
-no toque la porción de VIVE. Se puede verificar contra el pago real de $1 que ya
+no toque la porción de Sere. Se puede verificar contra el pago real de $1 que ya
 se hizo (09/08/2026), mirando cuánto entró de verdad. Si esa suposición estuviera
 mal, el techo local baja de 20% a ~14% y el número cambia.
 
@@ -115,7 +115,7 @@ el link, no antes** — el link define cómo llega el dato (slug, query param,
 código) y esa es la mitad que falta.
 
 📌 El corolario que desactiva la objeción por el otro lado: **si el cliente se
-queda por VIVE y no solo por su coach, la comisión se defiende sola.** Eso
+queda por Sere y no solo por su coach, la comisión se defiende sola.** Eso
 depende de qué ve esa persona al terminar la sesión 1 — y hoy no está diseñado.
 
 ## 3. Lo que se verificó contra el código
@@ -229,7 +229,7 @@ sin publicar eso deja de ser una comodidad: **la web tiene que poder entregar la
 sesión entera, o no hay lanzamiento.**
 
 📌 El upside que el Expansionista mencionó al pasar —*"si la reserva vive en la
-web, VIVE deja de necesitar la store para existir"*— **pasó de ventaja a
+web, Sere deja de necesitar la store para existir"*— **pasó de ventaja a
 requisito.**
 
 ### 🟢 Y la buena noticia: la sala web es chica
@@ -315,7 +315,7 @@ columna de origen en `bookings` queda pedida solo por el descuento (§2).
 1. 🔴 **La forma del link** (§4). Bloquea todo lo demás. **Única decisión grande
    que queda.**
 2. **El número exacto del descuento** (§2.1) — el marco ya está cerrado (lo paga
-   VIVE, solo la primera sesión). Falta elegir el porcentaje mirando el riel
+   Sere, solo la primera sesión). Falta elegir el porcentaje mirando el riel
    internacional, y confirmar el supuesto de la tarifa de MP contra el pago real.
 3. **Un camino de onboarding corto para quien llega invitado**, distinto del de
    descubrimiento (§5.5).

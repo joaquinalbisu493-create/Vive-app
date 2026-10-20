@@ -83,7 +83,7 @@ Volver a hCaptcha sería cambiar ese archivo y la rama de web de
 
 Panel de Cloudflare → **Turnstile** → **Add widget**.
 
-- **Hostnames:** `vitaapp.com.ar`.
+- **Hostnames:** `sere.ar` y `vitaapp.com.ar` (este último redirige a sere.ar).
   🔴 Un WebView de app nativa no tiene dominio propio:
   `components/CaptchaHost.tsx` le declara `baseUrl: CAPTCHA_ORIGEN`
   (`lib/captcha.ts`), y ese es el hostname que Cloudflare va a ver. Si cambia
@@ -184,7 +184,7 @@ que es el campo que `supabase-js` arma por dentro, y el token sale de
 ⚠️ **Por eso el orden de encendido tiene un paso más**: la web tiene que estar
 DEPLOYADA en Vercel con `web/captcha.js` antes de prender el CAPTCHA, igual que
 la app tiene que estar en el build nuevo. Comprobarlo: abrir
-`https://vitaapp.com.ar/captcha.js` — tiene que devolver el script, no un 404.
+`https://sere.ar/captcha.js` — tiene que devolver el script, no un 404.
 
 ⚠️ En una **preview de Vercel** (`*.vercel.app`) el widget falla porque ese
 hostname no está en la lista de Cloudflare, y el pedido sale sin token. Con el

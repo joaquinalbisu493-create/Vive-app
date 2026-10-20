@@ -1,6 +1,6 @@
 ## 2026-10-20 — Andre (Claude · repo privado, limpieza y paquete del abogado)
 
-**Tocado:** `docs/paquete-abogado.md`, `docs/consentimiento-datos-sensibles.md`, `docs/transferencias-internacionales.md`, `assets/images/` (borradas `react-logo*` y `partial-react-logo`, sobras de la plantilla de Expo que nada usaba).
+**Tocado:** casi todo `docs/` y `design/`, `SCHEMA.md`, `screens/CoachPayoutScreen.tsx`, `screens/AdminScreen.tsx`, `docs/paquete-abogado.md`, `docs/consentimiento-datos-sensibles.md`, `docs/transferencias-internacionales.md`, `assets/images/` (borradas `react-logo*` y `partial-react-logo`, sobras de la plantilla de Expo que nada usaba).
 
 **Resumen:**
 - Revisión de qué hay en el repo que no debería publicarse. Lo que entra a la App Store es solo lo que la app importa; los docs, skills, scripts y diseño nunca viajan en el binario. El riesgo era GitHub: el repo era público con estrategia, export de Notion, remediación de seguridad y SCHEMA.md.
@@ -8,6 +8,9 @@
 - Borrada en la Mac la carpeta duplicada `node_modules 2` (111 MB, fuera de git) y las carpetas vacías `outputs/` y `work/`.
 
 - **Paquete del abogado al día con Sere:** `docs/paquete-abogado.md`, `docs/consentimiento-datos-sensibles.md` y `docs/transferencias-internacionales.md` pasaron de Vita, vitaapp.com.ar y el gmail viejo a Sere, sere.ar y hola@sere.ar. Los T&C y la Política no cambiaron de fondo desde que se armó el paquete (solo el nombre) y la web coincide con los docs. Nueva pregunta **B.16** sobre la marca SERE (4 clases ingresadas en el INPI, riesgo SEREN en 41/44).
+
+- **Nombre unificado a Sere en todos los docs** (`docs/`, `design/`, `SCHEMA.md`): ~430 menciones de Vita/VIVE como marca. Sin tocar: nombres técnicos entre comillas invertidas (`VITA_TOOLS`, `vita:bienestar:v1:`, `vita-pruebas`, etc.), `security-audit-remediation.md` (ahí "VIVE" es el nombre del proyecto de Supabase en producción, que sigue llamándose así), `plantilla-mail-codigo.md` y `hosting.md` (ya cuentan la transición), y el export de Notion. Dominio y mail: pasaron a `sere.ar` / `hola@sere.ar` solo donde describen el estado actual (URLs de tiendas, contacto, captcha, pruebas); lo que documenta DNS e historia de `vitaapp.com.ar` queda, porque ese dominio sigue vivo como redirect.
+- **Dos textos visibles con "VIVE" en la app**, corregidos a Sere: la nota fiscal de `CoachPayoutScreen` (la ven los profesionales) y la de comisiones del panel admin. Van en el próximo build. Los comentarios del código siguen diciendo VIVE (interno, no se ve).
 
 **Pendiente:** mandarle el paquete al abogado. Joaquín: tu clon sigue andando, pero si tenías el repo enlazado como público en algún lado (Vercel, etc.), confirmar que sigue con acceso.
 

@@ -44,7 +44,7 @@ pareciendo útil. Al mirarla apareció que el problema no era visual.
 
 | | Copy | Va a |
 |---|---|---|
-| Quiero explorar la app | *Ver todo lo que ofrece Vita* | Inicio |
+| Quiero explorar la app | *Ver todo lo que ofrece Sere* | Inicio |
 | Sé qué necesito | *Busco el profesional indicado* | Profesionales |
 | No sé por dónde empezar | *Necesito que me orienten* | Las tres de abajo |
 

@@ -1,4 +1,4 @@
-# Etiquetas de privacidad de las tiendas — Vita
+# Etiquetas de privacidad de las tiendas — Sere
 
 Respuestas para las **App Privacy labels** de App Store Connect y el **Formulario
 de seguridad de los datos** de Google Play Console. Armadas auditando `SCHEMA.md`,
@@ -12,7 +12,7 @@ rechazo**, y en el caso de Apple también de baja posterior.
 Dos criterios que se aplicaron en todo el documento:
 - **"Vinculado a la identidad" = sí** en casi todo, porque cada fila está atada a
   `profiles.id` (= `auth.users.id`). No hay recolección anónima.
-- **"Usado para seguimiento" (tracking) = NO en todo.** Vita no tiene SDK de
+- **"Usado para seguimiento" (tracking) = NO en todo.** Sere no tiene SDK de
   publicidad, ni analítica de terceros, ni compartición con data brokers. Esto
   permite responder que **la app no hace tracking**, lo que evita el prompt de ATT
   en iOS. Mantenerlo así es una ventaja real: si algún día se suma un SDK de
@@ -24,7 +24,7 @@ Dos criterios que se aplicaron en todo el documento:
 
 ### Datos recolectados
 
-| Categoría Apple | Qué es en Vita | Vinculado | Tracking | Finalidad |
+| Categoría Apple | Qué es en Sere | Vinculado | Tracking | Finalidad |
 |---|---|---|---|---|
 | **Contact Info › Email Address** | `profiles.email` (registro) | Sí | No | Funcionalidad de la app |
 | **Contact Info › Name** | `profiles.name` | Sí | No | Funcionalidad de la app |
@@ -45,7 +45,7 @@ Dos criterios que se aplicaron en todo el documento:
 - **Location** (ni precisa ni aproximada) — la app no usa `expo-location`, verificado. La **dirección IP** se usa solo para limitar intentos repetidos (`rate_limits`, se borra a los 2 días) y no se convierte en ubicación; la zona horaria tampoco es ubicación (va en *Other Data*).
 - **Contacts** — no se accede a la agenda.
 - **Browsing History**, **Search History** fuera de la app.
-- **Financial Info › Payment Info** — ⚠️ **importante: los datos de tarjeta los recolecta Mercado Pago, no Vita.** El checkout ocurre en el flujo de Mercado Pago; la app **no almacena datos completos de tarjetas**, solo identificadores y estado de la transacción (eso va en *Purchase History*, no en *Payment Info*).
+- **Financial Info › Payment Info** — ⚠️ **importante: los datos de tarjeta los recolecta Mercado Pago, no Sere.** El checkout ocurre en el flujo de Mercado Pago; la app **no almacena datos completos de tarjetas**, solo identificadores y estado de la transacción (eso va en *Purchase History*, no en *Payment Info*).
 - **Diagnostics de terceros** — no hay Sentry ni Crashlytics. ⚠️ Pero **sí** se recolectan errores propios (`error_app`): están declarados arriba, en *Diagnostics*. Hasta el 04/10/2026 este documento decía "No" a secas, y eso era declarar de menos.
 - **Advertising Data** — no hay publicidad.
 
@@ -86,13 +86,13 @@ Contrastado contra el código el 13/08/2026 y declarado en **Política §6**:
 
 "Compartido = No" en todos: los proveedores (Supabase, Mercado Pago, PayPal, Daily.co,
 Expo, Resend, Cloudflare y Anthropic, este último sin datos que identifiquen a la persona)
-son **encargados de tratamiento que procesan por cuenta de Vita**, lo que
+son **encargados de tratamiento que procesan por cuenta de Sere**, lo que
 Google clasifica como procesamiento, no como compartir con terceros. La lista tiene que
 ser la misma que la de Política §6.
 
 ### Prácticas de seguridad
 - **¿Se cifran los datos en tránsito?** **Sí** — todo va por HTTPS (Supabase, Mercado Pago, Daily.co, Expo).
-- **¿El usuario puede pedir la eliminación de sus datos?** **Sí** — desde la app (Perfil → Eliminar mi cuenta), escribiendo a `vitaappar@gmail.com` (Política §9), o desde la URL que exige Google: **`https://vitaapp.com.ar/legal/eliminar-cuenta`** (escrita el 13/08/2026, pendiente de publicar).
+- **¿El usuario puede pedir la eliminación de sus datos?** **Sí** — desde la app (Perfil → Eliminar mi cuenta), escribiendo a `hola@sere.ar` (Política §9), o desde la URL que exige Google: **`https://vitaapp.com.ar/legal/eliminar-cuenta`** (escrita el 13/08/2026, pendiente de publicar).
 - **¿Se siguió el programa Play Families?** No aplica: la app es para mayores de 18 (T&C §3.1).
 
 ---

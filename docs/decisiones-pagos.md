@@ -19,9 +19,9 @@ todo lo que se discutió:
 
 | Dato | Decide | No decide |
 |---|---|---|
-| **Dirección fiscal del coach** | Cómo VIVE le factura **su comisión** (E si está afuera, C si está en Argentina) y qué rieles de cobro le sirven | Nada del precio |
+| **Dirección fiscal del coach** | Cómo Sere le factura **su comisión** (E si está afuera, C si está en Argentina) y qué rieles de cobro le sirven | Nada del precio |
 | **Riel usado** | Cuánto costó cobrar → **la comisión** | Nada del encuadre fiscal |
-| **Ubicación del cliente** | Si **el coach** exporta (problema de él) y qué rieles mostrarle | Nada de las obligaciones de VIVE |
+| **Ubicación del cliente** | Si **el coach** exporta (problema de él) y qué rieles mostrarle | Nada de las obligaciones de Sere |
 
 🔴 **Que la comisión dependa del riel NO es el acoplamiento que había que romper.**
 Es correcto: el 25% existe para cubrir lo que cuesta ese riel —el propio comentario
@@ -33,8 +33,8 @@ cobrar no es cobrar de más.**
 🔴 **El acoplamiento que sí había que romper es el otro: usar el riel para decidir
 la ETIQUETA FISCAL.** Eso sigue mal y lo arregla D2.
 
-🔴 **Y bajo D1 (agente), el cliente de VIVE es el COACH** — a él se le factura la
-comisión. Por lo tanto **si VIVE exporta o no lo decide la dirección fiscal del
+🔴 **Y bajo D1 (agente), el cliente de Sere es el COACH** — a él se le factura la
+comisión. Por lo tanto **si Sere exporta o no lo decide la dirección fiscal del
 coach, no la del cliente.** Esto corrige lo que este documento afirmaba antes.
 
 ## Mapa rápido
@@ -45,14 +45,14 @@ coach, no la del cliente.** Esto corrige lo que este documento afirmaba antes.
 | ~~D2~~ | ~~Cómo se clasifica una operación como internacional~~ | — | ✅ **DECIDIDA 25/08** · razón corregida, menos urgente |
 | ~~D3~~ | ~~La escalera~~ | — | ✅ **DECIDIDA 25/08** · revisada: escalera **por riel**, contador único |
 | ~~D4~~ | ~~Alcance de la regla espejo~~ | — | ✅ **DECIDIDA 25/08: espejo estricto, por reserva** |
-| ~~D5~~ | ~~Mínimo por riel~~ | — | ✅ **DECIDIDA 25/08: el costo de red lo absorbe VIVE; sin mínimo** |
+| ~~D5~~ | ~~Mínimo por riel~~ | — | ✅ **DECIDIDA 25/08: el costo de red lo absorbe Sere; sin mínimo** |
 | ~~D6~~ | ~~Coach sin Mercado Pago conectado~~ | — | ✅ **DECIDIDA 25/08: publicar exige al menos un riel completo** |
 | ~~D7~~ | ~~USDT: ofrecerlo o no~~ | — | ✅ **DECIDIDA 25/08: se ofrece, con dos cosas antes** |
 | ~~D8~~ | ~~Criterio y registro del tipo de cambio~~ | — | ✅ **DECIDIDA 25/08: tabla append-only de operaciones** |
 | ~~D9~~ | ~~Multiparty: pedirlo o no~~ | — | ✅ **DECIDIDA 25/08: se pide, sin desarmar nada** |
 | ~~D10~~ | ~~Contracargos~~ | — | ✅ **DECIDIDA 25/08: niveles 1 y 2 ahora** |
 | ~~D11~~ | ~~Filtro por ubicación~~ | — | ✅ **DECIDIDA 25/08: NO se filtra. El país solo etiqueta** |
-| **D12** | **Dirección fiscal del coach** | **Nadie** | 🔴 **El dato que VIVE necesita para SU facturación** |
+| **D12** | **Dirección fiscal del coach** | **Nadie** | 🔴 **El dato que Sere necesita para SU facturación** |
 
 ---
 
@@ -63,11 +63,11 @@ coach, no la del cliente.** Esto corrige lo que este documento afirmaba antes.
 > rehacer la cuenta. Es la tabla que sostiene el desglose que ahora ve el coach
 > en "Cómo te pagamos" (`lib/desglosePago.ts`).
 
-| Riel | Paga el cliente | VIVE | Procesador | **Le queda al coach** |
+| Riel | Paga el cliente | Sere | Procesador | **Le queda al coach** |
 |---|---|---|---|---|
 | **Mercado Pago** · 1.ª sesión | precio | 20% | ≈4% — **lo paga el coach** | **≈76%** |
 | **Mercado Pago** · recurrente | precio | 15% | ≈4% — **lo paga el coach** | **≈81%** |
-| **PayPal** · 1.ª / recurrente | precio | 25% / 20% | 5,40% + USD 0,30 — **lo paga VIVE** | **75% / 80%** |
+| **PayPal** · 1.ª / recurrente | precio | 25% / 20% | 5,40% + USD 0,30 — **lo paga Sere** | **75% / 80%** |
 | **USDT** · 1.ª / recurrente | precio (o hasta 0,99 menos) | 25% / 20% | no hay | **75% / 80%** |
 
 🔴 **La propiedad que conviene no romper sin darse cuenta: los cinco puntos extra
@@ -90,36 +90,36 @@ en cuenta) y del **plazo de acreditación** (estos son inmediatos). Por eso se
 muestra con "≈". Vive en `lib/pricing.ts` como `MP_FEE_PCT_OBSERVED`.
 
 📌 **En USDT el cliente paga hasta 0,99 MENOS que el precio desde el 08/09/2026**
-(antes pagaba hasta 0,99 de más y se lo quedaba VIVE). El coach cobra siempre
-sobre el precio entero; el hueco lo absorbe VIVE. Ver `SCHEMA.md` → `bookings`.
+(antes pagaba hasta 0,99 de más y se lo quedaba Sere). El coach cobra siempre
+sobre el precio entero; el hueco lo absorbe Sere. Ver `SCHEMA.md` → `bookings`.
 
 ---
 
-## D1 · ¿VIVE es principal o agente? — ✅ DECIDIDA: **AGENTE** (25/08/2026)
+## D1 · ¿Sere es principal o agente? — ✅ DECIDIDA: **AGENTE** (25/08/2026)
 
 > **Decisión de Andre, 25/08/2026.** Y no fue elegir entre dos opciones abiertas:
 > **los T&C ya dicen agente en cuatro cláusulas**, así que principal habría
 > significado reescribir el encuadre central de un documento que los usuarios ya
 > aceptan.
 >
-> - **§4.1** — "Vita es una plataforma tecnológica de intermediación… **no presta
+> - **§4.1** — "Sere es una plataforma tecnológica de intermediación… **no presta
 >   por sí misma** servicios de coaching, psicología, nutrición ni ningún servicio
 >   de salud".
 > - **§4.2** — "La relación contractual por la Sesión se establece entre el
->   Cliente y el Profesional. **Vita no es parte de esa relación**, más allá de
+>   Cliente y el Profesional. **Sere no es parte de esa relación**, más allá de
 >   facilitar la conexión, la agenda y —cuando corresponda— el procesamiento del
 >   pago".
-> - **§8.5** — "Vita **no emite comprobantes por la Sesión** … sino únicamente por
+> - **§8.5** — "Sere **no emite comprobantes por la Sesión** … sino únicamente por
 >   su comisión".
 > - **§18.1** — no responde por "la conducta, idoneidad, cumplimiento o
 >   prestaciones de los Profesionales".
 >
 > **Lo que se evita:** ser el prestador de sesiones de salud mental, y que el
-> ingreso declarable pase a ser el **ticket completo** — VIVE es Monotributo
+> ingreso declarable pase a ser el **ticket completo** — Sere es Monotributo
 > (§8.4), así que bajo principal el tope de categoría se consumiría cuatro o
 > cinco veces más rápido que facturando solo la comisión.
 >
-> **Lo que se asume:** en el riel internacional VIVE recibe el 100% del ticket en
+> **Lo que se asume:** en el riel internacional Sere recibe el 100% del ticket en
 > su cuenta, y bajo agente eso **no es ingreso: es plata de terceros**.
 > Contablemente un pasivo, con su propia superficie regulatoria. 🔴 **Eso convierte
 > la regla espejo (D4) y multiparty (D9) en estructurales y no en optimizaciones:
@@ -127,17 +127,17 @@ sobre el precio entero; el hueco lo absorbe VIVE. Ver `SCHEMA.md` → `bookings`
 
 ### Trabajo que se desprende de la decisión
 
-1. **Reescribir el razonamiento de la sesión 101** ("cobra Vita para tener un solo
-   circuito"). Bajo agente, VIVE cobra **por cuenta y orden**. El motivo real es
+1. **Reescribir el razonamiento de la sesión 101** ("cobra Sere para tener un solo
+   circuito"). Bajo agente, Sere cobra **por cuenta y orden**. El motivo real es
    más simple y alcanza: Mercado Pago no procesa tarjetas emitidas fuera del país.
 2. **Corregir el comentario de `screens/CoachProfileScreen.tsx:313`** — *"él nos
    factura a nosotros en vez de al usuario"* es la formulación de **principal**, y
    contradice directamente §8.5.
-3. **Revisar la promesa del documento del coach**: "cobrando VIVE, ese circuito es
+3. **Revisar la promesa del documento del coach**: "cobrando Sere, ese circuito es
    uno solo" (o sea, vos no exportás). Si el criterio de exportación es dónde se
    aprovecha el servicio, bajo agente esa promesa es probablemente falsa. La
    sección ya está bloqueada esperando al contador, así que **no se mandó a nadie**.
-4. 🔴 **Para el abogado: §9.3 (garantía de primera sesión) al lado de §4.1.** VIVE
+4. 🔴 **Para el abogado: §9.3 (garantía de primera sesión) al lado de §4.1.** Sere
    ofrece un reintegro por una prestación que §4.1 dice que no presta. Es
    defendible como garantía comercial, pero es el hecho más fuerte que un reclamo
    podría usar para argumentar solidaridad en la cadena. Que las vea juntas.
@@ -153,17 +153,17 @@ para cobrar.
 
 ## Comparación original
 
-**Qué se decide:** si VIVE le vende la sesión al usuario (y el coach le vende a
-VIVE), o si el coach es el vendedor y VIVE cobra una comisión por intermediar.
+**Qué se decide:** si Sere le vende la sesión al usuario (y el coach le vende a
+Sere), o si el coach es el vendedor y Sere cobra una comisión por intermediar.
 
 🔴 **No lo determina el contador: lo determinan ustedes.** El contador confirma
 la implementación de la decisión que tomen.
 
 | | **Principal** | **Agente** (recomendado) |
 |---|---|---|
-| El coach | Factura local en pesos a VIVE. No exporta nada, no toca factura E. | Es el vendedor. Puede ser **exportador** cuando el cliente está afuera. |
-| VIVE | Es el prestador: responde por la prestación bajo Ley 24.240. | Intermedia. Responsabilidad acotada. |
-| Ingreso declarable de VIVE | El **ticket completo** | Solo la comisión |
+| El coach | Factura local en pesos a Sere. No exporta nada, no toca factura E. | Es el vendedor. Puede ser **exportador** cuando el cliente está afuera. |
+| Sere | Es el prestador: responde por la prestación bajo Ley 24.240. | Intermedia. Responsabilidad acotada. |
+| Ingreso declarable de Sere | El **ticket completo** | Solo la comisión |
 | Riesgo | 🔴 Responder por la prestación en una app de **salud mental** no es un tecnicismo | El coach carga con la fricción de exportar |
 
 **A favor de agente:** es lo que ya son en el 100% del volumen local (el split de
@@ -171,10 +171,10 @@ MP), evita la responsabilidad de principal sobre sesiones de salud mental, y
 mantiene el ingreso declarable en la comisión.
 
 🔴 **El punto que hay que llevarle al contador:** si son agentes, **el coach
-podría ser exportador tenga o no VIVE en el medio** — el criterio de exportación
+podría ser exportador tenga o no Sere en el medio** — el criterio de exportación
 no sería la nacionalidad del cliente sino **dónde se aprovecha el servicio**. Si
-eso es así, el diseño actual (cobrar VIVE para que el coach no exporte) **no
-evita nada: lo esconde**, y a cambio le mete a VIVE un riesgo de tesorería.
+eso es así, el diseño actual (cobrar Sere para que el coach no exporte) **no
+evita nada: lo esconde**, y a cambio le mete a Sere un riesgo de tesorería.
 
 📝 Y exportar sería menos grave de lo que suena: la factura E no lleva IVA, se
 puede emitir en moneda extranjera, no suma al tope del monotributo, y desde la
@@ -195,8 +195,8 @@ es exactamente lo que hay que preguntar.**
 > ⚠️ **RAZÓN CORREGIDA el 25/08, unas horas después.** Este documento decía que la
 > clasificación era urgente porque "la comisión depende de si la operación es
 > internacional". **Eso era falso**: la comisión depende del **riel** (ver "El
-> modelo"), y la facturación de VIVE depende de la **dirección fiscal del coach**
-> (D12). El país del cliente **no decide ninguna obligación de VIVE**.
+> modelo"), y la facturación de Sere depende de la **dirección fiscal del coach**
+> (D12). El país del cliente **no decide ninguna obligación de Sere**.
 >
 > **La decisión se mantiene** —no derivar la clasificación del riel, guardar
 > observaciones— pero **baja de urgencia** y sirve para otras dos cosas: poder
@@ -323,9 +323,9 @@ Cada régimen lee su propia tarifa en la posición que le toca.
 ### Por qué este modelo y no el filtro
 
 🔴 **Cambia el RAZONAMIENTO de la escalera, no solo los números.** El comentario de
-`_shared/commission.ts` la justificaba diciendo que VIVE "deja de aportar" después
+`_shared/commission.ts` la justificaba diciendo que Sere "deja de aportar" después
 de la presentación —y de ahí salía que el internacional fuera plano, porque ahí
-VIVE aporta siempre—. **La justificación real es otra**: el 20% recupera el
+Sere aporta siempre—. **La justificación real es otra**: el 20% recupera el
 **costo de adquisición** del cliente y la baja al 15% es **retención**. Eso aplica
 igual en los dos regímenes: en el exterior también hubo un costo de adquirir a esa
 persona, y también hay que retenerla.
@@ -396,7 +396,7 @@ una sesión pagada por PayPal o USDT hace que **la próxima sesión local de ese
 se cobre 15% en vez de 20%**.
 
 🔴 **El propio código argumenta en contra.** El comentario de
-`_shared/commission.ts` dice que la escalera existe porque en Argentina VIVE
+`_shared/commission.ts` dice que la escalera existe porque en Argentina Sere
 "deja de aportar" después de la presentación, mientras que en el exterior "cobra,
 retiene y transfiere en cada sesión, **para siempre**". La escalera no es un
 descuento por fidelidad: es una **renuncia progresiva a cobrar por algo que ya no
@@ -408,7 +408,7 @@ generó.
 
 **Sub-decisión que NO cae sola** — el borde de esa regla: si las internacionales
 no cuentan, un par que hizo una internacional y después hace una local **paga la
-prima de adquisición del 20%** en la local, cuando VIVE ya los presentó y ya
+prima de adquisición del 20%** en la local, cuando Sere ya los presentó y ya
 cobró 25%.
 
 - **A favor de cobrar el 20%:** el 25% no era una prima de adquisición sino el
@@ -453,7 +453,7 @@ a alguien que no existe, pagándolo con una operación manual por cada pago. ⚠
 tiene un costo que apareció al analizarla: los retiros de PayPal a un banco
 argentino **tienen comisión de transferencia**, así que convertir de a un pago
 multiplica un costo fijo — el mismo problema de amortización de D5, pero del lado
-de VIVE.
+de Sere.
 
 📝 **Vale la pena guardar el hallazgo de esa opción**: convirtiendo **por pago**, la
 atribución del tipo de cambio es exacta y el criterio (A) de D8 —descartado por
@@ -466,7 +466,7 @@ Un coach que solo quiere pesos **no puede atender al exterior** sin convertir é
 
 📝 **Y eso es menos grave de lo que suena en el riel de PayPal**: como no se puede
 sacar dólares de PayPal salvo retirando a una cuenta en pesos, la ruta del coach y
-la de VIVE son **idénticas** — los dos pasan por la misma conversión, al mismo
+la de Sere son **idénticas** — los dos pasan por la misma conversión, al mismo
 ~3-4,5%. La regla espejo no empeora el resultado: mueve quién aprieta el botón y
 quién come el markup. "Saber hacerlo" ahí es vincular una cuenta bancaria y tocar
 retirar.
@@ -507,13 +507,13 @@ un coach con una sesión USDT por semana come USD 1,50 sobre ~USD 45: **3,3%**.
 
 **Lo que la regla elimina (no resuelve: elimina):** el pozo, la regla de ruteo,
 el criterio de tipo de cambio del payout —no habría ningún pago en pesos desde
-VIVE— y el problema de drenar PayPal.
+Sere— y el problema de drenar PayPal.
 
 **No es integración nueva:** es borrar opciones y filtrar en el checkout, un
 subconjunto estricto de lo que ya está construido.
 
 **Costo residual:** un coach que solo quiere pesos no puede atender al exterior.
-Hoy eso es **un** coach, y la conversión que hoy paga VIVE pasa a hacerla él,
+Hoy eso es **un** coach, y la conversión que hoy paga Sere pasa a hacerla él,
 explícitamente y sabiéndolo.
 
 </details>
@@ -522,7 +522,7 @@ explícitamente y sabiéndolo.
 
 ## D5 · El costo de entrega — ✅ DECIDIDA (25/08/2026)
 
-> **Decisión de Andre, 25/08/2026: el costo de red de USDT lo absorbe VIVE**, como
+> **Decisión de Andre, 25/08/2026: el costo de red de USDT lo absorbe Sere**, como
 > ya absorbe el 2% de PayPal Payouts. **Y no hay mínimo**: se paga todo, todas las
 > semanas, como estaba decidido.
 
@@ -542,7 +542,7 @@ causa y paga el costo"*.
 de ser una preferencia libre: **define qué clientes pueden pagarle**. Cobrarle el
 costo sería penalizarlo por una decisión que ya no es puramente suya.
 
-La regla nueva es más simple: **el costo de entrega lo paga VIVE, sea fijo o
+La regla nueva es más simple: **el costo de entrega lo paga Sere, sea fijo o
 proporcional.** El coach cobra su neto, siempre.
 
 ### El riesgo que se acepta, que ya estaba anticipado
@@ -550,11 +550,11 @@ proporcional.** El coach cobra su neto, siempre.
 `_shared/commission.ts` lo dice desde antes de esta conversación: el costo de red
 **es el único que no escala con la facturación sino con la cantidad de coaches** —
 es por pago, no por sesión, así que un coach de una sesión por semana cuesta lo
-mismo que uno de diez. Absorberlo traslada ese riesgo a VIVE.
+mismo que uno de diez. Absorberlo traslada ese riesgo a Sere.
 
 Sobre la comisión, no sobre el ticket, así se ve la magnitud real:
 
-| Sesión | Comisión de VIVE (25%) | USD 1,50 pesa |
+| Sesión | Comisión de Sere (25%) | USD 1,50 pesa |
 |---|---|---|
 | USD 60 | 15,00 | 10% |
 | USD 20 (el mínimo) | 5,00 | **30%** |
@@ -575,7 +575,7 @@ de más volumen.
 ### Trabajo que se desprende
 
 1. **`deliveryCostFor` devuelve 0 para todos los métodos** — el costo se mueve al
-   lado de VIVE (`costoPlataforma` en el panel, donde ya está el 2% de PayPal).
+   lado de Sere (`costoPlataforma` en el panel, donde ya está el 2% de PayPal).
 2. **Sacar el descuento del documento del coach**: hoy dice *"USDT — … con un costo
    de red de USD 1,50 por transferencia que se descuenta de tu pago"*.
 3. **Sacar la nota de la pantalla de datos de cobro**, que explica ese descuento.
@@ -639,7 +639,7 @@ contradecir a los datos es una fuente de estados imposibles; derivarla los elimi
 
 ### Por qué no la alternativa
 
-La otra opción era **que VIVE cobrara también en pesos** y transfiriera por CBU,
+La otra opción era **que Sere cobrara también en pesos** y transfiriera por CBU,
 para que un coach sin MP pudiera trabajar. Se descarta porque **contradice D1 y
 D4 a la vez**: pondría plata de terceros en la cuenta también en el mercado local
 —hoy el split de Mercado Pago es la única parte del sistema donde eso **no
@@ -662,14 +662,14 @@ sistema es un problema.
 
 ## Planteo original
 
-**Hoy la reserva se confirma igual, sin cobro**: sin comisión para VIVE y sin
+**Hoy la reserva se confirma igual, sin cobro**: sin comisión para Sere y sin
 ninguna protección para quien reservó. Es un default heredado de cuando el pago
 era opcional — el comentario del código ya lo anticipaba.
 
 | Opción | Pros | Contras |
 |---|---|---|
-| **(a) Exigir MP conectado para publicar** (recomendado) | Con el split, VIVE **nunca toca la plata del coach**: sin float, sin plata ajena, sin obligación de transferir | Fricción de onboarding |
-| **(b) VIVE cobra en pesos y transfiere por CBU** | Un coach sin MP puede trabajar | 🔴 Pone plata ajena en la cuenta y **extiende al mercado local la pregunta fiscal** que hoy es solo del exterior |
+| **(a) Exigir MP conectado para publicar** (recomendado) | Con el split, Sere **nunca toca la plata del coach**: sin float, sin plata ajena, sin obligación de transferir | Fricción de onboarding |
+| **(b) Sere cobra en pesos y transfiere por CBU** | Un coach sin MP puede trabajar | 🔴 Pone plata ajena en la cuenta y **extiende al mercado local la pregunta fiscal** que hoy es solo del exterior |
 | **(c) Dejarlo como está** | — | 🔴 No es una decisión: es un agujero |
 
 </details>
@@ -716,10 +716,10 @@ red elegida**, como ya hace `walletError` con la wallet del coach. Sin eso, algu
 puede pegar una dirección de Ethereum y elegir Tron — y ahí los fondos se pierden y
 no rebotan.
 
-### Sobre "que VIVE pague y el coach quede en negativo"
+### Sobre "que Sere pague y el coach quede en negativo"
 
 Propuesta de Andre durante la discusión. **Para las cancelaciones no hace falta: la
-plata todavía es de VIVE.** Al coach se le paga *después* de la sesión y las
+plata todavía es de Sere.** Al coach se le paga *después* de la sesión y las
 cancelaciones ocurren antes, así que cuando hay que devolver esos dólares siguen en
 la wallet. No hay nada que descontarle.
 
@@ -783,7 +783,7 @@ diez por semana en vez de una?
 La pregunta original tenía dos mitades: **qué criterio se promete** y **qué se
 registra**. La primera **ya no tiene caso de uso**: con el espejo estricto, el
 internacional se paga en dólares por el mismo riel que cobró, y lo local lo paga el
-split de Mercado Pago directamente. **VIVE nunca convierte moneda para pagarle a
+split de Mercado Pago directamente. **Sere nunca convierte moneda para pagarle a
 nadie.** Las tres opciones que se habían planteado (cambio realizado / referencia
 pública / pagar en dólares) quedaron sin objeto.
 
@@ -805,7 +805,7 @@ hizo. No se puede contestar "qué se ejecutó el martes", "quién lo hizo", ni
 **Los movimientos automáticos ya tienen registro en otro lado:** Mercado Pago y
 PayPal tienen sus propios paneles, y una transferencia TRC20 está en la blockchain
 para siempre. **Lo que no tiene registro en ningún lado es lo que hizo una persona
-de VIVE**: pagarle a un coach, ejecutar un reembolso de USDT a mano, compensar un
+de Sere**: pagarle a un coach, ejecutar un reembolso de USDT a mano, compensar un
 error.
 
 **La tabla cubre solo eso.** No cada escritura de webhook.
@@ -849,10 +849,10 @@ se pagó si un coach reclama en noviembre.
 | Opción | Pros | Contras |
 |---|---|---|
 | **(A) El cambio efectivamente realizado** | Suena justo, es lo que pasó | 🔴 Indefendible: el coach no puede verificarlo ni anticiparlo, y si se convierte en lote la atribución por coach es arbitraria |
-| **(B) Referencia pública** (MEP del día, fuente y horario por escrito) | El coach sabe el lunes cuánto cobra el viernes. Sin disputa posible | VIVE asume la brecha entre su cambio realizado y la referencia |
+| **(B) Referencia pública** (MEP del día, fuente y horario por escrito) | El coach sabe el lunes cuánto cobra el viernes. Sin disputa posible | Sere asume la brecha entre su cambio realizado y la referencia |
 | **(C) Pagar en dólares y que convierta él** | Es lo que ya resuelven PayPal y USDT como métodos de cobro | El coach que quiere pesos se queda afuera |
 
-📝 **El riesgo de (B) es más chico de lo que suena**: VIVE tiene dólares, cuyo
+📝 **El riesgo de (B) es más chico de lo que suena**: Sere tiene dólares, cuyo
 valor en pesos se mueve *con* la referencia. No hay exposición al nivel del tipo
 de cambio, solo a la **brecha**.
 
@@ -867,11 +867,11 @@ de cambio, solo a la **brecha**.
 > integración técnica se valida con una cuenta de desarrollador mientras la
 > solicitud avanza. Es gratis y es lento: cuanto antes arranque el reloj, mejor.
 
-**No rompe nada:** la integración actual (VIVE como comerciante) es otro producto y
+**No rompe nada:** la integración actual (Sere como comerciante) es otro producto y
 sigue funcionando igual.
 
 🔴 **Condición escrita: no desarmar nada hasta tenerlo aprobado y probado.** Sacar
-el riel actual antes dejaría a VIVE sin ningún medio internacional, esperando un
+el riel actual antes dejaría a Sere sin ningún medio internacional, esperando un
 permiso que puede tardar o no llegar. Y el problema es circular: la aprobación
 probablemente exija un volumen que **solo el riel actual puede generar**.
 
@@ -914,7 +914,7 @@ arriba.
 
 📝 **La tercera pregunta no estaba en el plan original** y es la que más importa
 para D10: si el contracargo va contra el vendedor, multiparty mitiga la exposición
-de 180 días que hoy tiene VIVE. Si va contra la plataforma, no cambia nada de eso.
+de 180 días que hoy tiene Sere. Si va contra la plataforma, no cambia nada de eso.
 
 📝 **Decir el volumen de entrada es a propósito.** Si el filtro es de volumen —que
 es el obstáculo más probable— conviene enterarse en el primer mail y no después de
@@ -933,7 +933,7 @@ construir la integración.
 🔴 **No desarmar nada hasta tenerlo aprobado y probado.** No es self-serve: hay
 formulario, evaluación humana y una segunda aprobación para producción. No hay
 lista pública de países y **el filtro más probable es de volumen** — hay
-plataformas rechazadas por volumen bajo, y VIVE tiene cero.
+plataformas rechazadas por volumen bajo, y Sere tiene cero.
 
 ⚠️ **Caveat que baja el techo de esta opción:** la partner fee se liquidaría a una
 cuenta bancaria vinculada, una vez por día — con entidad argentina, eso es
@@ -994,7 +994,7 @@ futuros. Necesita el registro de operaciones de **D8** para tener sentido.
 
 📝 **Acá sí aplica**, a diferencia de lo que se vio en D7: un contracargo llega
 *después* de haberle pagado al coach, así que hay algo que descontar. En las
-cancelaciones no, porque la plata todavía es de VIVE.
+cancelaciones no, porque la plata todavía es de Sere.
 
 ### Nivel 4 — Prevenir ❌ probablemente nunca
 
@@ -1005,7 +1005,7 @@ al coach. Solo si los contracargos aparecen de verdad.
 
 PayPal le da al comprador **hasta 180 días** para disputar; el coach cobra a la
 semana de la sesión, **sin mínimo y sin reserva retenida**. Cada sesión pagada es
-exposición neta de VIVE por medio año.
+exposición neta de Sere por medio año.
 
 📝 Cobrar directo (D9) lo mitigaría mucho —el contracargo iría contra el coach—
 pero hay que confirmar el tratamiento del platform fee. Y en el split de Mercado
@@ -1023,7 +1023,7 @@ verificarlo en la documentación de MP.
 - Las disputas de PayPal **ni llegan**: el webhook procesa dos eventos y el
   registrado en producción tiene suscritos exactamente esos dos.
 - **Nada mira `paid_out_at`** cuando la plata se va para atrás. Si el contracargo
-  cae sobre una sesión ya transferida, la pierde VIVE en silencio.
+  cae sobre una sesión ya transferida, la pierde Sere en silencio.
 
 **La exposición es estructural:** PayPal da hasta 180 días para disputar; el coach
 cobra a la semana, sin mínimo y sin reserva retenida.
@@ -1054,7 +1054,7 @@ los dos por una razón que no es la suya.
 
 **Y no rompe nada de lo decidido:**
 
-- **La regla espejo se cumple igual.** Un argentino paga en USDT, VIVE recibe USDT y
+- **La regla espejo se cumple igual.** Un argentino paga en USDT, Sere recibe USDT y
   le paga al coach en USDT. Sin pozo, sin conversión.
 - **La clasificación fiscal no se contradice.** Un argentino pagando USDT es una
   operación de **mercado interno pagada por USDT**. Las dos cosas conviven porque
@@ -1166,7 +1166,7 @@ para eso está la lista de sesiones—. Ya no es peligroso, es una limitación.
 
 ## D12 · La dirección fiscal del coach — 🔴 ABIERTA
 
-Apareció al final de la ronda, y es **el dato que VIVE necesita para sus propias
+Apareció al final de la ronda, y es **el dato que Sere necesita para sus propias
 obligaciones** — a diferencia del país del cliente, que no decide ninguna.
 
 **Hoy no existe.** Está implícito que todos los coaches son argentinos, y
@@ -1175,7 +1175,7 @@ cualquiera, en cualquier país.
 
 **Para qué se necesita:**
 
-1. **Cómo VIVE le factura su comisión.** Coach en el exterior → exportación de
+1. **Cómo Sere le factura su comisión.** Coach en el exterior → exportación de
    servicios, factura E, sin IVA y sin sumar al tope del monotributo. Coach en
    Argentina → factura C, mercado interno. Es la misma comisión y dos comprobantes
    distintos.
@@ -1204,7 +1204,7 @@ coach (`/c/<slug>`) no paga comisión, en los tres rieles** (Mercado Pago, PayPa
 USDT). De la segunda en adelante, la escalera de siempre.
 
 **Por qué.** El 20% de la primera sesión es el **costo de adquisición**: cobra que
-Vita aportó al cliente. Si al cliente lo trajo el coach, Vita no aportó nada que
+Sere aportó al cliente. Si al cliente lo trajo el coach, Sere no aportó nada que
 cobrar — sería cobrarle su propia cartera. Y es el incentivo para que traiga a
 las 4-10 personas que ya le pagan por transferencia, que es la demanda que existe
 el día 1.

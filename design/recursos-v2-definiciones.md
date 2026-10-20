@@ -10,14 +10,14 @@ Este documento es la fuente de verdad de producto para la implementación.
 
 Dos fuentes de recursos, con roles distintos:
 
-- **Vita** aporta solo **herramientas prácticas de uso diario** — no contenido informativo, para no asumir la responsabilidad de mantener información actualizada.
+- **Sere** aporta solo **herramientas prácticas de uso diario** — no contenido informativo, para no asumir la responsabilidad de mantener información actualizada.
 - **Los coaches** aportan todo el **contenido** (audios, podcasts, videos, lecturas). Cada recurso cumple doble función: herramienta clínica (el coach lo manda por chat a su paciente: "escuchá este audio esta noche") y exposición (un recurso popular le puede traer clientes).
-- **Vita cura**: los coaches proponen, Vita aprueba qué entra.
+- **Sere cura**: los coaches proponen, Sere aprueba qué entra.
 - Principio rector: **todo lo que el coach necesita que el usuario haga fuera de la sesión, vive dentro de la app.**
 
 ---
 
-## 2. Herramientas de Vita ✅ CERRADO
+## 2. Herramientas de Sere ✅ CERRADO
 
 Solo estas cuatro, como funcionalidades nativas de la app (no filas en la base de recursos):
 
@@ -26,7 +26,7 @@ Solo estas cuatro, como funcionalidades nativas de la app (no filas en la base d
 3. **Diario** (escritura libre)
 4. **Diario de gratitud**
 
-**Decisión cerrada:** "Sueño" NO entra como herramienta de Vita — dormir es territorio de contenido de coaches (más flywheel para ellos). Las herramientas que hoy existan en la UI fuera de estas cuatro se retiran de la vista, sin borrar su código.
+**Decisión cerrada:** "Sueño" NO entra como herramienta de Sere — dormir es territorio de contenido de coaches (más flywheel para ellos). Las herramientas que hoy existan en la UI fuera de estas cuatro se retiran de la vista, sin borrar su código.
 
 ---
 
@@ -52,10 +52,10 @@ Video: YouTube embebido en v1 (costo cero, streaming resuelto, visibilidad doble
 Estructura de la pantalla Recursos (de arriba a abajo):
 
 1. Header + racha (queda como está)
-2. Bloque según mood del día (queda como está — apunta a herramientas de Vita)
+2. Bloque según mood del día (queda como está — apunta a herramientas de Sere)
 3. "Continuar donde dejaste" (queda como está)
 4. **"De tus coaches"** — recursos que TUS coaches te recomendaron por chat, con su nota, badge NUEVO y estado visto/pendiente. Si no hay recomendaciones, la sección no aparece.
-5. **"Herramientas de Vive"** — las 4 de Vita, fila compacta de tiles.
+5. **"Herramientas de Vive"** — las 4 de Sere, fila compacta de tiles.
 6. **"Explorar por tema"** — chips de las 10 puertas + filtros secundarios de formato + "Guardados · N" → grilla de recursos de coaches con autor visible.
 
 ---
@@ -98,7 +98,7 @@ Al subir, checkbox obligatorio: *"Declaro que este contenido es de mi autoría y
 
 - **`coach_resources`**: id, coach_id, title, description, format (audio/podcast/video/lectura), source (native/external), url, storage_path, body_md, topic_id (puerta), duration_seconds, status (pending/published/rejected/archived), rejection_rule, is_author_declared, created_at. RLS: published visible para todos; el coach ve y gestiona solo los suyos; nadie borra (se archiva).
 
-  > Nota de implementación: el nombre es `coach_resources` (no `resources`) para no entrar en conflicto con la tabla `resources` existente que contiene contenido de Vita.
+  > Nota de implementación: el nombre es `coach_resources` (no `resources`) para no entrar en conflicto con la tabla `resources` existente que contiene contenido de Sere.
 
 - **`resource_recommendations`**: id, resource_id, coach_id, user_id, room_id, note, opened_at, created_at. RLS: solo emisor y receptor.
 
@@ -128,7 +128,7 @@ Al subir, checkbox obligatorio: *"Declaro que este contenido es de mi autoría y
 
 ## 10. Decisiones cerradas (antes abiertas)
 
-1. **"Sueño"**: territorio de coaches, no herramienta de Vita.
+1. **"Sueño"**: territorio de coaches, no herramienta de Sere.
 2. **Visibilidad**: los recursos publicados son visibles para **todos** los usuarios, no solo para pacientes del coach autor — sin visibilidad pública no hay flywheel de exposición.
 3. **Tope de 10 recursos publicados por coach**: confirmado como arranque.
 

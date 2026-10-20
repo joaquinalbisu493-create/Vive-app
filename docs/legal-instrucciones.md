@@ -1,4 +1,4 @@
-# Instrucciones — Documentos legales de Vita
+# Instrucciones — Documentos legales de Sere
 
 Guía operativa (no legal) para llevar los borradores de **Términos y Condiciones**
 y **Política de Privacidad** de "borrador" a "publicado". Leé esto antes de tocar
@@ -29,15 +29,15 @@ los otros dos archivos.
 ### Paso 1 — Completar los placeholders `[ ]`
 Datos de la empresa y de contacto que solo tenés vos. Checklist consolidado (ambos documentos):
 
-> **Decidido el 06/08/2026 (Andre): Vita la opera una PERSONA HUMANA inscripta en Monotributo**, no una sociedad. Por eso los documentos ya no dicen "razón social" sino `[NOMBRE Y APELLIDO]`. Revisar la decisión cuando entre inversión, se formalice un socio, la facturación se acerque al tope del monotributo, o el volumen haga que el riesgo patrimonial personal deje de ser teórico.
+> **Decidido el 06/08/2026 (Andre): Sere la opera una PERSONA HUMANA inscripta en Monotributo**, no una sociedad. Por eso los documentos ya no dicen "razón social" sino `[NOMBRE Y APELLIDO]`. Revisar la decisión cuando entre inversión, se formalice un socio, la facturación se acerque al tope del monotributo, o el volumen haga que el riesgo patrimonial personal deje de ser teórico.
 
 - [x] ~~**Nombre y apellido**~~ — Andre Albisu Lambertini
 - [x] ~~**CUIT**~~ — 20-46034087-0 (confirmado por Andre)
 - [x] ~~**Domicilio**~~ — De los Extremeños 5069, Córdoba, Provincia de Córdoba
-- [x] ~~**Correo de contacto legal**~~ — vitaappar@gmail.com
-- [x] ~~**Correo de privacidad**~~ — vitaappar@gmail.com (el mismo)
+- [x] ~~**Correo de contacto legal**~~ — hola@sere.ar
+- [x] ~~**Correo de privacidad**~~ — hola@sere.ar (el mismo)
 - [ ] **Fecha de última actualización** y **fecha de vigencia** (en ambos) — poner la fecha real de publicación, no la de hoy. **Son los últimos 4 corchetes que se completan**, después de la revisión legal.
-- [x] ~~Referente/responsable de datos (Política §1)~~ — **10/08/2026: no se designa uno distinto del Responsable.** Todo va a `vitaappar@gmail.com`.
+- [x] ~~Referente/responsable de datos (Política §1)~~ — **10/08/2026: no se designa uno distinto del Responsable.** Todo va a `hola@sere.ar`.
 
 > **El detector de placeholders estaba roto y ocultaba 10 de los 15.** `sync-legal.mjs`
 > limitaba el match a 60 caracteres, así que solo veía `[fecha]`: las notas largas
@@ -53,7 +53,7 @@ No son legales puras, son tuyas (con tu contador/abogado):
 - [x] ~~**IVA / figura fiscal** (T&C §8.4)~~ — **RESUELTO 06/08/2026: Monotributo**, factura C sin IVA discriminado. §8.4 ya redactada, y el código no necesita cambio (la comisión retenida es la comisión final). Se agregaron §8.5 (situación fiscal del Profesional) y §8.6 (cambio de condición fiscal).
 - [x] ~~**Comisión** (T&C §8.3)~~ — **20%** la primera sesión con cada persona / **15%** desde la 2da, ya escrito sin corchetes. Falta solo decidir si mencionás la promo fundador.
 - [x] ~~**Lista de proveedores** (Política §6)~~ — verificada contra el código: Supabase, Mercado Pago, **Daily.co** (el video real; lo de Jitsi en `salas.room_url` es vestigial, nada lo abre) y Expo push. **Analítica: ninguna de terceros**, es tabla propia. Falta el acuerdo de tratamiento de datos con cada uno.
-- [x] ~~**Garantía de primera sesión** (T&C §9.3)~~ — **RESUELTA 10/08/2026 (Andre): se mantiene y la paga el Profesional.** Reintegro total, se pide a `vitaappar@gmail.com` dentro de las 48hs del horario agendado, sin expresar motivo, **una sola vez por Cliente en toda la Plataforma**, solo sobre la primera Sesión de cada vínculo. Se debita de los fondos del Profesional; Vita no cobra comisión sobre lo reintegrado. Escrita en §9.3 y, del lado del Profesional, en **§8.8 (nueva)**. ⚠️ **Falta implementarla** — ver Paso 4.
+- [x] ~~**Garantía de primera sesión** (T&C §9.3)~~ — **RESUELTA 10/08/2026 (Andre): se mantiene y la paga el Profesional.** Reintegro total, se pide a `hola@sere.ar` dentro de las 48hs del horario agendado, sin expresar motivo, **una sola vez por Cliente en toda la Plataforma**, solo sobre la primera Sesión de cada vínculo. Se debita de los fondos del Profesional; Sere no cobra comisión sobre lo reintegrado. Escrita en §9.3 y, del lado del Profesional, en **§8.8 (nueva)**. ⚠️ **Falta implementarla** — ver Paso 4.
 - [x] ~~**Antelación mínima de cancelación** (T&C §9.1)~~ — **24 horas**, sin franja intermedia (Andre, 10/08/2026). Es lo que ya hacía el código (`lib/bookingHelpers.ts`, `SalaScreen.canCancelConfirmed`). ⚠️ **Reescrita otra vez el 04/09/2026, y volvió a lo de antes por un motivo mejor:** decía que dentro de las 24hs **no se puede cancelar**, y eso (a) contradecía a la base —el trigger acepta la cancelación tardía y solo niega el reembolso— y (b) chocaba con el derecho de revocación irrenunciable de §9.4. Ahora dice que **siempre se puede cancelar** y que lo que cambia es el reembolso. Ver `docs/consumo.md`. Informada además en `BookingScreen_Confirm`.
 - [x] ~~**Jurisdicción** (T&C §22)~~ — **RESUELTO por investigación el 01/09/2026, ver `consumo.md`.** No es CABA: el **CCyC art. 1109** fija la jurisdicción en el lugar donde el consumidor recibió la prestación y dice que **la cláusula de prórroga se tiene por no escrita**. Poner CABA no es riesgoso, es inútil. Texto propuesto en `consumo.md`. Para los Profesionales —que no son consumidores— sí se puede pactar, y ahí conviene Córdoba.
 - [x] ~~**Líneas de ayuda en crisis** (T&C §5.3)~~ — **incluidas 10/08/2026**: 911, y la línea de asistencia al suicida **135** (CABA/GBA) · **(011) 5275-1135** · **0800-345-1435** (todo el país), 24hs. Vigencia verificada al escribirlas. **Re-verificar antes de cada publicación**: un número muerto en un aviso de crisis es peor que no ponerlo.
@@ -71,7 +71,7 @@ Llevá los dos borradores ya completados (pasos 1 y 2) a un/a abogado/a. Puntos 
 
 - [ ] **Cláusula de jurisdicción frente a consumidores** (T&C §22) — tiene límites estrictos en Argentina; no se puede perjudicar al consumidor.
 - [ ] **Mecanismo de consentimiento de datos sensibles** (Política §3) — cómo se obtiene y registra el consentimiento explícito para mood/diario/mensajes. 📌 **Investigado**: ver `consentimiento-datos-sensibles.md`. Queda una sola pregunta de fondo, y es para la AAIP, no para un estudio.
-- [ ] 🔴 **Transferencia internacional de datos** (Política §7) — **el punto más flojo del borrador.** Ni Brasil ni EEUU están en la lista de países adecuados de la AAIP, y ahí van hoy el ánimo, el diario, la gratitud y los mensajes (Supabase, región `sa-east-1` / São Paulo). §7 solo dice que Vita "procurará" garantías adecuadas. El instrumento probable son las **CCM de la Res. AAIP 198/2023**. Ver la sección "Chequeo de jurisdicciones" más abajo.
+- [ ] 🔴 **Transferencia internacional de datos** (Política §7) — **el punto más flojo del borrador.** Ni Brasil ni EEUU están en la lista de países adecuados de la AAIP, y ahí van hoy el ánimo, el diario, la gratitud y los mensajes (Supabase, región `sa-east-1` / São Paulo). §7 solo dice que Sere "procurará" garantías adecuadas. El instrumento probable son las **CCM de la Res. AAIP 198/2023**. Ver la sección "Chequeo de jurisdicciones" más abajo.
 - [ ] **Limitación de responsabilidad e indemnidad** (T&C §18–19) — qué se sostiene ante un juez argentino.
 - [ ] **Aviso de salud y emergencias** (T&C §5) — redacción fina, sobre todo por tener psicólogos/as en la plataforma.
 - [ ] **Cláusula anti-solicitación / no elusión** (T&C §10) — que sea ejecutable.
@@ -87,13 +87,13 @@ puntos de arriba no cuesta nada; preguntarlo después son semanas de espera.
 
 *Contexto para pasarle al abogado/a, redactado para que se entienda sin conocer la app:*
 
-> Vita quiere ofrecer que la persona escriba **en texto libre** qué le está pasando
+> Sere quiere ofrecer que la persona escriba **en texto libre** qué le está pasando
 > (ej.: *"hace tres meses que no duermo y estoy peleando con mi mamá"*) y que el sistema,
 > usando un modelo de lenguaje de un proveedor externo, clasifique ese texto dentro de una
 > lista cerrada de 28 temas predefinidos y le muestre profesionales que trabajan esos temas.
 > El sistema **no** genera texto libre de vuelta, no diagnostica y no da consejo clínico:
 > solo elige temas de una lista y ordena profesionales, igual que hoy hace un cuestionario
-> de opción múltiple. Vita se declara intermediario (T&C §4) y expresamente no prestador de
+> de opción múltiple. Sere se declara intermediario (T&C §4) y expresamente no prestador de
 > salud (T&C §5).
 
 Preguntas concretas:
@@ -173,8 +173,8 @@ Una vez revisados y aprobados:
 - [x] ~~**Aceptación en el registro (email).**~~ El checkbox ya persiste en `profiles.accepted_terms` (antes se descartaba). El registro del profesional usa aceptación implícita, porque su pantalla es login y alta a la vez.
 - [x] ~~**Aceptación en el registro con Google y Apple.**~~ Resuelto el 06/08/2026: el checkbox se movió **fuera** del formulario de email (antes vivía adentro, así que quien tocaba Google ni siquiera tenía dónde aceptar), los dos botones sociales quedan deshabilitados hasta tildarlo, y `signInWithGoogle`/`signInWithApple` reciben el flag y persisten `profiles.accepted_terms`.
 - [x] ~~**Páginas web generadas.**~~ `npm run sync:legal` ahora emite además **`web/legal/terminos.html`** y **`web/legal/privacidad.html`**, del mismo texto que muestra la app (no pueden divergir). Responsive, con modo oscuro, y con el aviso de borrador mientras queden placeholders.
-- [ ] **Hostearlas y obtener la URL pública.** App Store Connect y Google Play Console **exigen una URL pública** de la Política para poder publicar. **Dominio ya comprado: `vitaapp.com.ar` (13/08/2026)**, hosting decidido en Vercel. Falta conectar y cargar `https://vitaapp.com.ar/legal/privacidad` en las dos consolas — paso a paso en `docs/hosting.md`.
-- [x] ~~**URL de solicitud de eliminación de cuenta (Google Play).**~~ Página escrita y generada: `docs/eliminar-cuenta.md` → `https://vitaapp.com.ar/legal/eliminar-cuenta`. Falta publicarla y cargar la URL en Play Console.
+- [ ] **Hostearlas y obtener la URL pública.** App Store Connect y Google Play Console **exigen una URL pública** de la Política para poder publicar. **Dominio ya comprado: `sere.ar` (17/10/2026; antes `vitaapp.com.ar`, que ahora redirige)**, hosting decidido en Vercel. Falta conectar y cargar `https://sere.ar/legal/privacidad` en las dos consolas — paso a paso en `docs/hosting.md`.
+- [x] ~~**URL de solicitud de eliminación de cuenta (Google Play).**~~ Página escrita y generada: `docs/eliminar-cuenta.md` → `https://sere.ar/legal/eliminar-cuenta`. Falta publicarla y cargar la URL en Play Console.
 - [x] ~~🚨 **BORRADO DE CUENTA DENTRO DE LA APP**~~ — **YA EXISTE** (se construyó el 06/08/2026, este ítem había quedado desactualizado). `supabase/functions/delete-account/index.ts` (edge function con service role), `lib/accountDeletion.ts`, UI en `ProfileOwnScreen.tsx`. Modelo de borrado + anonimización documentado en `SCHEMA.md`. Cumple la guideline 5.1.1(v) de Apple.
 
 ### 🔴 Desajustes detectados el 25/08/2026 — los T&C describen un sistema que ya no existe
@@ -194,22 +194,22 @@ paquete.
 **2. §8.2 — "Los pagos se procesan a través de Mercado Pago mediante un modelo de
 marketplace (pago dividido). Cada Profesional conecta su propia cuenta."** 🔴
 **Falso para dos de los tres rieles.** Hoy hay Mercado Pago, PayPal y USDT. Y en
-los dos últimos **no hay pago dividido**: cobra Vita y le transfiere al Profesional
+los dos últimos **no hay pago dividido**: cobra Sere y le transfiere al Profesional
 después. El Profesional no conecta ninguna cuenta propia ahí; declara adónde
 quiere recibir.
 
 **3. §8.3 — comisión 20% / 15%.** 🔴 **Incompleto.** En los rieles internacionales
 es **25% la primera Sesión del vínculo y 20% las siguientes**. Y la frase "retenida
 automáticamente en el momento del pago" **solo es cierta en Mercado Pago**: en los
-otros dos entra todo a Vita y la comisión se descuenta al transferir.
+otros dos entra todo a Sere y la comisión se descuenta al transferir.
 
 **4. §8.5 — "Las retenciones que aplique el procesador sobre los fondos del
 Profesional".** Asume que el procesador tiene los fondos del Profesional. Cierto
-con el split de Mercado Pago; en los otros dos **los fondos pasan por Vita**.
+con el split de Mercado Pago; en los otros dos **los fondos pasan por Sere**.
 
 **5. §8.7 — "La liberación de los fondos puede estar sujeta a plazos operativos del
 procesador."** 🔴 **Incompleto, y es material para el Profesional.** En los rieles
-internacionales la demora **no es del procesador**: es la política de Vita —pago
+internacionales la demora **no es del procesador**: es la política de Sere —pago
 semanal y **solo por Sesiones ya realizadas**—. Eso hoy solo está escrito en el
 documento explicativo del coach, que **no es un contrato**.
 
@@ -343,7 +343,7 @@ servicios a personas en la UE activa el **art. 3(2) del RGPD**.
   adhesión al Convenio 108+. El flujo UE→Argentina no necesita instrumento
   adicional. El problema sería el salto siguiente, Argentina→EEUU, que es el
   mismo de arriba.
-- ✅ **A favor, y conviene que quede escrito: Vita NO es un "sistema de
+- ✅ **A favor, y conviene que quede escrito: Sere NO es un "sistema de
   reconocimiento de emociones" del Reglamento de IA.** El art. 3(39) lo define
   como inferir emociones **a partir de datos biométricos**; acá la persona elige
   su ánimo tocando un botón. Es autorreporte, no inferencia. Las guías de la
@@ -363,12 +363,12 @@ La **My Health My Data Act de Washington** (vigente desde 03/2024) define
 consentimiento opt-in para recolectar y compartir, autorización firmada aparte
 para vender, política específica publicada, y tiene **acción privada** más multas
 de hasta USD 7.500 por infracción. Es la norma más exigente del mundo para lo que
-hace Vita. **No aplica sin residentes de Washington** — es un ítem a revisar antes
+hace Sere. **No aplica sin residentes de Washington** — es un ítem a revisar antes
 de cualquier expansión a EEUU, no ahora.
 
 ### Dispositivo médico — afuera, pero con un borde
 
-Mientras Vita no reclame diagnosticar, tratar ni manejar una enfermedad, queda
+Mientras Sere no reclame diagnosticar, tratar ni manejar una enfermedad, queda
 fuera del MDR europeo: la norma dice que las apps de bienestar no son software de
 dispositivo médico, y lo que define la línea es el **propósito declarado**. T&C §4
 y §5 ya declaran intermediario y no prestador, así que el encuadre está bien.
@@ -429,7 +429,7 @@ Lo construido está en el duodécimo y decimotercer bloque del changelog del
 >
 > Lo que lo cambió fue mirar el código en vez de el documento: **al proveedor no
 > le llega ningún identificador ni seudónimo**, y nada se almacena que ligue una
-> llamada con una persona — pasada la llamada, ni Vita puede reconstruir de quién
+> llamada con una persona — pasada la llamada, ni Sere puede reconstruir de quién
 > era. O sea que no es dato *seudonimizado* (que ya alcanzaría por TJUE
 > C-413/23 P) sino **anónimo**: el art. 2 define dato personal como el referido a
 > personas *determinadas o determinables*, y esto no describe a nadie

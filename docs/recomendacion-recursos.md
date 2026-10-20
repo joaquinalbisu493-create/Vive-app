@@ -117,7 +117,7 @@ señales del plan original están vacías o apuntan al catálogo equivocado.** L
 números crudos (proyecto de test / pre-launch):
 
 - **Hay DOS catálogos, no uno:**
-  - `resources` (biblioteca **curada** de Vita): **3 items**, 100% con eje
+  - `resources` (biblioteca **curada** de Sere): **3 items**, 100% con eje
     (`resource_axes`). `resource_axes` **FK apunta acá**, no a coach_resources.
   - `coach_resources` (lo que sube el coach, el deck de `formato.tsx`): **8
     publicados**, 100% con `topic_id`, **0% con `wellness_goal`, 0% con eje**.

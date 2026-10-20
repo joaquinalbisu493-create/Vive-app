@@ -1,4 +1,4 @@
-# Contexto para rediseñar el Diario — vita (VIVE)
+# Contexto para rediseñar el Diario — sere (antes vita)
 
 Documento para pasarle a un modelo (ChatGPT) que va a hacer bocetos visuales de la
 pantalla **Diario**. Todo lo que sigue está tomado del código real
@@ -9,7 +9,7 @@ no de un mockup viejo.
 
 ## 1. Qué es la app y qué es el Diario
 
-**vita** (marca escrita en minúscula) es una app argentina de bienestar emocional.
+**sere** (marca escrita en minúscula) es una app argentina de bienestar emocional.
 Dos mitades: **herramientas de autocuidado** (10 tools) y **conexión con
 profesionales** (reserva de sesiones, chat, videollamada).
 
@@ -68,7 +68,7 @@ Superficies "glass" del sistema:
 ### Tipografía — 2 familias, ya cargadas, no se pueden agregar otras
 - **Poppins** (400/500/600/700) → cuerpo, labels, botones, casi todo.
 - **Plus Jakarta Sans** (600/700/800) → títulos de pantalla (`title` 700),
-  el wordmark "vita" (800), y **textos de devolución/reflexión generada** (600).
+  el wordmark "sere" (800), y **textos de devolución/reflexión generada** (600).
 - Se sacó Fraunces (serif) del proyecto en agosto 2026. **No proponer serif**
   salvo que sea una decisión explícita de rediseño (implicaría sumar una fuente).
 - Cuerpo mínimo 16px en mobile; en Diario el textarea hoy está en 15px/24.

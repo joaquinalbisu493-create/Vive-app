@@ -344,7 +344,7 @@ paquetes**.
 
 ### En el riel internacional no hay nada que construir
 
-Ahí VIVE cobra entero y transfiere después. `mark_coach_paid` exige
+Ahí Sere cobra entero y transfiere después. `mark_coach_paid` exige
 `status = 'completada'`, `payment_status = 'aprobado'` y `paid_out_at is null`.
 La retención ya existe y ya es más estricta de lo que pidió el consejo —
 **siempre que se arregle `complete_confirmed_sessions()`**, porque hoy ese guard

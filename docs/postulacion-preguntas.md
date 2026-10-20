@@ -6,10 +6,10 @@ Análisis del 24/09/2026, a pedido de Andre: ¿estamos haciendo las preguntas co
 
 Especialidad (texto libre) · presentación breve · temas que trabaja · cómo acompaña (escucha / herramientas / las dos) · cuánto guía (propone el camino / sigue el de la persona / depende) · sobre qué trabaja (historia / presente / rumbo) · fecha de nacimiento · sexo · nacionalidad · precio · video. Aparte, después: credenciales y, solo con matrícula de psicología verificada, la escuela (cognitivo conductual, psicoanalítico, sistémico, gestáltico, humanístico, integrativo).
 
-## Donde Vita ya está mejor que Selia
+## Donde Sere ya está mejor que Selia
 
-- **Cómo trabaja cada profesional.** Selia muestra "Mi estilo de terapia" en texto libre y un rótulo de escuela. Vita pregunta tres ejes concretos que el cliente también contesta, y el match explica en qué coinciden.
-- **Credenciales.** Selia dice que no puede garantizar que sean auténticas; Vita revisa la matrícula a mano y la profesión sale de la matrícula verificada.
+- **Cómo trabaja cada profesional.** Selia muestra "Mi estilo de terapia" en texto libre y un rótulo de escuela. Sere pregunta tres ejes concretos que el cliente también contesta, y el match explica en qué coinciden.
+- **Credenciales.** Selia dice que no puede garantizar que sean auténticas; Sere revisa la matrícula a mano y la profesión sale de la matrícula verificada.
 
 ## Los huecos, por importancia
 
@@ -44,9 +44,9 @@ Investigado a fondo y aprobado por Andre. Van en "Cómo trabajo" (`CoachEnfoqueS
 **Nutrición (5):** dos de cómo trabaja (sin dietas / alimentación intuitiva, con plan alimentario) y tres especialidades (deportiva, basada en plantas, condiciones de salud). En nutrición sí van especialidades porque el único tema es "Nutrición". "Alimentación consciente" va dentro de la intuitiva: según sus autoras (Tribole y Resch) es una herramienta del marco, no un enfoque aparte.
 
 **Afuera a propósito:**
-- PNL: Witkowski (315 estudios, 18% la respalda, más de la mitad la contradice) y Sturt (sin evidencia suficiente para ningún resultado de salud). Una opción de la lista es Vita avalándola; el coach que la usa lo cuenta en su bio. El ontológico sí entra porque es un marco de conversación y no promete curar nada.
-- Trastornos de la conducta alimentaria: se tratan en equipo (psiquiatra, psicólogo, nutricionista, clínico). Selia los ofrece en nutrición; Vita no, porque atraería a quien hay que derivar.
-- Psiconutrición (es un equipo, no una persona), pediátrica (menores fuera de Vita), fitoterapia, flores de Bach, "funcional" y ortomolecular (sin evidencia), coaching ejecutivo o de vida (dicen sobre qué, y eso ya lo dicen los temas).
+- PNL: Witkowski (315 estudios, 18% la respalda, más de la mitad la contradice) y Sturt (sin evidencia suficiente para ningún resultado de salud). Una opción de la lista es Sere avalándola; el coach que la usa lo cuenta en su bio. El ontológico sí entra porque es un marco de conversación y no promete curar nada.
+- Trastornos de la conducta alimentaria: se tratan en equipo (psiquiatra, psicólogo, nutricionista, clínico). Selia los ofrece en nutrición; Sere no, porque atraería a quien hay que derivar.
+- Psiconutrición (es un equipo, no una persona), pediátrica (menores fuera de Sere), fitoterapia, flores de Bach, "funcional" y ortomolecular (sin evidencia), coaching ejecutivo o de vida (dicen sobre qué, y eso ya lo dicen los temas).
 
 **Idea para después:** verificar acreditaciones de coaches (AACOP publica credenciales, ICF tiene registro) y mostrar "Acreditado por AACOP", como la matrícula.
 
