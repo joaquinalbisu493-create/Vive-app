@@ -339,7 +339,7 @@ export default function RespiracionScreen() {
                 ))}
               </View>
               {orb}
-              <ScaleCard style={s.primaryBtn} onPress={handleStart} activeOpacity={0.85}>
+              <ScaleCard style={s.primaryBtn} onPress={handleStart} activeOpacity={0.85} vibrar>
                 <MaterialCommunityIcons name="play" size={16} color={CREAM_LIGHT} />
                 <Text style={s.primaryBtnText}>Iniciar</Text>
               </ScaleCard>

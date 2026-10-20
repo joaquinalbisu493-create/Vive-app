@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   Platform,
   Animated,
@@ -17,6 +16,7 @@ import { AppBg } from '@/components/ui/AppBg';
 import { CoachAvatar } from '@/components/CoachAvatar';
 import { localEquivalentLabel } from '@/lib/time';
 import { vibrarLogro } from '@/lib/vibracion';
+import { ScaleCard } from '@/components/ScaleCard';
 
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTH_NAMES = [
@@ -170,7 +170,7 @@ export default function BookingScreen_Success() {
 
         {/* Botones */}
         <Animated.View style={[s.footer, { opacity: contentOpacity }]}>
-          <TouchableOpacity
+          <ScaleCard
             style={s.btnPrimary}
             onPress={() => {
               // Desarmar primero y apilar la sala después: queda Inicio → sala,
@@ -180,14 +180,14 @@ export default function BookingScreen_Success() {
             }}
             activeOpacity={0.85}>
             <Text style={s.btnPrimaryText}>Ver mi sala</Text>
-          </TouchableOpacity>
+          </ScaleCard>
 
-          <TouchableOpacity
+          <ScaleCard
             style={s.btnSecondary}
             onPress={salirDelEmbudo}
             activeOpacity={0.75}>
             <Text style={s.btnSecondaryText}>Volver a Inicio</Text>
-          </TouchableOpacity>
+          </ScaleCard>
         </Animated.View>
 
       </SafeAreaView>

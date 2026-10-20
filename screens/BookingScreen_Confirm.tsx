@@ -1335,7 +1335,8 @@ export default function BookingScreen_Confirm() {
             style={[s.btn, loading && s.btnLoading]}
             onPress={onConfirm}
             disabled={loading}
-            activeOpacity={0.85}>
+            activeOpacity={0.85}
+            vibrar>
             {loading ? (
               <View style={s.btnLoadingRow}>
                 <ActivityIndicator color="#F7EFE4" size="small" />

@@ -15,6 +15,7 @@ import { ViveColors, ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { ScaleCard } from '@/components/ScaleCard';
 
 const MONTH_NAMES = [
   'Enero','Febrero','Marzo','Abril','Mayo','Junio',
@@ -440,13 +441,14 @@ export default function BookingScreen_Calendar() {
 
       <SafeAreaView style={s.footerSafe} edges={['bottom']}>
         <View style={s.footer}>
-          <TouchableOpacity
+          <ScaleCard
             style={[s.btn, !selectedDate && s.btnDisabled]}
             onPress={onSeguimos}
             disabled={!selectedDate}
-            activeOpacity={0.85}>
+            activeOpacity={0.85}
+            vibrar>
             <Text style={s.btnText}>Seguimos</Text>
-          </TouchableOpacity>
+          </ScaleCard>
         </View>
       </SafeAreaView>
 

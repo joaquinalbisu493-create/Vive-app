@@ -153,7 +153,7 @@ export default function RelajacionScreen() {
                   </View>
                 ))}
               </View>
-              <ScaleCard style={s.primaryBtn} onPress={handleStart} activeOpacity={0.85}>
+              <ScaleCard style={s.primaryBtn} onPress={handleStart} activeOpacity={0.85} vibrar>
                 <Text style={s.primaryBtnText}>Iniciar</Text>
               </ScaleCard>
             </>

@@ -20,6 +20,7 @@ import { useAuth } from '@/context/AuthContext';
 import { scheduledAtMs, deviceIsOffArgentina, localEquivalent } from '@/lib/time';
 import { CoachAvatar } from '@/components/CoachAvatar';
 import { pedirReagendado, proponerHorarios, contraproponerHorario } from '@/lib/reagendarApi';
+import { ScaleCard } from '@/components/ScaleCard';
 
 const MONTHS_SHORT = [
   'ene','feb','mar','abr','may','jun',
@@ -361,11 +362,12 @@ export default function BookingScreen_Time() {
 
       <SafeAreaView style={s.footerSafe} edges={['bottom']}>
         <View style={s.footer}>
-          <TouchableOpacity
+          <ScaleCard
             style={[s.btn, (!selectedTime || moviendo) && s.btnDisabled]}
             onPress={onSeguimos}
             disabled={!selectedTime || moviendo}
-            activeOpacity={0.85}>
+            activeOpacity={0.85}
+            vibrar>
             <Text style={s.btnText}>
               {/* `contra` también manda al tocar: con "Seguimos" la persona
                   esperaba otro paso y la propuesta ya salía. */}
@@ -375,7 +377,7 @@ export default function BookingScreen_Time() {
                   ? (moviendo ? 'Moviendo…' : 'Mover la sesión')
                   : 'Seguimos'}
             </Text>
-          </TouchableOpacity>
+          </ScaleCard>
         </View>
       </SafeAreaView>
 

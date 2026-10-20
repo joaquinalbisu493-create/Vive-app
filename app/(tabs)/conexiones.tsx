@@ -705,9 +705,9 @@ export default function ConexionesScreen() {
                   <Text style={s.rebookSub}>Tu última fue el {formatShortDate(rebookData.lastDate)}</Text>
                 )}
               </View>
-              <TouchableOpacity style={s.rebookCta} onPress={goRebook} activeOpacity={0.85}>
+              <ScaleCard style={s.rebookCta} onPress={goRebook} activeOpacity={0.85} vibrar>
                 <Text style={s.rebookCtaText}>Reservar</Text>
-              </TouchableOpacity>
+              </ScaleCard>
             </View>
           )}
 
