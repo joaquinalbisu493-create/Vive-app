@@ -1,6 +1,6 @@
 ## 2026-10-20 — Andre (Claude · repo privado, limpieza y paquete del abogado)
 
-**Tocado:** casi todo `docs/` y `design/`, `SCHEMA.md`, `screens/CoachPayoutScreen.tsx`, `screens/AdminScreen.tsx`, `docs/paquete-abogado.md`, `docs/consentimiento-datos-sensibles.md`, `docs/transferencias-internacionales.md`, `assets/images/` (borradas `react-logo*` y `partial-react-logo`, sobras de la plantilla de Expo que nada usaba).
+**Tocado:** casi todo `docs/` y `design/`, `SCHEMA.md`, `screens/CoachPayoutScreen.tsx`, `screens/AdminScreen.tsx`, `docs/paquete-abogado.md`, `docs/paquete-contadora.md`, `docs/fiscal-instrucciones.md`, `docs/consentimiento-datos-sensibles.md`, `docs/transferencias-internacionales.md`, `assets/images/` (borradas `react-logo*` y `partial-react-logo`, sobras de la plantilla de Expo que nada usaba).
 
 **Resumen:**
 - Revisión de qué hay en el repo que no debería publicarse. Lo que entra a la App Store es solo lo que la app importa; los docs, skills, scripts y diseño nunca viajan en el binario. El riesgo era GitHub: el repo era público con estrategia, export de Notion, remediación de seguridad y SCHEMA.md.
@@ -12,7 +12,9 @@
 - **Nombre unificado a Sere en todos los docs** (`docs/`, `design/`, `SCHEMA.md`): ~430 menciones de Vita/VIVE como marca. Sin tocar: nombres técnicos entre comillas invertidas (`VITA_TOOLS`, `vita:bienestar:v1:`, `vita-pruebas`, etc.), `security-audit-remediation.md` (ahí "VIVE" es el nombre del proyecto de Supabase en producción, que sigue llamándose así), `plantilla-mail-codigo.md` y `hosting.md` (ya cuentan la transición), y el export de Notion. Dominio y mail: pasaron a `sere.ar` / `hola@sere.ar` solo donde describen el estado actual (URLs de tiendas, contacto, captcha, pruebas); lo que documenta DNS e historia de `vitaapp.com.ar` queda, porque ese dominio sigue vivo como redirect.
 - **Dos textos visibles con "VIVE" en la app**, corregidos a Sere: la nota fiscal de `CoachPayoutScreen` (la ven los profesionales) y la de comisiones del panel admin. Van en el próximo build. Los comentarios del código siguen diciendo VIVE (interno, no se ve).
 
-**Pendiente:** mandarle el paquete al abogado. Joaquín: tu clon sigue andando, pero si tenías el repo enlazado como público en algún lado (Vercel, etc.), confirmar que sigue con acceso.
+- **Paquete para la contadora** (`docs/paquete-contadora.md`, nuevo): mail de encuadre, contexto del negocio, preguntas por urgencia (plata de terceros y tope, si el profesional exporta igual, cómo facturar la comisión, sociedad con Joaquín, Monotributo vs RI) y qué se le pide. Verificado contra producción: siguen sin ventas reales (41 pagos, todos con `coach-prueba`, 30 reembolsados). `fiscal-instrucciones.md` queda como historia con un aviso arriba.
+
+**Pendiente:** mandarle el paquete al abogado y el de la contadora. Joaquín: tu clon sigue andando, pero si tenías el repo enlazado como público en algún lado (Vercel, etc.), confirmar que sigue con acceso.
 
 ## 2026-10-20 — Joaquín (Claude · device-test del rename Vita→Sere)
 

@@ -1,5 +1,7 @@
 # Instrucciones — Situación fiscal de Sere
 
+> ⚠️ **20/10/2026: lo que se le manda a la contadora es [`paquete-contadora.md`](./paquete-contadora.md).** Este archivo queda como historia y notas internas; algunos datos de acá están viejos (por ejemplo, la comisión internacional ya no es 25% plano: es 25% la primera sesión y 20% las siguientes).
+
 Guía operativa (**no es asesoramiento contable**) para llevar a la reunión con el
 contador. Reúne lo que ya está decidido, lo que está sin resolver, y por qué cada
 pregunta importa. Escrito el 20/08/2026.
