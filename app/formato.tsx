@@ -18,6 +18,7 @@ import { FormatSurface } from '@/components/FormatSurface';
 import { supabase, registrarEvento } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { DOORS } from '@/constants/conexionesDoors';
+import { BotonGuardar } from '@/components/ui/BotonGuardar';
 
 const { width: SCREEN_W } = Dimensions.get('window');
 const CARD_W = Math.round(SCREEN_W * 0.79);
@@ -265,9 +266,9 @@ export default function FormatoScreen() {
                 <Ionicons name={FORMAT_ICON[formato] ?? 'book-outline'} size={13} color="#fff" />
                 {!!item.duration_seconds && <Text style={s.durPillText}>{fmtDuration(item.duration_seconds)}</Text>}
               </View>
-              <TouchableOpacity onPress={() => toggleSave(item.id)} hitSlop={10} activeOpacity={0.8}>
+              <BotonGuardar activo={saved} onPress={() => toggleSave(item.id)} hitSlop={10} activeOpacity={0.8}>
                 <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={20} color="#fff" />
-              </TouchableOpacity>
+              </BotonGuardar>
             </View>
 
             <View style={{ flex: 1 }} />

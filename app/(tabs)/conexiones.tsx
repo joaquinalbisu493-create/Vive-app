@@ -40,6 +40,7 @@ import { leerRespuestasGuardadas } from '@/lib/quizPendiente';
 import { evaluarParaMazo, topeDeRango, monedaDePresupuesto, type RespuestasQuiz } from '@/lib/quizMatch';
 import { QUIZ_AREAS } from '@/constants/searchData';
 import { etiquetaProfesionalPublica } from '@/lib/tipoProfesional';
+import { BotonGuardar } from '@/components/ui/BotonGuardar';
 
 // ─── Paleta (refleja el HTML de referencia) ──────────────────────────────────
 const FOREST      = '#3F512F';
@@ -555,7 +556,8 @@ export default function ConexionesScreen() {
                                   <Text style={s.cardInitials}>{getInitials(coach.name)}</Text>
                                 </LinearGradient>
                               )}
-                              <TouchableOpacity
+                              <BotonGuardar
+                                activo={isFav}
                                 onPress={() => toggleFav(coach.id)}
                                 hitSlop={8}
                                 activeOpacity={0.7}
@@ -563,7 +565,7 @@ export default function ConexionesScreen() {
                                 accessibilityLabel={isFav ? 'Quitar de favoritos' : 'Agregar a favoritos'}
                                 style={s.cardFavorite}>
                                 <Feather name="star" size={20} color={isFav ? TERRACOTTA : FOREST} />
-                              </TouchableOpacity>
+                              </BotonGuardar>
                             </View>
                           <View style={s.cardBody}>
                             <View style={s.cardNameRow}>

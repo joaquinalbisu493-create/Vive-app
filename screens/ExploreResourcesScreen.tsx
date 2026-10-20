@@ -12,6 +12,7 @@ import { AXES } from '@/constants/searchData';
 import { AxisIcon } from '@/components/ui/AxisIcon';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { BotonGuardar } from '@/components/ui/BotonGuardar';
 
 // ─── Paleta local (consistente con la pantalla de Recursos) ──────────────────
 const FOREST       = '#3A4F2A';
@@ -311,13 +312,13 @@ export default function ExploreResourcesScreen() {
                       </Text>
                     </View>
                   </View>
-                  <TouchableOpacity onPress={() => toggleSave(r.id)} hitSlop={10} style={s.bookmarkBtn}>
+                  <BotonGuardar activo={isSaved} onPress={() => toggleSave(r.id)} hitSlop={10} style={s.bookmarkBtn}>
                     <Ionicons
                       name={isSaved ? 'bookmark' : 'bookmark-outline'}
                       size={18}
                       color={isSaved ? ViveColors.primary : 'rgba(135,131,92,0.55)'}
                     />
-                  </TouchableOpacity>
+                  </BotonGuardar>
                 </TouchableOpacity>
               );
             })

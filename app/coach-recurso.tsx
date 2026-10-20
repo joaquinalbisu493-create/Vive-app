@@ -36,6 +36,7 @@ import { supabase, registrarEvento } from '@/lib/supabase';
 import { anotarSensible } from '@/lib/analytics';
 import { useAuth } from '@/context/AuthContext';
 import { logResourceEvent } from '@/lib/resourceEvents';
+import { BotonGuardar } from '@/components/ui/BotonGuardar';
 
 // ─── Constantes de formato ────────────────────────────────────────────────────
 const FOREST = '#3A4F2A';
@@ -828,13 +829,13 @@ export default function CoachRecursoScreen() {
             <Ionicons name="arrow-back" size={22} color={ViveColors.accent} />
           </TouchableOpacity>
           <View style={s.headerRight}>
-            <TouchableOpacity style={s.headerBtn} onPress={toggleSave} hitSlop={8}>
+            <BotonGuardar activo={saved} style={s.headerBtn} onPress={toggleSave} hitSlop={8}>
               <Ionicons
                 name={saved ? 'bookmark' : 'bookmark-outline'}
                 size={22}
                 color={saved ? ViveColors.primary : ViveColors.accent}
               />
-            </TouchableOpacity>
+            </BotonGuardar>
             <TouchableOpacity style={s.headerBtn} onPress={onShare} hitSlop={8}>
               <Ionicons name="share-outline" size={22} color={ViveColors.accent} />
             </TouchableOpacity>

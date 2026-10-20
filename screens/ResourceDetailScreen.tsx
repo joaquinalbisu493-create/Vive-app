@@ -15,6 +15,7 @@ import { AppBg } from '@/components/ui/AppBg';
 import { useAuth } from '@/context/AuthContext';
 import { recordCompletion } from '@/lib/resourceCompletions';
 import { useRecursoAbierto } from '@/hooks/useRecursoAbierto';
+import { BotonGuardar } from '@/components/ui/BotonGuardar';
 
 type Resource = {
   id: string;
@@ -409,20 +410,20 @@ export default function ResourceDetailScreen() {
             <Text style={s.backText}>Atrás</Text>
           </TouchableOpacity>
           <View style={s.topActions}>
-            <TouchableOpacity onPress={togglePin} hitSlop={8}>
+            <BotonGuardar activo={pinned} onPress={togglePin} hitSlop={8}>
               <MaterialCommunityIcons
                 name={pinned ? 'pin' : 'pin-outline'}
                 size={23}
                 color={pinned ? ViveColors.primary : 'rgba(135,131,92,0.72)'}
               />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={toggleSave} hitSlop={8}>
+            </BotonGuardar>
+            <BotonGuardar activo={saved} onPress={toggleSave} hitSlop={8}>
               <MaterialCommunityIcons
                 name={saved ? 'bookmark' : 'bookmark-outline'}
                 size={24}
                 color={saved ? ViveColors.primary : 'rgba(135,131,92,0.72)'}
               />
-            </TouchableOpacity>
+            </BotonGuardar>
           </View>
         </View>
 

@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { TouchableOpacity, Alert, StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { ViveColors } from '@/constants/theme';
+import { BotonGuardar } from '@/components/ui/BotonGuardar';
 
 /**
  * Botón de "fijar al inicio" (pinned_resources, tope 4).
@@ -79,13 +80,13 @@ export function PinButton({
   }
 
   const btn = (
-    <TouchableOpacity onPress={toggle} hitSlop={10}>
+    <BotonGuardar activo={pinned} onPress={toggle} hitSlop={10}>
       <MaterialCommunityIcons
         name={(pinned ? icon : `${icon}-outline`) as any}
         size={22}
         color={pinned ? ViveColors.primary : inactiveColor}
       />
-    </TouchableOpacity>
+    </BotonGuardar>
   );
 
   return inline ? btn : <View style={s.slot}>{btn}</View>;
