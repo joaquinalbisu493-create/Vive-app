@@ -16,6 +16,8 @@ import { AppBg } from '@/components/ui/AppBg';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { ScaleCard } from '@/components/ScaleCard';
+import { RellenoElegido } from '@/components/ui/RellenoElegido';
+import { vibrarToque } from '@/lib/vibracion';
 
 const MONTH_NAMES = [
   'Enero','Febrero','Marzo','Abril','Mayo','Junio',
@@ -237,6 +239,7 @@ export default function BookingScreen_Calendar() {
   function selectDay(day: number) {
     const ds = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     if (!availableDates.has(ds)) return;
+    if (ds !== selectedDate) vibrarToque();
     setSelectedDate(ds);
   }
 
@@ -403,12 +406,11 @@ export default function BookingScreen_Calendar() {
 
               return (
                 <View key={di} style={s.dayCell}>
-                  <TouchableOpacity
+                  <ScaleCard
                     style={[
                       s.dayCircle,
                       available && !isSelected && s.dayCircleAvailable,
                       esSugerida && s.dayCircleSugerida,
-                      isSelected && s.dayCircleSelected,
                     ]}
                     onPress={() => selectDay(day)}
                     activeOpacity={available ? 0.75 : 1}
@@ -423,6 +425,7 @@ export default function BookingScreen_Calendar() {
                     }
                     accessibilityState={{ selected: isSelected, disabled: !available }}
                     disabled={!available}>
+                    <RellenoElegido activo={isSelected} radio={20} />
                     <Text style={[
                       s.dayText,
                       available && !isSelected && s.dayTextAvailable,
@@ -431,7 +434,7 @@ export default function BookingScreen_Calendar() {
                     ]}>
                       {day}
                     </Text>
-                  </TouchableOpacity>
+                  </ScaleCard>
                 </View>
               );
             })}
@@ -508,7 +511,6 @@ const s = StyleSheet.create({
   },
   dayCircle: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
   dayCircleAvailable: { backgroundColor: 'rgba(255,248,240,0.68)', ...dayShadow },
-  dayCircleSelected: { backgroundColor: ViveColors.primary },
   // M6: el día que sugirió el profesional, todavía sin elegir. Borde y no
   // relleno, para que no se confunda con el día ya seleccionado.
   dayCircleSugerida: { borderWidth: 1.5, borderColor: ViveColors.primary },

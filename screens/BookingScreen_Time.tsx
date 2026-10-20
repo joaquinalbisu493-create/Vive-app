@@ -21,6 +21,8 @@ import { scheduledAtMs, deviceIsOffArgentina, localEquivalent } from '@/lib/time
 import { CoachAvatar } from '@/components/CoachAvatar';
 import { pedirReagendado, proponerHorarios, contraproponerHorario } from '@/lib/reagendarApi';
 import { ScaleCard } from '@/components/ScaleCard';
+import { RellenoElegido } from '@/components/ui/RellenoElegido';
+import { vibrarToque } from '@/lib/vibracion';
 
 const MONTHS_SHORT = [
   'ene','feb','mar','abr','may','jun',
@@ -302,7 +304,7 @@ export default function BookingScreen_Time() {
             {times.map(({ label, available }) => {
               const isSelected = selectedTime === label;
               return (
-                <TouchableOpacity
+                <ScaleCard
                   key={label}
                   style={[
                     s.chip,
@@ -310,9 +312,14 @@ export default function BookingScreen_Time() {
                     isSelected && s.chipSelected,
                     !available && s.chipUnavailable,
                   ]}
-                  onPress={() => available && setSelectedTime(label)}
+                  onPress={() => {
+                    if (!available) return;
+                    if (label !== selectedTime) vibrarToque();
+                    setSelectedTime(label);
+                  }}
                   activeOpacity={available ? 0.75 : 1}
                   disabled={!available}>
+                  <RellenoElegido activo={isSelected} radio={10.5} />
                   <Text style={[
                     s.chipText,
                     available && !isSelected && s.chipTextAvailable,
@@ -321,7 +328,7 @@ export default function BookingScreen_Time() {
                   ]}>
                     {label}
                   </Text>
-                </TouchableOpacity>
+                </ScaleCard>
               );
             })}
           </View>
@@ -438,7 +445,8 @@ const s = StyleSheet.create({
       android: { elevation: 1 },
     }),
   },
-  chipSelected: { backgroundColor: ViveColors.primary, borderColor: ViveColors.primary },
+  // El relleno lo pone RellenoElegido, que entra animado.
+  chipSelected: { borderColor: ViveColors.primary },
   chipUnavailable: { backgroundColor: 'rgba(86,94,50,0.06)', borderColor: 'transparent' },
   chipText: { fontFamily: ViveFonts.medium, fontSize: 15, color: '#FFFFFF' },
   chipTextAvailable: { color: '#565E32' },
