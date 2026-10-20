@@ -657,6 +657,62 @@
        la barra de abajo tapaba "Tus recursos a mano". Se achica entero. */
     .hero .phone { width: 300px; transform: scale(.84) rotate(2deg); margin: -50px auto; }
   }
+  /* ── Celular primero (20/10/2026) ──────────────────────────────────────
+     La página se pensó ancha y en el celular solo se apilaba. Acá: más
+     corta (teléfono de la portada recortado, datos lado a lado, fotos más
+     chicas) y una sola regla de alineación: títulos y textos cortos
+     centrados; a la izquierda solo lo que se lee de corrido (pasos,
+     preguntas, historia). */
+  .barra-descarga { display: none; }
+  @media (max-width: 640px) {
+    /* Portada centrada; el teléfono muestra solo la mitad de arriba y se
+       funde, en vez de ocupar una pantalla entera. */
+    .hero-inner > div:first-child { text-align: center; }
+    .hero h1, .hero .lead { margin-left: auto; margin-right: auto; }
+    .hero .stores { justify-content: center; }
+    .hero .garantia { margin-left: auto; margin-right: auto; }
+    .hero .phone {
+      margin: -50px auto -260px;
+      -webkit-mask-image: linear-gradient(to bottom, #000 300px, transparent 400px);
+      mask-image: linear-gradient(to bottom, #000 300px, transparent 400px);
+    }
+    .trebol { bottom: 7%; width: min(96vw, 420px); }
+
+    /* Los dos datos lado a lado. */
+    .datos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .puntos { gap: 4px; }
+    .puntos i { width: 16px; height: 20px; }
+    .dato b { margin-top: 14px; font-size: clamp(1.45rem, 7vw, 1.9rem); letter-spacing: -0.03em; }
+    .dato span { margin-top: 10px; font-size: .9rem; line-height: 1.45; }
+    .falta { margin-top: 48px; }
+
+    /* Títulos y bajadas centrados. */
+    .sec-title, .sec-lead { margin-left: auto; margin-right: auto; text-align: center; }
+    .afuera .sec-lead { margin-left: auto; margin-right: auto; }
+    .paises { justify-content: center; text-align: center; gap: 16px 28px; }
+    .afuera .fuentes { text-align: center; }
+    .steps { margin-left: auto; margin-right: auto; }
+    .pros-box { text-align: center; }
+    .pros-box p { margin-left: auto; margin-right: auto; }
+    .pros-link { justify-self: center; }
+    .story-text h2 { margin-left: auto; margin-right: auto; }
+
+    /* Fotos de la historia más chicas. */
+    .album { width: 82%; margin: 0 auto; }
+
+    /* Barra de descarga (tiendas.js la arma solo si hay links). */
+    .barra-descarga {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      position: fixed; z-index: 40; left: 16px; right: 16px; bottom: calc(12px + env(safe-area-inset-bottom));
+      min-height: 54px; border-radius: 999px; padding: 0 20px;
+      background: var(--olive); color: var(--cream); font-weight: 700; font-size: 16px; text-decoration: none;
+      box-shadow: 0 14px 30px -12px rgba(46, 38, 26, .45);
+      transform: translateY(calc(100% + 24px)); opacity: 0;
+      transition: transform .45s cubic-bezier(.22, 1, .36, 1), opacity .3s ease;
+    }
+    .barra-descarga svg { width: 20px; height: 20px; fill: currentColor; flex: none; }
+    .barra-descarga.on { transform: none; opacity: 1; }
+  }
   /* Pantallas muy angostas (Android con la letra agrandada): los tres botones
      del selector no entraban y el último se cortaba. */
   @media (max-width: 350px) {

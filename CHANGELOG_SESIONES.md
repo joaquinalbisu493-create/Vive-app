@@ -12,6 +12,7 @@
 - **Titular:** "Acompañados, casi nunca." en terracota.
 - **Los círculos de "Sere existe para que…" rehechos** (SVG + script "Un encuentro"): más planos y luminosos, sin brillo ni sombra de bola; cada uno respira a su ritmo, se acercan al entrar en pantalla, se prende una luz crema donde se cruzan y la respiración se va igualando hasta quedar juntas. Solo corre mientras se ve; con movimiento reducido o sin JavaScript se ven juntos y quietos.
 - **Sale el "Avisame" (mail) de la portada** (`web/tiendas.js`): la app está por salir; arriba y en el cierre quedan solo los botones "Muy pronto en App Store / Google Play". /profesionales sigue con su formulario para postularse. La función `anotarse_lista_espera` y la tabla quedan como estaban.
+- **Celular primero** (solo debajo de 640 px; la computadora no cambia): portada centrada con el teléfono recortado a la mitad de arriba y el trébol detrás; los dos datos lado a lado; títulos y textos cortos centrados (a la izquierda solo pasos, preguntas e historia); fotos de la historia más chicas. `tiendas.js`: en iPhone/iPad se muestra solo App Store y en Android solo Google Play (en la computadora, los dos). Barra fija "Descargá Sere en …" abajo en el celular entre la portada y el cierre; solo aparece cuando haya links en `TIENDAS` (probada con un link inventado en una copia local).
 
 **Pendiente para la próxima sesión:**
 - Andre ya aprobó el trébol ("está bien"). Falta decidir si se lleva a /profesionales.

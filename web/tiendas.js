@@ -17,6 +17,13 @@
   };
   var NOMBRES = { ios: 'App Store', android: 'Google Play' };
   var HAY_TIENDAS = !!(TIENDAS.ios || TIENDAS.android);
+  // 20/10/2026: en el celular se muestra solo la tienda de ese teléfono
+  // (iPhone/iPad: App Store; Android: Google Play), un botón grande. En la
+  // computadora, los dos. El iPad nuevo dice ser una Mac: se lo reconoce por
+  // la pantalla táctil.
+  var ua = navigator.userAgent || '';
+  var SOLO = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) ? 'ios'
+    : /Android/i.test(ua) ? 'android' : null;
 
   // Lista de espera (25/09/2026). Mientras no haya links de tiendas, el
   // recuadro muestra un formulario para dejar el mail. Escribe por la
@@ -95,7 +102,7 @@
   // llevan a ningún lado.
   function botonesDeTiendas(donde) {
     donde.classList.add('stores');
-    ['ios', 'android'].forEach(function (k) {
+    (SOLO ? [SOLO] : ['ios', 'android']).forEach(function (k) {
       var url = TIENDAS[k];
       var el = document.createElement(url ? 'a' : 'span');
       el.className = 'store';
@@ -123,4 +130,29 @@
     }
     botonesDeTiendas(box);
   });
+
+  // Barra fija de descarga en el celular (portada): aparece cuando ya pasaste
+  // la primera pantalla y se va al llegar al cierre, que tiene sus propios
+  // botones. Solo cuando hay links de tiendas y se sabe qué teléfono es.
+  var url = SOLO && TIENDAS[SOLO];
+  var hero = document.querySelector('.hero'), cierre = document.getElementById('descargar');
+  if (url && hero && cierre && document.querySelector('[data-stores][data-tipo="persona"]') && 'IntersectionObserver' in window) {
+    var barra = document.createElement('a');
+    barra.className = 'barra-descarga';
+    barra.href = url;
+    barra.rel = 'noopener';
+    barra.innerHTML = ICONOS[SOLO] + '<span>Descargá Sere en ' + NOMBRES[SOLO] + '</span>';
+    barra.setAttribute('aria-hidden', 'true');
+    barra.tabIndex = -1;
+    document.body.appendChild(barra);
+    var veoHero = true, veoCierre = false;
+    var mirar = function () {
+      var on = !veoHero && !veoCierre;
+      barra.classList.toggle('on', on);
+      barra.setAttribute('aria-hidden', String(!on));
+      barra.tabIndex = on ? 0 : -1;
+    };
+    new IntersectionObserver(function (es) { veoHero = es[0].isIntersecting; mirar(); }).observe(hero);
+    new IntersectionObserver(function (es) { veoCierre = es[0].isIntersecting; mirar(); }).observe(cierre);
+  }
 })();
