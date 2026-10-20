@@ -108,23 +108,13 @@
 
   document.querySelectorAll('[data-stores]').forEach(function (box) {
     var profesional = box.dataset.tipo === 'profesional';
-    // 08/10/2026, Andre: mientras no haya links de tiendas, la portada muestra
-    // las DOS cosas: los botones de App Store y Google Play ("Muy pronto en",
-    // como estaban hasta el 07/10) y, debajo, el mail para avisar. Los botones
-    // dicen que va a ser una app y dónde; el mail es lo único que se puede
-    // hacer hoy. Los QR de Feria 21 llevan `?ref=feria21`, que se guarda con el
-    // mail. La página de profesionales sigue solo con el formulario.
-    if (!HAY_TIENDAS) {
-      if (!profesional) {
-        // La caja deja de ser la fila de botones: adentro van la fila y el
-        // formulario, uno debajo del otro. Si queda como fila, en el celular
-        // los dos se ponen lado a lado y la página se ensancha.
-        box.classList.remove('stores');
-        var fila = document.createElement('div');
-        botonesDeTiendas(fila);
-        box.appendChild(fila);
-      }
-      formularioAviso(box, profesional ? 'profesional' : 'persona');
+    // 20/10/2026, Andre: la app está por salir, así que la portada ya no
+    // pide el mail ("Avisame"); quedan solo los botones de App Store y Google
+    // Play, que dicen "Muy pronto en" hasta que se carguen los links arriba.
+    // (Antes, desde el 08/10, iban los botones y debajo el mail.) La página
+    // de profesionales sigue con su formulario para postularse.
+    if (!HAY_TIENDAS && profesional) {
+      formularioAviso(box, 'profesional');
       return;
     }
     if (profesional) {

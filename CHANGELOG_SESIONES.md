@@ -1,6 +1,6 @@
 ## 2026-10-20 — Andre (Claude · revisión UX de sere.ar y primeros cambios)
 
-**Tocado:** `web/index.html`.
+**Tocado:** `web/index.html`, `web/tiendas.js`, `web/fonts/`, `vercel.json`, `scripts/sync-legal.mjs` y las demás páginas de `web/` (solo la letra).
 
 **Resumen:**
 - Revisión de UX/UI de sere.ar (escritorio, celular, Lighthouse 90/100/100/100). Andre decidió dejar "no estás solo", "bienestar físico, mental y espiritual" y la historia al final.
@@ -11,9 +11,11 @@
 - **"Cómo funciona" como puente:** una línea verde une los cinco pasos y se dibuja al entrar en pantalla; cada número se enciende cuando llega, arranca en terracota ("vos") y termina en rosado ("la ayuda"). En celular y tablet los pasos van en una columna y la línea baja por la izquierda.
 - **Titular:** "Acompañados, casi nunca." en terracota.
 - **Los círculos de "Sere existe para que…" rehechos** (SVG + script "Un encuentro"): más planos y luminosos, sin brillo ni sombra de bola; cada uno respira a su ritmo, se acercan al entrar en pantalla, se prende una luz crema donde se cruzan y la respiración se va igualando hasta quedar juntas. Solo corre mientras se ve; con movimiento reducido o sin JavaScript se ven juntos y quietos.
+- **Sale el "Avisame" (mail) de la portada** (`web/tiendas.js`): la app está por salir; arriba y en el cierre quedan solo los botones "Muy pronto en App Store / Google Play". /profesionales sigue con su formulario para postularse. La función `anotarse_lista_espera` y la tabla quedan como estaban.
 
 **Pendiente para la próxima sesión:**
-- Andre ya aprobó el trébol ("está bien"). Falta decidir si se lleva a /profesionales. Si queda, llevar el trébol a /profesionales.
+- Andre ya aprobó el trébol ("está bien"). Falta decidir si se lleva a /profesionales.
+- Cuando la app esté publicada: pegar las URLs en `TIENDAS` de `web/tiendas.js` (los botones pasan a "Descargala en" en las dos páginas). Si queda, llevar el trébol a /profesionales.
 - Otras ideas de la revisión sin hacer: fuente servida desde el sitio (carga en celular), visual en la primera pantalla de /profesionales, profesionales reales y testimonios cuando existan.
 
 ## 2026-10-20 — Andre (Claude · repo privado, limpieza y paquete del abogado)
