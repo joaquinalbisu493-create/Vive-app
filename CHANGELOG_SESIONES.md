@@ -1,3 +1,14 @@
+## 2026-10-20 — Joaquín (Claude · device-test del rename Vita→Sere)
+
+**Tocado:** nada de código. Verificación.
+
+**Resumen:**
+- **Pasada de device-test del rename a Sere** (los 7 commits / 146 archivos de Andre). Joaquín confirmó en el teléfono: animaciones/bienvenidas con el wordmark "sere", headers, recursos, las 4 tabs — **todo se ve bien**, nada roto ni descuadrado.
+- Verificado por búsqueda que **no queda ningún texto visible con "Vita"** (lo único que queda es interno: nombres de componentes `VitaWordmark`/`VitaHeader`/`VitaMark` y comentarios viejos — inofensivo). El wordmark compartido ya renderiza "sere".
+- Mi trabajo previo (headers unificados `screenHeader`, fixes de nav) sobrevivió el merge del rename sin conflictos.
+
+**Pendiente:** PRs #7/#9/#11 siguen esperando a Andre. Opcional: renombrar los componentes `Vita*`→`Sere*` (cosmético, interno — decisión de Andre).
+
 ## 2026-10-19 — Andre (Claude · web y dominio pasan a Sere / sere.ar)
 
 **Tocado:** `web/` (salvo `web/legal`), `api/c.js`, `lib/linkCoach.ts`, `lib/captcha.ts`, `lib/contacto.ts`, `lib/cambioDeNombre.ts`, `lib/coachVisibility.ts`, varias `screens/`, `supabase/functions/_shared/{cors,email}.ts` y funciones con mail de contacto o URL, `docs/hosting.md`, `docs/plantilla-mail-codigo.{md,html}`. Commits `e2d125cd`, `ba6b6414`, `967b6d27`. Directo en `main`.
