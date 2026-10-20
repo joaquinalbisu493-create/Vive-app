@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Animated, Easing, StatusBar, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Easing, StatusBar, ScrollView, Platform } from 'react-native';
+import * as Haptics from 'expo-haptics';
 import { ScaleCard } from '@/components/ScaleCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -85,6 +86,25 @@ const KEEP_AWAKE_TAG = 'vive-respiracion';
 const RETIRO_S = 30;
 const RETIRO_OPACIDAD = 0.22;
 
+// La guía por vibración, para cuando cerrás los ojos (la pantalla misma te
+// invita a hacerlo a los 30s). Inhalar es una serie de pulsos que se van
+// juntando, como algo que se llena; exhalar arranca con un solo pulso y después
+// silencio, que es soltar; mantener no vibra: la quietud también es la guía.
+// Devuelve los momentos (ms desde el inicio de la fase) en que vibrar.
+function pulsosDeFase(fase: string, segundos: number): number[] {
+  if (fase === 'Exhalá') return [0];
+  if (fase !== 'Inhalá') return [];
+  const pulsos: number[] = [];
+  let t = 0;
+  let pausa = 550;
+  while (t < segundos * 1000 - 150) {
+    pulsos.push(t);
+    t += pausa;
+    pausa = Math.max(180, pausa * 0.82);
+  }
+  return pulsos;
+}
+
 const DURATIONS = [
   { label: '3 min', seconds: 180 },
   { label: '8 min', seconds: 480 },
@@ -123,6 +143,9 @@ export default function RespiracionScreen() {
   const animTexto = useRef(new Animated.Value(1)).current;
   const timerRef  = useRef<ReturnType<typeof setInterval> | null>(null);
   const userIdRef = useRef<string | null>(null);
+  // El loop del orbe corre siempre; la vibración solo mientras hay una sesión.
+  const corriendoRef = useRef(false);
+  useEffect(() => { corriendoRef.current = phase === 'running'; }, [phase]);
 
   useEffect(() => {
     usuarioActualId().then(uid => { userIdRef.current = uid; }).catch(() => {});
@@ -146,9 +169,27 @@ export default function RespiracionScreen() {
     setBreathPhase(0);
     let cancelled = false;
     let legTimeout: ReturnType<typeof setTimeout> | null = null;
+    let pulsoTimeouts: ReturnType<typeof setTimeout>[] = [];
+
+    // Solo iOS, como el resto de las vibraciones finas de la app: en Android el
+    // pulso más suave es demasiado brusco para repetirlo tan seguido.
+    function vibrarFase(i: number) {
+      if (Platform.OS !== 'ios' || !corriendoRef.current) return;
+      const pulsos = pulsosDeFase(p.fases[i], p.segundos[i]);
+      const total = pulsos.length;
+      pulsoTimeouts = pulsos.map((t, n) => setTimeout(() => {
+        if (cancelled || !corriendoRef.current) return;
+        // El último tercio de la inhalación se siente un poco más firme.
+        const estilo = n >= total * 0.66 && total > 1
+          ? Haptics.ImpactFeedbackStyle.Light
+          : Haptics.ImpactFeedbackStyle.Soft;
+        Haptics.impactAsync(estilo).catch(() => {});
+      }, t));
+    }
 
     function runLeg(i: number) {
       if (cancelled) return;
+      vibrarFase(i);
 
       const avanzar = () => {
         if (cancelled) return;
@@ -178,6 +219,7 @@ export default function RespiracionScreen() {
     return () => {
       cancelled = true;
       if (legTimeout) clearTimeout(legTimeout);
+      pulsoTimeouts.forEach(clearTimeout);
       animScale.stopAnimation();
     };
   }, [reducedMotion, patronId]);
