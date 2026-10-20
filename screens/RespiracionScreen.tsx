@@ -17,6 +17,8 @@ import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useRecursoAbierto } from '@/hooks/useRecursoAbierto';
 import ParaQueSirve from '@/components/ParaQueSirve';
+import { RellenoElegido } from '@/components/ui/RellenoElegido';
+import { vibrarToque } from '@/lib/vibracion';
 
 const FOREST       = '#3A4F2A';
 const FOREST_SOFT  = '#566245';
@@ -310,15 +312,16 @@ export default function RespiracionScreen() {
               <ParaQueSirve toolId="respiracion" style={{ alignSelf: 'stretch', marginBottom: 14 }} />
               <View style={s.patronRow}>
                 {PATRONES.map(p => (
-                  <TouchableOpacity
+                  <ScaleCard
                     key={p.id}
                     style={[s.patronBtn, patronId === p.id && s.patronBtnActive]}
-                    onPress={() => setPatronId(p.id)}
+                    onPress={() => { if (patronId !== p.id) vibrarToque(); setPatronId(p.id); }}
                     activeOpacity={0.8}>
+                    <RellenoElegido activo={patronId === p.id} radio={18.5} color={FOREST} />
                     <Text style={[s.patronLabel, patronId === p.id && s.patronLabelActive]}>
                       {p.nombre}
                     </Text>
-                  </TouchableOpacity>
+                  </ScaleCard>
                 ))}
               </View>
 
@@ -327,15 +330,16 @@ export default function RespiracionScreen() {
 
               <View style={s.durationRow}>
                 {DURATIONS.map(d => (
-                  <TouchableOpacity
+                  <ScaleCard
                     key={d.seconds}
                     style={[s.durationBtn, duration === d.seconds && s.durationBtnActive]}
-                    onPress={() => setDuration(d.seconds)}
+                    onPress={() => { if (duration !== d.seconds) vibrarToque(); setDuration(d.seconds); }}
                     activeOpacity={0.8}>
+                    <RellenoElegido activo={duration === d.seconds} radio={18.5} color={FOREST} />
                     <Text style={[s.durationLabel, duration === d.seconds && s.durationLabelActive]}>
                       {d.label}
                     </Text>
-                  </TouchableOpacity>
+                  </ScaleCard>
                 ))}
               </View>
               {orb}
@@ -429,13 +433,13 @@ const s = StyleSheet.create({
 
   patronRow:        { flexDirection: 'row', gap: 10, alignSelf: 'stretch' },
   patronBtn:        { flex: 1, paddingVertical: 10, borderRadius: 20, borderWidth: 1.5, borderColor: 'rgba(63,81,47,0.25)', backgroundColor: GLASS_BG, alignItems: 'center' },
-  patronBtnActive:  { backgroundColor: FOREST, borderColor: FOREST },
+  patronBtnActive:  { borderColor: FOREST },
   patronLabel:      { fontFamily: ViveFonts.medium, fontSize: 14, color: FOREST_SOFT },
   patronLabelActive:{ color: CREAM_LIGHT },
 
   durationRow:       { flexDirection: 'row', gap: 12 },
   durationBtn:       { paddingHorizontal: 24, paddingVertical: 10, borderRadius: 20, borderWidth: 1.5, borderColor: 'rgba(63,81,47,0.25)', backgroundColor: GLASS_BG },
-  durationBtnActive: { backgroundColor: FOREST, borderColor: FOREST },
+  durationBtnActive: { borderColor: FOREST },
   durationLabel:     { fontFamily: ViveFonts.medium, fontSize: 14, color: FOREST_SOFT },
   durationLabelActive: { color: CREAM_LIGHT },
 

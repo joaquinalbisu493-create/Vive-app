@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, FlatList, TouchableOpacity,
-  StatusBar, TextInput, Image, Dimensions, ActivityIndicator,
+  StatusBar, TextInput, Image, Dimensions, ActivityIndicator, Animated,
   type NativeSyntheticEvent, type NativeScrollEvent,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -19,6 +19,8 @@ import { supabase, registrarEvento } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { DOORS } from '@/constants/conexionesDoors';
 import { BotonGuardar } from '@/components/ui/BotonGuardar';
+import { useIndicadorDeslizante } from '@/components/ui/useIndicadorDeslizante';
+import { vibrarToque } from '@/lib/vibracion';
 
 const { width: SCREEN_W } = Dimensions.get('window');
 const CARD_W = Math.round(SCREEN_W * 0.79);
@@ -103,6 +105,7 @@ export default function FormatoScreen() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [listView, setListView] = useState(false);
+  const segmento = useIndicadorDeslizante(listView ? 0 : 1);
   const [deckIndex, setDeckIndex] = useState(0);
   const maxPosLogged = useRef(0);
 
@@ -238,6 +241,7 @@ export default function FormatoScreen() {
   // ── Toggle de vista (persistido + analítica) ───────────────────────────────
   function setView(list: boolean) {
     if (list === listView) return;
+    vibrarToque();
     setListView(list);
     AsyncStorage.setItem(VIEW_PREF_KEY, list ? 'lista' : 'deck').catch(() => {});
     registrarEvento('vista_cambiada', { formato, vista: list ? 'lista' : 'deck' }).catch(() => {});
@@ -348,13 +352,14 @@ export default function FormatoScreen() {
           {/* Control segmentado: líneas = lista, cards = deck. Vive en las dos
               vistas, siempre en el mismo lugar. */}
           <View style={s.segment}>
+            <Animated.View style={[s.segmentIndicador, segmento.estiloIndicador]} />
             <TouchableOpacity
-              style={[s.segmentBtn, listView && s.segmentBtnActive]}
+              style={s.segmentBtn} onLayout={segmento.alMedir(0)}
               onPress={() => setView(true)} hitSlop={6} activeOpacity={0.8}>
               <Ionicons name="list" size={17} color={listView ? FOREST : FOREST_SOFT} />
             </TouchableOpacity>
             <TouchableOpacity
-              style={[s.segmentBtn, !listView && s.segmentBtnActive]}
+              style={s.segmentBtn} onLayout={segmento.alMedir(1)}
               onPress={() => setView(false)} hitSlop={6} activeOpacity={0.8}>
               <Ionicons name="albums" size={16} color={!listView ? FOREST : FOREST_SOFT} />
             </TouchableOpacity>
@@ -487,7 +492,9 @@ const s = StyleSheet.create({
     width: 32, height: 28, borderRadius: 9,
     alignItems: 'center', justifyContent: 'center',
   },
-  segmentBtnActive: {
+  // La pastilla blanca de la opción elegida: se desliza (useIndicadorDeslizante).
+  segmentIndicador: {
+    borderRadius: 9,
     backgroundColor: '#FFFDF8',
     shadowColor: '#3F512F', shadowOpacity: 0.16, shadowRadius: 4, shadowOffset: { width: 0, height: 1 },
     elevation: 2,

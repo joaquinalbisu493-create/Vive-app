@@ -7,7 +7,11 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 // color de golpe, crece desde el centro y se asienta: se siente que lo tocaste
 // vos, no que la pantalla saltó. Va como primer hijo de un botón, así el texto
 // queda encima. Sin rebote a propósito.
-export function RellenoElegido({ activo, radio }: { activo: boolean; radio: number }) {
+export function RellenoElegido({
+  activo,
+  radio,
+  color = ViveColors.primary,
+}: { activo: boolean; radio: number; color?: string }) {
   const reducedMotion = useReducedMotion();
   const valor = useRef(new Animated.Value(activo ? 1 : 0)).current;
 
@@ -28,7 +32,7 @@ export function RellenoElegido({ activo, radio }: { activo: boolean; radio: numb
         StyleSheet.absoluteFill,
         {
           borderRadius: radio,
-          backgroundColor: ViveColors.primary,
+          backgroundColor: color,
           opacity: valor,
           transform: [{ scale: valor.interpolate({ inputRange: [0, 1], outputRange: [0.8, 1] }) }],
         },

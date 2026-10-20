@@ -1,4 +1,6 @@
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, Text, StyleSheet, Animated } from 'react-native';
+import { useIndicadorDeslizante } from '@/components/ui/useIndicadorDeslizante';
+import { vibrarToque } from '@/lib/vibracion';
 import { ViveFonts } from '@/constants/theme';
 import { colors } from '@/theme/tokens';
 
@@ -9,14 +11,19 @@ type Props = {
   onChange: (v: Tab) => void;
 };
 
+const TABS: Tab[] = ['hoy', 'mes'];
+
 export function ProgressToggle({ value, onChange }: Props) {
+  const { alMedir, estiloIndicador } = useIndicadorDeslizante(TABS.indexOf(value));
   return (
     <View style={s.wrap}>
-      {(['hoy', 'mes'] as Tab[]).map(t => (
+      <Animated.View style={[s.indicador, estiloIndicador]} />
+      {TABS.map((t, i) => (
         <TouchableOpacity
           key={t}
-          style={[s.btn, value === t && s.btnActive]}
-          onPress={() => onChange(t)}
+          style={s.btn}
+          onLayout={alMedir(i)}
+          onPress={() => { if (t !== value) vibrarToque(); onChange(t); }}
           activeOpacity={0.8}
         >
           <Text style={[s.text, value === t && s.textActive]}>
@@ -42,7 +49,7 @@ const s = StyleSheet.create({
     paddingVertical: 5,
     borderRadius: 16,
   },
-  btnActive: { backgroundColor: colors.pillActiveBg },
+  indicador: { borderRadius: 16, backgroundColor: colors.pillActiveBg },
   text: {
     fontFamily: ViveFonts.medium,
     fontSize: 12,

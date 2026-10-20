@@ -14,6 +14,8 @@ import { ReminderBell } from '@/components/ReminderBell';
 import { usuarioActualId } from '@/lib/supabase';
 import { recordCompletion } from '@/lib/resourceCompletions';
 import { useRecursoAbierto } from '@/hooks/useRecursoAbierto';
+import { RellenoElegido } from '@/components/ui/RellenoElegido';
+import { vibrarToque } from '@/lib/vibracion';
 
 const FOREST      = '#3A4F2A';
 const FOREST_SOFT = '#566245';
@@ -112,15 +114,16 @@ export default function SuenoScreen() {
             </Text>
             <View style={s.durationRow}>
               {DURATIONS.map(d => (
-                <TouchableOpacity
+                <ScaleCard
                   key={d.seconds}
                   style={[s.durationBtn, duration === d.seconds && s.durationBtnActive]}
-                  onPress={() => setDuration(d.seconds)}
+                  onPress={() => { if (duration !== d.seconds) vibrarToque(); setDuration(d.seconds); }}
                   activeOpacity={0.8}>
+                  <RellenoElegido activo={duration === d.seconds} radio={18.5} color={FOREST} />
                   <Text style={[s.durationLabel, duration === d.seconds && s.durationLabelActive]}>
                     {d.label}
                   </Text>
-                </TouchableOpacity>
+                </ScaleCard>
               ))}
             </View>
             <ScaleCard style={s.primaryBtn} onPress={handleStart} activeOpacity={0.85} vibrar>
@@ -176,7 +179,7 @@ const s = StyleSheet.create({
 
   durationRow:       { flexDirection: 'row', gap: 12 },
   durationBtn:       { paddingHorizontal: 24, paddingVertical: 10, borderRadius: 20, borderWidth: 1.5, borderColor: 'rgba(63,81,47,0.25)', backgroundColor: 'rgba(255,248,240,0.55)' },
-  durationBtnActive: { backgroundColor: FOREST, borderColor: FOREST },
+  durationBtnActive: { borderColor: FOREST },
   durationLabel:     { fontFamily: ViveFonts.medium, fontSize: 14, color: FOREST_SOFT },
   durationLabelActive: { color: CREAM_LIGHT },
 

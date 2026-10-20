@@ -16,6 +16,8 @@ import { usuarioActualId } from '@/lib/supabase';
 import { recordCompletion } from '@/lib/resourceCompletions';
 import { useRecursoAbierto } from '@/hooks/useRecursoAbierto';
 import ParaQueSirve from '@/components/ParaQueSirve';
+import { RellenoElegido } from '@/components/ui/RellenoElegido';
+import { vibrarToque } from '@/lib/vibracion';
 
 const FOREST      = '#3A4F2A';
 const FOREST_SOFT = '#566245';
@@ -324,16 +326,17 @@ export default function RuidoScreen() {
             {/* Duration */}
             <View style={s.durationRow}>
               {DURATIONS.map(d => (
-                <TouchableOpacity
+                <ScaleCard
                   key={d.seconds}
                   style={[s.durationBtn, duration === d.seconds && s.durationBtnActive]}
-                  onPress={() => setDuration(d.seconds)}
+                  onPress={() => { if (duration !== d.seconds) vibrarToque(); setDuration(d.seconds); }}
                   disabled={isRunning}
                   activeOpacity={0.8}>
+                  <RellenoElegido activo={duration === d.seconds} radio={16.5} color={FOREST} />
                   <Text style={[s.durationLabel, duration === d.seconds && s.durationLabelActive]}>
                     {d.label}
                   </Text>
-                </TouchableOpacity>
+                </ScaleCard>
               ))}
             </View>
 
@@ -421,7 +424,7 @@ const s = StyleSheet.create({
 
   durationRow:       { flexDirection: 'row', gap: 8, justifyContent: 'center' },
   durationBtn:       { paddingHorizontal: 18, paddingVertical: 9, borderRadius: 18, borderWidth: 1.5, borderColor: 'rgba(63,81,47,0.25)', backgroundColor: GLASS_BG },
-  durationBtnActive: { backgroundColor: FOREST, borderColor: FOREST },
+  durationBtnActive: { borderColor: FOREST },
   durationLabel:     { fontFamily: ViveFonts.medium, fontSize: 13, color: FOREST_SOFT },
   durationLabelActive: { color: CREAM_LIGHT },
 
