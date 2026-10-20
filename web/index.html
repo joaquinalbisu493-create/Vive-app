@@ -477,6 +477,26 @@
     letter-spacing: -0.05em; line-height: 1; color: var(--terra);
   }
   .steps b { display: block; margin-top: 18px; font-size: 1.2rem; letter-spacing: -0.02em; color: var(--olive); }
+  /* 20/10/2026: los pasos son el puente que faltaba. Una línea del mismo
+     verde que el puente une los cinco y se dibuja al entrar en pantalla; cada
+     paso se enciende cuando la línea llega. Arranca en "vos" (terracota) y
+     termina en "la ayuda" (rosado), como el puente. Cada tramo es el ::after
+     de su paso; sin JavaScript o con movimiento reducido se ve armado. */
+  .steps { --g: 28px; }
+  .steps li { position: relative; padding-top: 38px; }
+  .steps .nodo { position: absolute; left: 0; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--terra); transition: background-color .5s ease, box-shadow .5s ease; }
+  .steps li:last-child .nodo { background: var(--m2); }
+  .steps li:not(:last-child)::after {
+    content: ""; position: absolute; top: 7px; left: 16px; width: calc(100% + var(--g) - 16px); height: 2.5px;
+    background: var(--forest); transform-origin: left; transition: transform .45s linear;
+  }
+  .steps li::before { transition: color .5s ease; }
+  .steps li:nth-child(2) { --i: 1; } .steps li:nth-child(3) { --i: 2; } .steps li:nth-child(4) { --i: 3; } .steps li:nth-child(5) { --i: 4; }
+  .steps li::after { transition-delay: calc(.3s + var(--i, 0) * .45s); }
+  .steps li::before, .steps .nodo { transition-delay: calc(.3s + var(--i, 0) * .45s); }
+  .steps.antes li::after { transform: scaleX(0); }
+  .steps.antes li::before { color: var(--m3); }
+  .steps.antes .nodo { background: var(--paper); box-shadow: inset 0 0 0 2px var(--m3); }
   .steps span { display: block; margin-top: 8px; color: var(--soft); font-size: 1rem; }
 
   .preview-note { margin-top: 32px; color: var(--soft); font-size: .85rem; text-align: center; }
@@ -584,7 +604,13 @@
     .hero-inner { grid-template-columns: minmax(0, 1fr); padding-top: 112px; gap: 40px; }
     .hero .phone { transform: rotate(2deg); }
     .trebol { width: min(112vw, 560px); top: auto; bottom: 3%; right: 50%; transform: translateX(50%); }
-    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px 32px; }
+    .steps { grid-template-columns: 1fr; gap: 40px; --g: 40px; max-width: 560px; }
+    .steps li { display: grid; grid-template-columns: 64px 1fr; column-gap: 8px; padding: 0 0 0 34px; }
+    .steps li::before { grid-row: span 2; font-size: 3rem; }
+    .steps b { margin-top: 4px; }
+    .steps .nodo { top: 16px; }
+    .steps li:not(:last-child)::after { top: 32px; left: 6.75px; width: 2.5px; height: calc(100% + var(--g) - 16px); transform-origin: top; }
+    .steps.antes li::after { transform: scaleY(0); }
     .pros-box { grid-template-columns: 1fr; }
     .faq-grid { grid-template-columns: 1fr; }
     .story-grid { grid-template-columns: 1fr; }
@@ -602,9 +628,6 @@
     .nav { padding-top: 16px; }
     .nav .btn { display: none; }
     .wordmark { font-size: 26px; }
-    .steps li { display: grid; grid-template-columns: 64px 1fr; column-gap: 8px; }
-    .steps li::before { grid-row: span 2; font-size: 3rem; }
-    .steps b { margin-top: 4px; }
     .peek-switch:not([hidden]) { display: flex; gap: 6px; margin-top: 24px; }
     .peek-switch button { flex: 1 1 auto; font: inherit; font-size: .8rem; font-weight: 700; min-height: 44px; padding: 10px 8px; white-space: nowrap; border-radius: 24px; border: 1px solid var(--line); color: var(--olive); background: transparent; cursor: pointer; }
     .peek-switch button[aria-pressed="true"] { color: var(--cream); background: var(--olive); }
@@ -628,7 +651,6 @@
     .hero .garantia { font-size: .875rem; margin-top: 16px; }
     .hero .regret { margin-top: 0; }
     .diary { min-height: 0; }
-    .steps { grid-template-columns: 1fr; }
     .foot { grid-template-columns: 1fr; }
     .store { flex: 1 1 0; min-width: 0; min-height: 52px; padding: 8px 12px; gap: 8px; border-radius: 16px; }
     .store svg { width: 20px; height: 20px; }
@@ -760,11 +782,11 @@
     <div class="wrap">
       <h2 id="como" class="sec-title">cómo funciona.</h2>
       <ol class="steps">
-        <li><b>Explorás qué necesitás</b><span>Elegí un tema en la app. Si no sabés por dónde empezar, unas preguntas te ayudan a orientarte.</span></li>
-        <li><b>Elegís con quién hablar</b><span>Conocé su enfoque, formación y precio antes de decidir con quién reservar. A cada profesional lo entrevistamos y lo revisamos a mano.</span></li>
-        <li><b>Reservás tu sesión</b><span>Elegí un horario y pagá en pesos con Mercado Pago. Algunos profesionales también aceptan dólares, con PayPal o crypto (USDT).</span></li>
-        <li><b>Tenés tu videollamada</b><span>Cuando llega el momento, entrá a la sala desde tu reserva en la app.</span></li>
-        <li><b>Seguís entre sesiones</b><span>Tu profesional puede dejarte una nota o un recurso para la semana, y tenés tus herramientas a mano.</span></li>
+        <li><i class="nodo" aria-hidden="true"></i><b>Explorás qué necesitás</b><span>Elegí un tema en la app. Si no sabés por dónde empezar, unas preguntas te ayudan a orientarte.</span></li>
+        <li><i class="nodo" aria-hidden="true"></i><b>Elegís con quién hablar</b><span>Conocé su enfoque, formación y precio antes de decidir con quién reservar. A cada profesional lo entrevistamos y lo revisamos a mano.</span></li>
+        <li><i class="nodo" aria-hidden="true"></i><b>Reservás tu sesión</b><span>Elegí un horario y pagá en pesos con Mercado Pago. Algunos profesionales también aceptan dólares, con PayPal o crypto (USDT).</span></li>
+        <li><i class="nodo" aria-hidden="true"></i><b>Tenés tu videollamada</b><span>Cuando llega el momento, entrá a la sala desde tu reserva en la app.</span></li>
+        <li><i class="nodo" aria-hidden="true"></i><b>Seguís entre sesiones</b><span>Tu profesional puede dejarte una nota o un recurso para la semana, y tenés tus herramientas a mano.</span></li>
       </ol>
     </div>
   </section>
@@ -1246,6 +1268,16 @@
     }
     document.addEventListener('visibilitychange', programar);
     programar();
+  }
+
+  // Cómo funciona: la línea une los pasos al entrar en pantalla.
+  var pasos = document.querySelector('.steps');
+  if (pasos && 'IntersectionObserver' in window && !sinMovimiento) {
+    pasos.classList.add('antes');
+    var obsPasos = new IntersectionObserver(function (es) {
+      if (es[0].isIntersecting) { obsPasos.disconnect(); pasos.classList.remove('antes'); }
+    }, { threshold: 0.45 });
+    obsPasos.observe(pasos);
   }
 
   // Las fotos de la historia se apoyan al entrar en pantalla.

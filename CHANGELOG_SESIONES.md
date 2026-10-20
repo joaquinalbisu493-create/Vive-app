@@ -8,7 +8,7 @@
 - **Prueba (a confirmar por Andre al verla en vivo):** la aurora de la primera pantalla se reemplaza por el trébol del logo en grande detrás del teléfono (las manchas quedan solo en el cierre), y "¿Cómo venís hoy?" subió a después del puente; Andre lo vio muy arriba y quedó después de "Un vistazo adentro" (donde estaba).
 
 - Segunda tanda: **Plus Jakarta Sans servida desde `web/fonts/`** en todas las páginas (antes Google Fonts, que frenaba ~0,9 s la primera pintura en el celular); `sync-legal.mjs` también, versión legal sin cambios (`18bdafe7d921`); caché de un año para `/fonts/` en `vercel.json`, y letra de respaldo (Arial/Roboto con las medidas de Jakarta) para que el cambio de letra no corra el teléfono de la portada. Lighthouse celular: 90 → 98 en vivo; 100 con el respaldo en local. "¿Cuánto cuesta?" abierta de entrada. El ánimo del teléfono de la portada se corre solo cada 3,2 s. Las fotos de la historia llegan giradas y se acomodan.
-- Pendiente de explicar/decidir: "Cómo funciona" como puente (los cinco pasos unidos por una línea que se dibuja).
+- **"Cómo funciona" como puente:** una línea verde une los cinco pasos y se dibuja al entrar en pantalla; cada número se enciende cuando llega, arranca en terracota ("vos") y termina en rosado ("la ayuda"). En celular y tablet los pasos van en una columna y la línea baja por la izquierda.
 
 **Pendiente para la próxima sesión:**
 - Andre ya aprobó el trébol ("está bien"). Falta decidir si se lleva a /profesionales. Si queda, llevar el trébol a /profesionales.
