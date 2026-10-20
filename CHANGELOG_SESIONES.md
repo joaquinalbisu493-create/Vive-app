@@ -1,13 +1,15 @@
-## 2026-10-20 — Andre (Claude · repo privado y limpieza)
+## 2026-10-20 — Andre (Claude · repo privado, limpieza y paquete del abogado)
 
-**Tocado:** `assets/images/` (borradas `react-logo*` y `partial-react-logo`, sobras de la plantilla de Expo que nada usaba).
+**Tocado:** `docs/paquete-abogado.md`, `docs/consentimiento-datos-sensibles.md`, `docs/transferencias-internacionales.md`, `assets/images/` (borradas `react-logo*` y `partial-react-logo`, sobras de la plantilla de Expo que nada usaba).
 
 **Resumen:**
 - Revisión de qué hay en el repo que no debería publicarse. Lo que entra a la App Store es solo lo que la app importa; los docs, skills, scripts y diseño nunca viajan en el binario. El riesgo era GitHub: el repo era público con estrategia, export de Notion, remediación de seguridad y SCHEMA.md.
 - **Andre pasó `vive-app` a privado** (verificado). Lo commiteado hasta hoy pudo haber sido visto. No había claves secretas, solo la anon de Supabase.
 - Borrada en la Mac la carpeta duplicada `node_modules 2` (111 MB, fuera de git) y las carpetas vacías `outputs/` y `work/`.
 
-**Pendiente:** Joaquín: tu clon sigue andando, pero si tenías el repo enlazado como público en algún lado (Vercel, etc.), confirmar que sigue con acceso.
+- **Paquete del abogado al día con Sere:** `docs/paquete-abogado.md`, `docs/consentimiento-datos-sensibles.md` y `docs/transferencias-internacionales.md` pasaron de Vita, vitaapp.com.ar y el gmail viejo a Sere, sere.ar y hola@sere.ar. Los T&C y la Política no cambiaron de fondo desde que se armó el paquete (solo el nombre) y la web coincide con los docs. Nueva pregunta **B.16** sobre la marca SERE (4 clases ingresadas en el INPI, riesgo SEREN en 41/44).
+
+**Pendiente:** mandarle el paquete al abogado. Joaquín: tu clon sigue andando, pero si tenías el repo enlazado como público en algún lado (Vercel, etc.), confirmar que sigue con acceso.
 
 ## 2026-10-20 — Joaquín (Claude · device-test del rename Vita→Sere)
 

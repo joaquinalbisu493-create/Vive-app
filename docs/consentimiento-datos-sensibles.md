@@ -9,7 +9,7 @@
 
 ---
 
-## 1. El dato de Vita ES sensible
+## 1. El dato de Sere ES sensible
 
 **Ley 25.326, art. 2** define datos sensibles como los que revelan origen racial
 o étnico, opiniones políticas, convicciones religiosas, filosóficas o morales,
@@ -69,7 +69,7 @@ de sus miembros."*
 
 Leído literalmente, **el art. 7 no menciona el consentimiento como base para
 tratar datos sensibles**, y el inciso 3 prohíbe formar el archivo, con
-excepciones que son la Iglesia, los partidos y los sindicatos. Vita no es
+excepciones que son la Iglesia, los partidos y los sindicatos. Sere no es
 ninguna de esas.
 
 **Qué se aplica en la práctica.** La lectura profesional corriente en Argentina
@@ -105,7 +105,7 @@ legal.
 | **Revocable** | en cualquier momento, y hay que poder ejercerlo |
 | **Específico para la cesión** | los datos sensibles no se ceden a terceros sin consentimiento previo propio |
 
-**Lo que Vita tiene hoy:** un checkbox de aceptación de los T&C al registrarse,
+**Lo que Sere tiene hoy:** un checkbox de aceptación de los T&C al registrarse,
 con `profiles.accepted_terms`, `accepted_terms_at` y `accepted_terms_version`.
 
 **Por qué probablemente no alcanza:**
@@ -183,7 +183,7 @@ Reemplaza el `[Validar con abogado…]` y saca el consentimiento por conducta.
 > Su tratamiento requiere el **consentimiento libre, expreso e informado** del
 > Usuario, que se solicita **de forma específica y separada de la aceptación de
 > los Términos y Condiciones**, la primera vez que el Usuario accede a estas
-> funcionalidades. Vita deja constancia de la fecha y de la versión del texto
+> funcionalidades. Sere deja constancia de la fecha y de la versión del texto
 > informado.
 >
 > **Prestar este consentimiento es voluntario y no es condición para usar la
@@ -192,7 +192,7 @@ Reemplaza el `[Validar con abogado…]` y saca el consentimiento por conducta.
 > registro de bienestar y sin recomendaciones basadas en su uso.
 >
 > El Usuario puede **revocar este consentimiento en cualquier momento** desde su
-> perfil o escribiendo a vitaappar@gmail.com, y solicitar la supresión de los
+> perfil o escribiendo a hola@sere.ar, y solicitar la supresión de los
 > datos ya registrados conforme a la sección 9. La revocación no afecta la
 > licitud del tratamiento anterior.
 >
@@ -209,7 +209,7 @@ que afirmar garantías de transferencia que no están firmadas.
 
 **Base legal:** Ley 25.326 art. 21 — todo archivo, registro, base o banco de
 datos debe inscribirse en el Registro Nacional de Bases de Datos Personales.
-Están exceptuados los de uso exclusivamente personal o doméstico. Vita no lo es.
+Están exceptuados los de uso exclusivamente personal o doméstico. Sere no lo es.
 
 📝 El art. 21 dice literalmente *"destinados a proporcionar informes"*, y hay
 discusión sobre si eso acota la obligación. **La AAIP interpreta que alcanza a
@@ -225,7 +225,7 @@ denuncia, así que la discusión no conviene darla.
    con su finalidad y las medidas de seguridad aplicadas.
 4. Renovar cuando corresponda y actualizar ante cambios.
 
-**Las bases a declarar en el caso de Vita**, para no improvisar el formulario:
+**Las bases a declarar en el caso de Sere**, para no improvisar el formulario:
 usuarios y perfiles; contenido de bienestar (ánimo, diario, gratitud) — **la
 sensible**; mensajería; reservas y transacciones; profesionales y sus
 credenciales.

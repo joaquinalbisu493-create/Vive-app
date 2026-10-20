@@ -1,10 +1,10 @@
-# Paquete para la consulta legal — Vita
+# Paquete para la consulta legal — Sere
 
 ## Mail de encuadre
 
 > Hola,
 >
-> Te escribo por **Vita**, una aplicación de bienestar y desarrollo personal
+> Te escribo por **Sere**, una aplicación de bienestar y desarrollo personal
 > para Argentina que estoy por publicar en App Store y Google Play. Tengo los
 > Términos y Condiciones y la Política de Privacidad **redactados y publicados
 > por mi cuenta, sin revisión profesional**, y necesito esa revisión antes de
@@ -16,7 +16,7 @@
 >
 > Abajo te dejo el contexto del negocio y las preguntas concretas, agrupadas
 > por si bloquean o no la publicación. Los textos completos van adjuntos y
-> también están publicados en https://vitaapp.com.ar/legal/.
+> también están publicados en https://sere.ar/legal/.
 >
 > Una sola aclaración de alcance: escribí todo pensando en Argentina, pero la
 > app ya permite que alguien que está en el exterior reserve y pague en dólares.
@@ -44,7 +44,7 @@ Las cinco que más pesan, en este orden:
 
 ---
 
-## 1. Qué es Vita y cómo funciona
+## 1. Qué es Sere y cómo funciona
 
 **Quién opera.** Persona humana inscripta en Monotributo — no hay sociedad.
 Actividad **631200 (Portales web)** a nivel nacional, y **631201** como
@@ -59,33 +59,33 @@ Categoría A. Facturación tipo C, sin IVA discriminado.
 2. **Contenido propio de bienestar.** Herramientas de 5-10 minutos: respiración,
    meditación, diario personal, registro diario de estado de ánimo.
 
-**Cómo circula el dinero.** La comisión de Vita es del **20% en la primera
+**Cómo circula el dinero.** La comisión de Sere es del **20% en la primera
 sesión de cada vínculo usuario–profesional y 15% en las siguientes** cuando se
 cobra en pesos, y del **25% y 20%** cuando se cobra en dólares. Si el cliente
 llegó por el enlace propio del profesional, la primera sesión no tiene comisión.
 Quien se registra invitado por otro usuario tiene 10% de descuento en su primera
-sesión, a cuenta de la comisión de Vita. Los reembolsos se ejecutan contra el pago original, así que **salen de
-los fondos del profesional** y Vita resigna su comisión.
+sesión, a cuenta de la comisión de Sere. Los reembolsos se ejecutan contra el pago original, así que **salen de
+los fondos del profesional** y Sere resigna su comisión.
 
 🔴 **Hay tres rieles de cobro y no se comportan igual. La diferencia importa para
 el encuadre**, así que la detallo en vez de resumirla:
 
-| Riel | Quién cobra | ¿Vita tiene los fondos? |
+| Riel | Quién cobra | ¿Sere tiene los fondos? |
 |---|---|---|
-| **Mercado Pago** (pesos, Argentina) | split automático: MP retiene la comisión y le acredita el resto al profesional | **No.** Nunca pasan por una cuenta de Vita |
-| **PayPal** (dólares, exterior) | cobra **Vita**, y después le transfiere lo suyo al profesional | **Sí** |
-| **USDT** (dólares, exterior) | entra el total a la billetera de Vita y se transfiere después | **Sí** |
+| **Mercado Pago** (pesos, Argentina) | split automático: MP retiene la comisión y le acredita el resto al profesional | **No.** Nunca pasan por una cuenta de Sere |
+| **PayPal** (dólares, exterior) | cobra **Sere**, y después le transfiere lo suyo al profesional | **Sí** |
+| **USDT** (dólares, exterior) | entra el total a la billetera de Sere y se transfiere después | **Sí** |
 
 Los dos rieles en dólares están **en producción**, cada uno probado con un pago
 real. No son un plan.
 
-⚠️ **Por qué cobra Vita en esos dos, y no es una preferencia:** si cada
+⚠️ **Por qué cobra Sere en esos dos, y no es una preferencia:** si cada
 profesional cobrara por su cuenta del exterior, cada uno pasaría a ser
 **exportador de servicios**, con factura E y registro propio por cada sesión.
-Cobrando Vita, ese circuito es uno solo. Es una decisión tomada, pero es
+Cobrando Sere, ese circuito es uno solo. Es una decisión tomada, pero es
 exactamente el punto donde quiero tu lectura — ver **B.7**.
 
-**Posicionamiento declarado.** Vita se declara **intermediaria** entre usuarios y
+**Posicionamiento declarado.** Sere se declara **intermediaria** entre usuarios y
 profesionales (T&C §4) y **expresamente no prestadora de servicios de salud**
 (T&C §5). No emplea a los profesionales.
 
@@ -141,7 +141,7 @@ mensajes con el profesional necesitan uno propio?
 más débil de todo el borrador, y el que más me sorprendió al revisarlo.*
 
 Hoy la Política §7 invoca el acuerdo de tratamiento de datos de Supabase y, para
-el resto, dice que *"Vita trabaja para que el resto de las transferencias cuente
+el resto, dice que *"Sere trabaja para que el resto de las transferencias cuente
 con garantías equivalentes"*. Eso último es una intención, no un instrumento — y
 mientras tanto la app ya transfiere datos al exterior todos los días, incluida la
 categoría más sensible que maneja.
@@ -210,7 +210,7 @@ varios órdenes de magnitud. Si esto se resuelve, esa parte se resuelve con lo
 mismo.
 
 **A.4 — Aviso de salud y emergencias (T&C §5).**
-La redacción actual aclara que Vita no presta servicios de salud, no diagnostica
+La redacción actual aclara que Sere no presta servicios de salud, no diagnostica
 y no reemplaza atención profesional, e incluye líneas de crisis (911, la línea
 nacional de salud mental 0800-999-0091 y el Centro de Asistencia al Suicida,
 135 / 0800-345-1435), con la aclaración de que no funcionan desde el exterior. **Con psicólogos/as operando en
@@ -225,7 +225,7 @@ prestado? Los arts. 1110 a 1116 del CCyC no parecen contemplar expresamente esa
 hipótesis para servicios. Necesito la cláusula redactada en consecuencia.
 *25/09/2026: mientras tanto, §9.4 dice reintegro total aunque la sesión ya se
 haya prestado (lo más favorable al consumidor). Si se puede limitar, se cambia.*
-- [ ] **¿Quién absorbe ese reintegro?** §9.4 dice que lo reintegra Vita y no
+- [ ] **¿Quién absorbe ese reintegro?** §9.4 dice que lo reintegra Sere y no
       dice de dónde sale. En Mercado Pago el importe de la sesión ya está en la
       cuenta del profesional, y la devolución se debita de ahí. §8.8 solo le
       avisa al profesional que se le debita la garantía de §9.3, no la
@@ -244,7 +244,7 @@ que pregunta por una sesión ya prestada. Si no es oponible, el código está
 implementando una penalidad que no se sostiene.
 
 **A.7 — La garantía de §9.3 frente al encuadre de §4.1.**
-Léelas juntas, por favor. §4.1 dice que Vita **no presta** servicios de coaching ni
+Léelas juntas, por favor. §4.1 dice que Sere **no presta** servicios de coaching ni
 de salud, y §9.3 ofrece **reintegrar la primera sesión** si la persona no quedó
 conforme. ¿Ofrecer esa garantía debilita el encuadre de intermediación, o convive
 sin problema como garantía comercial? Es el hecho más fuerte que un reclamo podría
@@ -350,16 +350,16 @@ que necesito es saber si está bien encuadrado y bien redactado.
 Cómo funciona hoy, verificado contra el código:
 
 - **Dónde se analiza:** en el teléfono de quien escribe, antes de enviar. **El
-  texto no viaja a Vita para este análisis.**
+  texto no viaja a Sere para este análisis.**
 - **Qué se busca:** teléfonos, mails, redes sociales, links, datos de pago (CBU,
   alias, links de cobro) y frases como "lo hacemos por fuera de la app".
 - **Qué pasa en textos privados** (mensajes, notas y comentarios a otra persona):
   una advertencia que deja enviar igual. **Una excepción:** si el que escribe es
-  el Profesional y lo que manda son datos para cobrar, no se envía. Vita cobra y
-  Vita le paga, así que no tiene motivo legítimo para mandarlos.
+  el Profesional y lo que manda son datos para cobrar, no se envía. Sere cobra y
+  Sere le paga, así que no tiene motivo legítimo para mandarlos.
 - **Qué pasa en textos públicos** (presentación del Profesional, reseñas,
   recursos): no se pueden publicar.
-- **Qué registra Vita:** solo el **tipo** de dato (por ejemplo "teléfono"), en qué
+- **Qué registra Sere:** solo el **tipo** de dato (por ejemplo "teléfono"), en qué
   lugar de la app, la fecha, las cuentas involucradas y si se envió igual.
   **Nunca el texto.**
 - **Para qué:** el equipo ve esos avisos agrupados por Profesional, junto con si
@@ -379,7 +379,7 @@ Preguntas:
       y prevenir usos indebidos"*), o necesita una finalidad propia?
 - [ ] 🔴 La **§8.2** promete *"no utilizar el contenido de las conversaciones con
       fines comerciales"*, y la cláusula que esto protege es la de comisiones.
-      Nuestra lectura: como el análisis corre en el teléfono y Vita solo recibe el
+      Nuestra lectura: como el análisis corre en el teléfono y Sere solo recibe el
       tipo de dato, **no es usar el contenido**. ¿Se sostiene, o hay que tocar la
       §8.2?
 - [ ] 🔴 **No mostrarle la evidencia al sancionado frente al derecho de acceso**
@@ -388,7 +388,7 @@ Preguntas:
 - [ ] ¿Hace falta darle al Profesional un **descargo previo** antes de suspenderlo,
       o alcanza con poder pedir la revisión después?
 - [ ] ¿Avisarle a los clientes que el Profesional "no está disponible", sin decir
-      por qué, tiene algún riesgo para Vita?
+      por qué, tiene algún riesgo para Sere?
 - [ ] **Los plazos de conservación que puse en Política §10**: los registros de
       detección, 12 meses (hay un borrado automático diario que lo cumple); las
       medidas y su documentación, mientras exista la cuenta del Profesional y
@@ -421,7 +421,7 @@ que pidió irse. ¿Qué corresponde?
 - [ ] Si el profesional es psicólogo, ¿esas notas pueden considerarse parte de
       la historia clínica, con deber de conservación de 10 años (Ley 26.529)?
       De ser así, borrarlas cuando el cliente se da de baja lo dejaría en
-      falta. ¿Alcanza con decir en §16 que las notas de Vita no reemplazan la
+      falta. ¿Alcanza con decir en §16 que las notas de Sere no reemplazan la
       historia clínica y que el profesional debe llevar la suya?
 - [ ] Lo mismo cuando quien se da de baja es el profesional: sus notas privadas
       se borran de inmediato.
@@ -459,7 +459,7 @@ Dos cosas que ya revisamos por nuestra cuenta y queremos que confirmes o
 corrijas:
 
 1. **No somos un "sistema de reconocimiento de emociones".** El art. 3(39) lo
-   define como inferir emociones **a partir de datos biométricos**. En Vita la
+   define como inferir emociones **a partir de datos biométricos**. En Sere la
    persona elige su ánimo tocando un botón: es autorreporte, no inferencia. Las
    guías de la Comisión aclaran incluso que el análisis de sentimiento sobre
    texto tampoco entra, por el mismo motivo. Nuestra lectura es que quedamos
@@ -474,8 +474,8 @@ considera suficiente para "informar" — una línea en la pantalla, una mención
 la Política, una etiqueta visible en la propia tarjeta?
 
 **B.7 — Cobro por cuenta y orden en los pagos del exterior (T&C §8.2).**
-En los pagos por PayPal o USDT, Vita recibe la plata y después le transfiere su
-parte al profesional. La cláusula ya dice que Vita "percibe el pago por cuenta y
+En los pagos por PayPal o USDT, Sere recibe la plata y después le transfiere su
+parte al profesional. La cláusula ya dice que Sere "percibe el pago por cuenta y
 orden del Profesional". ¿Corresponde encuadrarlo expresamente como mandato de
 cobranza, y hace falta alguna previsión adicional en §8.2 o en §4?
 - [ ] Soy una persona física recibiendo y reteniendo fondos de terceros. ¿Eso
@@ -493,7 +493,7 @@ cobranza, y hace falta alguna previsión adicional en §8.2 o en §4?
 
 **B.8 — Cifrado de los datos sensibles.**
 El diario y la gratitud se cifran en el teléfono antes de guardarse, así que en
-la base quedan ilegibles. No es cifrado de extremo a extremo: Vita conserva un
+la base quedan ilegibles. No es cifrado de extremo a extremo: Sere conserva un
 secreto con el que puede volver a abrirlos, y lo hace para dos cosas: que la
 persona no pierda su diario si cambia o le roban el teléfono, y poder contestar
 un pedido de acceso (Ley 25.326, art. 14). Los mensajes y el estado de ánimo no
@@ -511,7 +511,7 @@ reemplazó las medidas obligatorias por recomendadas.
       las personas? ¿Conviene comprometer un plazo en la Política?
 
 **B.9 — Mis datos personales en la web.**
-Vita opera a mi nombre, así que para identificar al proveedor figuran mi nombre
+Sere opera a mi nombre, así que para identificar al proveedor figuran mi nombre
 completo, mi CUIT y mi domicilio. El 08/10/2026 saqué el domicilio del pie de la
 portada y de la página de profesionales (quedó "Andre Albisu Lambertini. CUIT
 … Córdoba, Argentina."). El domicilio completo sigue en los Términos, la
@@ -527,7 +527,7 @@ cuenta, todos enlazados desde ese mismo pie.
 
 **B.10 — Modificación unilateral (T&C §20 y §8.3).**
 §20 dice que el uso continuado después de un cambio implica aceptarlo, y §8.3
-que Vita puede modificar sus comisiones "notificando con antelación razonable",
+que Sere puede modificar sus comisiones "notificando con antelación razonable",
 sin plazo. ¿Son abusivas así (art. 37 Ley 24.240, arts. 985 a 989 CCyC)? ¿Qué
 plazo de preaviso y qué forma de aceptación corresponden?
 
@@ -535,13 +535,13 @@ plazo de preaviso y qué forma de aceptación corresponden?
 El profesional no es consumidor, pero firma un contrato de adhesión. ¿Son
 atacables por él la jurisdicción en Córdoba (§22.3), la comisión modificable
 (§8.3), el débito de la garantía (§8.8) y la no elusión sin plazo (§10.2, que no
-dice cuánto dura "el vínculo originado en Vita")? ¿Hay riesgo de que la
+dice cuánto dura "el vínculo originado en Sere")? ¿Hay riesgo de que la
 exclusividad más las sanciones se lean como relación de dependencia?
 
 **B.12 — Matrícula y atención entre jurisdicciones.**
 La matrícula de psicólogos y nutricionistas es provincial. ¿Puede un profesional
 matriculado en una provincia atender por videollamada a alguien que está en otra,
-o en otro país? ¿Vita tiene que controlarlo o alcanza con dejarlo a cargo del
+o en otro país? ¿Sere tiene que controlarlo o alcanza con dejarlo a cargo del
 profesional en §5.2?
 
 **B.13 — Traspaso a una futura sociedad (T&C §23.2 y Política §6).**
@@ -593,6 +593,28 @@ modo de **retención cero** (el dato se descarta al terminar de procesarlo, no s
 conserva). Todavía no lo activamos, pero lo vamos a pedir en cualquier
 escenario. Si eso alcanza para cerrar el punto, decímelo.
 
+**B.16 — La marca SERE.**
+La app se llamó **Vita** hasta el 17/10/2026; si ves ese nombre en algún lado,
+es el anterior. Ese día presenté yo mismo en el INPI la marca **denominativa
+SERE** (sin tilde), a mi nombre como persona humana, en las clases **9, 41, 42
+y 44**. Las cuatro solicitudes ya figuran como ingresadas y todavía no se
+publicaron en el Boletín.
+
+El riesgo que conozco: **SEREN**, marca mixta concedida en **41 y 44** en 2025
+a un tercero, para psicoterapia y salud mental. Mi lectura es que la raíz
+SEREN- es débil en esas clases, porque ya conviven SEREN EXPERIENCE, SERENO
+TERAPIA ONLINE, SERENIS SALUD MENTAL, SERENA SALUD y otras. No encontré ninguna
+app de salud mental llamada Sere.
+
+- [ ] ¿Ves probable una oposición de SEREN en 41 y 44? Si llega, ¿conviene
+      defenderla, negociar una coexistencia o resignar esas dos clases?
+- [ ] Mientras el trámite está abierto, ¿puedo usar el nombre en la app y en
+      las tiendas sin riesgo? Hasta la publicación más los 30 días de
+      oposición no voy a invertir en publicidad ni impresos.
+- [ ] La marca está a mi nombre. Si después se arma una sociedad (B.13),
+      ¿alcanza con cederla en ese momento?
+- [ ] ¿Esto lo ves vos o me conviene un agente de marcas?
+
 ### C. Una idea a futuro: que el asistente converse
 
 *No está construido ni decidido. Contestala solo si te resulta rápido: me sirve
@@ -606,7 +628,7 @@ Es una idea, que puede hacerse o no, conectarlo a un modelo de lenguaje.
 Si Sofía conversa libremente, cada mensaje es texto libre de una persona sobre
 cómo se siente, procesado por un proveedor externo fuera del país. ¿Qué exige
 eso — consentimiento propio, aviso específico, algo más? ¿Y cambia el encuadre
-de Vita como no prestadora de servicios de salud el hecho de tener un
+de Sere como no prestadora de servicios de salud el hecho de tener un
 interlocutor automático que responde sobre malestar emocional?
 
 **C.2 — Clasificación de texto libre hacia un destino cerrado.**

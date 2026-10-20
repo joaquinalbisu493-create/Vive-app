@@ -6,7 +6,7 @@
 > fuentes citadas, para poder decidir con fundamento. Lo que queda como riesgo
 > residual está dicho al final, sin maquillar.
 >
-> Lo que motivó esto: la Política §7 dice hoy que Vita *"procurará que existan
+> Lo que motivó esto: la Política §7 dice hoy que Sere *"procurará que existan
 > garantías adecuadas"*. Eso es una intención, no un instrumento, y mientras
 > tanto la app transfiere dato sensible al exterior todos los días.
 
@@ -26,7 +26,7 @@ Feroe, Canadá (solo sector privado), Andorra, Nueva Zelanda, Uruguay e Israel
 (solo datos con tratamiento automatizado).
 
 > 🔴 **Ni Brasil ni Estados Unidos están en la lista.** Los dos países donde
-> viven o por donde pasan los datos de Vita quedan del lado que necesita
+> viven o por donde pasan los datos de Sere quedan del lado que necesita
 > instrumento.
 
 **Resolución AAIP 198/2023 — las cláusulas contractuales modelo.** Aprobó las
@@ -99,7 +99,7 @@ Su **Data Processing Addendum** (v1, 01/08/2026):
 
 - 📌 **Y una cláusula que conviene tener presente: la 6.1.** Si el cliente
   indica una región geográfica, Supabase se obliga a almacenar y procesar
-  principalmente ahí. Vita eligió `sa-east-1`, así que la permanencia en Brasil
+  principalmente ahí. Sere eligió `sa-east-1`, así que la permanencia en Brasil
   no es una casualidad de configuración: es contractual.
 
 **Lectura:** el contenido cubre lo que la Ley 25.326 le pide a un instrumento de
@@ -123,7 +123,7 @@ token del dispositivo. Falta confirmar si hay DPA para aceptar.
 ### Mercado Pago y PayPal — otro encuadre
 
 Procesan pagos por cuenta propia y bajo su propia normativa; no son encargados
-de Vita en el sentido del art. 12. Van declarados en §6 como destinatarios, pero
+de Sere en el sentido del art. 12. Van declarados en §6 como destinatarios, pero
 no son el problema de este documento.
 
 ## 4. Lo que hay que hacer
@@ -167,7 +167,7 @@ nada que no sea cierto hoy**, que es la única regla que no se negocia acá.
 >   políticas.
 >
 > Brasil y Estados Unidos no integran la nómina de países con nivel adecuado de
-> protección de la Disposición DNPDP 60-E/2016. Para esas transferencias Vita se
+> protección de la Disposición DNPDP 60-E/2016. Para esas transferencias Sere se
 > ampara en los acuerdos de tratamiento de datos suscriptos con cada proveedor,
 > que incorporan cláusulas contractuales de protección equivalentes a las
 > previstas en la Resolución AAIP 198/2023, e incluyen obligaciones de
@@ -176,7 +176,7 @@ nada que no sea cierto hoy**, que es la única regla que no se negocia acá.
 > de los datos al finalizar el servicio.
 >
 > El Usuario puede solicitar información sobre estos acuerdos escribiendo a
-> vitaappar@gmail.com.
+> hola@sere.ar.
 
 Y en **§6**, agregar la fila que falta:
 
@@ -208,7 +208,7 @@ Y nada más. Verificado línea por línea:
 
 - **La identidad NUNCA llega al proveedor.** El JWT del usuario autentica contra
   *la edge function*; la llamada a Anthropic es un `fetch` aparte con la API key
-  de Vita. Anthropic no ve el token, ni el `user_id`, ni un seudónimo.
+  de Sere. Anthropic no ve el token, ni el `user_id`, ni un seudónimo.
 - **El payload se filtra contra listas cerradas.** `signal` y `tone` tienen que
   estar en un enum; de `facts` solo pasan números finitos y la etiqueta `level`
   con tope de 20 caracteres. Cualquier otra cosa se descarta antes del prompt.
@@ -225,7 +225,7 @@ que no puede reidentificar.
 Pero mirando el código, es **más fuerte que eso**. Un dato seudonimizado tiene
 una clave que alguien guarda. **Acá no hay clave.** No hay identificador, no hay
 seudónimo estable, y nada se almacena que ligue una llamada con una persona — ni
-del lado de Anthropic ni del de Vita. Pasada la llamada, **ni siquiera Vita puede
+del lado de Anthropic ni del de Sere. Pasada la llamada, **ni siquiera Sere puede
 reconstruir de quién era**.
 
 La **Ley 25.326 art. 2** define dato personal como información referida a
@@ -276,7 +276,7 @@ pregunta es corta y concreta.
    bajón, anteayer bien"*). Una secuencia larga empieza a ser un patrón que
    singulariza, y ahí esto hay que rehacerlo. **Encender la redacción NO habilita
    subir el presupuesto de datos.** Son dos decisiones y esta cubre una sola.
-3. **Correlación por tiempo.** Alguien con los logs de Anthropic *y* los de Vita
+3. **Correlación por tiempo.** Alguien con los logs de Anthropic *y* los de Sere
    podría cruzar marcas temporales. Exige comprometer los dos lados; se nombra
    por completitud, no como bloqueo.
 
