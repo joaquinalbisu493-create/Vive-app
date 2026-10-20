@@ -444,7 +444,10 @@
   .peek figcaption span { display: block; margin-top: 6px; color: var(--soft); font-size: 1rem; }
   .peek figure:nth-child(2) { margin-top: 32px; }
 
-  .pro-card { text-align: center; padding: 18px 14px; }
+  /* Safari dibujaba cualquier sombra de esta tarjeta como una rayita suelta
+     a su derecha (y como filtro, el texto salía borroso): va sin sombra, el
+     borde blanco alcanza para separarla. */
+  .pro-card { text-align: center; padding: 18px 14px; box-shadow: none; }
   .pro-face { width: 72px; height: 72px; margin: 0 auto; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #F7C9A8, var(--terra)); }
   .pro-name { margin-top: 10px; font-weight: 800; font-size: 16px; letter-spacing: -0.02em; }
   .pro-role { color: var(--soft); font-size: 11px; }
@@ -696,6 +699,10 @@
     .pros-box p { margin-left: auto; margin-right: auto; }
     .pros-link { justify-self: center; }
     .story-text h2 { margin-left: auto; margin-right: auto; }
+
+    .peek figcaption { text-align: center; }
+    /* El puente un poco más angosto: "la ayuda" quedaba pegada al borde. */
+    .puente { padding: 0 18px; }
 
     /* Fotos de la historia más chicas. */
     .album { width: 82%; margin: 0 auto; }
