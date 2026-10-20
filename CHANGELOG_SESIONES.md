@@ -9,6 +9,8 @@
 
 - Segunda tanda: **Plus Jakarta Sans servida desde `web/fonts/`** en todas las páginas (antes Google Fonts, que frenaba ~0,9 s la primera pintura en el celular); `sync-legal.mjs` también, versión legal sin cambios (`18bdafe7d921`); caché de un año para `/fonts/` en `vercel.json`, y letra de respaldo (Arial/Roboto con las medidas de Jakarta) para que el cambio de letra no corra el teléfono de la portada. Lighthouse celular: 90 → 98 en vivo; 100 con el respaldo en local. "¿Cuánto cuesta?" abierta de entrada. El ánimo del teléfono de la portada se corre solo cada 3,2 s. Las fotos de la historia llegan giradas y se acomodan.
 - **"Cómo funciona" como puente:** una línea verde une los cinco pasos y se dibuja al entrar en pantalla; cada número se enciende cuando llega, arranca en terracota ("vos") y termina en rosado ("la ayuda"). En celular y tablet los pasos van en una columna y la línea baja por la izquierda.
+- **Titular:** "Acompañados, casi nunca." en terracota.
+- **Los círculos de "Sere existe para que…" rehechos** (SVG + script "Un encuentro"): más planos y luminosos, sin brillo ni sombra de bola; cada uno respira a su ritmo, se acercan al entrar en pantalla, se prende una luz crema donde se cruzan y la respiración se va igualando hasta quedar juntas. Solo corre mientras se ve; con movimiento reducido o sin JavaScript se ven juntos y quietos.
 
 **Pendiente para la próxima sesión:**
 - Andre ya aprobó el trébol ("está bien"). Falta decidir si se lleva a /profesionales. Si queda, llevar el trébol a /profesionales.

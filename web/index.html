@@ -174,6 +174,8 @@
   .hero h1 { font-size: clamp(2.8rem, 5.4vw, 4.8rem); max-width: 13ch; }
   /* Cada oración en su bloque: el corte cae entre las dos, nunca a mitad. */
   .hero h1 span { display: block; text-wrap: balance; }
+  /* La tensión entre las dos frases es el mensaje: la segunda en terracota. */
+  .hero h1 span + span { color: var(--terra-ink); }
   .hero .lead { margin-top: 24px; font-size: clamp(1.1rem, 1.6vw, 1.3rem); max-width: 42ch; color: var(--soft); font-weight: 500; }
   .hero .stores { margin-top: 28px; gap: 10px; }
   .hero .store { min-height: 48px; padding: 8px 16px; gap: 8px; border-radius: 14px; }
@@ -400,24 +402,18 @@
   .purpose { text-align: center; }
   .purpose-q { margin: 0 auto; max-width: 22ch; font-size: clamp(1.8rem, 3.6vw, 2.9rem); line-height: 1.08; text-wrap: balance; }
   .purpose .sec-lead { margin: 24px auto 0; text-wrap: balance; }
-  /* Un encuentro (25/09/2026). Reemplaza la videollamada dibujada, que
-     quedaba infantil al lado de los teléfonos. Son dos círculos, uno por
-     persona (cálido y celeste, con gradiente como la aurora: en coral y
-     naranja planos se leía como otro logo): al entrar en pantalla se acercan hasta
-     superponerse. Sin JavaScript, o con movimiento reducido, se ven juntos.
+  /* Un encuentro. 25/09/2026: dos círculos, uno por persona, que se acercan
+     hasta superponerse. 20/10/2026: más planos (sin brillo ni sombra de
+     bola), y con sentido: cada uno respira a su ritmo, al encontrarse se
+     ilumina lo que comparten y terminan respirando juntos. Lo mueve el
+     script "Un encuentro". Sin JavaScript o con movimiento reducido se ven
+     juntos y quietos, con la luz prendida.
      🔁 Si llega la FOTO real (escena armada con alguien de la beta, con
      permiso firmado), puede ir acá o sumarse debajo. */
-  .encuentro { margin: 56px auto 0; max-width: 560px; }
-  .pareja { display: flex; justify-content: center; align-items: flex-start; }
-  .quien { display: flex; flex-direction: column; align-items: center; gap: 18px; transition: transform 2.4s cubic-bezier(.22, 1, .36, 1); }
-  .quien i { display: block; width: min(220px, 38vw); aspect-ratio: 1; border-radius: 50%; mix-blend-mode: multiply; }
-  .quien:first-child i { background: radial-gradient(circle at 38% 34%, #FBD9B8, var(--sun) 58%, var(--coral)); opacity: .82; }
-  .quien:last-child i { background: radial-gradient(circle at 38% 34%, #EAF2F8, var(--sky) 60%, #7E8CA8); opacity: .8; }
-  .quien i { box-shadow: 0 30px 60px -30px rgba(80, 40, 20, .35); }
-  .quien:first-child { margin-right: calc(min(220px, 38vw) * -.32); }
-  .quien span { font-weight: 700; font-size: .95rem; }
-  .pareja.lejos .quien:first-child { transform: translateX(-38%); }
-  .pareja.lejos .quien:last-child { transform: translateX(38%); }
+  .encuentro { margin: 48px auto 0; max-width: 600px; }
+  .encuentro svg { width: 100%; height: auto; overflow: visible; }
+  .encuentro text { font-weight: 700; font-size: 18px; fill: var(--olive); }
+  @media (max-width: 640px) { .encuentro text { font-size: 25px; } }
   .purpose-link { display: inline-block; margin-top: 24px; font-weight: 700; text-decoration-color: var(--terra); text-decoration-thickness: 2px; text-underline-offset: 5px; }
 
   /* Preguntas frecuentes */
@@ -769,10 +765,24 @@
       <h2 id="para-que" class="purpose-q">Sere existe para que, en un momento difícil, sepas a quién acudir.</h2>
       <p class="sec-lead">Acompañamos tu bienestar físico, mental y espiritual. Usamos la pantalla para llevarte a una persona real, no para reemplazarla.</p>
       <figure class="encuentro">
-        <div class="pareja" role="img" aria-label="Dos círculos, uno por persona, que se encuentran: vos y tu profesional">
-          <div class="quien"><i></i><span>vos</span></div>
-          <div class="quien"><i></i><span>tu profesional</span></div>
-        </div>
+        <svg viewBox="0 0 600 310" role="img" aria-label="Dos círculos, uno por persona, que se encuentran: vos y tu profesional. Donde se cruzan, se ilumina.">
+          <defs>
+            <radialGradient id="enc-vos"><stop offset="0" stop-color="#FAD3AE"/><stop offset=".7" stop-color="#F5A66E"/><stop offset="1" stop-color="#F0906A"/></radialGradient>
+            <radialGradient id="enc-pro"><stop offset="0" stop-color="#E4EEF6"/><stop offset=".7" stop-color="#B9D2E8"/><stop offset="1" stop-color="#A2BBD8"/></radialGradient>
+            <radialGradient id="enc-luz"><stop offset="0" stop-color="#FFFDF6"/><stop offset=".55" stop-color="#FCF3DC"/><stop offset="1" stop-color="#F3E7BE"/></radialGradient>
+            <clipPath id="enc-clip"><circle class="e-a" cx="234" cy="140" r="100"/></clipPath>
+            <filter id="enc-halo" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="18"/></filter>
+          </defs>
+          <g filter="url(#enc-halo)" opacity=".35"><circle class="e-a" cx="234" cy="140" r="100" fill="#F5A66E"/><circle class="e-b" cx="366" cy="140" r="100" fill="#B9D2E8"/></g>
+          <circle class="e-a" cx="234" cy="140" r="100" fill="url(#enc-vos)"/>
+          <circle class="e-b" cx="366" cy="140" r="100" fill="url(#enc-pro)"/>
+          <g class="e-luz">
+            <g filter="url(#enc-halo)" opacity=".9"><g clip-path="url(#enc-clip)"><circle class="e-b" cx="366" cy="140" r="100" fill="url(#enc-luz)"/></g></g>
+            <g clip-path="url(#enc-clip)"><circle class="e-b" cx="366" cy="140" r="100" fill="url(#enc-luz)"/></g>
+          </g>
+          <text class="e-ta" x="206" y="290" text-anchor="middle">vos</text>
+          <text class="e-tb" x="394" y="290" text-anchor="middle">tu profesional</text>
+        </svg>
       </figure>
       <a class="purpose-link" href="#historia">Conocé por qué la hicimos</a>
     </div>
@@ -1013,16 +1023,42 @@
 </footer>
 
 <script>
-  // Un encuentro: los dos círculos arrancan separados y se acercan cuando la
-  // sección entra en pantalla. Sin soporte o con movimiento reducido, quedan
-  // juntos desde el principio.
-  var pareja = document.querySelector('.pareja');
-  if (pareja && 'IntersectionObserver' in window && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-    pareja.classList.add('lejos');
-    var obsPareja = new IntersectionObserver(function (es) {
-      if (es[0].isIntersecting) { obsPareja.disconnect(); setTimeout(function () { pareja.classList.remove('lejos'); }, 300); }
-    }, { threshold: 0.5 });
-    obsPareja.observe(pareja);
+  // Un encuentro: los dos círculos arrancan separados, cada uno respirando a
+  // su ritmo. Al entrar en pantalla se acercan, se prende la luz donde se
+  // cruzan y la respiración de los dos se va igualando hasta quedar juntas.
+  // Solo corre mientras se ve. Con movimiento reducido queda el final quieto.
+  var encuentro = document.querySelector('.encuentro svg');
+  if (encuentro && 'IntersectionObserver' in window && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+    (function () {
+      var A = encuentro.querySelectorAll('.e-a'), B = encuentro.querySelectorAll('.e-b');
+      var luz = encuentro.querySelector('.e-luz'), ta = encuentro.querySelector('.e-ta'), tb = encuentro.querySelector('.e-tb');
+      var R = 100, LEJOS = 350, CERCA = 132, VIAJE = 3200, DOS_PI = Math.PI * 2;
+      var t0 = null, inicio = null, raf = null, visible = false;
+      function suave(x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }
+      function poner(lista, cx, r) { lista.forEach(function (c) { c.setAttribute('cx', cx.toFixed(2)); c.setAttribute('r', r.toFixed(2)); }); }
+      function cuadro(ahora) {
+        if (t0 === null) t0 = ahora;
+        var t = (ahora - t0) / 1000;
+        var p = inicio === null ? 0 : Math.max(0, Math.min(1, (ahora - inicio) / VIAJE));
+        var d = LEJOS + (CERCA - LEJOS) * suave(p);
+        // Sincronía: 0 mientras están lejos, 1 un rato después de encontrarse.
+        var k = inicio === null ? 0 : suave(Math.max(0, Math.min(1, (ahora - inicio) / (VIAJE + 2500))));
+        var juntos = Math.sin(DOS_PI * t / 5.6);
+        var ra = R * (1 + .03 * ((1 - k) * Math.sin(DOS_PI * t / 4.4) + k * juntos));
+        var rb = R * (1 + .03 * ((1 - k) * Math.sin(DOS_PI * t / 6.6 + 1.7) + k * juntos));
+        var ca = 300 - d / 2, cb = 300 + d / 2;
+        poner(A, ca, ra); poner(B, cb, rb);
+        ta.setAttribute('x', (ca - 28).toFixed(2)); tb.setAttribute('x', (cb + 28).toFixed(2));
+        luz.setAttribute('opacity', Math.max(0, Math.min(1, (ra + rb - d) / 50)).toFixed(3));
+        raf = visible ? requestAnimationFrame(cuadro) : null;
+      }
+      cuadro(performance.now());
+      new IntersectionObserver(function (es) {
+        visible = es[0].isIntersecting;
+        if (visible && inicio === null && es[0].intersectionRatio >= .5) inicio = performance.now() + 300;
+        if (visible && !raf) raf = requestAnimationFrame(cuadro);
+      }, { threshold: [0, .5] }).observe(encuentro);
+    })();
   }
 
   // El puente: arranca como una línea punteada entre "vos" y "la ayuda" y se
