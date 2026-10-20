@@ -5,10 +5,10 @@
 **Resumen:**
 - Revisión de UX/UI de sere.ar (escritorio, celular, Lighthouse 90/100/100/100). Andre decidió dejar "no estás solo", "bienestar físico, mental y espiritual" y la historia al final.
 - Cambios en la portada: línea "Lleva el nombre de nuestra hermana." bajo Sofía; figuritas en lugar de círculos en "1 de cada 6 / 1 de cada 2"; íconos reales de la app (casa, personas, libro, mensaje) en la barra de las pantallas ilustrativas; botones de tiendas verde oscuro también arriba.
-- **Prueba (a confirmar por Andre al verla en vivo):** la aurora de la primera pantalla se reemplaza por el trébol del logo en grande detrás del teléfono (las manchas quedan solo en el cierre), y "¿Cómo venís hoy?" sube a justo después del puente.
+- **Prueba (a confirmar por Andre al verla en vivo):** la aurora de la primera pantalla se reemplaza por el trébol del logo en grande detrás del teléfono (las manchas quedan solo en el cierre), y "¿Cómo venís hoy?" subió a después del puente; Andre lo vio muy arriba y quedó después de "Un vistazo adentro" (donde estaba).
 
 **Pendiente para la próxima sesión:**
-- Andre confirma o descarta la prueba del trébol y el nuevo orden. Si queda, llevar el trébol a /profesionales.
+- Andre confirma o descarta la prueba del trébol. Si queda, llevar el trébol a /profesionales.
 - Otras ideas de la revisión sin hacer: fuente servida desde el sitio (carga en celular), visual en la primera pantalla de /profesionales, profesionales reales y testimonios cuando existan.
 
 ## 2026-10-20 — Andre (Claude · repo privado, limpieza y paquete del abogado)
