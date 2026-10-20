@@ -1,3 +1,14 @@
+## 2026-10-20 — Andre (Claude · repo privado y limpieza)
+
+**Tocado:** `assets/images/` (borradas `react-logo*` y `partial-react-logo`, sobras de la plantilla de Expo que nada usaba).
+
+**Resumen:**
+- Revisión de qué hay en el repo que no debería publicarse. Lo que entra a la App Store es solo lo que la app importa; los docs, skills, scripts y diseño nunca viajan en el binario. El riesgo era GitHub: el repo era público con estrategia, export de Notion, remediación de seguridad y SCHEMA.md.
+- **Andre pasó `vive-app` a privado** (verificado). Lo commiteado hasta hoy pudo haber sido visto. No había claves secretas, solo la anon de Supabase.
+- Borrada en la Mac la carpeta duplicada `node_modules 2` (111 MB, fuera de git) y las carpetas vacías `outputs/` y `work/`.
+
+**Pendiente:** Joaquín: tu clon sigue andando, pero si tenías el repo enlazado como público en algún lado (Vercel, etc.), confirmar que sigue con acceso.
+
 ## 2026-10-20 — Joaquín (Claude · device-test del rename Vita→Sere)
 
 **Tocado:** nada de código. Verificación.
