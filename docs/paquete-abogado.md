@@ -82,8 +82,9 @@ registro diario de estado de ánimo, entradas de diario personal, y los mensajes
 entre usuario y profesional.
 
 **Un punto sobre el que quiero ser explícito, porque suele darse por
-supuesto: los mensajes NO tienen cifrado de extremo a extremo.** Hay una
-ofuscación básica, no criptografía real. Los textos actuales (T&C §15 y Política
+supuesto: los mensajes NO tienen cifrado de extremo a extremo.** Se guardan
+con una transformación reversible que no es cifrado: el equipo de Sere puede
+leerlos. Los textos actuales (T&C §15 y Política
 §8.2) lo dicen así, sin adornos, a propósito. Si te parece que esa redacción
 expone de más o de menos, decímelo.
 
@@ -112,9 +113,9 @@ resolver solo.*
 
 Me llamó la atención que el **art. 7 no menciona el consentimiento** entre las
 bases para tratar dato sensible, y que el inciso 3 prohíba directamente formar el
-archivo salvo para iglesias, partidos y sindicatos. Entiendo que la práctica
-admite el consentimiento expreso y escrito integrando el art. 7 con el art. 5,
-pero quiero saber **qué tan firme es esa lectura**, porque de eso depende toda la
+archivo salvo para iglesias, partidos y sindicatos. **¿Qué habilitación
+corresponde a este tratamiento bajo los arts. 5, 7 y 8, y qué papel tiene el
+consentimiento separado?** De eso depende toda la
 mitad de bienestar de la app y no una función suelta.
 
 Lo que está construido hoy: además del checkbox de aceptación de los Términos
@@ -148,7 +149,7 @@ empresa**, porque no es lo mismo y creo que las dos cosas cuentan:
 | Proveedor | Qué recibe | Dónde queda el dato | Sede |
 |---|---|---|---|
 | **Supabase** | todo lo sensible: check-ins de ánimo, diario, gratitud, contenido de los mensajes | **Brasil**, región `sa-east-1`, São Paulo (verificado, no estimado) | EEUU |
-| **Daily.co** | el audio y video de las sesiones, **en tránsito** | **En ningún lado**: no grabamos. Daily solo almacena si se activa su API de grabación, y no la usamos: nuestras salas se crean sin `enable_recording` | EEUU |
+| **Daily.co** | el audio y video de las sesiones, **en tránsito** | **No guardamos grabaciones**: nuestras salas se crean sin `enable_recording`, que es lo que activa la grabación en Daily. Daily sí conserva metadatos de conexión (quién entró y cuánto tiempo) | EEUU |
 | **Expo** | el token del dispositivo y el texto de la notificación | El token queda guardado; **el contenido no** (va por memoria y colas, no a una base) hasta entregarlo a Apple/Google | EEUU |
 | **Mercado Pago** | datos de pago | Argentina | Argentina |
 | **PayPal** | datos de pago del riel en dólares | EEUU | EEUU |
@@ -223,12 +224,23 @@ consumido el producto o servicio contratado"*. Hasta el 21/10/2026, §9.4 decía
 contrario a propósito (reintegro total aunque la sesión ya se hubiera
 prestado), y eso permitía sesiones gratis sin límite.
 
-- [ ] **Decisión tomada y ya publicada (21/10/2026):** el arrepentimiento vale
-      **hasta que empieza la Sesión**. Una vez prestada, la única devolución por
-      insatisfacción es la garantía de §9.3 (una vez por cuenta, revisada por
-      Sere). Así quedaron redactados §9.4 y el Botón de arrepentimiento, que van
-      adjuntos. ¿La norma lo permite y la redacción es correcta? No hay usuarios
-      todavía, así que no afecta reservas hechas.
+- [ ] **Decisión tomada y ya publicada (21/10/2026):** dejamos de ofrecer el
+      reintegro general de sesiones ya prestadas. El arrepentimiento vale hasta
+      que la Sesión **empieza a prestarse**; después, la única devolución por
+      insatisfacción es la garantía de §9.3 (una vez por persona, revisada por
+      Sere). Las devoluciones por ausencia o fallas (§9.5) y los demás derechos
+      (§9.7) no cambian. Se toma el momento en que la persona envió la solicitud,
+      no el momento en que la procesamos. Así quedaron redactados §9.4 y el Botón
+      de arrepentimiento, que van adjuntos. No hay usuarios todavía, así que no
+      afecta reservas hechas.
+- [ ] ¿Qué alcance tiene el art. 3.b para una sesión prestada en parte? ¿Sirve
+      el comienzo de la prestación efectiva como criterio? ¿Cómo se tratan la
+      inasistencia, la conexión sin prestación y las fallas técnicas? Necesito la
+      redacción y la regla operativa para cada caso.
+- [ ] Plazo y cómputo (arts. 1110 y 1111 CCyC): ¿qué pasa si el día 10 es
+      inhábil, y qué efecto tiene una información insuficiente sobre el derecho?
+      ¿Cuándo se celebra el contrato en las reservas que el profesional tiene que
+      aceptar, si el cobro es anterior a esa aceptación?
 - [ ] Antes de la Sesión el arrepentimiento sigue valiendo aunque falten menos
       de 24 horas, así que deja sin efecto la regla de §9.1 para las reservas
       hechas con menos de 10 días de anticipación. ¿Es así?
@@ -236,8 +248,8 @@ prestado), y eso permitía sesiones gratis sin límite.
       profesional, igual que con la garantía. La sesión no ocurrió, así que no
       la cobra, y Sere tampoco cobra su comisión. En Mercado Pago es lo que ya
       pasa: el importe está en la cuenta del profesional y la devolución se
-      debita de ahí. §8.8 ahora lo dice para todos los reintegros de la cláusula 9. ¿Se puede trasladar así? Si el
-      profesional no tiene saldo, la devolución falla: ¿qué tengo que prever?
+      debita de ahí. §8.8 ahora lo dice para todos los reintegros de la
+      cláusula 9. ¿Se puede trasladar así? Si el profesional no tiene saldo, la devolución falla: ¿qué tengo que prever?
 
 **A.6. Cancelación dentro de las 24hs sin reembolso (T&C §9.1).**
 Hoy quien cancela con menos de 24 horas de anticipación **pierde el reembolso**, y
@@ -271,45 +283,13 @@ está en Argentina elija pagar el precio en dólares**: puede ser lo que prefier
 dólares, si el precio en pesos también está disponible? ¿Cambia si el profesional
 solo aceptó medios en dólares y entonces el precio en pesos no se le ofrece?
 
-**A.10. Mostrarle al profesional el ánimo de su cliente.** *La más delicada de
-todas.*
-El Usuario hace un check-in diario de estado de ánimo (una escala de 1 a 5:
-"bajón", "cansado", "normal", "bien", "brillando"). Hoy **eso lo ve solo él**.
-Queremos que el profesional pueda ver, **antes de la sesión**, cómo viene esa
-persona, porque llega mejor preparado y la sesión rinde más.
-
-Lo que queremos mostrarle es **solo la tendencia agregada** (un promedio y si
-viene subiendo o bajando en los últimos días), **nunca las entradas una por una**,
-y **nunca el diario ni las anotaciones de gratitud**, que son texto libre y se
-quedan afuera por completo.
-
-Nuestra lectura, para que la confirmes o la corrijas:
-1. Entendemos que el ánimo puede ser **dato sensible** en los términos de la Ley
-   25.326, y así lo dice hoy nuestra Política de privacidad.
-2. El consentimiento que hoy damos por prestado alcanza para **prestar el
-   servicio**, o sea, para que la app se lo muestre a la propia persona.
-   Compartirlo con un tercero (el profesional) nos parece una **finalidad nueva**
-   que ese consentimiento **no cubre**.
-3. Por eso asumimos que hace falta un **consentimiento propio, expreso,
-   informado y revocable**, probablemente por profesional y no global.
-
-**Preguntas:** ¿es correcta esa lectura? ¿Alcanza con un opt-in dentro de la app
-(un interruptor con su texto explicativo) o hace falta otra forma? ¿Cambia algo
-que sea solo la tendencia y no las entradas? ¿Y que el profesional no sea
-personal de salud sino un coach? ¿Hay que registrar cuándo y qué versión del
-texto aceptó, como hacemos con los T&C?
-
-**Estado (26/08/2026): esta pregunta puede haber quedado sin objeto.** Se
-construyó, se apagó, y después una psicóloga consultada corrigió el enfoque: la
-asociación entre lo que la persona sintió y lo que estaba pasando **es el trabajo
-de la sesión**, no algo que la app deba entregar resuelto. En vez de acceso
-permanente a una tendencia, la persona **arma y manda un paquete** antes de cada
-sesión (es la pregunta A.11). Sin acceso continuo no hay permiso que
-consultar. **Contestala igual si te resulta simple** (sirve para saber si el
-camino descartado estaba bien descartado), pero **la pregunta que importa ahora es
-A.11**, y una nueva: ¿cambia algo que la persona envíe texto libre suyo por el
-chat a su profesional, frente a compartirlo por un permiso? Nuestra lectura es
-que es un mensaje como cualquier otro y no una cesión a un tercero.
+**A.10. Antecedente descartado: acceso continuo del profesional al ánimo.**
+Se evaluó y se descartó que el profesional viera de forma permanente la
+tendencia de ánimo de su cliente. Una psicóloga consultada señaló que asociar lo
+que la persona sintió con lo que estaba pasando es el trabajo de la sesión, no
+algo que la app deba entregar resuelto. El mecanismo implementado es el envío
+puntual que se consulta en A.11. No te pido evaluar la función descartada, salvo
+que sirva para comparar los dos encuadres.
 
 **A.11. El paquete que la persona le manda a su profesional antes de la sesión.**
 *Es la que reemplaza a A.10, y la que de verdad importa de las dos.*
@@ -341,9 +321,8 @@ Preguntas:
 - [ ] ¿Cambia algo que el destinatario sea un **coach** y no personal de salud?
 - [ ] ¿Hay que dejar constancia de qué se mandó y cuándo, o alcanza con que la
       persona lo haya visto antes de enviarlo?
-- [ ] Relacionada: ¿cambia algo que la persona escriba lo mismo **por el chat**
-      de la app a su profesional? Nuestra lectura es que ahí es un mensaje como
-      cualquier otro y no una cesión.
+- [ ] ¿Cambia el análisis si la persona escribe el mismo contenido
+      directamente **por el chat**, en lugar de mandarlo con el paquete?
 
 **A.12. La detección de datos de contacto y las sanciones (T&C §10.3 y Política).**
 *Va en A porque de esto depende un sistema de sanciones a profesionales.*
@@ -402,7 +381,11 @@ Preguntas:
       medidas y su documentación, mientras exista la cuenta del Profesional y
       después disociadas. ¿Son razonables?
 
-### B. No bloquean, pero quiero tu lectura
+### B. Otras cuestiones a revisar
+
+Tres de estas necesitan respuesta antes del lanzamiento: **B.7** (cobros del
+exterior), **B.4** (borrado de notas, que es irreversible) y **B.5** (reglamento
+europeo, porque la función que lo dispara ya existe).
 
 **B.1. Limitación de responsabilidad e indemnidad (T&C §18–19).**
 ¿Qué exclusiones son ineficaces o abusivas en una relación de consumo (art. 37
@@ -488,9 +471,9 @@ orden del Profesional". ¿Corresponde encuadrarlo expresamente como mandato de
 cobranza, y hace falta alguna previsión adicional en §8.2 o en §4?
 - [ ] Soy una persona física recibiendo y reteniendo fondos de terceros. ¿Eso
       exige inscripción como proveedor de servicios de pago ante el BCRA?
-- [ ] Por los cobros en USDT: ¿me alcanza el registro de proveedores de
-      servicios de activos virtuales de la CNV (Ley 27.739), o alguna
-      obligación ante la UIF?
+- [ ] Por los cobros en USDT: ¿esta operación exige inscripción u otras
+      obligaciones ante la CNV (registro de proveedores de servicios de activos
+      virtuales, Ley 27.739) o ante la UIF? ¿Cuáles y por qué?
 - [ ] El importe bruto entra a mis cuentas aunque mi ingreso sea solo la
       comisión. ¿Cómo lo documento para que no cuente contra el tope del
       Monotributo?
@@ -509,8 +492,8 @@ están cifrados de ese modo.
 Lo que encontré, para que lo confirmes o lo corrijas: el art. 9 de la Ley 25.326
 exige medidas "necesarias" sin nombrar el cifrado, y la Resolución AAIP 47/2018
 reemplazó las medidas obligatorias por recomendadas.
-- [ ] ¿Hay alguna norma vigente que **obligue** a cifrar datos sensibles o de
-      salud, o es solo recomendación?
+- [ ] ¿Qué medidas de seguridad resultan exigibles según estos datos y sus
+      riesgos concretos?
 - [ ] ¿Alcanza con este esquema para el diario, o conviene extenderlo a los
       mensajes y a las notas del profesional antes de lanzar?
 - [ ] ¿La Política puede decir "se almacenan cifrados" con este esquema, siempre
@@ -595,8 +578,8 @@ Un ancla que puede servir, por si ayuda a acortar la respuesta: el TJUE falló e
 **4 de septiembre de 2025 en *EDPS c/ JUR* (C-413/23 P)** que el carácter
 personal de un dato **no es absoluto**: los mismos datos seudonimizados pueden
 ser personales para quien los envía y no serlo para el receptor que no puede
-reidentificar. Acá el receptor no recibe identificador, ni clave, ni forma de
-volver a la persona. No sé si ese criterio se traslada al encuadre argentino;
+reidentificar. Acá no enviamos identificador directo ni clave; necesito que
+evalúes la identificabilidad considerando también los registros técnicos. No sé si ese criterio se traslada al encuadre argentino;
 esa es justamente la pregunta. Tené en cuenta también que el proveedor recibe la
 IP del servidor que hace el pedido y guarda sus propios registros técnicos.
 
@@ -672,13 +655,13 @@ antes de mandártelos porque varias dependen de las respuestas de arriba.
 | T&C §9.1 a §9.5 y Botón de arrepentimiento frente a T&C §9.6 | Los reintegros se describen como automáticos por el procesador, pero los pagos en USDT se devuelven a mano (ver A.8). |
 | T&C §8.2 y Política §2.2 frente a A.9 | Los pagos en dólares se presentan como "desde el exterior", pero también puede elegirlos alguien que está en Argentina. |
 | T&C §15.2 y Política §8.2 frente a A.12 | "No utilizar el contenido de las conversaciones con fines comerciales" frente a un análisis local que protege la regla de comisiones. |
-| Política §3.4 frente a §6 y §7 | "Ni con ningún tercero" choca con los proveedores que tratan esos datos. |
+| Política §3.4 frente a §6 y §7 | Decía "ni con ningún tercero", que chocaba con los proveedores que tratan esos datos. Corregido el 21/10: ahora distingue a otros Usuarios de los proveedores. |
 | Política §2.5 frente a §6 | La lista de espera "no se comparte con terceros", pero se guarda y se avisa con proveedores externos. |
 | Política §10 frente a Eliminar cuenta | La página de eliminación no incluye todos los plazos de la Política (registros de detección, solicitudes de arrepentimiento, documentación de sanciones) y deja reportes y datos técnicos sin plazo. |
 | Política §10 y Eliminar cuenta frente a B.4 | Se promete el borrado inmediato de las notas del profesional mientras está abierta la pregunta de si son historia clínica. |
 | Política §10 | "Anonimizados", "disociados" y "Usuario eliminado" se usan como equivalentes. Un mensaje o una reseña pueden identificar a alguien por su contenido aunque se quite el nombre. |
-| Política §6 y §7 frente a B.15 | La Política da por hecho que lo que va al proveedor de IA no es dato personal, y la retención cero todavía no está activa. |
-| Sección 1 de esta consulta frente a T&C §8.5 | Acá digo que Sere cobra los pagos del exterior para que el profesional no sea exportador ni haga factura E. Pero §8.5 dice que cada profesional factura la Sesión al Cliente y Sere solo su comisión. Si el profesional factura a un cliente del exterior, vuelve a ser exportador. ¿Quién factura qué en PayPal y USDT? |
+| Política §7 frente a B.15 | La Política concluye que lo que va al proveedor de IA no es dato personal, mientras la consulta pregunta justamente eso. Aparte, como medida técnica: la retención cero todavía no está activa (la Política no dice que lo esté). |
+| Sección 1 de esta consulta frente a T&C §8.5 | La hipótesis fiscal de la sección 1 (que si cobra Sere el profesional no exporta ni hace factura E) choca con §8.5, que dice que cada profesional factura la Sesión al Cliente y Sere solo su comisión. ¿Quién factura qué en PayPal y USDT? Lo coordino también con la contadora. |
 | T&C §8.3 | La comisión del 20% es sobre la "primera Sesión completada", pero se retiene "en el momento del pago", cuando todavía no se sabe si se va a completar. Falta decir qué pasa si la primera se cancela o se reintegra. |
 | T&C §9.3 | La primera frase parece ofrecer la garantía con cada profesional; el límite real es una vez en toda Sere. |
 | T&C §7.4 frente a §9.1 | Cambiar de horario libremente pide "más de 24 horas" y cancelar con reembolso pide "24 horas o más". Una reserva a exactamente 24 horas cae en grupos distintos. |
@@ -686,7 +669,7 @@ antes de mandártelos porque varias dependen de las respuestas de arriba.
 | Política §10 y Eliminar cuenta | Notas de sesión: si se da de baja el Cliente, se borran todas, incluidas las compartidas; si se da de baja el Profesional, las compartidas se conservan "porque también pertenecen al Cliente". Los mensajes se conservan por el mismo motivo. Son criterios opuestos para casos parecidos. |
 | Política §10 | Las reservas se conservan 10 años "por obligaciones contables y fiscales", pero disociadas de la identidad. Si el motivo es fiscal, probablemente haga falta saber a quién se le cobró. |
 | Política §10 frente a Eliminar cuenta | Los reportes quedan "disociados" en un texto y "anonimizados" en el otro. Eliminar cuenta llama "métricas agregadas" a la calidad de cada videollamada, que es un dato por sesión. |
-| Política §2.4 | La cámara figura para fotos, video de presentación y verificación, pero no para las videollamadas (el micrófono sí). Tampoco figura el permiso de notificaciones. |
+| Política §2.4 | La cámara figuraba para fotos, video de presentación y verificación, pero no para las videollamadas (el micrófono sí). Corregido el 21/10, junto con una remisión a §12 por las notificaciones. |
 | Política §6 | Dice que la lista comprende "la totalidad de los proveedores", pero la verificación de pagos en USDT consulta a TronGrid (un servicio externo que lee la red), que no figura. Solo recibe la billetera de Sere. |
 | Política §6 frente a §13 | YouTube recibe datos "al cargarse" el reproductor según §6, y pone cookies "cuando decide reproducirlo" según §13. |
 

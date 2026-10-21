@@ -99,7 +99,7 @@ El Profesional puede, por su parte, proponer al Cliente horarios alternativos, q
 
 8.7. **Liberación de fondos.** La liberación de los fondos al Profesional puede estar sujeta a plazos operativos del procesador de pagos.
 
-8.8. **Reintegros: efecto sobre el Profesional.** El Profesional conoce y acepta, como condición para operar en la Plataforma, que cuando una Sesión se reintegra al Cliente, el importe reintegrado **se debita de los fondos que le correspondían por esa Sesión**, y Sere no percibe comisión sobre ella. Esto rige en todos los reintegros previstos en la cláusula 9: la cancelación con veinticuatro (24) horas o más de antelación (9.1), la cancelación o el rechazo por el Profesional y el vencimiento de una reserva pendiente (9.2), la garantía de primera sesión (9.3), la revocación antes de que comience la Sesión (9.4) y las ausencias (9.5). La garantía alcanza únicamente a la primera Sesión de cada vínculo Cliente–Profesional y solo puede ejercerse una vez por Cliente en toda la Plataforma. Como Sere no percibe comisión sobre las Sesiones reintegradas, el costo del reintegro no se traslada a la comisión de Sesiones posteriores.
+8.8. **Reintegros: efecto sobre el Profesional.** El Profesional conoce y acepta, como condición para operar en la Plataforma, que cuando una Sesión se reintegra al Cliente, el importe reintegrado **se debita de los fondos que le correspondían por esa Sesión**, y Sere no percibe comisión sobre ella. Esto rige en todos los reintegros previstos en la cláusula 9: la cancelación con veinticuatro (24) horas o más de antelación (9.1), la cancelación o el rechazo por el Profesional y el vencimiento de una reserva pendiente (9.2), la garantía de primera sesión (9.3), la revocación (9.4) y las ausencias (9.5). La garantía alcanza únicamente a la primera Sesión de cada vínculo Cliente–Profesional y solo puede ejercerse una vez por Cliente en toda la Plataforma. Como Sere no percibe comisión sobre las Sesiones reintegradas, el costo del reintegro no se traslada a la comisión de Sesiones posteriores.
 
 8.9. **Descuento por invitación.** Quien se registra en la Plataforma con el código de invitación de otro Usuario obtiene un **descuento del 10% sobre el precio de su primera Sesión abonada**, por única vez. El descuento rige para los pagos en pesos a través de Mercado Pago y **se descuenta de la comisión de Sere**: el Profesional percibe el mismo importe que percibiría sin el descuento. Si esa Sesión no genera comisión (ver la excepción de 8.3), el descuento no se aplica. Quien invita no recibe beneficio alguno.
 
@@ -116,7 +116,7 @@ Lo previsto en esta cláusula **no afecta ni limita** el derecho de revocación 
 
 9.2. **Cancelación o rechazo por el Profesional.** Si el Profesional rechaza o cancela una Sesión ya abonada, o si la reserva pendiente vence sin confirmarse, el Cliente tendrá derecho al reembolso, que se procesará de forma automática a través del procesador de pagos. Los tiempos de acreditación dependen de dicho procesador y del medio de pago.
 
-9.3. **Garantía de primera sesión.** Si el Cliente no queda conforme con la **primera Sesión que mantiene con un Profesional determinado**, puede solicitar el reintegro total de lo abonado por esa Sesión **desde la propia aplicación**, en la pantalla de esa Sesión, o escribiendo a hola@sere.ar, **dentro de las 48 horas** posteriores al horario en que la Sesión estaba agendada.
+9.3. **Garantía de primera sesión.** Cada Cliente puede usar esta garantía **una sola vez en toda la Plataforma**: si no queda conforme con la **primera Sesión que mantiene con un Profesional**, puede solicitar el reintegro total de lo abonado por esa Sesión **desde la propia aplicación**, en la pantalla de esa Sesión, o escribiendo a hola@sere.ar, **dentro de las 48 horas** posteriores al horario en que la Sesión estaba agendada.
 
 Condiciones:
 
@@ -127,7 +127,7 @@ Condiciones:
 - El reintegro se procesa a través del procesador de pagos y **se debita de los fondos correspondientes al Profesional**, conforme a la cláusula 8.8. Sere no percibe comisión sobre las Sesiones reintegradas por esta vía.
 - Sere puede denegar la solicitud ante uso abusivo o fraudulento de la garantía (por ejemplo, cuentas múltiples de una misma persona, o solicitudes reiteradas destinadas a obtener Sesiones sin costo).
 
-9.4. **Derecho de revocación: Botón de arrepentimiento.** Por tratarse de una contratación celebrada a distancia, el Cliente tiene el **derecho irrenunciable de revocar la contratación dentro de los diez (10) días corridos**, contados desde la celebración del contrato (esto es, desde la confirmación de la reserva de la Sesión), **siempre que la Sesión todavía no haya comenzado**, conforme al art. 34 de la Ley 24.240, a los arts. 1110 a 1116 del Código Civil y Comercial y al art. 3, inc. b, de la Disposición 954/2025.
+9.4. **Derecho de revocación: Botón de arrepentimiento.** Por tratarse de una contratación celebrada a distancia, el Cliente tiene el **derecho irrenunciable de revocar la contratación dentro de los diez (10) días corridos**, contados desde la celebración del contrato (esto es, desde la confirmación de la reserva de la Sesión), **siempre que, al momento de la solicitud, la Sesión todavía no haya comenzado a prestarse**, conforme al art. 34 de la Ley 24.240, a los arts. 1110 a 1116 del Código Civil y Comercial y al art. 3, inc. b, de la Disposición 954/2025.
 
 Condiciones:
 
@@ -135,8 +135,8 @@ Condiciones:
 - Puede ejercerse desde el enlace **"BOTÓN DE ARREPENTIMIENTO"**, disponible en https://sere.ar y en https://sere.ar/legal/arrepentimiento, **sin necesidad de registrarse ni de realizar trámite previo alguno**, o escribiendo a hola@sere.ar.
 - Recibida la solicitud, Sere remitirá al Cliente, **dentro de las 24 horas y por medio electrónico**, un **código de identificación de la revocación**, conforme a la Disposición 954/2025 de la Subsecretaría de Defensa del Consumidor y Lealtad Comercial.
 - Ejercida la revocación, Sere reintegrará la totalidad de lo abonado, sin cargo, conforme a la cláusula 8.8. El reintegro se procesa a través del procesador de pagos, salvo en los pagos en USDT, que se rigen por la cláusula 9.6; los tiempos de acreditación dependen del procesador y del medio de pago.
-- Dentro de su plazo y antes de que comience la Sesión, la revocación procede aunque falten menos de veinticuatro (24) horas, y prevalece sobre lo previsto en la cláusula 9.1.
-- **Una vez comenzada la Sesión, la revocación ya no procede**, por haberse utilizado el servicio contratado. Si el Cliente no quedó conforme con la primera Sesión que mantuvo con un Profesional, puede ejercer la garantía de la cláusula 9.3.
+- Dentro de su plazo y antes de que la Sesión comience a prestarse, la revocación procede aunque falten menos de veinticuatro (24) horas, y prevalece sobre lo previsto en la cláusula 9.1.
+- **Una vez que la Sesión comenzó a prestarse, la revocación ya no procede**, por haberse utilizado el servicio contratado. Se toma en cuenta el momento en que el Cliente envió la solicitud. Esto no afecta los reintegros por ausencias de la cláusula 9.5 ni los derechos de la cláusula 9.7. Si el Cliente no quedó conforme con la primera Sesión que mantuvo con un Profesional, puede ejercer la garantía de la cláusula 9.3.
 
 9.5. **Ausencias.** Si alguna de las partes no se presenta a una Sesión confirmada, rige lo siguiente:
 
@@ -147,7 +147,7 @@ Condiciones:
 - **Cómo se determina.** Sere constata la asistencia a partir de los **registros de conexión a la videollamada** (quién ingresó, cuándo y por cuánto tiempo), que son **metadatos de conexión y en ningún caso contenido**: Sere no accede al audio, al video ni a transcripción alguna de las Sesiones, conforme a la Política de Privacidad.
 - Lo previsto en esta cláusula **no desplaza** la garantía de la cláusula 9.3, que cubre un supuesto distinto: la insatisfacción del Cliente con una Sesión efectivamente prestada.
 
-9.6. **Reintegros de pagos en USDT.** En los pagos en USDT no interviene un procesador de pagos. Los reintegros previstos en esta cláusula no se procesan de forma automática: los realiza Sere mediante una transferencia a la dirección que el Cliente indique desde la Plataforma.
+9.6. **Reintegros de pagos en USDT.** En los pagos en USDT no interviene un procesador de pagos. Los reintegros de pagos en USDT previstos en esta cláusula 9 no se procesan de forma automática: los realiza Sere mediante una transferencia a la dirección que el Cliente indique desde la Plataforma.
 
 9.7. Nada de lo previsto en esta cláusula limita los derechos que la normativa de defensa del consumidor reconozca al Cliente.
 
@@ -287,9 +287,10 @@ Responsable del tratamiento: Andre Albisu Lambertini, CUIT 20-46034087-0. Contac
 - **Informes de error de la aplicación**: cuando algo falla, la aplicación registra en qué pantalla ocurrió y el mensaje técnico del error, para poder corregirlo. No incluyen el contenido que el Usuario escribió.
 
 **2.4. Accesos al dispositivo que la aplicación solicita.** En todos los casos el sistema operativo pide autorización previa, el Usuario puede negarla o revocarla en cualquier momento desde los ajustes del dispositivo, y la aplicación sigue funcionando sin ellos (solo deja de estar disponible la función asociada):
-- **Fotos y cámara:** para subir la foto de perfil y, en el caso de Profesionales, el video de presentación y las imágenes de verificación de identidad. Sere accede únicamente al archivo que el Usuario elige o captura; no lee el resto de la galería.
+- **Fotos y cámara:** para subir la foto de perfil y, en el caso de Profesionales, el video de presentación y las imágenes de verificación de identidad. Sere accede únicamente al archivo que el Usuario elige o captura; no lee el resto de la galería. La cámara se usa además durante las videollamadas de las Sesiones.
 - **Micrófono:** únicamente durante la grabación del video de presentación y durante las videollamadas de las Sesiones.
 - **Calendario:** solo para *escribir* el evento de una Sesión que el Usuario decide agendar. Sere **no lee** los eventos existentes del calendario.
+- **Notificaciones:** ver la sección 12.
 
 **2.5. Lista de espera del sitio web.** Quien deja su correo en sere.ar para que le avisemos cuando Sere esté disponible nos proporciona ese correo, si se anota como persona o como Profesional y, si llegó por un enlace de invitación, su código; registramos además la fecha. Lo usamos solo para avisarle del lanzamiento y, si se anotó como Profesional, para contarle cómo postularse. No lo compartimos con terceros ni lo usamos con fines publicitarios.
 
@@ -307,7 +308,7 @@ Ciertos datos vinculados al Usuario (los registros de estado de ánimo, las entr
 
 3.3. El Usuario puede **revocar el consentimiento en cualquier momento** desde su perfil o escribiendo a hola@sere.ar, y solicitar la supresión de los datos ya registrados conforme a la sección 9. La revocación no afecta la licitud del tratamiento realizado con anterioridad.
 
-3.4. **Estos datos no se comparten con los Profesionales ni con ningún tercero**, salvo que el propio Usuario decida enviarlos, en cada caso y de forma expresa. Cuando el Usuario reserva una Sesión a partir de un tema elegido en la sección de búsqueda de Profesionales, el Profesional ve ese tema junto con la reserva; la aplicación se lo informa al Usuario antes de confirmarla.
+3.4. **Estos datos no se comparten con los Profesionales ni con otros Usuarios, salvo en dos casos:** cuando el propio Usuario decide enviarlos, en cada caso y de forma expresa; y cuando reserva una Sesión a partir de un tema elegido en la búsqueda de Profesionales, en cuyo caso el Profesional ve ese tema junto con la reserva y la aplicación se lo informa al Usuario antes de confirmarla. Los proveedores que intervienen en el funcionamiento de la Plataforma los tratan conforme a las secciones 6 y 7.
 
 ## 4. Finalidades del Tratamiento
 
@@ -437,9 +438,9 @@ export const REGRET_MD = `# Botón de arrepentimiento
 
 ## Qué es
 
-Si contrataste una Sesión en Sere, tenés derecho a **arrepentirte y dejar sin efecto la contratación dentro de los 10 (diez) días corridos**, contados desde que confirmaste la reserva, **siempre que la Sesión todavía no haya empezado**.
+Si contrataste una Sesión en Sere, tenés derecho a **arrepentirte y dejar sin efecto la contratación dentro de los 10 (diez) días corridos**, contados desde que confirmaste la reserva, **siempre que la Sesión todavía no haya empezado cuando hacés la solicitud**.
 
-Una vez que la Sesión empezó ya no se puede revocar, porque el servicio se usó (Disposición 954/2025, art. 3). Si no te convenció tu primera sesión con un profesional, tenés la garantía de primera sesión, que se explica más abajo.
+Una vez que la Sesión empezó a prestarse ya no se puede revocar, porque el servicio se usó (Disposición 954/2025, art. 3). Si el profesional no se conectó, eso tiene su propia devolución (Términos y Condiciones §9.5). Si no te convenció tu primera sesión con un profesional, tenés la garantía de primera sesión, que se explica más abajo.
 
 Es un derecho **irrenunciable**: no hace falta que expliques por qué, no tiene ningún costo para vos, y nadie puede pedirte que renuncies a él. Está previsto en el **artículo 34 de la Ley 24.240** de Defensa del Consumidor y en los **artículos 1110 a 1116 del Código Civil y Comercial**.
 
@@ -451,20 +452,20 @@ No necesitás tener cuenta, ni estar logueado, ni hacer ningún trámite previo.
 - El correo electrónico con el que reservaste (o el que usaste para pagar).
 - Si los tenés a mano, la fecha en que hiciste la reserva y con qué profesional.
 
-Con eso alcanza. Si preferís, también podés escribirnos a **hola@sere.ar** con el asunto **"ARREPENTIMIENTO"** y esos mismos datos.
+Si necesitamos confirmar tu identidad o ubicar la reserva, te escribimos y te pedimos solo lo indispensable para eso. Si preferís, también podés escribirnos a **hola@sere.ar** con el asunto **"ARREPENTIMIENTO"** y esos mismos datos.
 
 ## Qué pasa después
 
 1. Al enviar el formulario te mostramos en pantalla y te mandamos por correo electrónico un **código de identificación de la revocación**. Si nos escribiste por correo, te lo enviamos **dentro de las 24 horas**. Ese código es tu constancia: guardalo.
 2. Ubicamos tu reserva. Si la Sesión todavía no había empezado cuando hiciste la solicitud, la damos de baja y te **reintegramos el 100% de lo que pagaste**, sin cargo alguno.
-3. El reintegro se hace a través del mismo medio de pago que usaste, por medio del procesador de pagos. Si pagaste en USDT, te lo transferimos nosotros a la dirección que nos indiques (Términos y Condiciones §9.6). **Los tiempos de acreditación dependen de tu banco o de la tarjeta**, no de nosotros: normalmente entre 5 y 20 días hábiles según el medio.
+3. El reintegro se hace a través del mismo medio de pago que usaste, por medio del procesador de pagos. Si pagaste en USDT, te lo transferimos nosotros a la dirección que nos indiques (Términos y Condiciones §9.6). Iniciamos la devolución apenas ubicamos la reserva. Desde ahí, **el tiempo de acreditación depende del medio de pago** (en tarjeta, del banco o de la tarjeta).
 
 ## Si el plazo ya pasó o la Sesión ya ocurrió
 
 Tenés otras vías, que son independientes de este derecho:
 
 - **Cancelar una Sesión** que todavía no ocurrió: podés hacerlo desde la app hasta 24 horas antes del horario agendado, con reembolso total (Términos y Condiciones §9.1).
-- **Garantía de primera sesión**: si no quedaste conforme con la primera Sesión con un profesional, podés pedir el reintegro total **desde la app, en la pantalla de esa sesión**, o escribiendo a hola@sere.ar, dentro de las 48 horas del horario agendado. Se puede usar **una sola vez por cuenta** (Términos y Condiciones §9.3).
+- **Garantía de primera sesión**: si no quedaste conforme con la primera Sesión con un profesional, podés pedir el reintegro total **desde la app, en la pantalla de esa sesión**, o escribiendo a hola@sere.ar, dentro de las 48 horas posteriores al horario de inicio agendado. Se puede usar **una sola vez por persona** (Términos y Condiciones §9.3).
 
 ## Ante cualquier problema
 
@@ -544,7 +545,7 @@ export const LEGAL_PLACEHOLDERS: string[] = [];
  *  Se guarda en `profiles.accepted_terms_version` al registrarse: sin esto no
  *  hay forma de probar qué texto leyó cada persona, que es lo que se discute al
  *  invocar §20 (modificaciones) o §10 (no elusión). */
-export const LEGAL_VERSION = '3ce85d882464';
+export const LEGAL_VERSION = 'f03582c03b35';
 
 /** true mientras los documentos sigan siendo un borrador sin completar.
  *  La pantalla legal muestra un aviso mientras esto sea true; cuando el/la

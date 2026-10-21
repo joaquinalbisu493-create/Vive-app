@@ -39,9 +39,10 @@ Responsable del tratamiento: Andre Albisu Lambertini, CUIT 20-46034087-0. Contac
 - **Informes de error de la aplicación**: cuando algo falla, la aplicación registra en qué pantalla ocurrió y el mensaje técnico del error, para poder corregirlo. No incluyen el contenido que el Usuario escribió.
 
 **2.4. Accesos al dispositivo que la aplicación solicita.** En todos los casos el sistema operativo pide autorización previa, el Usuario puede negarla o revocarla en cualquier momento desde los ajustes del dispositivo, y la aplicación sigue funcionando sin ellos (solo deja de estar disponible la función asociada):
-- **Fotos y cámara:** para subir la foto de perfil y, en el caso de Profesionales, el video de presentación y las imágenes de verificación de identidad. Sere accede únicamente al archivo que el Usuario elige o captura; no lee el resto de la galería.
+- **Fotos y cámara:** para subir la foto de perfil y, en el caso de Profesionales, el video de presentación y las imágenes de verificación de identidad. Sere accede únicamente al archivo que el Usuario elige o captura; no lee el resto de la galería. La cámara se usa además durante las videollamadas de las Sesiones.
 - **Micrófono:** únicamente durante la grabación del video de presentación y durante las videollamadas de las Sesiones.
 - **Calendario:** solo para *escribir* el evento de una Sesión que el Usuario decide agendar. Sere **no lee** los eventos existentes del calendario.
+- **Notificaciones:** ver la sección 12.
 
 **2.5. Lista de espera del sitio web.** Quien deja su correo en sere.ar para que le avisemos cuando Sere esté disponible nos proporciona ese correo, si se anota como persona o como Profesional y, si llegó por un enlace de invitación, su código; registramos además la fecha. Lo usamos solo para avisarle del lanzamiento y, si se anotó como Profesional, para contarle cómo postularse. No lo compartimos con terceros ni lo usamos con fines publicitarios.
 
@@ -59,7 +60,7 @@ Ciertos datos vinculados al Usuario (los registros de estado de ánimo, las entr
 
 3.3. El Usuario puede **revocar el consentimiento en cualquier momento** desde su perfil o escribiendo a hola@sere.ar, y solicitar la supresión de los datos ya registrados conforme a la sección 9. La revocación no afecta la licitud del tratamiento realizado con anterioridad.
 
-3.4. **Estos datos no se comparten con los Profesionales ni con ningún tercero**, salvo que el propio Usuario decida enviarlos, en cada caso y de forma expresa. Cuando el Usuario reserva una Sesión a partir de un tema elegido en la sección de búsqueda de Profesionales, el Profesional ve ese tema junto con la reserva; la aplicación se lo informa al Usuario antes de confirmarla.
+3.4. **Estos datos no se comparten con los Profesionales ni con otros Usuarios, salvo en dos casos:** cuando el propio Usuario decide enviarlos, en cada caso y de forma expresa; y cuando reserva una Sesión a partir de un tema elegido en la búsqueda de Profesionales, en cuyo caso el Profesional ve ese tema junto con la reserva y la aplicación se lo informa al Usuario antes de confirmarla. Los proveedores que intervienen en el funcionamiento de la Plataforma los tratan conforme a las secciones 6 y 7.
 
 ## 4. Finalidades del Tratamiento
 
