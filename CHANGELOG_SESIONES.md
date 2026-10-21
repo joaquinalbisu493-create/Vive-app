@@ -7,6 +7,10 @@
 - Marcos/líneas: borde de `streakPill` y de `checkCircle` (círculo del hábito), y la `timelineLine` del historial — blanco → `rgba(86,94,50,0.22)` (el oliva suave que ya usan las otras cards de la pantalla).
 - Se dejaron los blancos/crema legítimos (iniciales de avatar sobre gradiente verde, texto del tooltip sobre FOREST). tsc limpio.
 
+**Segunda tanda (mismo día):** Joaquín vio que los **marcos de las cards grandes seguían blancos** y pidió reordenar el header.
+- Los marcos venían de `GlassCard`, que usa `colors.glassBorder` = blanco. Ese token lo comparten 4 componentes (GlassCard, VitaHeader, ProgressToggle, SegmentedPill), así que **no se tocó global**: `GlassCard` hace `StyleSheet.flatten([base, style])`, o sea que el `style` que le paso pisa el borde base. Se le pasó `borderColor: 'rgba(86,94,50,0.22)'` (el mismo oliva) a los 4 estilos de card de Progreso: `moodStatCard`, `moodChartCard`, `habitosCard`, `emptyCard`.
+- **Header reordenado:** antes era sere → flecha → título; ahora es **sere → "Tu progreso" → flecha** (la flecha quedó debajo del título). Ajustados márgenes: `pageTitle` paddingBottom 20→8, `backBtn` marginTop 4→0 / marginBottom −4→8, para que el título quede pegado a "sere", la flecha justo debajo y un respiro antes de las stats. tsc limpio. Pendiente verlo en device (Joaquín mide al pixel).
+
 ## 2026-10-20 — Andre (Claude · revisión UX de sere.ar y primeros cambios)
 
 **Tocado:** `web/index.html`, `web/tiendas.js`, `web/fonts/`, `vercel.json`, `scripts/sync-legal.mjs` y las demás páginas de `web/` (solo la letra).

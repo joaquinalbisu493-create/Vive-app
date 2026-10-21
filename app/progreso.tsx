@@ -321,13 +321,13 @@ export default function ProgresoScreen() {
           {/* ── Header: Sere + toggle ── */}
           <VitaHeader right={<ProgressToggle value={tab} onChange={setTab} />} />
 
+          {/* ── Título ── */}
+          <Text style={s.pageTitle}>Tu progreso</Text>
+
           {/* ── Atrás ── */}
           <TouchableOpacity style={s.backBtn} onPress={() => router.back()} activeOpacity={0.7}>
             <MaterialCommunityIcons name="arrow-left" size={20} color="#565E32" />
           </TouchableOpacity>
-
-          {/* ── Título ── */}
-          <Text style={s.pageTitle}>Tu progreso</Text>
 
           {/* ── Stats: 3 tarjetas de color ── */}
           <View style={s.statsRow}>
@@ -560,8 +560,8 @@ const s = StyleSheet.create({
 
   backBtn: {
     marginLeft: 18,
-    marginTop: 4,
-    marginBottom: -4,
+    marginTop: 0,
+    marginBottom: 8,
     width: 32,
     height: 32,
     alignItems: 'center',
@@ -574,7 +574,7 @@ const s = StyleSheet.create({
     color: '#565E32',
     paddingHorizontal: 22,
     paddingTop: 10,
-    paddingBottom: 20,
+    paddingBottom: 8,
     letterSpacing: -0.3,
   },
 
@@ -659,6 +659,7 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 14,
     paddingHorizontal: 4,
+    borderColor: 'rgba(86,94,50,0.22)',
   },
   moodStatValue: {
     fontFamily: ViveFonts.bold,
@@ -683,6 +684,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     minHeight: 80,
     justifyContent: 'center',
+    borderColor: 'rgba(86,94,50,0.22)',
   },
   moodLegendRow: {
     flexDirection: 'row',
@@ -722,6 +724,7 @@ const s = StyleSheet.create({
     marginHorizontal: CARD_MX,
     marginBottom: 24,
     paddingVertical: 4,
+    borderColor: 'rgba(86,94,50,0.22)',
   },
   habitosEmpty: { paddingHorizontal: 16, paddingVertical: 18, gap: 8 },
   habitosEmptyText: {
@@ -843,6 +846,7 @@ const s = StyleSheet.create({
     marginHorizontal: CARD_MX,
     padding: 20,
     alignItems: 'center',
+    borderColor: 'rgba(86,94,50,0.22)',
   },
   emptyText: {
     fontFamily: ViveFonts.regular,
