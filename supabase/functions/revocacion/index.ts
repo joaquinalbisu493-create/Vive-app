@@ -123,7 +123,10 @@ serve(async (req) => {
     titulo: 'Recibimos tu arrepentimiento',
     lineas: [
       `Tu código de identificación de la revocación es <strong>${codigo}</strong>. Guardalo: es tu constancia.`,
-      'Vamos a dar de baja la Sesión y a reintegrarte el total de lo que pagaste, sin cargo. Si necesitamos algún dato más para ubicar la reserva, te escribimos a este correo.',
+      // Desde el 21/10/2026 el arrepentimiento vale solo antes de que empiece la
+      // Sesión (T&C §9.4, Disp. 954/2025 art. 3.b): el reintegro ya no se promete
+      // sin condición, porque el formulario no sabe si la sesión ocurrió.
+      'Vamos a ubicar tu reserva. Si la Sesión todavía no había empezado, la damos de baja y te reintegramos el total de lo que pagaste, sin cargo. Si necesitamos algún dato más para ubicar la reserva, te escribimos a este correo.',
     ],
     pie: `Si no hiciste esta solicitud, escribinos a ${CASILLA_VITA}.`,
     idempotencyKey: `revocacion-${codigo}`,
@@ -144,7 +147,7 @@ serve(async (req) => {
       alConsumidor
         ? 'El código ya se le mandó por correo.'
         : '⚠️ El correo con el código NO salió. Hay que mandárselo a mano dentro de las 24 horas.',
-      'Falta: ubicar la reserva, darla de baja y reintegrar.',
+      'Falta: ubicar la reserva. Si la sesión no había empezado al momento de la solicitud, darla de baja y reintegrar. Si ya había empezado, no procede: contestarle y mencionar la garantía (§9.3) si es su primera sesión con ese profesional.',
     ],
     idempotencyKey: `revocacion-aviso-${codigo}`,
   })

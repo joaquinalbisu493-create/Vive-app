@@ -127,15 +127,16 @@ Condiciones:
 - El reintegro se procesa a través del procesador de pagos y **se debita de los fondos correspondientes al Profesional**, conforme a la cláusula 8.8. Sere no percibe comisión sobre las Sesiones reintegradas por esta vía.
 - Sere puede denegar la solicitud ante uso abusivo o fraudulento de la garantía (por ejemplo, cuentas múltiples de una misma persona, o solicitudes reiteradas destinadas a obtener Sesiones sin costo).
 
-9.4. **Derecho de revocación: Botón de arrepentimiento.** Por tratarse de una contratación celebrada a distancia, el Cliente tiene el **derecho irrenunciable de revocar la contratación dentro de los diez (10) días corridos**, contados desde la celebración del contrato (esto es, desde la confirmación de la reserva de la Sesión), conforme al art. 34 de la Ley 24.240 y a los arts. 1110 a 1116 del Código Civil y Comercial.
+9.4. **Derecho de revocación: Botón de arrepentimiento.** Por tratarse de una contratación celebrada a distancia, el Cliente tiene el **derecho irrenunciable de revocar la contratación dentro de los diez (10) días corridos**, contados desde la celebración del contrato (esto es, desde la confirmación de la reserva de la Sesión), **siempre que la Sesión todavía no haya comenzado**, conforme al art. 34 de la Ley 24.240, a los arts. 1110 a 1116 del Código Civil y Comercial y al art. 3, inc. b, de la Disposición 954/2025.
 
 Condiciones:
 
 - La revocación **no requiere expresar motivo** y **no tiene costo alguno** para el Cliente.
 - Puede ejercerse desde el enlace **"BOTÓN DE ARREPENTIMIENTO"**, disponible en https://sere.ar y en https://sere.ar/legal/arrepentimiento, **sin necesidad de registrarse ni de realizar trámite previo alguno**, o escribiendo a hola@sere.ar.
 - Recibida la solicitud, Sere remitirá al Cliente, **dentro de las 24 horas y por medio electrónico**, un **código de identificación de la revocación**, conforme a la Disposición 954/2025 de la Subsecretaría de Defensa del Consumidor y Lealtad Comercial.
-- Ejercida la revocación, Sere reintegrará la totalidad de lo abonado, sin cargo. El reintegro se procesa a través del procesador de pagos; los tiempos de acreditación dependen de dicho procesador y del medio de pago.
-- La revocación procede **aunque la Sesión ya se haya prestado** dentro del plazo de diez (10) días, y también en ese caso Sere reintegra la totalidad de lo abonado.
+- Ejercida la revocación, Sere reintegrará la totalidad de lo abonado, sin cargo. El reintegro se procesa a través del procesador de pagos, salvo en los pagos en USDT, que se rigen por la cláusula 9.6; los tiempos de acreditación dependen del procesador y del medio de pago.
+- Dentro de su plazo y antes de que comience la Sesión, la revocación procede aunque falten menos de veinticuatro (24) horas, y prevalece sobre lo previsto en la cláusula 9.1.
+- **Una vez comenzada la Sesión, la revocación ya no procede**, por haberse utilizado el servicio contratado. Si el Cliente no quedó conforme con la primera Sesión que mantuvo con un Profesional, puede ejercer la garantía de la cláusula 9.3.
 
 9.5. **Ausencias.** Si alguna de las partes no se presenta a una Sesión confirmada, rige lo siguiente:
 
@@ -436,7 +437,9 @@ export const REGRET_MD = `# Botón de arrepentimiento
 
 ## Qué es
 
-Si contrataste una Sesión en Sere, tenés derecho a **arrepentirte y dejar sin efecto la contratación dentro de los 10 (diez) días corridos**, contados desde que confirmaste la reserva.
+Si contrataste una Sesión en Sere, tenés derecho a **arrepentirte y dejar sin efecto la contratación dentro de los 10 (diez) días corridos**, contados desde que confirmaste la reserva, **siempre que la Sesión todavía no haya empezado**.
+
+Una vez que la Sesión empezó ya no se puede revocar, porque el servicio se usó (Disposición 954/2025, art. 3). Si no te convenció tu primera sesión con un profesional, tenés la garantía de primera sesión, que se explica más abajo.
 
 Es un derecho **irrenunciable**: no hace falta que expliques por qué, no tiene ningún costo para vos, y nadie puede pedirte que renuncies a él. Está previsto en el **artículo 34 de la Ley 24.240** de Defensa del Consumidor y en los **artículos 1110 a 1116 del Código Civil y Comercial**.
 
@@ -453,15 +456,15 @@ Con eso alcanza. Si preferís, también podés escribirnos a **hola@sere.ar** co
 ## Qué pasa después
 
 1. Al enviar el formulario te mostramos en pantalla y te mandamos por correo electrónico un **código de identificación de la revocación**. Si nos escribiste por correo, te lo enviamos **dentro de las 24 horas**. Ese código es tu constancia: guardalo.
-2. Damos de baja la Sesión y te **reintegramos el 100% de lo que pagaste**, sin cargo alguno.
-3. El reintegro se hace a través del mismo medio de pago que usaste, por medio del procesador de pagos. **Los tiempos de acreditación dependen de tu banco o de la tarjeta**, no de nosotros: normalmente entre 5 y 20 días hábiles según el medio.
+2. Ubicamos tu reserva. Si la Sesión todavía no había empezado cuando hiciste la solicitud, la damos de baja y te **reintegramos el 100% de lo que pagaste**, sin cargo alguno.
+3. El reintegro se hace a través del mismo medio de pago que usaste, por medio del procesador de pagos. Si pagaste en USDT, te lo transferimos nosotros a la dirección que nos indiques (Términos y Condiciones §9.6). **Los tiempos de acreditación dependen de tu banco o de la tarjeta**, no de nosotros: normalmente entre 5 y 20 días hábiles según el medio.
 
-## Si el plazo de 10 días ya pasó
+## Si el plazo ya pasó o la Sesión ya ocurrió
 
 Tenés otras vías, que son independientes de este derecho:
 
 - **Cancelar una Sesión** que todavía no ocurrió: podés hacerlo desde la app hasta 24 horas antes del horario agendado, con reembolso total (Términos y Condiciones §9.1).
-- **Garantía de primera sesión**: si no quedaste conforme con la primera Sesión con un profesional, podés pedir el reintegro total **desde la app, en la pantalla de esa sesión**, o escribiendo a hola@sere.ar, dentro de las 48 horas del horario agendado (Términos y Condiciones §9.3).
+- **Garantía de primera sesión**: si no quedaste conforme con la primera Sesión con un profesional, podés pedir el reintegro total **desde la app, en la pantalla de esa sesión**, o escribiendo a hola@sere.ar, dentro de las 48 horas del horario agendado. Se puede usar **una sola vez por cuenta** (Términos y Condiciones §9.3).
 
 ## Ante cualquier problema
 
@@ -541,7 +544,7 @@ export const LEGAL_PLACEHOLDERS: string[] = [];
  *  Se guarda en `profiles.accepted_terms_version` al registrarse: sin esto no
  *  hay forma de probar qué texto leyó cada persona, que es lo que se discute al
  *  invocar §20 (modificaciones) o §10 (no elusión). */
-export const LEGAL_VERSION = '71c4861c291c';
+export const LEGAL_VERSION = 'a04ce44afb03';
 
 /** true mientras los documentos sigan siendo un borrador sin completar.
  *  La pantalla legal muestra un aviso mientras esto sea true; cuando el/la

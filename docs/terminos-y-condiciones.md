@@ -132,15 +132,16 @@ Condiciones:
 - El reintegro se procesa a través del procesador de pagos y **se debita de los fondos correspondientes al Profesional**, conforme a la cláusula 8.8. Sere no percibe comisión sobre las Sesiones reintegradas por esta vía.
 - Sere puede denegar la solicitud ante uso abusivo o fraudulento de la garantía (por ejemplo, cuentas múltiples de una misma persona, o solicitudes reiteradas destinadas a obtener Sesiones sin costo).
 
-9.4. **Derecho de revocación: Botón de arrepentimiento.** Por tratarse de una contratación celebrada a distancia, el Cliente tiene el **derecho irrenunciable de revocar la contratación dentro de los diez (10) días corridos**, contados desde la celebración del contrato (esto es, desde la confirmación de la reserva de la Sesión), conforme al art. 34 de la Ley 24.240 y a los arts. 1110 a 1116 del Código Civil y Comercial.
+9.4. **Derecho de revocación: Botón de arrepentimiento.** Por tratarse de una contratación celebrada a distancia, el Cliente tiene el **derecho irrenunciable de revocar la contratación dentro de los diez (10) días corridos**, contados desde la celebración del contrato (esto es, desde la confirmación de la reserva de la Sesión), **siempre que la Sesión todavía no haya comenzado**, conforme al art. 34 de la Ley 24.240, a los arts. 1110 a 1116 del Código Civil y Comercial y al art. 3, inc. b, de la Disposición 954/2025.
 
 Condiciones:
 
 - La revocación **no requiere expresar motivo** y **no tiene costo alguno** para el Cliente.
 - Puede ejercerse desde el enlace **"BOTÓN DE ARREPENTIMIENTO"**, disponible en https://sere.ar y en https://sere.ar/legal/arrepentimiento, **sin necesidad de registrarse ni de realizar trámite previo alguno**, o escribiendo a hola@sere.ar.
 - Recibida la solicitud, Sere remitirá al Cliente, **dentro de las 24 horas y por medio electrónico**, un **código de identificación de la revocación**, conforme a la Disposición 954/2025 de la Subsecretaría de Defensa del Consumidor y Lealtad Comercial.
-- Ejercida la revocación, Sere reintegrará la totalidad de lo abonado, sin cargo. El reintegro se procesa a través del procesador de pagos; los tiempos de acreditación dependen de dicho procesador y del medio de pago.
-- La revocación procede **aunque la Sesión ya se haya prestado** dentro del plazo de diez (10) días, y también en ese caso Sere reintegra la totalidad de lo abonado.
+- Ejercida la revocación, Sere reintegrará la totalidad de lo abonado, sin cargo. El reintegro se procesa a través del procesador de pagos, salvo en los pagos en USDT, que se rigen por la cláusula 9.6; los tiempos de acreditación dependen del procesador y del medio de pago.
+- Dentro de su plazo y antes de que comience la Sesión, la revocación procede aunque falten menos de veinticuatro (24) horas, y prevalece sobre lo previsto en la cláusula 9.1.
+- **Una vez comenzada la Sesión, la revocación ya no procede**, por haberse utilizado el servicio contratado. Si el Cliente no quedó conforme con la primera Sesión que mantuvo con un Profesional, puede ejercer la garantía de la cláusula 9.3.
 
 9.5. **Ausencias.** Si alguna de las partes no se presenta a una Sesión confirmada, rige lo siguiente:
 

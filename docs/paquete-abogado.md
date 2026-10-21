@@ -36,8 +36,8 @@ Las cinco que más pesan, en este orden:
 1. **B.7** — cobro plata de terceros en PayPal y USDT siendo persona física
    (BCRA, CNV, Monotributo). Voy a lanzar con los tres medios, así que bloquea.
 2. **A.5** — arrepentimiento con la sesión ya prestada: la Disposición 954/2025
-   parece excluirlo. Decidimos limitarlo a antes de la sesión y necesito la
-   redacción, y saber quién absorbe el reintegro.
+   parece excluirlo. Ya lo limitamos a antes de la sesión: necesito que valides
+   la redacción y me digas quién absorbe el reintegro.
 3. **A.7 y B.1** — si el encuadre de "solo intermediaria" se sostiene, dado que
    cobro, doy una garantía, verifico y sanciono. Opero sin sociedad (ver B.9).
 4. **A.3** — transferencias de datos sensibles al exterior.
@@ -233,17 +233,16 @@ quedarme corto.
 El botón de arrepentimiento da 10 días corridos (art. 34 Ley 24.240). La
 **Disposición 954/2025** (que derogó la Res. 424/2020) dice en su art. 3.b que el
 arrepentimiento no rige *"cuando el consumidor efectivamente haya utilizado o
-consumido el producto o servicio contratado"*. Hoy §9.4 dice lo contrario a
-propósito: reintegro total aunque la sesión ya se haya prestado.
+consumido el producto o servicio contratado"*. Hasta el 21/10/2026, §9.4 decía lo
+contrario a propósito (reintegro total aunque la sesión ya se hubiera
+prestado), y eso permitía sesiones gratis sin límite.
 
-- [ ] ¿Cómo se aplica el art. 3.b a una sesión ya prestada? ¿Qué parte de §9.4
-      es obligación legal y qué parte es un beneficio que ofrece Sere?
-- [ ] **Decisión tomada (21/10/2026), sujeta a que confirmes que la norma lo
-      permite:** el arrepentimiento vale **hasta que empieza la Sesión**. Una
-      vez prestada, la única devolución por insatisfacción es la garantía de
-      §9.3 (una vez por cuenta, revisada por Sere). Necesito la redacción de
-      §9.4 y del Botón de arrepentimiento en ese sentido, y saber si el cambio
-      rige para reservas futuras sin afectar las ya hechas.
+- [ ] **Decisión tomada y ya publicada (21/10/2026):** el arrepentimiento vale
+      **hasta que empieza la Sesión**. Una vez prestada, la única devolución por
+      insatisfacción es la garantía de §9.3 (una vez por cuenta, revisada por
+      Sere). Así quedaron redactados §9.4 y el Botón de arrepentimiento, que van
+      adjuntos. ¿La norma lo permite y la redacción es correcta? No hay usuarios
+      todavía, así que no afecta reservas hechas.
 - [ ] Antes de la Sesión el arrepentimiento sigue valiendo aunque falten menos
       de 24 horas, así que deja sin efecto la regla de §9.1 para las reservas
       hechas con menos de 10 días de anticipación. ¿Es así?
@@ -254,9 +253,6 @@ propósito: reintegro total aunque la sesión ya se haya prestado.
       revocación. ¿Puedo trasladársela al profesional si lo digo en §8.8, o la
       tengo que absorber yo? Si el profesional no tiene saldo, la devolución
       falla.
-- [ ] Como casi todas las reservas se hacen con menos de 10 días, la revocación
-      deja sin efecto práctico el "sin reembolso dentro de las 24hs" de §9.1 y
-      el "una sola vez" de §9.3. ¿Cambia eso con la Disposición 954/2025?
 
 **A.6 — Cancelación dentro de las 24hs sin reembolso (T&C §9.1).**
 Hoy quien cancela con menos de 24 horas de anticipación **pierde el reembolso**, y
@@ -700,8 +696,7 @@ antes de mandártelos porque varias dependen de las respuestas de arriba.
 | Política §6 y §7 frente a B.15 | La Política da por hecho que lo que va al proveedor de IA no es dato personal, y la retención cero todavía no está activa. |
 | Sección 1 de esta consulta frente a T&C §8.5 | Acá digo que Sere cobra los pagos del exterior para que el profesional no sea exportador ni haga factura E. Pero §8.5 dice que cada profesional factura la Sesión al Cliente y Sere solo su comisión. Si el profesional factura a un cliente del exterior, vuelve a ser exportador. ¿Quién factura qué en PayPal y USDT? |
 | T&C §8.3 | La comisión del 20% es sobre la "primera Sesión completada", pero se retiene "en el momento del pago", cuando todavía no se sabe si se va a completar. Falta decir qué pasa si la primera se cancela o se reintegra. |
-| T&C §9.3 frente a §9.4 | La garantía es una sola vez por Cliente, pero la revocación después de la sesión (A.5) es ilimitada y también devuelve el 100%: en la práctica, cualquier Sesión puede salir gratis dentro de los 10 días. |
-| T&C §9.3 | La primera frase parece ofrecer la garantía con cada profesional; el límite real es una vez en toda Sere. El Botón de arrepentimiento la resume sin ese límite. |
+| T&C §9.3 | La primera frase parece ofrecer la garantía con cada profesional; el límite real es una vez en toda Sere. |
 | T&C §7.4 frente a §9.1 | Cambiar de horario libremente pide "más de 24 horas" y cancelar con reembolso pide "24 horas o más". Una reserva a exactamente 24 horas cae en grupos distintos. |
 | T&C §9.4 y Botón de arrepentimiento frente a T&C §7.1 y §8.2 | Los 10 días corren "desde la confirmación de la reserva", pero en las reservas que el profesional tiene que aceptar se cobra antes de esa confirmación. ¿Cuándo se celebra el contrato? |
 | Política §10 y Eliminar cuenta | Notas de sesión: si se da de baja el Cliente, se borran todas, incluidas las compartidas; si se da de baja el Profesional, las compartidas se conservan "porque también pertenecen al Cliente". Los mensajes se conservan por el mismo motivo. Son criterios opuestos para casos parecidos. |
