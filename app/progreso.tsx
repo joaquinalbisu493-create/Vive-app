@@ -570,6 +570,7 @@ const s = StyleSheet.create({
     height: 32,
     marginLeft: -6,
     marginRight: 2,
+    marginTop: 3,
     alignItems: 'center',
     justifyContent: 'center',
   },
