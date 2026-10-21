@@ -1,3 +1,12 @@
+## 2026-10-21 — Joaquín (Claude · Progreso: texto y marcos blancos invisibles)
+
+**Tocado:** `app/progreso.tsx`.
+
+**Resumen:** Joaquín vio en device que en Progreso había tipografía y marcos en blanco que no se veían. Eran **restos de un diseño oscuro** (colores blancos/semi-blancos) que quedaron invisibles sobre el fondo claro actual (`bgGrad` crema). **No era del rename** (el commit de Sere solo tocó dos comentarios ahí). Arreglados 6:
+- Texto: `sectionTitle`, `moodLegendText`, `editBtn` (botón "Editar") — blanco → `FOREST_SOFT`.
+- Marcos/líneas: borde de `streakPill` y de `checkCircle` (círculo del hábito), y la `timelineLine` del historial — blanco → `rgba(86,94,50,0.22)` (el oliva suave que ya usan las otras cards de la pantalla).
+- Se dejaron los blancos/crema legítimos (iniciales de avatar sobre gradiente verde, texto del tooltip sobre FOREST). tsc limpio.
+
 ## 2026-10-20 — Andre (Claude · revisión UX de sere.ar y primeros cambios)
 
 **Tocado:** `web/index.html`, `web/tiendas.js`, `web/fonts/`, `vercel.json`, `scripts/sync-legal.mjs` y las demás páginas de `web/` (solo la letra).

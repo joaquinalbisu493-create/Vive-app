@@ -621,7 +621,7 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.78)',
+    color: FOREST_SOFT,   // era blanco (resto de un diseño oscuro) → invisible sobre el fondo claro
     paddingHorizontal: 22,
     marginBottom: 10,
   },
@@ -694,7 +694,7 @@ const s = StyleSheet.create({
   },
   moodLegendItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   moodLegendDot: { width: 7, height: 7, borderRadius: 3.5 },
-  moodLegendText: { fontFamily: ViveFonts.regular, fontSize: 10, color: 'rgba(255,255,255,0.78)' },
+  moodLegendText: { fontFamily: ViveFonts.regular, fontSize: 10, color: FOREST_SOFT },
 
   // ── Hábitos ───────────────────────────────────────────────────────────────
   habitosHeader: {
@@ -711,13 +711,13 @@ const s = StyleSheet.create({
     gap: 3,
     backgroundColor: 'rgba(255,248,240,0.55)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.65)',
+    borderColor: 'rgba(86,94,50,0.22)',   // era blanco → no se veía el marco sobre el fondo claro
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
   streakPillText: { fontFamily: ViveFonts.semibold, fontSize: 11, color: '#565E32' },
-  editBtn: { fontFamily: ViveFonts.medium, fontSize: 13, color: 'rgba(255,255,255,0.85)' },
+  editBtn: { fontFamily: ViveFonts.medium, fontSize: 13, color: FOREST_SOFT },
   habitosCard: {
     marginHorizontal: CARD_MX,
     marginBottom: 24,
@@ -776,7 +776,7 @@ const s = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.70)',
+    borderColor: 'rgba(86,94,50,0.22)',   // era blanco → el círculo del hábito no se veía
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -806,7 +806,7 @@ const s = StyleSheet.create({
     width: 1.5,
     flex: 1,
     minHeight: 14,
-    backgroundColor: 'rgba(255,255,255,0.35)',
+    backgroundColor: 'rgba(86,94,50,0.22)',   // era blanco → la línea del historial no se veía
     marginTop: 4,
   },
   sesionCard: {
