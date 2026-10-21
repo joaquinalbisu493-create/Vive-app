@@ -250,7 +250,7 @@ prestado), y eso permitía sesiones gratis sin límite.
       profesional, igual que con la garantía. La sesión no ocurrió, así que no
       la cobra, y Sere tampoco cobra su comisión. En Mercado Pago es lo que ya
       pasa: el importe está en la cuenta del profesional y la devolución se
-      debita de ahí. Ya lo agregué en §8.8. ¿Se puede trasladar así? Si el
+      debita de ahí. §8.8 ahora lo dice para todos los reintegros de la cláusula 9. ¿Se puede trasladar así? Si el
       profesional no tiene saldo, la devolución falla: ¿qué tengo que prever?
 
 **A.6 — Cancelación dentro de las 24hs sin reembolso (T&C §9.1).**
@@ -685,7 +685,6 @@ antes de mandártelos porque varias dependen de las respuestas de arriba.
 | T&C §10.4 frente a §14.2 | La notificación del motivo de una sanción es obligatoria en §10.4 y "se procura, cuando sea posible" en §14.2. |
 | T&C §9.1 a §9.5 y Botón de arrepentimiento frente a T&C §9.6 | Los reintegros se describen como automáticos por el procesador, pero los pagos en USDT se devuelven a mano (ver A.8). |
 | T&C §8.2 y Política §2.2 frente a A.9 | Los pagos en dólares se presentan como "desde el exterior", pero también puede elegirlos alguien que está en Argentina. |
-| Flujo de fondos (sección 1) frente a T&C §8.8 | Todos los reembolsos salen de los fondos del profesional, pero §8.8 solo regula expresamente la garantía y la revocación. Faltan las cancelaciones con reembolso y las ausencias de §9.5. |
 | T&C §15.2 y Política §8.2 frente a A.12 | "No utilizar el contenido de las conversaciones con fines comerciales" frente a un análisis local que protege la regla de comisiones. |
 | Política §3.4 frente a §6 y §7 | "Ni con ningún tercero" choca con los proveedores que tratan esos datos. |
 | Política §2.5 frente a §6 | La lista de espera "no se comparte con terceros", pero se guarda y se avisa con proveedores externos. |
