@@ -404,28 +404,27 @@
   .purpose .sec-lead { margin: 24px auto 0; text-wrap: balance; }
   /* Un encuentro. 25/09/2026: dos círculos, uno por persona, que se acercan
      hasta superponerse. 21/10/2026: con los colores de la web y de la escala
-     de ánimo de la app: vos en arena, tu profesional en salvia, los dos con
-     el borde oliva del isotipo, y lo que comparten en terracota. El viaje es
+     de ánimo de la app: vos en arena, tu profesional en salvia y lo que
+     comparten en terracota. Con volumen suave (luz arriba a la izquierda,
+     una sombra difusa abajo): Andre no quiso el dibujo plano. El viaje es
      corto y frena suave; al llegar quedan quietos (Andre no quiso eco ni
      respiración). Sin JavaScript o con movimiento reducido se ven juntos.
      🔁 Si llega la FOTO real (escena armada con alguien de la beta, con
      permiso firmado), puede ir acá o sumarse debajo. */
   .encuentro { margin: 40px auto 0; max-width: 400px; }
   @media (max-width: 640px) { .encuentro { max-width: 320px; } }
-  .enc-escena { position: relative; aspect-ratio: 2 / 1; }
+  .enc-escena { position: relative; z-index: 0; aspect-ratio: 2 / 1; }
   .enc-escena i { position: absolute; top: 0; width: 50%; aspect-ratio: 1; border-radius: 50%; transition: transform 1.3s cubic-bezier(.16, 1, .3, 1); }
-  .enc-vos { left: 8.5%; background: #EFDCCB; }
+  .enc-vos { left: 8.5%; background: radial-gradient(circle at 36% 30%, #FDF6EE, #ECD3BC 58%, #DDB596); box-shadow: inset -10px -14px 30px rgba(162, 88, 66, .10), 0 22px 40px -18px rgba(86, 94, 50, .28); }
   /* Lo compartido es una copia del círculo de "vos" adentro del de tu
-     profesional: el recorte deja ver solo la parte que se cruza. Los bordes
-     van en una capa aparte, arriba, para que se vean completos. */
-  .enc-pro { left: 41.5%; clip-path: circle(50%); background: #DCE3CB; }
-  .enc-pro b { position: absolute; top: 0; left: -66%; width: 100%; height: 100%; border-radius: 50%; background: var(--terra); transition: transform 1.3s cubic-bezier(.16, 1, .3, 1); }
-  .enc-escena .enc-borde { border: 1.5px solid var(--olive); }
-  .enc-escena .enc-borde:nth-child(4) { left: 41.5%; }
-  .enc-escena .enc-borde:nth-child(3) { left: 8.5%; }
-  .encuentro.lejos .enc-vos, .encuentro.lejos .enc-borde:nth-child(3) { transform: translateX(-22%); }
+     profesional: el recorte deja ver solo la parte que se cruza. La sombra
+     de este círculo va en otra capa, debajo, porque el recorte la cortaría. */
+  .enc-pro { left: 41.5%; clip-path: circle(50%); background: radial-gradient(circle at 40% 30%, #F7F9F1, #D5DEC2 58%, #B9C79E); }
+  .enc-pro b { position: absolute; top: 0; left: -66%; width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 80% 38%, #F2B596, #D07F60 45%, #B05E45 80%); transition: transform 1.3s cubic-bezier(.16, 1, .3, 1); }
+  .enc-escena .enc-sombra { left: 41.5%; z-index: -1; box-shadow: 0 22px 40px -18px rgba(86, 94, 50, .28); }
+  .encuentro.lejos .enc-vos { transform: translateX(-22%); }
   .encuentro.lejos .enc-pro b { transform: translateX(-44%); }
-  .encuentro.lejos .enc-pro, .encuentro.lejos .enc-borde:nth-child(4) { transform: translateX(22%); }
+  .encuentro.lejos .enc-pro, .encuentro.lejos .enc-sombra { transform: translateX(22%); }
   .enc-nombres { position: relative; height: 1.6em; margin-top: 14px; font-weight: 700; font-size: 1.05rem; }
   .enc-nombres span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; transition: opacity .6s ease .5s; }
   .enc-nombres span:first-child { left: 28%; }
@@ -500,7 +499,7 @@
      de su paso; sin JavaScript o con movimiento reducido se ve armado. */
   .steps { --g: 28px; }
   .steps li { position: relative; padding-top: 38px; }
-  .steps .nodo { position: absolute; left: 0; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--terra); transition: background-color .5s ease, box-shadow .5s ease; }
+  .steps .nodo { position: absolute; left: 0; top: 0; width: 16px; height: 16px; border-radius: 50%; background: radial-gradient(circle at 80% 38%, #F2B596, #D07F60 45%, #B05E45 80%); transition: background-color .5s ease, box-shadow .5s ease; }
   .steps li:last-child .nodo { background: var(--m2); }
   .steps li:not(:last-child)::after {
     content: ""; position: absolute; top: 7px; left: 16px; width: calc(100% + var(--g) - 16px); height: 2.5px;
@@ -846,7 +845,7 @@
       <p class="sec-lead">Acompañamos tu bienestar físico, mental y espiritual. Usamos la pantalla para llevarte a una persona real, no para reemplazarla.</p>
       <figure class="encuentro">
         <div class="enc-escena" role="img" aria-label="Dos círculos, uno por persona, que se encuentran: vos y tu profesional.">
-          <i class="enc-vos"></i><i class="enc-pro"><b></b></i><i class="enc-borde"></i><i class="enc-borde"></i>
+          <i class="enc-sombra"></i><i class="enc-vos"></i><i class="enc-pro"><b></b></i>
         </div>
         <figcaption class="enc-nombres"><span>vos</span><span>tu profesional</span></figcaption>
       </figure>
