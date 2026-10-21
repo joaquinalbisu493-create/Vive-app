@@ -1,4 +1,4 @@
-# Paquete para la consulta legal — Sere
+# Paquete para la consulta legal de Sere
 
 ## Mail de encuadre
 
@@ -14,14 +14,16 @@
 > que el sistema hace de verdad. Lo que necesito es (a) que valides los puntos
 > donde no me alcanza el criterio, y (b) que me digas qué está mal.
 >
-> Abajo te dejo el contexto del negocio y las preguntas concretas, agrupadas
-> por si bloquean o no la publicación. Los textos completos van adjuntos y
-> también están publicados en https://sere.ar/legal/.
+> En el documento "0 - Consulta y preguntas" te dejo el contexto del negocio y
+> las preguntas concretas, agrupadas según bloqueen o no la publicación. También
+> van adjuntos los textos completos: Términos y Condiciones, Política de
+> Privacidad, Botón de arrepentimiento y Eliminar cuenta. Están publicados en
+> https://sere.ar/legal/.
 >
 > Una sola aclaración de alcance: escribí todo pensando en Argentina, pero la
 > app ya permite que alguien que está en el exterior reserve y pague en dólares.
 > Si eso cambia el marco aplicable, es la pregunta **B.5** y prefiero saberlo
-> antes que después — incluso si la respuesta es que necesito a otra persona
+> antes que después, incluso si la respuesta es que necesito a otra persona
 > para esa parte.
 >
 > Gracias,
@@ -31,7 +33,7 @@
 
 ## 1. Qué es Sere y cómo funciona
 
-**Quién opera.** Persona humana inscripta en Monotributo — no hay sociedad.
+**Quién opera.** Persona humana inscripta en Monotributo; no hay sociedad.
 Actividad **631200 (Portales web)** a nivel nacional, y **631201** como
 actividad provincial en el alta de IIBB de Córdoba (Monotributo Unificado).
 Categoría A. Facturación tipo C, sin IVA discriminado.
@@ -39,7 +41,7 @@ Categoría A. Facturación tipo C, sin IVA discriminado.
 **Qué hace la app.** Dos cosas conectadas:
 
 1. **Un marketplace.** Los usuarios reservan y pagan sesiones por videollamada
-   con profesionales — hay **coaches y también psicólogos/as**. La sesión ocurre
+   con profesionales: hay **coaches y también psicólogos/as**. La sesión ocurre
    dentro de la app.
 2. **Contenido propio de bienestar.** Herramientas de 5-10 minutos: respiración,
    meditación, diario personal, registro diario de estado de ánimo.
@@ -52,7 +54,7 @@ Quien se registra invitado por otro usuario tiene 10% de descuento en su primera
 sesión, a cuenta de la comisión de Sere. Los reembolsos se ejecutan contra el pago original, así que **salen de
 los fondos del profesional** y Sere resigna su comisión.
 
-🔴 **Hay tres medios de cobro y no se comportan igual. La diferencia importa para
+**Hay tres medios de cobro y no se comportan igual. La diferencia importa para
 el encuadre**, así que la detallo en vez de resumirla:
 
 | Medio | Quién cobra | ¿Sere tiene los fondos? |
@@ -64,12 +66,12 @@ el encuadre**, así que la detallo en vez de resumirla:
 Los dos medios en dólares están **en producción**, cada uno probado con un pago
 real.
 
-⚠️ **Por qué cobra Sere en esos dos:** entendemos que, si cada profesional
+**Por qué cobra Sere en esos dos:** entendemos que, si cada profesional
 cobrara por su cuenta del exterior, cada uno pasaría a ser **exportador de
 servicios**, con factura E y registro propio por cada sesión, y que centralizando
 el cobro ese circuito es uno solo. Es una decisión tomada, pero no sabemos si el
 efecto fiscal es realmente ese, ni qué obligaciones le genera a Sere: es
-exactamente el punto donde quiero tu lectura — ver **B.7**.
+exactamente el punto donde quiero tu lectura (ver **B.7**).
 
 **Posicionamiento declarado.** Sere se declara **intermediaria** entre usuarios y
 profesionales (T&C §4) y **expresamente no prestadora de servicios de salud**
@@ -79,7 +81,7 @@ profesionales (T&C §4) y **expresamente no prestadora de servicios de salud**
 registro diario de estado de ánimo, entradas de diario personal, y los mensajes
 entre usuario y profesional.
 
-⚠️ **Un punto sobre el que quiero ser explícito, porque suele darse por
+**Un punto sobre el que quiero ser explícito, porque suele darse por
 supuesto: los mensajes NO tienen cifrado de extremo a extremo.** Hay una
 ofuscación básica, no criptografía real. Los textos actuales (T&C §15 y Política
 §8.2) lo dicen así, sin adornos, a propósito. Si te parece que esa redacción
@@ -97,15 +99,15 @@ pero no está publicada.
 Son los puntos donde el texto publicado es mi mejor lectura y no una certeza.
 Los últimos se sumaron a medida que el sistema creció.
 
-**A.1 — Jurisdicción frente a consumidores (T&C §22.2).**
+**A.1. Jurisdicción frente a consumidores (T&C §22.2).**
 La cláusula hoy dice que es competente el tribunal del lugar donde el consumidor
 recibió o debió recibir la prestación (art. 1109 CCyC) y que no hay prórroga en
 su perjuicio. Para los profesionales, §22.3 fija los tribunales de la Ciudad de
 Córdoba. ¿Es correcta así, considerando que opero desde **Córdoba** y los
 usuarios pueden estar en cualquier provincia o en el exterior?
 
-**A.2 — Consentimiento de datos sensibles (Política §3).**
-📌 *Investigué esto antes de preguntarte. Lo que sigue es lo que no pude
+**A.2. Consentimiento de datos sensibles (Política §3).**
+*Investigué esto antes de preguntarte. Lo que sigue es lo que no pude
 resolver solo.*
 
 Me llamó la atención que el **art. 7 no menciona el consentimiento** entre las
@@ -130,12 +132,12 @@ confirmación se lo avisa antes de pagar ("Tu profesional va a ver que buscabas
 por ansiedad"), y la Política §3.4 lo dice. ¿Alcanza el aviso, o hace falta un
 consentimiento para eso?
 
-**A.3 — Transferencia internacional de datos (Política §7).** 🔴 *Es el punto
+**A.3. Transferencia internacional de datos (Política §7).** *Es el punto
 más débil de todo el borrador, y el que más me sorprendió al revisarlo.*
 
 Hoy la Política §7 invoca el acuerdo de tratamiento de datos de Supabase y, para
 el resto, dice que *"Sere trabaja para que el resto de las transferencias cuente
-con garantías equivalentes"*. Eso último es una intención, no un instrumento — y
+con garantías equivalentes"*. Eso último es una intención, no un instrumento, y
 mientras tanto la app ya transfiere datos al exterior todos los días, incluida la
 categoría más sensible que maneja.
 
@@ -145,8 +147,8 @@ empresa**, porque no es lo mismo y creo que las dos cosas cuentan:
 
 | Proveedor | Qué recibe | Dónde queda el dato | Sede |
 |---|---|---|---|
-| **Supabase** | todo lo sensible: check-ins de ánimo, diario, gratitud, contenido de los mensajes | **Brasil** — región `sa-east-1`, São Paulo (verificado, no estimado) | EEUU |
-| **Daily.co** | el audio y video de las sesiones, **en tránsito** | **En ningún lado**: no grabamos. Daily solo almacena si se activa su API de grabación, y no la usamos — nuestras salas se crean sin `enable_recording` | EEUU |
+| **Supabase** | todo lo sensible: check-ins de ánimo, diario, gratitud, contenido de los mensajes | **Brasil**, región `sa-east-1`, São Paulo (verificado, no estimado) | EEUU |
+| **Daily.co** | el audio y video de las sesiones, **en tránsito** | **En ningún lado**: no grabamos. Daily solo almacena si se activa su API de grabación, y no la usamos: nuestras salas se crean sin `enable_recording` | EEUU |
 | **Expo** | el token del dispositivo y el texto de la notificación | El token queda guardado; **el contenido no** (va por memoria y colas, no a una base) hasta entregarlo a Apple/Google | EEUU |
 | **Mercado Pago** | datos de pago | Argentina | Argentina |
 | **PayPal** | datos de pago del riel en dólares | EEUU | EEUU |
@@ -161,7 +163,7 @@ nivel adecuado de la AAIP**. La lista de la Disposición 60-E/2016 son los
 Estados miembro de la UE y del EEE, Reino Unido, Suiza, Guernsey, Jersey, Isla de
 Man, Islas Feroe, Canadá (solo sector privado), Andorra, Nueva Zelanda, Uruguay e
 Israel (solo datos con tratamiento automatizado). Si eso es así, la primera fila
-—que es la que lleva todo lo sensible— necesita un instrumento propio, y
+(la que lleva todo lo sensible) necesita un instrumento propio, y
 probablemente también las dos siguientes.
 
 Tres preguntas que me quedan de la tabla misma:
@@ -174,7 +176,7 @@ Tres preguntas que me quedan de la tabla misma:
       Técnicamente es una migración, no un rediseño, y la UE **sí** está en la
       lista. Si eso resuelve el punto, es el camino que prefiero.
 
-📌 **Investigué esto por mi cuenta antes de preguntarte, así que la consulta es
+**Investigué esto por mi cuenta antes de preguntarte, así que la consulta es
 más chica de lo que parece.** En resumen: Supabase, Daily y Expo tienen
 acuerdos de tratamiento de datos, y el de Supabase incorpora las cláusulas tipo
 europeas y se acepta con los términos, sin firma. La Res. 198/2023 admite
@@ -201,11 +203,11 @@ Preguntas:
 - [ ] ¿Qué tiene que decir el texto de la Política §7 una vez resuelto? Hoy solo
       es verificable lo de Supabase.
 
-⚠️ **Incluí en esta tabla la transferencia de B.15** (el proveedor de IA). Es la
+**Incluí en esta tabla la transferencia de B.15** (el proveedor de IA). Es la
 más chica de todas en volumen de datos, pero te pido que la evalúes en
 particular y no la des por cubierta por los contratos de los demás.
 
-**A.4 — Aviso de salud y emergencias (T&C §5).**
+**A.4. Aviso de salud y emergencias (T&C §5).**
 La redacción actual aclara que Sere no presta servicios de salud, no diagnostica
 y no reemplaza atención profesional, e incluye líneas de crisis (911, la línea
 nacional de salud mental 0800-999-0091 y el Centro de Asistencia al Suicida,
@@ -213,7 +215,7 @@ nacional de salud mental 0800-999-0091 y el Centro de Asistencia al Suicida,
 la plataforma, ¿esa redacción alcanza?** Es el punto donde más me preocupa
 quedarme corto.
 
-**A.5 — Efecto de la revocación sobre una sesión ya prestada (T&C §9.4).**
+**A.5. Efecto de la revocación sobre una sesión ya prestada (T&C §9.4).**
 El botón de arrepentimiento da 10 días corridos (art. 34 Ley 24.240). La
 **Disposición 954/2025** (que derogó la Res. 424/2020) dice en su art. 3.b que el
 arrepentimiento no rige *"cuando el consumidor efectivamente haya utilizado o
@@ -237,21 +239,21 @@ prestado), y eso permitía sesiones gratis sin límite.
       debita de ahí. §8.8 ahora lo dice para todos los reintegros de la cláusula 9. ¿Se puede trasladar así? Si el
       profesional no tiene saldo, la devolución falla: ¿qué tengo que prever?
 
-**A.6 — Cancelación dentro de las 24hs sin reembolso (T&C §9.1).**
+**A.6. Cancelación dentro de las 24hs sin reembolso (T&C §9.1).**
 Hoy quien cancela con menos de 24 horas de anticipación **pierde el reembolso**, y
 la sesión **todavía no se prestó**. ¿Esa cláusula es oponible frente al régimen de
 contratación a distancia de la Ley 24.240 y la Disposición 954/2025? Es distinto de A.5,
 que pregunta por una sesión ya prestada. Si no es oponible, el código está
 implementando una penalidad que no se sostiene.
 
-**A.7 — La garantía de §9.3 frente al encuadre de §4.1.**
+**A.7. La garantía de §9.3 frente al encuadre de §4.1.**
 Léelas juntas, por favor. §4.1 dice que Sere **no presta** servicios de coaching ni
 de salud, y §9.3 ofrece **reintegrar la primera sesión** si la persona no quedó
 conforme. ¿Ofrecer esa garantía debilita el encuadre de intermediación, o convive
 sin problema como garantía comercial? ¿Qué incidencia tiene en las
 responsabilidades de Sere, considerando también que cobra, verifica y sanciona?
 
-**A.8 — Reintegros de pagos en USDT (T&C §9.6).**
+**A.8. Reintegros de pagos en USDT (T&C §9.6).**
 §9.1 y §9.2 dicen que el reembolso "se procesa de forma **automática** a través del
 procesador de pagos". Es cierto para Mercado Pago y PayPal. **Para los pagos en
 criptomoneda (USDT) no hay procesador**: lo hago yo con una transferencia a la
@@ -261,20 +263,20 @@ costo alguno". ¿Qué plazo corresponde para iniciar y completar el reintegro?
 ¿Qué gastos (comisión de la red, entre otros) tengo que absorber para que el
 cliente reciba el importe comprometido?
 
-**A.9 — Precio en dólares a un consumidor en Argentina.**
+**A.9. Precio en dólares a un consumidor en Argentina.**
 Un profesional puede fijar **dos precios**: uno en pesos y uno en dólares. Y puede
 aceptar cobrar por medios en dólares (PayPal, USDT). **Nada impide que alguien que
-está en Argentina elija pagar el precio en dólares** — puede ser lo que prefiera.
+está en Argentina elija pagar el precio en dólares**: puede ser lo que prefiera.
 ¿Hay algún problema con ofrecerle a un consumidor local un precio expresado en
 dólares, si el precio en pesos también está disponible? ¿Cambia si el profesional
 solo aceptó medios en dólares y entonces el precio en pesos no se le ofrece?
 
-**A.10 — Mostrarle al profesional el ánimo de su cliente.** 🔴 *La más delicada de
+**A.10. Mostrarle al profesional el ánimo de su cliente.** *La más delicada de
 todas.*
 El Usuario hace un check-in diario de estado de ánimo (una escala de 1 a 5:
 "bajón", "cansado", "normal", "bien", "brillando"). Hoy **eso lo ve solo él**.
 Queremos que el profesional pueda ver, **antes de la sesión**, cómo viene esa
-persona — porque llega mejor preparado y la sesión rinde más.
+persona, porque llega mejor preparado y la sesión rinde más.
 
 Lo que queremos mostrarle es **solo la tendencia agregada** (un promedio y si
 viene subiendo o bajando en los últimos días), **nunca las entradas una por una**,
@@ -285,7 +287,7 @@ Nuestra lectura, para que la confirmes o la corrijas:
 1. Entendemos que el ánimo puede ser **dato sensible** en los términos de la Ley
    25.326, y así lo dice hoy nuestra Política de privacidad.
 2. El consentimiento que hoy damos por prestado alcanza para **prestar el
-   servicio** — o sea, para que la app se lo muestre a la propia persona.
+   servicio**, o sea, para que la app se lo muestre a la propia persona.
    Compartirlo con un tercero (el profesional) nos parece una **finalidad nueva**
    que ese consentimiento **no cubre**.
 3. Por eso asumimos que hace falta un **consentimiento propio, expreso,
@@ -297,20 +299,20 @@ que sea solo la tendencia y no las entradas? ¿Y que el profesional no sea
 personal de salud sino un coach? ¿Hay que registrar cuándo y qué versión del
 texto aceptó, como hacemos con los T&C?
 
-⚠️ **Estado (26/08/2026): esta pregunta puede haber quedado sin objeto.** Se
+**Estado (26/08/2026): esta pregunta puede haber quedado sin objeto.** Se
 construyó, se apagó, y después una psicóloga consultada corrigió el enfoque: la
 asociación entre lo que la persona sintió y lo que estaba pasando **es el trabajo
 de la sesión**, no algo que la app deba entregar resuelto. En vez de acceso
 permanente a una tendencia, la persona **arma y manda un paquete** antes de cada
 sesión (es la pregunta A.11). Sin acceso continuo no hay permiso que
-consultar. **Contestala igual si te resulta simple** —sirve para saber si el
-camino descartado estaba bien descartado— pero **la pregunta que importa ahora es
+consultar. **Contestala igual si te resulta simple** (sirve para saber si el
+camino descartado estaba bien descartado), pero **la pregunta que importa ahora es
 A.11**, y una nueva: ¿cambia algo que la persona envíe texto libre suyo por el
 chat a su profesional, frente a compartirlo por un permiso? Nuestra lectura es
 que es un mensaje como cualquier otro y no una cesión a un tercero.
 
-**A.11 — El paquete que la persona le manda a su profesional antes de la sesión.**
-🔴 *Es la que reemplaza a A.10, y la que de verdad importa de las dos.*
+**A.11. El paquete que la persona le manda a su profesional antes de la sesión.**
+*Es la que reemplaza a A.10, y la que de verdad importa de las dos.*
 
 En vez de darle al profesional acceso permanente al ánimo de su cliente (A.10,
 descartado), la persona **arma y envía un paquete puntual antes de cada sesión**.
@@ -318,7 +320,7 @@ Ya está construido. Cómo funciona:
 
 - **Lo inicia siempre la persona.** El profesional no puede pedirlo ni verlo
   aparecer solo.
-- **Ventana por defecto: desde la última sesión** — "qué pasó entre que nos
+- **Ventana por defecto: desde la última sesión**, o sea "qué pasó entre que nos
   vimos", que es el encuadre del propio trabajo.
 - Los **check-ins de ánimo** con su fecha vienen incluidos de entrada, y la
   persona puede sacar cualquier día. Opcionalmente: una nota corta por día que
@@ -343,8 +345,8 @@ Preguntas:
       de la app a su profesional? Nuestra lectura es que ahí es un mensaje como
       cualquier otro y no una cesión.
 
-**A.12 — La detección de datos de contacto y las sanciones (T&C §10.3 y Política).**
-🔴 *Va en A porque de esto depende un sistema de sanciones a profesionales.*
+**A.12. La detección de datos de contacto y las sanciones (T&C §10.3 y Política).**
+*Va en A porque de esto depende un sistema de sanciones a profesionales.*
 
 La §10.3 de los Términos y la §8.3 de la Política ya describen lo que sigue; lo
 que necesito es saber si está bien encuadrado y bien redactado.
@@ -383,12 +385,12 @@ Preguntas:
 
 - [ ] ¿Esto entra en la finalidad (f) de la Política (*"moderar la plataforma (…)
       y prevenir usos indebidos"*), o necesita una finalidad propia?
-- [ ] 🔴 La **§8.2** promete *"no utilizar el contenido de las conversaciones con
+- [ ] La **§8.2** promete *"no utilizar el contenido de las conversaciones con
       fines comerciales"*, y la cláusula que esto protege es la de comisiones.
       Nuestra lectura: como el análisis corre en el teléfono y Sere solo recibe el
       tipo de dato, **no es usar el contenido**. ¿Se sostiene, o hay que tocar la
       §8.2?
-- [ ] 🔴 **No mostrarle la evidencia al sancionado frente al derecho de acceso**
+- [ ] **No mostrarle la evidencia al sancionado frente al derecho de acceso**
       (Ley 25.326, art. 14). La evidencia son datos sobre el Profesional. ¿Puede
       exigir verla? Si puede, ¿cómo se protege al cliente que denunció?
 - [ ] ¿Hace falta darle al Profesional un **descargo previo** antes de suspenderlo,
@@ -402,23 +404,23 @@ Preguntas:
 
 ### B. No bloquean, pero quiero tu lectura
 
-**B.1 — Limitación de responsabilidad e indemnidad (T&C §18–19).**
+**B.1. Limitación de responsabilidad e indemnidad (T&C §18–19).**
 ¿Qué exclusiones son ineficaces o abusivas en una relación de consumo (art. 37
 Ley 24.240)? Proponé una cláusula ajustada a las obligaciones propias de Sere.
 
-**B.2 — Cláusula anti-elusión (T&C §10).**
+**B.2. Cláusula anti-elusión (T&C §10).**
 Prohíbe que usuario y profesional se lleven la relación fuera de la plataforma
 para evitar la comisión. ¿Es ejecutable? ¿Cómo se redacta para que lo sea sin
 volverse abusiva?
 
-**B.3 — Inscripción en el Registro Nacional de Bases de Datos (AAIP).**
+**B.3. Inscripción en el Registro Nacional de Bases de Datos (AAIP).**
 Entiendo que es una obligación del Responsable, se hace por TAD, y que con datos
 sensibles de por medio la falta de inscripción agrava ante una denuncia.
 ¿Confirmás? ¿Me guiás con el trámite o lo hago yo?
 Además, la Política §9 incluye la leyenda sobre la AAIP como órgano de control.
 Decime si el texto es el que la normativa exige.
 
-**B.4 — Notas de sesión después de una baja de cuenta.**
+**B.4. Notas de sesión después de una baja de cuenta.**
 Cuando alguien pide eliminar su cuenta, se borran o anonimizan sus datos, y
 **las notas que el profesional escribió sobre esa persona también se borran**,
 de inmediato (Política §10). Es la pregunta más delicada del modelo de borrado: son
@@ -432,7 +434,7 @@ que pidió irse. ¿Qué corresponde?
 - [ ] Lo mismo cuando quien se da de baja es el profesional: sus notas privadas
       se borran de inmediato.
 
-**B.5 — ¿Me alcanza el reglamento europeo?** 🔴 *La función que lo dispara ya
+**B.5. ¿Me alcanza el reglamento europeo?** *La función que lo dispara ya
 existe, así que puede corresponder tratarla como bloqueante.*
 
 La app ya permite que un profesional argentino atienda a alguien que está fuera
@@ -452,14 +454,14 @@ siguiente salto, Argentina→EEUU, que es el de A.3.
 Preguntas:
 
 - [ ] ¿Corresponde asumir que el RGPD aplica a los usuarios que estén en la UE?
-      ¿Y desde qué momento — desde que la función existe, o desde que hay un
+      ¿Y desde qué momento: desde que la función existe, o desde que hay un
       usuario real allá?
 - [ ] Si aplica, ¿qué es lo mínimo que cambia en los documentos? ¿Hace falta un
       texto distinto por región o alcanza con uno solo que cubra las dos?
 - [ ] ¿Es algo que ves vos, o me conviene una consulta local? No quiero
       descubrirlo cuando ya haya usuarios.
 
-**B.6 — El Reglamento de IA europeo, si B.5 da que sí.**
+**B.6. El Reglamento de IA europeo, si B.5 da que sí.**
 
 Dos cosas que ya revisamos por nuestra cuenta y queremos que confirmes o
 corrijas:
@@ -476,10 +478,10 @@ corrijas:
    cuando resulta "obvio", pero entendemos que no conviene apoyarse en ella.
 
 Preguntas: ¿son correctas las dos lecturas? Y sobre la segunda, ¿qué se
-considera suficiente para "informar" — una línea en la pantalla, una mención en
+considera suficiente para "informar": una línea en la pantalla, una mención en
 la Política, una etiqueta visible en la propia tarjeta?
 
-**B.7 — Cobro por cuenta y orden en los pagos del exterior (T&C §8.2).**
+**B.7. Cobro por cuenta y orden en los pagos del exterior (T&C §8.2).**
 En los pagos por PayPal o USDT, Sere recibe la plata y después le transfiere su
 parte al profesional. La cláusula ya dice que Sere "percibe el pago por cuenta y
 orden del Profesional". ¿Corresponde encuadrarlo expresamente como mandato de
@@ -497,7 +499,7 @@ cobranza, y hace falta alguna previsión adicional en §8.2 o en §4?
       tiene salida para una persona física, ¿alcanza con postergar solo ese
       medio?
 
-**B.8 — Cifrado de los datos sensibles.**
+**B.8. Cifrado de los datos sensibles.**
 El diario y la gratitud se cifran en el teléfono antes de guardarse, así que en
 la base quedan ilegibles. No es cifrado de extremo a extremo: Sere conserva un
 secreto con el que puede volver a abrirlos, y lo hace para dos cosas: que la
@@ -516,7 +518,7 @@ reemplazó las medidas obligatorias por recomendadas.
 - [ ] Si hubiera una filtración, ¿hay hoy obligación de avisarle a la AAIP o a
       las personas? ¿Conviene comprometer un plazo en la Política?
 
-**B.9 — Mis datos personales en la web.**
+**B.9. Mis datos personales en la web.**
 Sere opera a mi nombre, así que para identificar al proveedor figuran mi nombre
 completo, mi CUIT y mi domicilio. El 08/10/2026 saqué el domicilio del pie de la
 portada y de la página de profesionales (quedó "Andre Albisu Lambertini. CUIT
@@ -531,32 +533,32 @@ cuenta, todos enlazados desde ese mismo pie.
 - [ ] ¿Conviene pasar a una sociedad antes de lanzar, entre otras cosas para que
       figuren sus datos y no los míos?
 
-**B.10 — Modificación unilateral (T&C §20 y §8.3).**
+**B.10. Modificación unilateral (T&C §20 y §8.3).**
 §20 dice que el uso continuado después de un cambio implica aceptarlo, y §8.3
 que Sere puede modificar sus comisiones "notificando con antelación razonable",
 sin plazo. ¿Son abusivas así (art. 37 Ley 24.240, arts. 985 a 989 CCyC)? ¿Qué
 plazo de preaviso y qué forma de aceptación corresponden?
 
-**B.11 — El profesional como adherente.**
+**B.11. El profesional como adherente.**
 El profesional no es consumidor, pero firma un contrato de adhesión. ¿Son
 atacables por él la jurisdicción en Córdoba (§22.3), la comisión modificable
 (§8.3), el débito de la garantía (§8.8) y la no elusión sin plazo (§10.2, que no
 dice cuánto dura "el vínculo originado en Sere")? ¿Hay riesgo de que la
 exclusividad más las sanciones se lean como relación de dependencia?
 
-**B.12 — Matrícula y atención entre jurisdicciones.**
+**B.12. Matrícula y atención entre jurisdicciones.**
 La matrícula de psicólogos y nutricionistas es provincial. ¿Puede un profesional
 matriculado en una provincia atender por videollamada a alguien que está en otra,
 o en otro país? ¿Sere tiene que controlarlo o alcanza con dejarlo a cargo del
 profesional en §5.2?
 
-**B.13 — Traspaso a una futura sociedad (T&C §23.2 y Política §6).**
+**B.13. Traspaso a una futura sociedad (T&C §23.2 y Política §6).**
 Los dos documentos hablan de "reorganizaciones societarias", pero hoy no hay
 sociedad. Si más adelante constituyo una, ¿qué requisitos, información o
 consentimiento exigiría pasarle los contratos y los datos, y qué cláusula conviene
 tener desde hoy?
 
-**B.14 — Obligaciones de la web pública.**
+**B.14. Obligaciones de la web pública.**
 - [ ] El botón de arrepentimiento es un formulario que emite el código de
       revocación en el momento, en pantalla y por correo. Pide
       nombre, correo y, opcional, datos para ubicar la reserva. No cancela ni
@@ -575,7 +577,7 @@ tener desde hoy?
       arrepentimiento.
 - [ ] ¿Tengo que mostrar el código QR de Data Fiscal siendo monotributista?
 
-**B.15 — Una frase redactada con inteligencia artificial.**
+**B.15. Una frase redactada con inteligencia artificial.**
 **Está funcionando desde el 04/09/2026** y declarado en la Política (§6 y §7). En
 la pantalla de inicio se muestra una frase sobre la semana de la persona ("Tu
 semana viene pareja. No todo tiene que ser un antes y un después"). **Qué decir
@@ -591,19 +593,19 @@ ser información sobre la salud de un titular identificable? Si queda afuera,
 
 Un ancla que puede servir, por si ayuda a acortar la respuesta: el TJUE falló el
 **4 de septiembre de 2025 en *EDPS c/ JUR* (C-413/23 P)** que el carácter
-personal de un dato **no es absoluto** — los mismos datos seudonimizados pueden
+personal de un dato **no es absoluto**: los mismos datos seudonimizados pueden
 ser personales para quien los envía y no serlo para el receptor que no puede
 reidentificar. Acá el receptor no recibe identificador, ni clave, ni forma de
 volver a la persona. No sé si ese criterio se traslada al encuadre argentino;
 esa es justamente la pregunta. Tené en cuenta también que el proveedor recibe la
 IP del servidor que hace el pedido y guarda sus propios registros técnicos.
 
-📌 Del lado técnico, y sin depender de esta respuesta: el proveedor ofrece un
+Del lado técnico, y sin depender de esta respuesta: el proveedor ofrece un
 modo de **retención cero** (el dato se descarta al terminar de procesarlo, no se
 conserva). Todavía no lo activamos, pero lo vamos a pedir en cualquier
 escenario. Si eso alcanza para cerrar el punto, decímelo.
 
-**B.16 — La marca SERE.**
+**B.16. La marca SERE.**
 La app se llamó **Vita** hasta el 17/10/2026; si ves ese nombre en algún lado,
 es el anterior. Ese día presenté yo mismo en el INPI la marca **denominativa
 SERE** (sin tilde), a mi nombre como persona humana, en las clases **9, 41, 42
@@ -634,14 +636,14 @@ La app tiene un asistente llamado **Sofía**. Hoy es solo interfaz: cuatro
 atajos que llevan a pantallas existentes, sin ninguna inteligencia detrás.
 Es una idea, que puede hacerse o no, conectarlo a un modelo de lenguaje.
 
-**C.1 — Chat abierto sobre malestar.**
+**C.1. Chat abierto sobre malestar.**
 Si Sofía conversa libremente, cada mensaje es texto libre de una persona sobre
 cómo se siente, procesado por un proveedor externo fuera del país. ¿Qué exige
-eso — consentimiento propio, aviso específico, algo más? ¿Y cambia el encuadre
+eso: consentimiento propio, aviso específico, algo más? ¿Y cambia el encuadre
 de Sere como no prestadora de servicios de salud el hecho de tener un
 interlocutor automático que responde sobre malestar emocional?
 
-**C.2 — Clasificación de texto libre hacia un destino cerrado.**
+**C.2. Clasificación de texto libre hacia un destino cerrado.**
 Alternativa mucho más acotada (las dos son exploratorias): la persona
 escribe qué necesita y el sistema **solo la deriva** a una de las secciones ya
 existentes, o a profesionales que trabajan uno de 28 temas predefinidos. No hay
@@ -649,7 +651,7 @@ conversación ni respuesta generada. ¿Clasificar un relato de malestar para
 derivar puede interpretarse como **triage** o acto sanitario, aun sin
 diagnóstico ni indicación terapéutica?
 
-> ⚠️ Independientemente de la respuesta legal, si esto se construye ya está
+> Independientemente de la respuesta legal, si esto se construye ya está
 > decidido del lado del producto que **la detección de expresiones de riesgo corre antes que
 > cualquier modelo**, con reglas fijas: si las reglas detectan las expresiones
 > previstas, el flujo corta y muestra las líneas de emergencia, sin devolver

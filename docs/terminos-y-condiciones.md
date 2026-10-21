@@ -117,7 +117,7 @@ El Profesional puede, por su parte, proponer al Cliente horarios alternativos, q
 
 Esta política se informa al Cliente **antes de confirmar la reserva**.
 
-⚠️ Lo previsto en esta cláusula **no afecta ni limita** el derecho de revocación del punto 9.4, que es irrenunciable y prevalece dentro de su plazo.
+Lo previsto en esta cláusula **no afecta ni limita** el derecho de revocación del punto 9.4, que es irrenunciable y prevalece dentro de su plazo.
 
 9.2. **Cancelación o rechazo por el Profesional.** Si el Profesional rechaza o cancela una Sesión ya abonada, o si la reserva pendiente vence sin confirmarse, el Cliente tendrá derecho al reembolso, que se procesará de forma automática a través del procesador de pagos. Los tiempos de acreditación dependen de dicho procesador y del medio de pago.
 

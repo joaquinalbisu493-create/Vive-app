@@ -112,7 +112,7 @@ El Profesional puede, por su parte, proponer al Cliente horarios alternativos, q
 
 Esta política se informa al Cliente **antes de confirmar la reserva**.
 
-⚠️ Lo previsto en esta cláusula **no afecta ni limita** el derecho de revocación del punto 9.4, que es irrenunciable y prevalece dentro de su plazo.
+Lo previsto en esta cláusula **no afecta ni limita** el derecho de revocación del punto 9.4, que es irrenunciable y prevalece dentro de su plazo.
 
 9.2. **Cancelación o rechazo por el Profesional.** Si el Profesional rechaza o cancela una Sesión ya abonada, o si la reserva pendiente vence sin confirmarse, el Cliente tendrá derecho al reembolso, que se procesará de forma automática a través del procesador de pagos. Los tiempos de acreditación dependen de dicho procesador y del medio de pago.
 
@@ -544,7 +544,7 @@ export const LEGAL_PLACEHOLDERS: string[] = [];
  *  Se guarda en `profiles.accepted_terms_version` al registrarse: sin esto no
  *  hay forma de probar qué texto leyó cada persona, que es lo que se discute al
  *  invocar §20 (modificaciones) o §10 (no elusión). */
-export const LEGAL_VERSION = 'd9355f0c0921';
+export const LEGAL_VERSION = '3ce85d882464';
 
 /** true mientras los documentos sigan siendo un borrador sin completar.
  *  La pantalla legal muestra un aviso mientras esto sea true; cuando el/la
