@@ -29,22 +29,6 @@
 
 ---
 
-## Si solo hay una hora
-
-Las cinco que más pesan, en este orden:
-
-1. **B.7** — cobro plata de terceros en PayPal y USDT siendo persona física
-   (BCRA, CNV, Monotributo). Voy a lanzar con los tres medios, así que bloquea.
-2. **A.5** — arrepentimiento con la sesión ya prestada: la Disposición 954/2025
-   parece excluirlo. Ya lo limitamos a antes de la sesión, y el reintegro lo
-   absorbe el profesional: necesito que valides las dos cosas.
-3. **A.7 y B.1** — si el encuadre de "solo intermediaria" se sostiene, dado que
-   cobro, doy una garantía, verifico y sanciono. Opero sin sociedad (ver B.9).
-4. **A.3** — transferencias de datos sensibles al exterior.
-5. **B.4** — notas de sesión de psicólogos frente a la historia clínica.
-
----
-
 ## 1. Qué es Sere y cómo funciona
 
 **Quién opera.** Persona humana inscripta en Monotributo — no hay sociedad.
