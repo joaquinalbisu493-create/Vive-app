@@ -139,6 +139,13 @@ voluntario (sin él se puede reservar y usar el resto), se puede revocar desde
 el perfil, y se guarda la fecha y la versión del texto. ¿Alcanza así? ¿Los
 mensajes con el profesional necesitan uno propio?
 
+Un caso particular: quien reserva desde un tema de la búsqueda de profesionales
+(por ejemplo "ansiedad") hace que el profesional vea ese tema junto con la
+reserva. La Política lista esos temas como dato sensible. Hoy la pantalla de
+confirmación se lo avisa antes de pagar ("Tu profesional va a ver que buscabas
+por ansiedad"), y la Política §3.4 lo dice. ¿Alcanza el aviso, o hace falta un
+consentimiento para eso?
+
 **A.3 — Transferencia internacional de datos (Política §7).** 🔴 *Es el punto
 más débil de todo el borrador, y el que más me sorprendió al revisarlo.*
 
@@ -368,8 +375,10 @@ Cómo funciona hoy, verificado contra el código:
   el Profesional y lo que manda son datos para cobrar, no se envía, por la regla
   de que el cobro se hace dentro de la plataforma. ¿Qué excepciones y garantías
   corresponden, incluidos los falsos positivos?
-- **Qué pasa en textos públicos** (presentación del Profesional, reseñas,
-  recursos): no se pueden publicar.
+- **Qué pasa en textos públicos:** en la presentación del Profesional y en las
+  reseñas no se pueden publicar. En los recursos que propone un Profesional, la
+  app advierte, no deja poner enlaces a redes o mensajería, y Sere revisa cada
+  recurso antes de publicarlo.
 - **Qué registra Sere:** solo el **tipo** de dato (por ejemplo "teléfono"), en qué
   lugar de la app, la fecha, las cuentas involucradas y si se envió igual. **El
   registro automático no incluye el texto.** Por separado, se pueden conservar
@@ -683,6 +692,17 @@ antes de mandártelos porque varias dependen de las respuestas de arriba.
 | Política §10 y Eliminar cuenta frente a B.4 | Se promete el borrado inmediato de las notas del profesional mientras está abierta la pregunta de si son historia clínica. |
 | Política §10 | "Anonimizados", "disociados" y "Usuario eliminado" se usan como equivalentes. Un mensaje o una reseña pueden identificar a alguien por su contenido aunque se quite el nombre. |
 | Política §6 y §7 frente a B.15 | La Política da por hecho que lo que va al proveedor de IA no es dato personal, y la retención cero todavía no está activa. |
+| Sección 1 de esta consulta frente a T&C §8.5 | Acá digo que Sere cobra los pagos del exterior para que el profesional no sea exportador ni haga factura E. Pero §8.5 dice que cada profesional factura la Sesión al Cliente y Sere solo su comisión. Si el profesional factura a un cliente del exterior, vuelve a ser exportador. ¿Quién factura qué en PayPal y USDT? |
+| T&C §8.3 | La comisión del 20% es sobre la "primera Sesión completada", pero se retiene "en el momento del pago", cuando todavía no se sabe si se va a completar. Falta decir qué pasa si la primera se cancela o se reintegra. |
+| T&C §9.3 frente a §9.4 | La garantía es una sola vez por Cliente, pero la revocación después de la sesión (A.5) es ilimitada y también devuelve el 100%: en la práctica, cualquier Sesión puede salir gratis dentro de los 10 días. |
+| T&C §9.3 | La primera frase parece ofrecer la garantía con cada profesional; el límite real es una vez en toda Sere. El Botón de arrepentimiento la resume sin ese límite. |
+| T&C §7.4 frente a §9.1 | Cambiar de horario libremente pide "más de 24 horas" y cancelar con reembolso pide "24 horas o más". Una reserva a exactamente 24 horas cae en grupos distintos. |
+| T&C §9.4 y Botón de arrepentimiento frente a T&C §7.1 y §8.2 | Los 10 días corren "desde la confirmación de la reserva", pero en las reservas que el profesional tiene que aceptar se cobra antes de esa confirmación. ¿Cuándo se celebra el contrato? |
+| Política §10 y Eliminar cuenta | Notas de sesión: si se da de baja el Cliente, se borran todas, incluidas las compartidas; si se da de baja el Profesional, las compartidas se conservan "porque también pertenecen al Cliente". Los mensajes se conservan por el mismo motivo. Son criterios opuestos para casos parecidos. |
+| Política §10 | Las reservas se conservan 10 años "por obligaciones contables y fiscales", pero disociadas de la identidad. Si el motivo es fiscal, probablemente haga falta saber a quién se le cobró. |
+| Política §10 frente a Eliminar cuenta | Los reportes quedan "disociados" en un texto y "anonimizados" en el otro. Eliminar cuenta llama "métricas agregadas" a la calidad de cada videollamada, que es un dato por sesión. |
+| Política §2.4 | La cámara figura para fotos, video de presentación y verificación, pero no para las videollamadas (el micrófono sí). Tampoco figura el permiso de notificaciones. |
+| Política §6 | Dice que la lista comprende "la totalidad de los proveedores", pero la verificación de pagos en USDT consulta a TronGrid (un servicio externo que lee la red), que no figura. Solo recibe la billetera de Sere. |
 | Política §6 frente a §13 | YouTube recibe datos "al cargarse" el reproductor según §6, y pone cookies "cuando decide reproducirlo" según §13. |
 
 ## 4. Lo que ya está implementado

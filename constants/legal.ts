@@ -257,8 +257,8 @@ Ante consultas sobre estos Términos: hola@sere.ar. Andre Albisu Lambertini, De 
 
 export const PRIVACY_MD = `# Política de Privacidad de Sere
 
-**Última actualización:** 19 de octubre de 2026
-**Vigencia a partir de:** 19 de octubre de 2026
+**Última actualización:** 21 de octubre de 2026
+**Vigencia a partir de:** 21 de octubre de 2026
 
 Esta Política describe cómo Sere, operada por Andre Albisu Lambertini, CUIT 20-46034087-0, con domicilio en De los Extremeños 5069, Córdoba, Provincia de Córdoba ("**Sere**", "**nosotros**"), recolecta, usa, comparte y protege los datos personales de sus Usuarios, en el marco de la **Ley 25.326 de Protección de los Datos Personales** de la República Argentina y su reglamentación, bajo la autoridad de la Agencia de Acceso a la Información Pública (AAIP).
 
@@ -306,7 +306,7 @@ Ciertos datos vinculados al Usuario (los registros de estado de ánimo, las entr
 
 3.3. El Usuario puede **revocar el consentimiento en cualquier momento** desde su perfil o escribiendo a hola@sere.ar, y solicitar la supresión de los datos ya registrados conforme a la sección 9. La revocación no afecta la licitud del tratamiento realizado con anterioridad.
 
-3.4. **Estos datos no se comparten con los Profesionales ni con ningún tercero**, salvo que el propio Usuario decida enviarlos, en cada caso y de forma expresa.
+3.4. **Estos datos no se comparten con los Profesionales ni con ningún tercero**, salvo que el propio Usuario decida enviarlos, en cada caso y de forma expresa. Cuando el Usuario reserva una Sesión a partir de un tema elegido en la sección de búsqueda de Profesionales, el Profesional ve ese tema junto con la reserva; la aplicación se lo informa al Usuario antes de confirmarla.
 
 ## 4. Finalidades del Tratamiento
 
@@ -541,7 +541,7 @@ export const LEGAL_PLACEHOLDERS: string[] = [];
  *  Se guarda en `profiles.accepted_terms_version` al registrarse: sin esto no
  *  hay forma de probar qué texto leyó cada persona, que es lo que se discute al
  *  invocar §20 (modificaciones) o §10 (no elusión). */
-export const LEGAL_VERSION = '775b33b555df';
+export const LEGAL_VERSION = '71c4861c291c';
 
 /** true mientras los documentos sigan siendo un borrador sin completar.
  *  La pantalla legal muestra un aviso mientras esto sea true; cuando el/la

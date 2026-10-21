@@ -1,14 +1,18 @@
 ## 2026-10-21 — Andre (Claude · paquete del abogado: normas al día y preguntas abiertas)
 
-**Tocado:** `docs/paquete-abogado.md`, `docs/boton-de-arrepentimiento.md`, `docs/terminos-y-condiciones.md`, `constants/legal.ts`, `web/legal/*`, `web/legal-version.js`, `web/index.html`, `scripts/sync-legal.mjs`, `docs/hosting.md`, `docs/editar-la-web.md`. Fuera del repo: los 5 Word de `~/Desktop/SERE para el abogado` regenerados (decían "Vita").
+**Tocado:** `docs/paquete-abogado.md`, `docs/politica-de-privacidad.md`, `screens/BookingScreen_Confirm.tsx`, `docs/boton-de-arrepentimiento.md`, `docs/terminos-y-condiciones.md`, `constants/legal.ts`, `web/legal/*`, `web/legal-version.js`, `web/index.html`, `scripts/sync-legal.mjs`, `docs/hosting.md`, `docs/editar-la-web.md`. Fuera del repo: los 5 Word de `~/Desktop/SERE para el abogado` regenerados (decían "Vita").
 
 **Resumen:**
 - Una auditoría de ChatGPT de los documentos del abogado detectó normas desactualizadas; verificadas contra los textos oficiales: la **Res. 424/2020 fue derogada por la Disposición 954/2025** (04/09/2025), el **COPREC fue disuelto por el Decreto 55/2025** y la **Disposición 3/2026** admite verificación razonable de identidad en los botones. Corregido: T&C §9.4 cita la 954/2025, la página de arrepentimiento ya no manda al COPREC y la fecha de la reserva figura como opcional (como en el formulario). Vigencia T&C y Arrepentimiento: 21/10/2026, `sync:legal` → versión `775b33b555df` (no obliga a re-aceptar).
 - **Decisión pendiente para Andre y Joaquín:** el art. 3.b de la 954/2025 excluye el arrepentimiento cuando el servicio ya se usó. §9.4 sigue devolviendo todo aunque la sesión se haya prestado (no se tocó la sustancia); si el abogado lo confirma, pasa a ser un beneficio voluntario que hoy paga el profesional. Reformulada la A.5 en ese sentido; el botón de baja (art. 4) se vuelve a preguntar en B.14.
 - Paquete: preguntas abiertas en vez de conclusiones (A.3, A.7, A.8, A.11, A.12, B.1, B.13, B.16), "rieles" → "medios de cobro", nueva sección 3 con 14 inconsistencias entre documentos (cada una verificada en los textos) y la sección "resuelto" pasa a "implementado, no validado". La reescritura de fondo de T&C y Política queda para después de la respuesta del abogado.
+- **Segunda revisión de los 5 documentos (mismo día):** 13 incoherencias nuevas sumadas a la tabla de la sección 3 del paquete (facturación de pagos del exterior vs T&C §8.5, comisión "completada" retenida al pagar, revocación ilimitada vs garantía única, notas compartidas con criterios opuestos, cámara de videollamada y TronGrid sin declarar, entre otras).
+- 🔴 **El profesional veía el tema por el que llegó el cliente ("Buscaba por…") sin que nadie se lo avisara**, contra Política §3.4. Decisión de Andre: avisarlo. `BookingScreen_Confirm` muestra "Tu profesional va a ver que buscabas por X" cuando la reserva viene de un tema, y Política §3.4 lo dice (vigencia 21/10, `sync:legal` → `71c4861c291c`). Se pregunta al abogado en A.2 si el aviso alcanza.
 - Sin cambios de base de datos; SCHEMA.md no cambia.
 
 **Pendiente para la próxima sesión:**
+- Andre: probar en el iPhone una reserva desde un tema de Conexiones y ver el aviso (texto, no hace falta recompilar).
+- Confirmar el horario del Centro de Asistencia al Suicida (T&C §5.3 dice 8 a 24; Befrienders publica 0-2 y 8-24).
 - Mandarle el paquete a la abogada de Buenos Aires (ofreció acompañamiento integral o servicios puntuales; recomendación: arrancar puntual con el paquete como alcance).
 - Abrir y revisar a ojo los Word regenerados (formato simple, tablas).
 - El resto de la auditoría de ChatGPT (redacción de T&C, Política, Eliminar cuenta) sigue sobre la mesa para después del abogado.

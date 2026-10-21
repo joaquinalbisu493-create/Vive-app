@@ -1187,6 +1187,18 @@ export default function BookingScreen_Confirm() {
             Antes eran tres párrafos sueltos, oscuros, con el ícono centrado y
             el texto pegado al borde derecho. El contenido no cambió. */}
         <View style={s.avisos}>
+        {/* El tema es dato sensible (Política §3) y el profesional lo ve en sus
+            reservas ("Buscaba por…", CoachReservasScreen). La Política §3.4 dice
+            que nada sensible le llega sin que la persona lo sepa: este aviso es
+            lo que hace cierta esa frase. Decisión de Andre (21/10/2026). */}
+        {!!temaOrigen && (
+          <View style={s.noticeRow}>
+            <MaterialIcons name="visibility" size={16} color={ViveColors.accent} style={{ marginTop: 2 }} />
+            <Text style={s.noticeText}>
+              {`Tu profesional va a ver que buscabas por ${temaOrigen.toLowerCase()}`}
+            </Text>
+          </View>
+        )}
         {garantiaDisponible && (
           <TouchableOpacity
             style={s.noticeRow}
