@@ -35,8 +35,9 @@ Las cinco que más pesan, en este orden:
 
 1. **B.7** — cobro plata de terceros en PayPal y USDT siendo persona física
    (BCRA, CNV, Monotributo). Voy a lanzar con los tres medios, así que bloquea.
-2. **A.5** — arrepentimiento con la sesión ya prestada: si corresponde devolver
-   todo, y quién lo absorbe.
+2. **A.5** — arrepentimiento con la sesión ya prestada: la Disposición 954/2025
+   parece excluirlo, y hoy devolvemos todo igual. Qué es obligación y qué es
+   beneficio nuestro, y quién lo absorbe.
 3. **A.7 y B.1** — si el encuadre de "solo intermediaria" se sostiene, dado que
    cobro, doy una garantía, verifico y sanciono. Opero sin sociedad (ver B.9).
 4. **A.3** — transferencias de datos sensibles al exterior.
@@ -67,22 +68,23 @@ Quien se registra invitado por otro usuario tiene 10% de descuento en su primera
 sesión, a cuenta de la comisión de Sere. Los reembolsos se ejecutan contra el pago original, así que **salen de
 los fondos del profesional** y Sere resigna su comisión.
 
-🔴 **Hay tres rieles de cobro y no se comportan igual. La diferencia importa para
+🔴 **Hay tres medios de cobro y no se comportan igual. La diferencia importa para
 el encuadre**, así que la detallo en vez de resumirla:
 
-| Riel | Quién cobra | ¿Sere tiene los fondos? |
+| Medio | Quién cobra | ¿Sere tiene los fondos? |
 |---|---|---|
 | **Mercado Pago** (pesos, Argentina) | split automático: MP retiene la comisión y le acredita el resto al profesional | **No.** Nunca pasan por una cuenta de Sere |
-| **PayPal** (dólares, exterior) | cobra **Sere**, y después le transfiere lo suyo al profesional | **Sí** |
+| **PayPal** (dólares, exterior) | cobra **Sere**, y después le transfiere al profesional el importe que le corresponde | **Sí** |
 | **USDT** (dólares, exterior) | entra el total a la billetera de Sere y se transfiere después | **Sí** |
 
-Los dos rieles en dólares están **en producción**, cada uno probado con un pago
-real. No son un plan.
+Los dos medios en dólares están **en producción**, cada uno probado con un pago
+real.
 
-⚠️ **Por qué cobra Sere en esos dos, y no es una preferencia:** si cada
-profesional cobrara por su cuenta del exterior, cada uno pasaría a ser
-**exportador de servicios**, con factura E y registro propio por cada sesión.
-Cobrando Sere, ese circuito es uno solo. Es una decisión tomada, pero es
+⚠️ **Por qué cobra Sere en esos dos:** entendemos que, si cada profesional
+cobrara por su cuenta del exterior, cada uno pasaría a ser **exportador de
+servicios**, con factura E y registro propio por cada sesión, y que centralizando
+el cobro ese circuito es uno solo. Es una decisión tomada, pero no sabemos si el
+efecto fiscal es realmente ese, ni qué obligaciones le genera a Sere: es
 exactamente el punto donde quiero tu lectura — ver **B.7**.
 
 **Posicionamiento declarado.** Sere se declara **intermediaria** entre usuarios y
@@ -186,7 +188,11 @@ más chica de lo que parece.** En resumen: Supabase, Daily y Expo tienen
 acuerdos de tratamiento de datos, y el de Supabase incorpora las cláusulas tipo
 europeas y se acepta con los términos, sin firma. La Res. 198/2023 admite
 expresamente contratos distintos de su modelo si reflejan los mismos principios.
-**Mi posición es que eso alcanza. Lo que necesito saber es si me equivoco.**
+Lo que no sé es qué mecanismo habilita cada transferencia concreta. Según la
+guía de la AAIP, los contratos distintos de los modelos aprobados tienen que
+presentarse para su aprobación dentro de los 30 días corridos desde la firma, y
+también hay otros mecanismos y excepciones. **Para cada proveedor de la tabla,
+¿qué documento corresponde y qué tenemos que conservar?**
 
 Mi lectura, para que la confirmes o la corrijas: el camino son las **Cláusulas
 Contractuales Modelo aprobadas por la Resolución AAIP 198/2023** (las de la Red
@@ -204,10 +210,9 @@ Preguntas:
 - [ ] ¿Qué tiene que decir el texto de la Política §7 una vez resuelto? Hoy solo
       es verificable lo de Supabase.
 
-⚠️ **Esta pregunta absorbe la parte de transferencia de B.15.** La que va al
-proveedor de IA es la transferencia **más chica** de todas las que ya hago, por
-varios órdenes de magnitud. Si esto se resuelve, esa parte se resuelve con lo
-mismo.
+⚠️ **Incluí en esta tabla la transferencia de B.15** (el proveedor de IA). Es la
+más chica de todas en volumen de datos, pero te pido que la evalúes en
+particular y no la des por cubierta por los contratos de los demás.
 
 **A.4 — Aviso de salud y emergencias (T&C §5).**
 La redacción actual aclara que Sere no presta servicios de salud, no diagnostica
@@ -218,13 +223,17 @@ la plataforma, ¿esa redacción alcanza?** Es el punto donde más me preocupa
 quedarme corto.
 
 **A.5 — Efecto de la revocación sobre una sesión ya prestada (T&C §9.4).**
-El botón de arrepentimiento da 10 días corridos (art. 34 Ley 24.240). Pero si la
-sesión **ya se prestó** dentro de esos 10 días, con conformidad expresa del
-cliente, ¿el reintegro es total o proporcional al servicio efectivamente
-prestado? Los arts. 1110 a 1116 del CCyC no parecen contemplar expresamente esa
-hipótesis para servicios. Necesito la cláusula redactada en consecuencia.
-*25/09/2026: mientras tanto, §9.4 dice reintegro total aunque la sesión ya se
-haya prestado (lo más favorable al consumidor). Si se puede limitar, se cambia.*
+El botón de arrepentimiento da 10 días corridos (art. 34 Ley 24.240). La
+**Disposición 954/2025** (que derogó la Res. 424/2020) dice en su art. 3.b que el
+arrepentimiento no rige *"cuando el consumidor efectivamente haya utilizado o
+consumido el producto o servicio contratado"*. Hoy §9.4 dice lo contrario a
+propósito: reintegro total aunque la sesión ya se haya prestado.
+
+- [ ] ¿Cómo se aplica el art. 3.b a una sesión ya prestada? ¿Qué parte de §9.4
+      es obligación legal y qué parte es un beneficio que ofrece Sere?
+- [ ] Si es un beneficio, la decisión de mantenerlo o limitarlo es nuestra. ¿Cómo
+      se redacta en cada caso, y se puede cambiar para reservas futuras sin
+      afectar las ya hechas?
 - [ ] **¿Quién absorbe ese reintegro?** §9.4 dice que lo reintegra Sere y no
       dice de dónde sale. En Mercado Pago el importe de la sesión ya está en la
       cuenta del profesional, y la devolución se debita de ahí. §8.8 solo le
@@ -234,12 +243,12 @@ haya prestado (lo más favorable al consumidor). Si se puede limitar, se cambia.
       falla.
 - [ ] Como casi todas las reservas se hacen con menos de 10 días, la revocación
       deja sin efecto práctico el "sin reembolso dentro de las 24hs" de §9.1 y
-      el "una sola vez" de §9.3. ¿Hay forma válida de que no sea así?
+      el "una sola vez" de §9.3. ¿Cambia eso con la Disposición 954/2025?
 
 **A.6 — Cancelación dentro de las 24hs sin reembolso (T&C §9.1).**
 Hoy quien cancela con menos de 24 horas de anticipación **pierde el reembolso**, y
 la sesión **todavía no se prestó**. ¿Esa cláusula es oponible frente al régimen de
-contratación a distancia de la Ley 24.240 y la Res. 424/2020? Es distinto de A.5,
+contratación a distancia de la Ley 24.240 y la Disposición 954/2025? Es distinto de A.5,
 que pregunta por una sesión ya prestada. Si no es oponible, el código está
 implementando una penalidad que no se sostiene.
 
@@ -247,8 +256,8 @@ implementando una penalidad que no se sostiene.
 Léelas juntas, por favor. §4.1 dice que Sere **no presta** servicios de coaching ni
 de salud, y §9.3 ofrece **reintegrar la primera sesión** si la persona no quedó
 conforme. ¿Ofrecer esa garantía debilita el encuadre de intermediación, o convive
-sin problema como garantía comercial? Es el hecho más fuerte que un reclamo podría
-usar para argumentar solidaridad en la cadena de comercialización.
+sin problema como garantía comercial? ¿Qué incidencia tiene en las
+responsabilidades de Sere, considerando también que cobra, verifica y sanciona?
 
 **A.8 — Reintegros de pagos en USDT (T&C §9.6).**
 §9.1 y §9.2 dicen que el reembolso "se procesa de forma **automática** a través del
@@ -256,8 +265,9 @@ procesador de pagos". Es cierto para Mercado Pago y PayPal. **Para los pagos en
 criptomoneda (USDT) no hay procesador**: lo hago yo con una transferencia a la
 dirección que indique el cliente, y §9.6 lo aclara así. No compromete un plazo
 ni dice quién paga la comisión de la red, y §9.4 dice que la revocación "no tiene
-costo alguno". ¿Hay que comprometer un plazo máximo, y cuál sería defendible?
-¿La comisión de la red la tengo que absorber yo?
+costo alguno". ¿Qué plazo corresponde para iniciar y completar el reintegro?
+¿Qué gastos (comisión de la red, entre otros) tengo que absorber para que el
+cliente reciba el importe comprometido?
 
 **A.9 — Precio en dólares a un consumidor en Argentina.**
 Un profesional puede fijar **dos precios**: uno en pesos y uno en dólares. Y puede
@@ -318,22 +328,22 @@ Ya está construido. Cómo funciona:
   aparecer solo.
 - **Ventana por defecto: desde la última sesión** — "qué pasó entre que nos
   vimos", que es el encuadre del propio trabajo.
-- Incluye siempre los **check-ins de ánimo** con su fecha. Opcionalmente: una
-  nota corta por día que escribe la persona, y **entradas de diario o gratitud
-  elegidas UNA POR UNA**.
+- Los **check-ins de ánimo** con su fecha vienen incluidos de entrada, y la
+  persona puede sacar cualquier día. Opcionalmente: una nota corta por día que
+  escribe la persona, y **entradas de diario o gratitud elegidas UNA POR UNA**.
 - **Se revisa entero antes de mandarlo.** Se arma, se muestra completo, se puede
   sacar cualquier pieza, y recién ahí se envía. Nada se genera y se manda solo.
 
-Nuestra lectura, para que la confirmes o la corrijas: esto **no es una cesión a
-un tercero** sino la persona mostrándole algo suyo a quien la atiende, del mismo
-modo que llevarle una hoja del cuaderno al terapeuta. La distinción con A.10 es
-que allá había un permiso de fondo y acá hay un acto puntual, revisado y
-revocable por omisión (si no lo manda, no existe).
+La diferencia con A.10: no hay acceso continuo. La persona elige y revisa el
+contenido antes de enviárselo a un profesional determinado, en un acto puntual.
+Para explicarlo internamente lo comparamos con llevarle una hoja del cuaderno al
+terapeuta, pero eso no resuelve qué hace Sere jurídicamente en el medio.
 
 Preguntas:
 
-- [ ] ¿Esa lectura se sostiene, o sigue haciendo falta un consentimiento
-      específico registrado, como el que pediría A.10?
+- [ ] ¿Qué tratamiento hace Sere al armar, transmitir y conservar ese envío?
+      ¿Qué información, consentimiento y constancia corresponden?
+- [ ] ¿Qué efecto tiene que la persona revoque después algo que ya mandó?
 - [ ] ¿Cambia algo que el destinatario sea un **coach** y no personal de salud?
 - [ ] ¿Hay que dejar constancia de qué se mandó y cuándo, o alcanza con que la
       persona lo haya visto antes de enviarlo?
@@ -355,13 +365,15 @@ Cómo funciona hoy, verificado contra el código:
   alias, links de cobro) y frases como "lo hacemos por fuera de la app".
 - **Qué pasa en textos privados** (mensajes, notas y comentarios a otra persona):
   una advertencia que deja enviar igual. **Una excepción:** si el que escribe es
-  el Profesional y lo que manda son datos para cobrar, no se envía. Sere cobra y
-  Sere le paga, así que no tiene motivo legítimo para mandarlos.
+  el Profesional y lo que manda son datos para cobrar, no se envía, por la regla
+  de que el cobro se hace dentro de la plataforma. ¿Qué excepciones y garantías
+  corresponden, incluidos los falsos positivos?
 - **Qué pasa en textos públicos** (presentación del Profesional, reseñas,
   recursos): no se pueden publicar.
 - **Qué registra Sere:** solo el **tipo** de dato (por ejemplo "teléfono"), en qué
-  lugar de la app, la fecha, las cuentas involucradas y si se envió igual.
-  **Nunca el texto.**
+  lugar de la app, la fecha, las cuentas involucradas y si se envió igual. **El
+  registro automático no incluye el texto.** Por separado, se pueden conservar
+  capturas que aporten los usuarios cuando hacen un reporte.
 - **Para qué:** el equipo ve esos avisos agrupados por Profesional, junto con si
   cada cliente siguió reservando. Si decide actuar, aplica una advertencia, una
   suspensión o una baja. **Ninguna medida es automática.**
@@ -397,8 +409,8 @@ Preguntas:
 ### B. No bloquean, pero quiero tu lectura
 
 **B.1 — Limitación de responsabilidad e indemnidad (T&C §18–19).**
-¿Qué de lo redactado se sostiene efectivamente ante un juez argentino en una
-relación de consumo, y qué es letra muerta que conviene sacar?
+¿Qué exclusiones son ineficaces o abusivas en una relación de consumo (art. 37
+Ley 24.240)? Proponé una cláusula ajustada a las obligaciones propias de Sere.
 
 **B.2 — Cláusula anti-elusión (T&C §10).**
 Prohíbe que usuario y profesional se lleven la relación fuera de la plataforma
@@ -546,9 +558,9 @@ profesional en §5.2?
 
 **B.13 — Traspaso a una futura sociedad (T&C §23.2 y Política §6).**
 Los dos documentos hablan de "reorganizaciones societarias", pero hoy no hay
-sociedad. Si más adelante constituyo una, ¿qué cláusula necesito hoy para poder
-pasarle los contratos y los datos sin volver a pedirle consentimiento a cada
-usuario?
+sociedad. Si más adelante constituyo una, ¿qué requisitos, información o
+consentimiento exigiría pasarle los contratos y los datos, y qué cláusula conviene
+tener desde hoy?
 
 **B.14 — Obligaciones de la web pública.**
 - [ ] El botón de arrepentimiento es un formulario que emite el código de
@@ -556,11 +568,14 @@ usuario?
       nombre, correo y, opcional, datos para ubicar la reserva. No cancela ni
       reintegra solo: eso lo hago yo después de ubicar la reserva, porque el
       formulario no tiene forma de saber quién lo completa. ¿Cumple así con la
-      Res. 424/2020? ¿Hay un plazo máximo para el reintegro?
+      Disposición 954/2025 (art. 5: código y medidas para hacerla efectiva) y con
+      la Disposición 3/2026, que admite pasos razonables para verificar la
+      identidad? ¿Hay un plazo máximo para el reintegro?
 - [ ] Guardo esas solicitudes tres años como constancia (Política §10). ¿Es el
       plazo correcto?
-- [ ] ¿Me corresponde el "botón de baja" (Res. 271/2020), o no aplica porque no
-      hay suscripción?
+- [ ] ¿Me corresponde el "botón de baja de servicio" (Disposición 954/2025,
+      art. 4, que lo exige a quien vende servicios a distancia)? Sere no tiene
+      suscripción: cada sesión se reserva y se paga por separado.
 - [ ] ¿Tiene que estar en la portada el enlace a Defensa del Consumidor / la
       Ventanilla Única Federal? Hoy solo figura dentro de la página de
       arrepentimiento.
@@ -586,7 +601,8 @@ personal de un dato **no es absoluto** — los mismos datos seudonimizados puede
 ser personales para quien los envía y no serlo para el receptor que no puede
 reidentificar. Acá el receptor no recibe identificador, ni clave, ni forma de
 volver a la persona. No sé si ese criterio se traslada al encuadre argentino;
-esa es justamente la pregunta.
+esa es justamente la pregunta. Tené en cuenta también que el proveedor recibe la
+IP del servidor que hace el pedido y guarda sus propios registros técnicos.
 
 📌 Del lado técnico, y sin depender de esta respuesta: el proveedor ofrece un
 modo de **retención cero** (el dato se descarta al terminar de procesarlo, no se
@@ -608,8 +624,8 @@ app de salud mental llamada Sere.
 
 - [ ] ¿Ves probable una oposición de SEREN en 41 y 44? Si llega, ¿conviene
       defenderla, negociar una coexistencia o resignar esas dos clases?
-- [ ] Mientras el trámite está abierto, ¿puedo usar el nombre en la app y en
-      las tiendas sin riesgo? Hasta la publicación más los 30 días de
+- [ ] Mientras el trámite está abierto, ¿qué riesgo tiene usar el nombre en la
+      app y en las tiendas, y qué recomendás? Hasta la publicación más los 30 días de
       oposición no voy a invertir en publicidad ni impresos.
 - [ ] La marca está a mi nombre. Si después se arma una sociedad (B.13),
       ¿alcanza con cederla en ese momento?
@@ -632,7 +648,7 @@ de Sere como no prestadora de servicios de salud el hecho de tener un
 interlocutor automático que responde sobre malestar emocional?
 
 **C.2 — Clasificación de texto libre hacia un destino cerrado.**
-Alternativa mucho más acotada, y la que probablemente elijamos si avanzamos: la persona
+Alternativa mucho más acotada (las dos son exploratorias): la persona
 escribe qué necesita y el sistema **solo la deriva** a una de las secciones ya
 existentes, o a profesionales que trabajan uno de 28 temas predefinidos. No hay
 conversación ni respuesta generada. ¿Clasificar un relato de malestar para
@@ -641,30 +657,54 @@ diagnóstico ni indicación terapéutica?
 
 > ⚠️ Independientemente de la respuesta legal, si esto se construye ya está
 > decidido del lado del producto que **la detección de expresiones de riesgo corre antes que
-> cualquier modelo**, con reglas fijas: si el texto trae señales de crisis, el
-> flujo corta y muestra las líneas de emergencia, sin devolver ninguna
-> recomendación. No es negociable ni depende de esta consulta.
+> cualquier modelo**, con reglas fijas: si las reglas detectan las expresiones
+> previstas, el flujo corta y muestra las líneas de emergencia, sin devolver
+> ninguna recomendación. Ninguna regla detecta todos los casos. No es negociable ni depende de esta consulta.
 
 ---
 
-## 3. Lo que ya está resuelto y no necesita revisión
+## 3. Inconsistencias entre los documentos que quiero que mires
 
-Para que no gastes tiempo ahí:
+Las detectamos en una revisión cruzada de los cinco documentos. No las corregí
+antes de mandártelos porque varias dependen de las respuestas de arriba.
+
+| Dónde | Qué no coincide |
+|---|---|
+| T&C §21 y Política §10 frente a Eliminar cuenta | La baja "en cualquier momento" y la cancelación automática de sesiones futuras conviven con que el profesional no puede darse de baja con sesiones agendadas. Falta explicar por separado la baja del cliente y la del profesional. |
+| T&C §10.4 y §14.2 frente a §21 | Un profesional suspendido o dado de baja conserva sus sesiones agendadas, pero otras cláusulas permiten cancelar la cuenta. Falta distinguir suspensión, bloqueo de nuevas reservas y eliminación del acceso. |
+| T&C §10.4 frente a §14.2 | La notificación del motivo de una sanción es obligatoria en §10.4 y "se procura, cuando sea posible" en §14.2. |
+| T&C §9.1 a §9.5 y Botón de arrepentimiento frente a T&C §9.6 | Los reintegros se describen como automáticos por el procesador, pero los pagos en USDT se devuelven a mano (ver A.8). |
+| T&C §8.2 y Política §2.2 frente a A.9 | Los pagos en dólares se presentan como "desde el exterior", pero también puede elegirlos alguien que está en Argentina. |
+| Flujo de fondos (sección 1) frente a T&C §8.8 | Todos los reembolsos salen de los fondos del profesional, pero §8.8 solo regula expresamente el débito de la garantía (ver A.5). |
+| T&C §15.2 y Política §8.2 frente a A.12 | "No utilizar el contenido de las conversaciones con fines comerciales" frente a un análisis local que protege la regla de comisiones. |
+| Política §3.4 frente a §6 y §7 | "Ni con ningún tercero" choca con los proveedores que tratan esos datos. |
+| Política §2.5 frente a §6 | La lista de espera "no se comparte con terceros", pero se guarda y se avisa con proveedores externos. |
+| Política §10 frente a Eliminar cuenta | La página de eliminación no incluye todos los plazos de la Política (registros de detección, solicitudes de arrepentimiento, documentación de sanciones) y deja reportes y datos técnicos sin plazo. |
+| Política §10 y Eliminar cuenta frente a B.4 | Se promete el borrado inmediato de las notas del profesional mientras está abierta la pregunta de si son historia clínica. |
+| Política §10 | "Anonimizados", "disociados" y "Usuario eliminado" se usan como equivalentes. Un mensaje o una reseña pueden identificar a alguien por su contenido aunque se quite el nombre. |
+| Política §6 y §7 frente a B.15 | La Política da por hecho que lo que va al proveedor de IA no es dato personal, y la retención cero todavía no está activa. |
+| Política §6 frente a §13 | YouTube recibe datos "al cargarse" el reproductor según §6, y pone cookies "cuando decide reproducirlo" según §13. |
+
+## 4. Lo que ya está implementado
+
+Funciona en la app o en la web. Que esté implementado no quiere decir que esté
+validado: donde hay una pregunta abierta, lo indico.
 
 - **Baja de cuenta dentro de la app**, con borrado y anonimización, y su página
-  pública de solicitud (exigida por Google Play).
+  pública de solicitud (exigida por Google Play). Ver B.4 y la sección 3.
 - **Botón de arrepentimiento** como página propia con formulario, enlazada desde
-  la portada sin requerir registro (Res. 424/2020), con el plazo de 10 días
-  **corridos**. Lo que sí quiero que mires de esto está en B.14.
+  la portada sin requerir registro (Disposición 954/2025), con el plazo de 10 días
+  **corridos**. Ver A.5 y B.14.
 - **Bloqueo y reporte de usuarios** (guideline 1.2 de Apple).
 - **Declaración de mayoría de edad** en el registro, con constancia guardada.
 - **Constancia de qué versión de los textos aceptó cada persona**, con fecha.
-- **Garantía de primera sesión** (T&C §9.3) implementada y operable.
-- **Plazos de conservación** definidos por tipo de dato (Política §10).
+- **Garantía de primera sesión** (T&C §9.3) implementada y operable. Ver A.7.
+- **Plazos de conservación** definidos por tipo de dato (Política §10). Ver A.12
+  y la sección 3.
 
 ---
 
-## 4. Qué necesito de vuelta
+## 5. Qué necesito de vuelta
 
 1. Los **puntos de A** resueltos, con la redacción que corresponda.
 2. Tu lectura de **B**.

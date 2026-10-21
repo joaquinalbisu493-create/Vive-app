@@ -5,7 +5,7 @@ de ejecución. Existe por tres obligaciones concretas, no por marketing:
 
 | Página | Por qué existe |
 |---|---|
-| `index.html` | **Res. 424/2020**: el "BOTÓN DE ARREPENTIMIENTO" tiene que estar en la **portada**, destacado y sin registro previo. Además publica el **contacto**, que es la cuarta pata de la **guideline 1.2 de Apple** (junto con filtrado, reporte y bloqueo) |
+| `index.html` | **Disp. 954/2025**: el "BOTÓN DE ARREPENTIMIENTO" tiene que estar en la **portada**, destacado y sin registro previo. Además publica el **contacto**, que es la cuarta pata de la **guideline 1.2 de Apple** (junto con filtrado, reporte y bloqueo) |
 | `legal/arrepentimiento.html` | El botón en sí (art. 34 Ley 24.240, arts. 1110-1116 CCyC) |
 | `legal/terminos.html` | Exigida por App Store Connect y Google Play |
 | `legal/privacidad.html` | Ídem — sin URL pública de privacidad no se puede publicar la app |

@@ -28,7 +28,7 @@ const DOCS = [
   { key: 'TERMS',   file: 'docs/terminos-y-condiciones.md' },
   { key: 'PRIVACY', file: 'docs/politica-de-privacidad.md' },
   // El botón de arrepentimiento es página propia y no una sección de los T&C
-  // por exigencia de la Res. 424/2020: tiene que ser un enlace de acceso fácil
+  // por exigencia de la Disp. 954/2025: tiene que ser un enlace de acceso fácil
   // y directo desde la portada, sin registro ni trámite previo. Enterrado
   // adentro de los Términos no cumpliría.
   { key: 'REGRET',  file: 'docs/boton-de-arrepentimiento.md' },
@@ -109,7 +109,7 @@ const forWeb = [];
 
 // `web = false` es la contraparte de `app = false`: el documento entra al bundle
 // pero NO genera página pública. Las de `web/legal/` existen para cumplir
-// requisitos de las tiendas y de la Res. 424/2020 —son un set legal— y meter ahí
+// requisitos de las tiendas y de la Disp. 954/2025 —son un set legal— y meter ahí
 // una página institucional le agrega ruido a un nav que la norma quiere limpio.
 for (const { key, file, app = true, web = true } of DOCS) {
   const raw = readFileSync(join(root, file), 'utf8');
@@ -179,7 +179,7 @@ for (const { file, line, text } of placeholders) {
 const WEB_META = {
   TERMS:   { file: 'terminos.html',       title: 'Términos y Condiciones — Sere', nav: 'Términos y Condiciones' },
   PRIVACY: { file: 'privacidad.html',     title: 'Política de Privacidad — Sere', nav: 'Política de Privacidad' },
-  // El nav lo escribe en mayúsculas y destacado porque la Res. 424/2020 pide
+  // El nav lo escribe en mayúsculas y destacado porque la Disp. 954/2025 pide
   // que el enlace diga literalmente "BOTÓN DE ARREPENTIMIENTO" y esté en lugar
   // destacado. Va en las tres páginas, no solo en la suya.
   REGRET:  { file: 'arrepentimiento.html', title: 'Botón de Arrepentimiento — Sere', nav: 'BOTÓN DE ARREPENTIMIENTO' },
@@ -261,7 +261,7 @@ const CSS = `
   .nav a { color: var(--soft); text-decoration: none; padding: 10px 0; touch-action: manipulation; }
   @media (hover: hover) and (pointer: fine) { .nav a:hover { color: var(--olive); text-decoration: underline; } }
   .nav a[aria-current="page"] { color: var(--olive); text-decoration: underline; text-decoration-color: var(--terra-ink); text-underline-offset: 5px; }
-  /* "Lugar destacado" de la Res. 424/2020: el enlace no puede ser un link más
+  /* "Lugar destacado" de la Disp. 954/2025: el enlace no puede ser un link más
      perdido en el pie. Va primero y como botón, en su propia pastilla. */
   .nav a.regret {
     display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 6px;
@@ -308,7 +308,7 @@ const HOME_CSS = `
   @media (hover: hover) and (pointer: fine) { .card:hover { border-color: rgba(86,94,50,.32); } }
   .card strong { display: block; margin-bottom: 3px; font-weight: 800; letter-spacing: -0.01em; }
   .card span { font-size: .92rem; color: var(--soft); }
-  /* "Lugar destacado" de la Res. 424/2020: el botón de arrepentimiento tiene
+  /* "Lugar destacado" de la Disp. 954/2025: el botón de arrepentimiento tiene
      que verse como tal en la portada, no ser un link más de una lista. */
   .card.regret { background: rgba(193,105,79,.10); border-color: rgba(193,105,79,.40); }
   .card.regret strong { color: var(--terra-ink); letter-spacing: .02em; }   /* #C1694F daba 3.41:1 */
@@ -319,7 +319,7 @@ const HOME_CSS = `
 // ── El formulario del botón de arrepentimiento ───────────────────────────────
 // Va SOLO en la página web: adentro de la app el documento se muestra como
 // texto, y ahí el .md manda a esta página. Lo recibe la edge function
-// `revocacion`, que emite el código en el momento (Res. 424/2020). Sin
+// `revocacion`, que emite el código en el momento (Disp. 954/2025). Sin
 // JavaScript el formulario no se ve y queda el correo, que el texto ya explica.
 const REVOCAR_URL = 'https://ggygiihhnkjrerpinhha.supabase.co/functions/v1/revocacion';
 const REVOCAR_ANCLA = '<h2>Cómo lo ejercés</h2>';
@@ -392,7 +392,7 @@ for (const { key, md } of forWeb) {
   const { file, title } = WEB_META[key];
   // Enlaces a TODAS las páginas, no solo a "la otra": con tres documentos el
   // par fijo dejaba el botón de arrepentimiento inalcanzable desde dos de las
-  // tres páginas, que es justo lo que la Res. 424/2020 no permite. La actual
+  // tres páginas, que es justo lo que la Disp. 954/2025 no permite. La actual
   // queda marcada en vez de desaparecer, así el menú no cambia de forma.
   const actual = (k) => (k === key ? ' aria-current="page"' : '');
   const links = Object.entries(WEB_META)
@@ -445,7 +445,7 @@ ${cuerpo}
 // exigencias de abajo las sigue cumpliendo la landing (el botón va en su nav y
 // el contacto en su pie); este índice queda como hub de los legales.
 // Existe por dos exigencias distintas que se resuelven en el mismo lugar:
-//   - Res. 424/2020: el enlace "BOTÓN DE ARREPENTIMIENTO" tiene que estar en la
+//   - Disp. 954/2025: el enlace "BOTÓN DE ARREPENTIMIENTO" tiene que estar en la
 //     PORTADA, en lugar destacado y sin registro previo. Sin index no hay
 //     portada, así que las páginas legales sueltas no alcanzaban.
 //   - Guideline 1.2 de Apple: junto con filtrado, reporte y bloqueo, exige un

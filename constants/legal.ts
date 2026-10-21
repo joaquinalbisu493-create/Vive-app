@@ -4,8 +4,8 @@
 
 export const TERMS_MD = `# Términos y Condiciones de Uso de Sere
 
-**Última actualización:** 19 de octubre de 2026
-**Vigencia a partir de:** 19 de octubre de 2026
+**Última actualización:** 21 de octubre de 2026
+**Vigencia a partir de:** 21 de octubre de 2026
 
 ## 1. Aceptación de los Términos
 
@@ -133,7 +133,7 @@ Condiciones:
 
 - La revocación **no requiere expresar motivo** y **no tiene costo alguno** para el Cliente.
 - Puede ejercerse desde el enlace **"BOTÓN DE ARREPENTIMIENTO"**, disponible en https://sere.ar y en https://sere.ar/legal/arrepentimiento, **sin necesidad de registrarse ni de realizar trámite previo alguno**, o escribiendo a hola@sere.ar.
-- Recibida la solicitud, Sere remitirá al Cliente, **dentro de las 24 horas y por medio electrónico**, un **código de identificación de la revocación**, conforme a la Resolución 424/2020 de la Secretaría de Comercio Interior.
+- Recibida la solicitud, Sere remitirá al Cliente, **dentro de las 24 horas y por medio electrónico**, un **código de identificación de la revocación**, conforme a la Disposición 954/2025 de la Subsecretaría de Defensa del Consumidor y Lealtad Comercial.
 - Ejercida la revocación, Sere reintegrará la totalidad de lo abonado, sin cargo. El reintegro se procesa a través del procesador de pagos; los tiempos de acreditación dependen de dicho procesador y del medio de pago.
 - La revocación procede **aunque la Sesión ya se haya prestado** dentro del plazo de diez (10) días, y también en ese caso Sere reintegra la totalidad de lo abonado.
 
@@ -432,7 +432,7 @@ Consultas o ejercicio de derechos: hola@sere.ar. Andre Albisu Lambertini, De los
 
 export const REGRET_MD = `# Botón de arrepentimiento
 
-**Última actualización:** 19 de octubre de 2026
+**Última actualización:** 21 de octubre de 2026
 
 ## Qué es
 
@@ -446,7 +446,7 @@ No necesitás tener cuenta, ni estar logueado, ni hacer ningún trámite previo.
 
 - Tu nombre y apellido.
 - El correo electrónico con el que reservaste (o el que usaste para pagar).
-- La fecha en que hiciste la reserva y, si lo tenés a mano, con qué profesional.
+- Si los tenés a mano, la fecha en que hiciste la reserva y con qué profesional.
 
 Con eso alcanza. Si preferís, también podés escribirnos a **hola@sere.ar** con el asunto **"ARREPENTIMIENTO"** y esos mismos datos.
 
@@ -467,7 +467,7 @@ Tenés otras vías, que son independientes de este derecho:
 
 Si tenés una dificultad para ejercer este derecho, escribinos a **hola@sere.ar** y lo resolvemos.
 
-También podés acudir a la autoridad de aplicación en materia de defensa del consumidor de tu jurisdicción, o iniciar un reclamo en el **Servicio de Conciliación Previa en las Relaciones de Consumo (COPREC)**, en https://autogestion.produccion.gob.ar/consumidores.
+También podés acudir a la autoridad de aplicación en materia de defensa del consumidor de tu jurisdicción.
 
 ---
 
@@ -541,7 +541,7 @@ export const LEGAL_PLACEHOLDERS: string[] = [];
  *  Se guarda en `profiles.accepted_terms_version` al registrarse: sin esto no
  *  hay forma de probar qué texto leyó cada persona, que es lo que se discute al
  *  invocar §20 (modificaciones) o §10 (no elusión). */
-export const LEGAL_VERSION = '18bdafe7d921';
+export const LEGAL_VERSION = '775b33b555df';
 
 /** true mientras los documentos sigan siendo un borrador sin completar.
  *  La pantalla legal muestra un aviso mientras esto sea true; cuando el/la

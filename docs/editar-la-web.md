@@ -51,7 +51,7 @@ Para cambiar un texto legal se edita el `.md` de `docs/` y se corre
 - `web/legal/index.html` y `web/legal-version.js` ← los arma el mismo script
 
 ⚠️ Y hay dos cosas en la landing que **no son decorativas y no se pueden sacar**:
-el enlace **"BOTÓN DE ARREPENTIMIENTO"** (lo exige la Resolución 424/2020, tiene
+el enlace **"BOTÓN DE ARREPENTIMIENTO"** (lo exige la Disposición 954/2025, tiene
 que estar en la primera pantalla y en un lugar destacado) y el **contacto
 publicado** en el pie (lo exige la guideline 1.2 de Apple).
 

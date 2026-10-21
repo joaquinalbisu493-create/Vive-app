@@ -1,3 +1,3 @@
 // GENERADO POR scripts/sync-legal.mjs — NO EDITAR A MANO.
 // Es el mismo valor que LEGAL_VERSION en constants/legal.ts.
-window.LEGAL_VERSION = '18bdafe7d921';
+window.LEGAL_VERSION = '775b33b555df';

@@ -1,6 +1,6 @@
 > ⚠️ **Completado y publicado por nosotros el 25/09/2026, sin revisión legal profesional todavía.** Andre lo va a revisar con un abogado; si hace falta, se amplía o modifica.
-> Esta página existe para cumplir la Resolución 424/2020 de la Secretaría de
-> Comercio Interior, que obliga a quien vende por web o app a ofrecer un enlace
+> Esta página existe para cumplir la Disposición 954/2025 de la Subsecretaría de
+> Defensa del Consumidor y Lealtad Comercial (que derogó la Res. 424/2020), que obliga a quien vende por web o app a ofrecer un enlace
 > "BOTÓN DE ARREPENTIMIENTO" de acceso fácil y directo desde la portada, en
 > lugar destacado y **sin exigir registro previo ni trámite alguno**. El texto
 > debe ser validado por un/a abogado/a matriculado/a antes de publicarse. Los
@@ -8,7 +8,7 @@
 
 # Botón de arrepentimiento
 
-**Última actualización:** 19 de octubre de 2026
+**Última actualización:** 21 de octubre de 2026
 
 ## Qué es
 
@@ -22,7 +22,7 @@ No necesitás tener cuenta, ni estar logueado, ni hacer ningún trámite previo.
 
 - Tu nombre y apellido.
 - El correo electrónico con el que reservaste (o el que usaste para pagar).
-- La fecha en que hiciste la reserva y, si lo tenés a mano, con qué profesional.
+- Si los tenés a mano, la fecha en que hiciste la reserva y con qué profesional.
 
 Con eso alcanza. Si preferís, también podés escribirnos a **hola@sere.ar** con el asunto **"ARREPENTIMIENTO"** y esos mismos datos.
 
@@ -43,7 +43,7 @@ Tenés otras vías, que son independientes de este derecho:
 
 Si tenés una dificultad para ejercer este derecho, escribinos a **hola@sere.ar** y lo resolvemos.
 
-También podés acudir a la autoridad de aplicación en materia de defensa del consumidor de tu jurisdicción, o iniciar un reclamo en el **Servicio de Conciliación Previa en las Relaciones de Consumo (COPREC)**, en https://autogestion.produccion.gob.ar/consumidores.
+También podés acudir a la autoridad de aplicación en materia de defensa del consumidor de tu jurisdicción.
 
 ---
 
