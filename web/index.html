@@ -403,21 +403,25 @@
   .purpose-q { margin: 0 auto; max-width: 22ch; font-size: clamp(1.8rem, 3.6vw, 2.9rem); line-height: 1.08; text-wrap: balance; }
   .purpose .sec-lead { margin: 24px auto 0; text-wrap: balance; }
   /* Un encuentro. 25/09/2026: dos círculos, uno por persona, que se acercan
-     hasta superponerse. 21/10/2026: con el lenguaje del logo y del trébol de
-     la portada (planos, translúcidos, multiplicados): donde se cruzan nace un
-     tercer tono, sin capas extra. El viaje es corto y frena suave; al llegar
-     sale un eco del encuentro y después respiran juntos. Sin JavaScript o
-     con movimiento reducido se ven juntos y quietos.
+     hasta superponerse. 21/10/2026: con los colores del logo. Vos en coral,
+     tu profesional en celeste, y donde se cruzan aparece el sol: el tercer
+     círculo del trébol nace del encuentro. El viaje es corto y frena suave;
+     al llegar sale un eco y después respiran juntos. Sin JavaScript o con
+     movimiento reducido se ven juntos y quietos.
      🔁 Si llega la FOTO real (escena armada con alguien de la beta, con
      permiso firmado), puede ir acá o sumarse debajo. */
   .encuentro { margin: 40px auto 0; max-width: 540px; }
-  .enc-escena { position: relative; aspect-ratio: 2 / 1; isolation: isolate; animation: respirar 6s ease-in-out 1.6s infinite; }
-  .enc-escena i { position: absolute; top: 0; width: 50%; aspect-ratio: 1; border-radius: 50%; mix-blend-mode: multiply; transition: transform 1.3s cubic-bezier(.16, 1, .3, 1); }
-  .enc-vos { left: 8.5%; background: radial-gradient(circle at 40% 36%, #FBD9C4, var(--coral) 78%); opacity: .62; }
-  .enc-pro { left: 41.5%; background: radial-gradient(circle at 60% 36%, #EEF4F9, var(--sky) 78%); opacity: .85; }
-  .enc-escena .enc-eco { left: 25%; mix-blend-mode: normal; border: 1.5px solid var(--terra); background: none; opacity: 0; transform: scale(.4); transition: none; }
-  .encuentro.lejos .enc-vos { transform: translateX(-34%); }
-  .encuentro.lejos .enc-pro { transform: translateX(34%); }
+  .enc-escena { position: relative; aspect-ratio: 2 / 1; animation: respirar 6s ease-in-out 1.6s infinite; }
+  .enc-escena i { position: absolute; top: 0; width: 50%; aspect-ratio: 1; border-radius: 50%; transition: transform 1.3s cubic-bezier(.16, 1, .3, 1); }
+  .enc-vos { left: 8.5%; background: radial-gradient(circle at 40% 36%, #FBE0D2, #F39A85 78%); }
+  /* El sol es una copia del círculo de "vos" adentro del de tu profesional:
+     el recorte deja ver solo la parte compartida. */
+  .enc-pro { left: 41.5%; clip-path: circle(50%); background: radial-gradient(circle at 60% 36%, #F1F6FA, #B5D0E6 78%); }
+  .enc-pro b { position: absolute; top: 0; left: -66%; width: 100%; height: 100%; border-radius: 50%; background: radial-gradient(circle at 83% 50%, #FFF4DE, #FBCB86 55%, #F5A65A); transition: transform 1.3s cubic-bezier(.16, 1, .3, 1); }
+  .enc-escena .enc-eco { left: 25%; border: 1.5px solid var(--sun); opacity: 0; transform: scale(.4); transition: none; }
+  .encuentro.lejos .enc-vos { transform: translateX(-22%); }
+  .encuentro.lejos .enc-pro b { transform: translateX(-44%); }
+  .encuentro.lejos .enc-pro { transform: translateX(22%); }
   .encuentro.llego .enc-eco { animation: eco 1.8s cubic-bezier(.22, 1, .36, 1) .75s both; }
   .enc-nombres { position: relative; height: 1.6em; margin-top: 14px; font-weight: 700; font-size: 1.05rem; }
   .enc-nombres span { position: absolute; top: 0; transform: translateX(-50%); white-space: nowrap; transition: opacity .6s ease .5s; }
@@ -842,7 +846,7 @@
       <p class="sec-lead">Acompañamos tu bienestar físico, mental y espiritual. Usamos la pantalla para llevarte a una persona real, no para reemplazarla.</p>
       <figure class="encuentro">
         <div class="enc-escena" role="img" aria-label="Dos círculos, uno por persona, que se encuentran: vos y tu profesional.">
-          <i class="enc-vos"></i><i class="enc-pro"></i><i class="enc-eco"></i>
+          <i class="enc-vos"></i><i class="enc-pro"><b></b></i><i class="enc-eco"></i>
         </div>
         <figcaption class="enc-nombres"><span>vos</span><span>tu profesional</span></figcaption>
       </figure>
