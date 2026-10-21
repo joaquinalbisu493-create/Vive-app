@@ -1,3 +1,19 @@
+## 2026-10-21 — Andre (Claude · sensación de la app: vibración, animación y sonido)
+
+**Tocado:** `screens/RespiracionScreen.tsx`, `components/ScaleCard.tsx`, `screens/BookingScreen_Calendar.tsx`, `screens/BookingScreen_Time.tsx`, `screens/BookingScreen_Confirm.tsx`, `screens/BookingScreen_Success.tsx`, `app/(tabs)/conexiones.tsx`, las seis prácticas (`Anclaje`, `Escaner`, `Meditacion`, `Relajacion`, `Sueno`, `Ruido`), `components/PinButton.tsx`, `app/formato.tsx`, `app/coach-recurso.tsx`, `screens/ExploreResourcesScreen.tsx`, `screens/ResourceDetailScreen.tsx`, `components/ui/ProgressToggle.tsx`; nuevos `components/ui/RellenoElegido.tsx`, `components/ui/BotonGuardar.tsx`, `components/ui/useIndicadorDeslizante.ts`, `components/LogoATilde.tsx`, `lib/sonido.ts`, `assets/sounds/reserva-confirmada.m4a`.
+
+**Resumen:**
+- Inspiración Duolingo, pero en el tono de Sere: juvenil y moderna, coherente con un público adulto y temas serios. Se copia la respuesta física a cada acción, no los festejos ni el enganche por culpa.
+- **Vibración:** la respiración guía cada fase para hacerla con los ojos cerrados (inhalar = pulsos que se juntan, exhalar = un pulso, mantener = nada; solo iOS). "Tic" de selección en día y hora de la reserva, duración y patrón de las prácticas, Hoy/Mes y lista/tarjetas. "Tic" en los botones que hacen avanzar (`ScaleCard vibrar`). Pulso de guardado al guardar, fijar o marcar favorito (`BotonGuardar`: late una vez, solo tras un toque real).
+- **Animación:** botones de la reserva que se hunden; lo elegido se llena desde el centro (`RellenoElegido`); pastillas de los controles segmentados que se deslizan; **la reserva confirmada cambia la tilde por el logo que se junta en un círculo y dibuja la tilde** (`LogoATilde`), y la info entra cuando termina.
+- **Sonido:** después de cuatro vueltas de sonidos sintetizados por Claude, Andre decidió **un solo sonido de interfaz: la reserva confirmada** (kalimba de tres notas). Las prácticas terminan solo con vibración (el sonido no tenía función que la vibración no cubriera). Respeta el modo silencio y no corta la música; por eso los audios de recursos ahora fijan "suena en silencio" antes de cada play.
+- Arreglo: en las listas por formato, guardar sin sesión pide entrar (antes pintaba el marcador y no guardaba). Sin cambios de base de datos; SCHEMA.md no cambia.
+
+**Pendiente para la próxima sesión:**
+- Andre tiene que probar todo en el iPhone (no hace falta recompilar): respiración con ojos cerrados, reserva completa con cuenta de prueba (velocidad del logo a tilde, sonido con y sin silencio), guardar y selectores.
+- Android: la guía de respiración y los "tic" son solo iOS; revisar cuando se pruebe Android.
+- Sigue abierta la unificación `saved_resources` / `resource_saves` (documentada en SCHEMA.md).
+
 ## 2026-10-20 — Andre (Claude · revisión UX de sere.ar y primeros cambios)
 
 **Tocado:** `web/index.html`, `web/tiendas.js`, `web/fonts/`, `vercel.json`, `scripts/sync-legal.mjs` y las demás páginas de `web/` (solo la letra).
