@@ -321,13 +321,13 @@ export default function ProgresoScreen() {
           {/* ── Header: Sere + toggle ── */}
           <VitaHeader right={<ProgressToggle value={tab} onChange={setTab} />} />
 
-          {/* ── Título ── */}
-          <Text style={s.pageTitle}>Tu progreso</Text>
-
-          {/* ── Atrás ── */}
-          <TouchableOpacity style={s.backBtn} onPress={() => router.back()} activeOpacity={0.7}>
-            <MaterialCommunityIcons name="arrow-left" size={20} color="#565E32" />
-          </TouchableOpacity>
+          {/* ── Atrás + Título ── */}
+          <View style={s.titleRow}>
+            <TouchableOpacity style={s.backBtn} onPress={() => router.back()} activeOpacity={0.7}>
+              <MaterialCommunityIcons name="arrow-left" size={20} color="#565E32" />
+            </TouchableOpacity>
+            <Text style={s.pageTitle}>Tu progreso</Text>
+          </View>
 
           {/* ── Stats: 3 tarjetas de color ── */}
           <View style={s.statsRow}>
@@ -558,12 +558,18 @@ const s = StyleSheet.create({
   safe: { flex: 1 },
   scroll: { paddingBottom: 16 },
 
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+    paddingTop: 10,
+    paddingBottom: 8,
+  },
   backBtn: {
-    marginLeft: 18,
-    marginTop: 0,
-    marginBottom: 8,
     width: 32,
     height: 32,
+    marginLeft: -6,
+    marginRight: 2,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -572,9 +578,6 @@ const s = StyleSheet.create({
     fontFamily: ViveFonts.title,
     fontSize: 27,
     color: '#565E32',
-    paddingHorizontal: 22,
-    paddingTop: 10,
-    paddingBottom: 8,
     letterSpacing: -0.3,
   },
 
