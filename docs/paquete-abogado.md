@@ -36,8 +36,8 @@ Las cinco que más pesan, en este orden:
 1. **B.7** — cobro plata de terceros en PayPal y USDT siendo persona física
    (BCRA, CNV, Monotributo). Voy a lanzar con los tres medios, así que bloquea.
 2. **A.5** — arrepentimiento con la sesión ya prestada: la Disposición 954/2025
-   parece excluirlo, y hoy devolvemos todo igual. Qué es obligación y qué es
-   beneficio nuestro, y quién lo absorbe.
+   parece excluirlo. Decidimos limitarlo a antes de la sesión y necesito la
+   redacción, y saber quién absorbe el reintegro.
 3. **A.7 y B.1** — si el encuadre de "solo intermediaria" se sostiene, dado que
    cobro, doy una garantía, verifico y sanciono. Opero sin sociedad (ver B.9).
 4. **A.3** — transferencias de datos sensibles al exterior.
@@ -238,9 +238,15 @@ propósito: reintegro total aunque la sesión ya se haya prestado.
 
 - [ ] ¿Cómo se aplica el art. 3.b a una sesión ya prestada? ¿Qué parte de §9.4
       es obligación legal y qué parte es un beneficio que ofrece Sere?
-- [ ] Si es un beneficio, la decisión de mantenerlo o limitarlo es nuestra. ¿Cómo
-      se redacta en cada caso, y se puede cambiar para reservas futuras sin
-      afectar las ya hechas?
+- [ ] **Decisión tomada (21/10/2026), sujeta a que confirmes que la norma lo
+      permite:** el arrepentimiento vale **hasta que empieza la Sesión**. Una
+      vez prestada, la única devolución por insatisfacción es la garantía de
+      §9.3 (una vez por cuenta, revisada por Sere). Necesito la redacción de
+      §9.4 y del Botón de arrepentimiento en ese sentido, y saber si el cambio
+      rige para reservas futuras sin afectar las ya hechas.
+- [ ] Antes de la Sesión el arrepentimiento sigue valiendo aunque falten menos
+      de 24 horas, así que deja sin efecto la regla de §9.1 para las reservas
+      hechas con menos de 10 días de anticipación. ¿Es así?
 - [ ] **¿Quién absorbe ese reintegro?** §9.4 dice que lo reintegra Sere y no
       dice de dónde sale. En Mercado Pago el importe de la sesión ya está en la
       cuenta del profesional, y la devolución se debita de ahí. §8.8 solo le
