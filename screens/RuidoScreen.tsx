@@ -264,6 +264,7 @@ export default function RuidoScreen() {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
         <ToolHeader
+          title="Sonidos ambientales"
           onBack={() => { stopTimer(); pauseAll(); router.back(); }}
           right={
             <>
@@ -289,7 +290,8 @@ export default function RuidoScreen() {
           </View>
         ) : (
           <ScrollView contentContainerStyle={s.scrollContent} showsVerticalScrollIndicator={false}>
-            <Text style={s.screenTitle}>Sonidos ambientales</Text>
+            {/* El título "Sonidos ambientales" vive ahora en el header (ToolHeader),
+                igual que Diario y Gratitud. Antes estaba acá como encabezado de cuerpo. */}
             {/* Reemplaza al párrafo que ya decía para qué sirve: mismo bloque
                 que las otras tres herramientas (constants/herramientasParaQue). */}
             <ParaQueSirve toolId="ruido" style={{ alignSelf: 'stretch', marginBottom: 12 }} />

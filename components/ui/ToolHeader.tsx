@@ -16,10 +16,10 @@ export function ToolHeader({
   onBack,
   right,
 }: {
-  // Respiración y Sonidos ambientales sacaron el título del header y lo
-  // bajaron como encabezado propio dentro del contenido ("Respiración
-  // cuadrada" / "Sonidos ambientales", justo arriba del texto) — el header
-  // les queda solo con back + right. Gratitud/Diario lo siguen mostrando acá.
+  // Las 4 herramientas muestran el título acá, en la barra del header, al lado
+  // del chevron (Diario, Gratitud, Respiración, Sonidos ambientales). Antes
+  // Respiración y Sonidos lo bajaban como encabezado de cuerpo; se unificó para
+  // que el título esté siempre en el mismo lugar (pedido de Joaquín).
   title?: string;
   onBack: () => void;
   right?: React.ReactNode;
