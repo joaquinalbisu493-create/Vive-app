@@ -84,7 +84,7 @@ function norm(s: string) {
 
 export default function FormatoScreen() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, requestAuth } = useAuth();
   // Reduced-motion: el deck es scroll manual sin animaciones de entrada ni
   // auto-scroll, así que no hay transición que gatear — se respeta por
   // construcción. Si se sumara alguna animación, gatearla con useReducedMotion.
@@ -198,13 +198,15 @@ export default function FormatoScreen() {
   const totalMin = Math.round(resources.reduce((a, r) => a + (r.duration_seconds ?? 0), 0) / 60);
 
   async function toggleSave(id: string) {
+    // Sin sesión no hay dónde guardar: antes el marcador se pintaba igual y no
+    // quedaba nada. Pide entrar, como en la ficha del recurso.
+    if (!user) { requestAuth('guardar_recurso'); return; }
     const isSaved = savedIds.has(id);
     setSavedIds(prev => {
       const next = new Set(prev);
       if (isSaved) next.delete(id); else next.add(id);
       return next;
     });
-    if (!user) return;
     if (isSaved) await supabase.from('resource_saves').delete().eq('user_id', user.id).eq('resource_id', id);
     else await supabase.from('resource_saves').insert({ user_id: user.id, resource_id: id });
   }
