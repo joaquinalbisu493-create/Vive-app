@@ -14,6 +14,24 @@
 - Android: la guía de respiración y los "tic" son solo iOS; revisar cuando se pruebe Android.
 - Sigue abierta la unificación `saved_resources` / `resource_saves` (documentada en SCHEMA.md).
 
+## 2026-10-21 — Joaquín (Claude · Progreso: texto/marcos blancos + header; Recursos: títulos y "para qué sirve")
+
+**Tocado:** `app/progreso.tsx`, `screens/RuidoScreen.tsx`, `screens/RespiracionScreen.tsx`, `components/ui/ToolHeader.tsx`.
+
+**Resumen:** Joaquín vio en device que en Progreso había tipografía y marcos en blanco que no se veían. Eran **restos de un diseño oscuro** (colores blancos/semi-blancos) que quedaron invisibles sobre el fondo claro actual (`bgGrad` crema). **No era del rename** (el commit de Sere solo tocó dos comentarios ahí). Arreglados 6:
+- Texto: `sectionTitle`, `moodLegendText`, `editBtn` (botón "Editar") — blanco → `FOREST_SOFT`.
+- Marcos/líneas: borde de `streakPill` y de `checkCircle` (círculo del hábito), y la `timelineLine` del historial — blanco → `rgba(86,94,50,0.22)` (el oliva suave que ya usan las otras cards de la pantalla).
+- Se dejaron los blancos/crema legítimos (iniciales de avatar sobre gradiente verde, texto del tooltip sobre FOREST). tsc limpio.
+
+**Segunda tanda (mismo día):** Joaquín vio que los **marcos de las cards grandes seguían blancos** y pidió reordenar el header.
+- Los marcos venían de `GlassCard`, que usa `colors.glassBorder` = blanco. Ese token lo comparten 4 componentes (GlassCard, VitaHeader, ProgressToggle, SegmentedPill), así que **no se tocó global**: `GlassCard` hace `StyleSheet.flatten([base, style])`, o sea que el `style` que le paso pisa el borde base. Se le pasó `borderColor: 'rgba(86,94,50,0.22)'` (el mismo oliva) a los 4 estilos de card de Progreso: `moodStatCard`, `moodChartCard`, `habitosCard`, `emptyCard`.
+- **Header reordenado:** antes era sere → flecha → título; ahora es **sere → "Tu progreso" → flecha**. Ajustados márgenes para que el título quede pegado a "sere" y haya respiro antes de las stats.
+
+**Tercera tanda (iteración en device, mismo día):** afinados a pedido de Joaquín (mide al pixel):
+- **Progreso:** flecha movida a la **izquierda del título** "Tu progreso" (nuevo `titleRow` flexDirection row, el título y la flecha en la misma fila; `backBtn` con `marginLeft -6` para alinear ópticamente el glifo). Después, flecha un toque abajo (`backBtn marginTop: 3`). Y las **cards de stats** ("semana activa" etc.) bajadas un poco (`statsRow marginTop: 8`).
+- **Recursos — títulos al header:** Sonidos y Respiración tenían el título bajado como encabezado de cuerpo (decisión vieja documentada en `ToolHeader`). Ahora las 4 herramientas muestran el título en la **barra del `ToolHeader`**, en el mismo lugar que Diario/Gratitud. En Ruido se le pasó `title="Sonidos ambientales"` y se quitó el `<Text screenTitle>` del cuerpo; en Respiración se le pasó `title="Respiración"`. Comentario de `ToolHeader` actualizado.
+- **Recursos — "para qué sirve" a la misma altura:** `RuidoScreen` tenía `scrollContent paddingTop: 12`; el resto (Diario/Gratitud/Respiración) usa `24`. Igualado a 24 para que el cartel arranque a la misma altura en las cuatro. (El check-in del día de Diario solo aparece si ya registraste el ánimo hoy —`if (checkinHoy === null) return null`— así que al abrir fresco el cartel es lo primero, igual que en las otras.) tsc limpio en toda la tanda.
+
 ## 2026-10-20 — Andre (Claude · revisión UX de sere.ar y primeros cambios)
 
 **Tocado:** `web/index.html`, `web/tiendas.js`, `web/fonts/`, `vercel.json`, `scripts/sync-legal.mjs` y las demás páginas de `web/` (solo la letra).

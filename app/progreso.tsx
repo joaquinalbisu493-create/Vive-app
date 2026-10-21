@@ -321,13 +321,13 @@ export default function ProgresoScreen() {
           {/* ── Header: Sere + toggle ── */}
           <VitaHeader right={<ProgressToggle value={tab} onChange={setTab} />} />
 
-          {/* ── Atrás ── */}
-          <TouchableOpacity style={s.backBtn} onPress={() => router.back()} activeOpacity={0.7}>
-            <MaterialCommunityIcons name="arrow-left" size={20} color="#565E32" />
-          </TouchableOpacity>
-
-          {/* ── Título ── */}
-          <Text style={s.pageTitle}>Tu progreso</Text>
+          {/* ── Atrás + Título ── */}
+          <View style={s.titleRow}>
+            <TouchableOpacity style={s.backBtn} onPress={() => router.back()} activeOpacity={0.7}>
+              <MaterialCommunityIcons name="arrow-left" size={20} color="#565E32" />
+            </TouchableOpacity>
+            <Text style={s.pageTitle}>Tu progreso</Text>
+          </View>
 
           {/* ── Stats: 3 tarjetas de color ── */}
           <View style={s.statsRow}>
@@ -558,12 +558,19 @@ const s = StyleSheet.create({
   safe: { flex: 1 },
   scroll: { paddingBottom: 16 },
 
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+    paddingTop: 10,
+    paddingBottom: 8,
+  },
   backBtn: {
-    marginLeft: 18,
-    marginTop: 4,
-    marginBottom: -4,
     width: 32,
     height: 32,
+    marginLeft: -6,
+    marginRight: 2,
+    marginTop: 3,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -572,9 +579,6 @@ const s = StyleSheet.create({
     fontFamily: ViveFonts.title,
     fontSize: 27,
     color: '#565E32',
-    paddingHorizontal: 22,
-    paddingTop: 10,
-    paddingBottom: 20,
     letterSpacing: -0.3,
   },
 
@@ -583,6 +587,7 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     paddingHorizontal: CARD_MX,
+    marginTop: 8,
     marginBottom: 24,
   },
   statCard: {
@@ -621,7 +626,7 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontFamily: ViveFonts.medium,
     fontSize: 13,
-    color: 'rgba(255,255,255,0.78)',
+    color: FOREST_SOFT,   // era blanco (resto de un diseño oscuro) → invisible sobre el fondo claro
     paddingHorizontal: 22,
     marginBottom: 10,
   },
@@ -659,6 +664,7 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 14,
     paddingHorizontal: 4,
+    borderColor: 'rgba(86,94,50,0.22)',
   },
   moodStatValue: {
     fontFamily: ViveFonts.bold,
@@ -683,6 +689,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
     minHeight: 80,
     justifyContent: 'center',
+    borderColor: 'rgba(86,94,50,0.22)',
   },
   moodLegendRow: {
     flexDirection: 'row',
@@ -694,7 +701,7 @@ const s = StyleSheet.create({
   },
   moodLegendItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   moodLegendDot: { width: 7, height: 7, borderRadius: 3.5 },
-  moodLegendText: { fontFamily: ViveFonts.regular, fontSize: 10, color: 'rgba(255,255,255,0.78)' },
+  moodLegendText: { fontFamily: ViveFonts.regular, fontSize: 10, color: FOREST_SOFT },
 
   // ── Hábitos ───────────────────────────────────────────────────────────────
   habitosHeader: {
@@ -711,17 +718,18 @@ const s = StyleSheet.create({
     gap: 3,
     backgroundColor: 'rgba(255,248,240,0.55)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.65)',
+    borderColor: 'rgba(86,94,50,0.22)',   // era blanco → no se veía el marco sobre el fondo claro
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
   streakPillText: { fontFamily: ViveFonts.semibold, fontSize: 11, color: '#565E32' },
-  editBtn: { fontFamily: ViveFonts.medium, fontSize: 13, color: 'rgba(255,255,255,0.85)' },
+  editBtn: { fontFamily: ViveFonts.medium, fontSize: 13, color: FOREST_SOFT },
   habitosCard: {
     marginHorizontal: CARD_MX,
     marginBottom: 24,
     paddingVertical: 4,
+    borderColor: 'rgba(86,94,50,0.22)',
   },
   habitosEmpty: { paddingHorizontal: 16, paddingVertical: 18, gap: 8 },
   habitosEmptyText: {
@@ -776,7 +784,7 @@ const s = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.70)',
+    borderColor: 'rgba(86,94,50,0.22)',   // era blanco → el círculo del hábito no se veía
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
@@ -806,7 +814,7 @@ const s = StyleSheet.create({
     width: 1.5,
     flex: 1,
     minHeight: 14,
-    backgroundColor: 'rgba(255,255,255,0.35)',
+    backgroundColor: 'rgba(86,94,50,0.22)',   // era blanco → la línea del historial no se veía
     marginTop: 4,
   },
   sesionCard: {
@@ -843,6 +851,7 @@ const s = StyleSheet.create({
     marginHorizontal: CARD_MX,
     padding: 20,
     alignItems: 'center',
+    borderColor: 'rgba(86,94,50,0.22)',
   },
   emptyText: {
     fontFamily: ViveFonts.regular,

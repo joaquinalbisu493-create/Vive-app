@@ -264,6 +264,7 @@ export default function RuidoScreen() {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
         <ToolHeader
+          title="Sonidos ambientales"
           onBack={() => { stopTimer(); pauseAll(); router.back(); }}
           right={
             <>
@@ -289,7 +290,8 @@ export default function RuidoScreen() {
           </View>
         ) : (
           <ScrollView contentContainerStyle={s.scrollContent} showsVerticalScrollIndicator={false}>
-            <Text style={s.screenTitle}>Sonidos ambientales</Text>
+            {/* El título "Sonidos ambientales" vive ahora en el header (ToolHeader),
+                igual que Diario y Gratitud. Antes estaba acá como encabezado de cuerpo. */}
             {/* Reemplaza al párrafo que ya decía para qué sirve: mismo bloque
                 que las otras tres herramientas (constants/herramientasParaQue). */}
             <ParaQueSirve toolId="ruido" style={{ alignSelf: 'stretch', marginBottom: 12 }} />
@@ -377,7 +379,7 @@ const s = StyleSheet.create({
   headerDivider: { height: 1, backgroundColor: 'rgba(58,79,42,0.08)' },
 
   content:      { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, gap: 18 },
-  scrollContent:{ flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 24, paddingTop: 12, paddingBottom: 24, gap: 18 },
+  scrollContent:{ flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 24, paddingTop: 24, paddingBottom: 24, gap: 18 },
   subtitle:     { fontFamily: ViveFonts.title, fontSize: 26, color: FOREST, textAlign: 'center' },
   screenTitle:  { fontFamily: ViveFonts.semibold, fontSize: 22, color: FOREST, textAlign: 'center' },
   description:  { fontFamily: ViveFonts.regular, fontSize: 15, color: FOREST_SOFT, textAlign: 'center', lineHeight: 23 },

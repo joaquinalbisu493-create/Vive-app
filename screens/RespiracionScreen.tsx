@@ -288,6 +288,7 @@ export default function RespiracionScreen() {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
         <ToolHeader
+          title="Respiración"
           onBack={() => { stopTimer(); router.back(); }}
           right={
             <>
