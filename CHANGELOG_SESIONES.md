@@ -1,3 +1,15 @@
+## 2026-10-22 — Joaquín (Claude · conectar barra del día ↔ carrusel en Recursos)
+
+**Tocado:** `app/(tabs)/recursos.tsx`.
+
+**Resumen:** Joaquín notó que la barra bajo "Herramientas de Sere" (`RecommendedCard`, la sugerencia del día) se sentía repetitiva porque casi siempre apuntaba a una herramienta que está en el carrusel justo abajo. En vez de sacarla, se **conectaron** las dos piezas:
+- Si la sugerencia del día es una **herramienta**, la barra queda solo con la **razón** ("Hoy: …") —sin el "→ herramienta"— y esa herramienta se **destaca en el carrusel**: va al frente, con el ícono en verde bosque, borde FOREST y un badge **"Para hoy"**. La barra explica, el carrusel ejecuta; dejan de duplicar el mismo link pegados.
+- El carrusel queda **intacto** salvo el reorden (la recomendada primero). Si la recomendación del día es un **recurso de biblioteca** (no está en el carrusel), la barra mantiene el atajo completo "→ recurso".
+- Los otros dos estados de la barra no cambian: "¿Cómo estás hoy?" (sin ánimo) y el hero verde (ánimo intenso).
+- `ToolsCarousel` recibe `destacadoId` y `ToolCard` un prop `destacado`. tsc limpio.
+
+**Pendiente:** verlo en device (el badge "Para hoy" a top:-8 sobre el primer tile, el reorden del carrusel).
+
 ## 2026-10-22 — Joaquín (Claude · rediseño pantalla de Respiración)
 
 **Tocado:** `screens/RespiracionScreen.tsx`, `components/ui/SaveScreen.tsx`.
