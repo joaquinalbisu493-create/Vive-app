@@ -6,19 +6,20 @@ import {
   ScrollView,
   StatusBar,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter, useFocusEffect } from 'expo-router';
 
-import { ViveFonts, TAB_BAR_CLEARANCE, ResourceFormatColors, ResourceFormatLabels } from '@/constants/theme';
+import { ViveFonts, TAB_BAR_CLEARANCE, ResourceFormatColors, ResourceFormatLabels, resourceFormatGradient } from '@/constants/theme';
 import { ScaleCard } from '@/components/ScaleCard';
 import { FirstTimeTooltip } from '@/components/FirstTimeTooltip';
 import { AppBg } from '@/components/ui/AppBg';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/lib/supabase';
+import { supabase, registrarEvento } from '@/lib/supabase';
 import { useMoodHistory } from '@/hooks/useMoodHistory';
 import { useResourceProgress } from '@/hooks/useResourceProgress';
 import { useRecommendedResource, type Reco, type MoodLite } from '@/hooks/useRecommendedResource';
@@ -47,7 +48,7 @@ type CoachRecoItem = {
     topic_id: string;
   };
   coaches: {
-    profiles: { name: string };
+    profiles: { name: string; avatar_url: string | null };
   };
 };
 
@@ -233,61 +234,92 @@ function CoachRecoSection({
   const router = useRouter();
   if (recos.length === 0) return null;
   const visible = recos.slice(0, MAX_RECOS_VISIBLE);
+  // Contador accionable: no leídas (opened_at null). El total vive en el "+N más".
+  const sinVer = recos.filter(r => !r.opened_at).length;
 
   return (
     <View style={{ marginTop: 18, marginBottom: 4 }}>
-      {/* Eyebrow, no título grande: en Fraunces competía con "Herramientas de
-          Sere", dos encabezados del mismo peso peleando por ser lo principal. */}
       <View style={s.eyebrowRow}>
         <Text style={s.eyebrow}>De tu profesional</Text>
-        <Text style={s.eyebrowCount}>{recos.length}</Text>
+        {/* "N sin ver" en vez del total: el total ya se dice en el "+N más" de
+            abajo. Si no hay nada sin ver, no mostramos "0 sin ver". */}
+        {sinVer > 0 && (
+          <View style={s.recoSinVerPill}>
+            <Text style={s.recoSinVerText}>{sinVer} sin ver</Text>
+          </View>
+        )}
       </View>
       <View style={{ gap: 10 }}>
         {visible.map(item => {
           const res = item.coach_resources;
           const color = FORMAT_COLOR[res.format] ?? TERRACOTTA;
-          const isNew = !item.opened_at;
           const coachName = item.coaches?.profiles?.name ?? 'Tu profesional';
+          const avatarUrl = item.coaches?.profiles?.avatar_url ?? null;
+          // En Lectura no se reproduce nada → flecha, nunca play.
+          const esLectura = res.format === 'lectura';
+          const dur = res.duration_seconds ? fmtDuration(res.duration_seconds) : '';
+          const meta = `${displayTitle(res.title)}${dur ? ` · ${dur}` : ''}`;
           return (
-            <SurfaceCard key={item.id} variant="subtle" backgroundColor={CREAM_DEEP} borderRadius={22}>
-            <View style={s.recbox}>
-              <View style={s.recHead}>
+            <ScaleCard key={item.id} onPress={() => onPress(item)} activeOpacity={0.92}>
+              <SurfaceCard variant="subtle" backgroundColor={CARD} borderRadius={18} grainOpacity={0.035}>
+                {/* Lavado terracota muy suave sobre el color de card. */}
                 <LinearGradient
-                  colors={['#C06B4A', '#A5583B']}
+                  colors={['rgba(192,107,74,0.09)', 'rgba(192,107,74,0.035)']}
                   start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-                  style={s.recAvatar}>
-                  <Text style={s.recAvatarText}>{initials(coachName)}</Text>
-                </LinearGradient>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={s.recHeadName} numberOfLines={1}>{coachName}</Text>
-                  <Text style={s.recHeadSub}>te recomendó esto · {relativeDay(item.created_at)}</Text>
+                  style={[StyleSheet.absoluteFill, { borderRadius: 18 }]}
+                  pointerEvents="none"
+                />
+                <View style={s.recRow}>
+                  {/* Avatar + badge de formato superpuesto */}
+                  <View style={s.recAvatarWrap}>
+                    {avatarUrl ? (
+                      <Image source={{ uri: avatarUrl }} style={s.recAvatar} />
+                    ) : (
+                      <LinearGradient
+                        colors={['#C06B4A', '#A5583B']}
+                        start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                        style={s.recAvatar}>
+                        <Text style={s.recAvatarText}>{initials(coachName)}</Text>
+                      </LinearGradient>
+                    )}
+                    <View style={[s.recFormatBadge, { backgroundColor: color }]}>
+                      <Ionicons name={FORMAT_ICON[res.format] ?? 'book-outline'} size={10} color="#FFF5EA" />
+                    </View>
+                  </View>
+
+                  {/* Dos renglones: mensaje del coach + meta del recurso */}
+                  <View style={s.recBody}>
+                    <Text style={s.recMessage} numberOfLines={2}>
+                      {item.note ? `“${item.note}”` : `${coachName} te recomendó esto`}
+                    </Text>
+                    <Text style={s.recMeta} numberOfLines={1}>{meta}</Text>
+                  </View>
+
+                  {/* Botón: gradiente del color del formato + sombra del mismo color */}
+                  <LinearGradient
+                    colors={resourceFormatGradient(res.format)}
+                    start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                    style={[s.recPlayBtn, { shadowColor: color }]}>
+                    <Ionicons
+                      name={esLectura ? 'arrow-forward' : 'play'}
+                      size={15}
+                      color="#FFF5EA"
+                      style={esLectura ? undefined : { marginLeft: 1 }}
+                    />
+                  </LinearGradient>
                 </View>
-                {isNew && <View style={s.recDot} />}
-              </View>
-              {item.note ? (
-                <Text style={s.recNote} numberOfLines={4}>“{item.note}”</Text>
-              ) : null}
-              <ScaleCard style={s.recAttach} onPress={() => onPress(item)} activeOpacity={0.92}>
-                <View style={[s.recAttachIcon, { backgroundColor: color }]}>
-                  <Ionicons name={FORMAT_ICON[res.format] ?? 'book-outline'} size={16} color="#fff" />
-                </View>
-                <View style={{ flex: 1, minWidth: 0 }}>
-                  <Text style={s.recAttachTitle} numberOfLines={1}>{displayTitle(res.title)}</Text>
-                  <Text style={s.recAttachMeta}>
-                    {FORMAT_LABEL[res.format] ?? res.format}{res.duration_seconds ? ` · ${fmtDuration(res.duration_seconds)}` : ''}
-                  </Text>
-                </View>
-                <View style={s.recAttachPlay}>
-                  <Ionicons name="play" size={13} color={FOREST} />
-                </View>
-              </ScaleCard>
-            </View>
-            </SurfaceCard>
+              </SurfaceCard>
+            </ScaleCard>
           );
         })}
       </View>
       {recos.length > MAX_RECOS_VISIBLE && (
-        <TouchableOpacity onPress={() => router.push('/mis-recomendaciones' as any)} hitSlop={8} activeOpacity={0.7} style={s.recoMoreLink}>
+        <TouchableOpacity
+          onPress={() => {
+            registrarEvento('recomendaciones_todas_abiertas', { total: recos.length });
+            router.push('/mis-recomendaciones' as any);
+          }}
+          hitSlop={8} activeOpacity={0.7} style={s.recoMoreLink}>
           <Text style={s.exploreLink}>+{recos.length - MAX_RECOS_VISIBLE} más →</Text>
         </TouchableOpacity>
       )}
@@ -438,7 +470,7 @@ export default function RecursosScreen() {
     if (!user) return;
     supabase
       .from('resource_recommendations')
-      .select('id, resource_id, note, opened_at, created_at, coach_resources!inner(id, title, format, duration_seconds, topic_id), coaches!inner(profiles!inner(name))')
+      .select('id, resource_id, note, opened_at, created_at, coach_resources!inner(id, title, format, duration_seconds, topic_id), coaches!inner(profiles!inner(name, avatar_url))')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
       .limit(5)
@@ -557,6 +589,13 @@ export default function RecursosScreen() {
           <CoachRecoSection
             recos={coachRecos}
             onPress={async item => {
+              const diasDesdeEnvio = Math.round(
+                (Date.now() - new Date(item.created_at).getTime()) / 86400000
+              );
+              registrarEvento('recomendacion_abierta', {
+                formato: item.coach_resources.format,
+                dias_desde_envio: diasDesdeEnvio,
+              });
               if (!item.opened_at) {
                 await supabase
                   .from('resource_recommendations')
@@ -883,93 +922,85 @@ const s = StyleSheet.create({
     lineHeight: 13,
   },
 
-  // ── CoachRecoSection — tarjeta-mensaje (Ajuste 3) ────────────────────────────
-  recbox: {
-    padding: 15,
+  // ── CoachRecoSection — fila horizontal compacta ─────────────────────────────
+  recoSinVerPill: {
+    backgroundColor: 'rgba(192,107,74,0.12)',
+    borderRadius: 999,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
   },
-  recHead: {
+  recoSinVerText: {
+    fontFamily: ViveFonts.semibold,
+    fontSize: 9.5,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+    color: TERRACOTTA,
+  },
+  recRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 12,
+    paddingVertical: 13,
+    paddingHorizontal: 14,
+  },
+  recAvatarWrap: {
+    width: 42,
+    height: 42,
+    flexShrink: 0,
   },
   recAvatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
     backgroundColor: TERRACOTTA,
     alignItems: 'center',
     justifyContent: 'center',
-    flexShrink: 0,
   },
   recAvatarText: {
     fontFamily: ViveFonts.bold,
-    fontSize: 12,
+    fontSize: 14,
     color: '#FFF3E8',
   },
-  recHeadName: {
-    fontFamily: ViveFonts.semibold,
-    fontSize: 12.5,
-    color: FOREST,
+  recFormatBadge: {
+    position: 'absolute',
+    right: -3,
+    bottom: -3,
+    width: 19,
+    height: 19,
+    borderRadius: 7,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: CARD,
   },
-  recHeadSub: {
-    fontFamily: ViveFonts.regular,
-    fontSize: 10,
-    color: FOREST_SOFT,
+  recBody: {
+    flex: 1,
+    minWidth: 0,
+    gap: 2,
   },
-  recDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: TERRACOTTA,
-    flexShrink: 0,
-  },
-  recNote: {
+  recMessage: {
     fontFamily: ViveFonts.feedback,
     fontStyle: 'italic',
     fontSize: 13.5,
     color: '#2E3624',
-    lineHeight: 19,
-    marginTop: 10,
-    marginBottom: 11,
+    lineHeight: 18,
   },
-  recAttach: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 11,
-    backgroundColor: CARD,
-    borderWidth: 1,
-    borderColor: LINE,
-    borderRadius: 16,
-    padding: 10,
-    marginTop: 10,
-  },
-  recAttachIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexShrink: 0,
-  },
-  recAttachTitle: {
+  recMeta: {
     fontFamily: ViveFonts.semibold,
-    fontSize: 12.5,
-    color: FOREST,
-  },
-  recAttachMeta: {
-    fontFamily: ViveFonts.regular,
-    fontSize: 10,
+    fontSize: 11,
     color: FOREST_SOFT,
-    marginTop: 1,
   },
-  recAttachPlay: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: CREAM_DEEP,
+  recPlayBtn: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     alignItems: 'center',
     justifyContent: 'center',
     flexShrink: 0,
+    shadowOpacity: 0.35,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 3,
   },
 
   // ── ExploreSection ────────────────────────────────────────────────────────
