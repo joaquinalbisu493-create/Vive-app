@@ -109,6 +109,12 @@ const PLANTILLAS: Record<string, { titulo: string; pie?: string; conLinkSala?: b
     titulo: 'Te respondimos sobre tu sesión',
     pie: 'La respuesta está en la app, en el chat de esa sesión.',
   },
+  // Para el equipo (22/10/2026): un reembolso automático se rindió tras 6
+  // intentos (`trg_refund_dead_letter_notify_admins`). Sin datos de la persona.
+  reembolso_trabado: {
+    titulo: 'Un reembolso no se pudo hacer solo',
+    pie: 'La persona sigue sin su plata hasta que lo resolvamos.',
+  },
 }
 
 serve(async (req) => {

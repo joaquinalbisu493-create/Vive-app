@@ -1,6 +1,6 @@
 ## 2026-10-22 — Andre (Claude · tablero de administración en sere.ar/admin)
 
-**Tocado:** `supabase/migrations/20261022010000_tablero_admin.sql` y `20261022020000_tablero_pendientes.sql` (nuevos), `web/admin/index.html` (nuevo), `web/robots.txt`, `supabase/functions/admin-actions/index.ts` y `guarantee-claim/index.ts` (CORS), `SCHEMA.md`.
+**Tocado:** `supabase/migrations/20261022010000_tablero_admin.sql` y `20261022020000_tablero_pendientes.sql` (nuevos), `web/admin/index.html` (nuevo), `web/robots.txt`, `supabase/functions/admin-actions/index.ts` y `guarantee-claim/index.ts` (CORS), `mail-notificaciones/index.ts` (plantilla nueva), migraciones `20261022030000` y `20261022040000`, `SCHEMA.md`.
 
 **Resumen:**
 - Decisión: la operación (aprobar coaches, denuncias, garantías) sigue en la app; el tablero de métricas y objetivos va en la web, que se lee mejor en la compu y se cambia sin actualizar la app. La seguridad no depende de dónde esté: todo lo controla la base con `is_admin()` (verificado de nuevo: nadie puede auto-nombrarse admin; `approve_coach_application` no es ejecutable por el cliente).
@@ -17,7 +17,7 @@
 **Pendiente para la próxima sesión:**
 - Andre: probar el ingreso en sere.ar/admin después del deploy.
 - Investigado el reembolso trabado: es un pago de prueba de $1 ARS (09/08, cuentas de prueba) que `mp-process-refunds` intentó 6 veces y abandonó (dead-letter, `refund_attempts = 6`) sin avisar a nadie; el motivo del fallo ya no está en los logs. El otro pendiente es 1 USDT de prueba (06/10) sin dirección de reembolso. Arreglo: el tablero distingue "se rindió, hay que hacerlo a mano" (migración `20261022030000`, aplicada y verificada; y la ficha en Plata). Pendiente: Andre se fija en Mercado Pago si ese $1 se devolvió; decidir cómo cerrar los dos de prueba.
-- Hueco a cerrar: cuando un reembolso automático cae al dead-letter, hoy solo se entera quien abre el tablero. Conviene un aviso por mail a los admins.
+- Cerrado el hueco: cuando un reembolso automático (MP o PayPal) se rinde a los 6 intentos, la base crea un aviso `reembolso_trabado` para cada admin y `mail-notificaciones` (v17) lo manda por mail. Verificado con rollback; el cron de mails sigue respondiendo 200. En la app el aviso aparece con el ícono genérico y no abre nada (no se tocó la app: pediría compilar).
 - Probar en sere.ar una revisión real de punta a punta (abrir una foto de identidad, registrar entrevista). Siguientes módulos a mudar: plata (pagos internacionales, USDT, reembolsos, comisiones) y auditoría. La subida de evidencia de sanciones desde la web (PUT directo a la URL firmada de storage) se probó solo con datos simulados: confirmarla con la primera sanción real.
 - Cargar los objetivos del primer mes cuando se cierren con Joaquín (videollamada 31/10 o 1/11). Hay una propuesta alternativa por etapas guardada fuera del repo, para analizar después.
 - El ingreso por código no se pudo probar de punta a punta en local (Turnstile no acepta localhost): probarlo en sere.ar.
