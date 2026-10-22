@@ -35,15 +35,24 @@ const CARD         = '#F7F2E7';
 const PRACTICE_GRAD = ['#34462A', '#212E18'] as const;
 const CIERRE_GRAD: [string, string] = [PASTEL_SALVIA, FOREST];
 
-// Verdes de la barra de ritmo: variantes del token de salvia, de más claro a
-// más oscuro siguiendo la secuencia. Se genera para N fases (no fija a 4), así
-// sirve igual para la diafragmática o cualquier técnica que agreguen.
+// Verdes de la barra de ritmo, de más claro a más oscuro siguiendo la
+// secuencia. Son el verde del token salvia pero SATURADO: oscurecer el token
+// pastel hacia el negro lo volvía gris, así que en vez de eso se interpola entre
+// dos salvia-verdes vivos. Genérico para N fases (no fijo a 4).
+const BARRA_CLARO  = '#7FC08A'; // salvia claro y brillante
+const BARRA_OSCURO = '#3E8F5B'; // salvia saturado, más oscuro
+function lerpHex(a: string, b: string, t: number): string {
+  const ca = a.replace('#', ''), cb = b.replace('#', '');
+  const mix = (i: number) => {
+    const x = parseInt(ca.slice(i, i + 2), 16);
+    const y = parseInt(cb.slice(i, i + 2), 16);
+    return Math.round(x + (y - x) * t).toString(16).padStart(2, '0');
+  };
+  return `#${mix(0)}${mix(2)}${mix(4)}`;
+}
 function ramaVerdes(n: number): string[] {
-  if (n <= 1) return [mixHex(PASTEL_SALVIA, -0.5)];
-  return Array.from({ length: n }, (_, i) => {
-    const t = i / (n - 1);                 // 0 (claro) → 1 (oscuro)
-    return mixHex(PASTEL_SALVIA, -0.34 - t * 0.34); // -0.34 → -0.68
-  });
+  if (n <= 1) return [lerpHex(BARRA_CLARO, BARRA_OSCURO, 0.5)];
+  return Array.from({ length: n }, (_, i) => lerpHex(BARRA_CLARO, BARRA_OSCURO, i / (n - 1)));
 }
 
 // Un patrón de respiración: sus fases, el tamaño objetivo del orbe en cada una,
