@@ -1,3 +1,19 @@
+## 2026-10-22 — Joaquín (Claude · rediseño pantalla de Respiración)
+
+**Tocado:** `screens/RespiracionScreen.tsx`, `components/ui/SaveScreen.tsx`.
+
+**Resumen:** se alineó Respiración con Gratitud/Diario/Recursos (era la herramienta más desviada). Reusa componentes compartidos: `ToolWash` (lavado salvia), `RachaPill`, `SaveScreen` (cierre).
+- **Bug del orbe en reposo:** el loop fase-por-fase corría desde que se abría la pantalla, así que el orbe anunciaba "Inhalá" sin haber empezado. Se separó: en preparación late despacio (1↔1.05, ~6s) sin texto; el loop de fases arranca recién al Empezar.
+- **Preparación:** header sin fecha ni campana (solo back + "Respiración" + guardar); `RachaPill` "N prácticas esta semana" (desde `resource_completions`, misma tabla que la racha de Gratitud — **no hizo falta migración**); técnica como control segmentado (cream-deep, activo en card con sombra) en vez de dos pastillas; título y descripción a la izquierda, sin repetir (la descripción de la cuadrada pasó a "Para que la respiración deje de ir apurada."); **barra de ritmo genérica** (un tramo por fase, ancho ∝ `segundos`, verdes derivados del token salvia con `mixHex`, labels alineados) que reemplaza el párrafo "Inhalá 4, mantené 4…"; orbe con grano ~9%; botón "Empezar".
+- **Práctica:** pantalla verde bosque oscuro en gradiente + grano; X (salir), tiempo, orbe grande con la fase adentro y cuenta regresiva; se mantuvo el retiro a los 30s (decisión de Joaquín). keep-awake ya estaba.
+- **Cierre:** `SaveScreen` (mismo que Gratitud/Diario) con `doneLabel="Volver"` (prop nuevo, default "Listo", backward-compatible). Solo en prácticas completadas; salir por la X no muestra cierre.
+- **Analítica:** `respiracion_iniciada` / `respiracion_completada` / `respiracion_abandonada`.
+- **Serif:** el proyecto no tiene serif (Fraunces fuera desde 24/08). Joaquín eligió Plus Jakarta (orbe en `title`, cita del cierre en italic). Tipografía 100% desde `ViveFonts`, sin tamaños nuevos (17/24/40 ya existían).
+
+**Pendiente para la próxima sesión:**
+- Device: la práctica (orbe creciendo/achicándose en el fondo oscuro), el clip del grano del orbe en Android, y que la pantalla efectivamente no se apague.
+- Confirmar el copy del cierre ("Quedate un momento, sin apuro, con lo que quede.") y la línea itálica.
+
 ## 2026-10-22 — Joaquín (Claude · rediseño card "De tu profesional" en Recursos)
 
 **Tocado:** `app/(tabs)/recursos.tsx`, `app/mis-recomendaciones.tsx`, `screens/SalaScreen.tsx`, `screens/SessionsScreen.tsx`, `screens/CoachResourcesScreen.tsx`. **Datos:** fechas de la data semilla `[SEED]` de `resource_recommendations` (ver abajo).
