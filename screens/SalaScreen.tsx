@@ -1440,7 +1440,7 @@ export default function SalaScreen() {
 
       {/* Session card */}
       {sessionState === 'live' ? (
-        <LinearGradient colors={['#42542F', '#354526']} style={styles.sessionCardLive}>
+        <LinearGradient colors={['#3F512F', '#324226']} style={styles.sessionCardLive}>
           <Text style={styles.liveTitle}>
             {(() => {
               const startMs = scheduledAtMs(activeBooking!.scheduled_date, activeBooking!.scheduled_time);
