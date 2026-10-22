@@ -1,6 +1,11 @@
 ## 2026-10-22 — Joaquín (Claude · rediseño card "De tu profesional" en Recursos)
 
-**Tocado:** `app/(tabs)/recursos.tsx`. **Datos:** fechas de la data semilla `[SEED]` de `resource_recommendations` (ver abajo).
+**Tocado:** `app/(tabs)/recursos.tsx`, `app/mis-recomendaciones.tsx`, `screens/SalaScreen.tsx`, `screens/SessionsScreen.tsx`, `screens/CoachResourcesScreen.tsx`. **Datos:** fechas de la data semilla `[SEED]` de `resource_recommendations` (ver abajo).
+
+**Follow-ups de la misma sesión:**
+- **Verde de las cards de sesión unificado a FOREST.** La card en vivo del chat (`SalaScreen`), la hero de `SessionsScreen` y las stats de `CoachResourcesScreen` usaban el gradiente `#42542F→#354526` (bajaba a un verde más apagado). Se rebasó sobre **FOREST `#3F512F`** (el verde de la tab de Profesionales): `#3F512F→#324226`, misma profundidad. Las tres quedan con el mismo verde.
+- **"+N más" → "N más"** en la card de Recursos (el "+" con "más" quedaba repetitivo).
+- **Pantalla "/mis-recomendaciones" (el "N más") al nuevo diseño.** Tenía el diseño vertical viejo duplicado; ahora usa la misma fila horizontal que la card de Recursos (avatar+badge, mensaje italic, botón con gradiente/ícono por formato). Se agregó `avatar_url` al query y `recomendacion_abierta` al abrir. Limpieza de código muerto. tsc limpio.
 
 **Resumen:**
 - **Card "De tu profesional" → fila horizontal compacta** (antes bloque vertical). Avatar 42px (foto desde `profiles.avatar_url` —se agregó al select del query— o iniciales) con badge de formato 19px superpuesto (color del formato, ícono crema, borde del color de card). Dos renglones: mensaje del coach en Plus Jakarta **italic** 13.5 + "título · duración" chico apagado. Botón 34px con `resourceFormatGradient(formato)` y sombra del color; **ícono play para audio/podcast/video, flecha para lectura** (en lectura no se reproduce nada). Contenedor `SurfaceCard` con lavado terracota ~9%, grano 3.5%, sombra cálida, radio 18.
