@@ -34,6 +34,7 @@ import { guaranteeFailures, alertasDeAbuso, scheduledAtMs } from '../_shared/gua
 import { esServiceRole } from '../_shared/service-role.ts'
 import { enviarMail, nombreSeguro } from '../_shared/email.ts'
 import { WEB_ORIGIN } from '../_shared/cors.ts'
+import { tieneSegundoFactor } from '../_shared/aal.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -83,6 +84,10 @@ async function authorize(authHeader: string): Promise<{ ok: boolean; identity: s
     .from('profiles').select('is_admin').eq('id', user.id).maybeSingle()
 
   if (!profile?.is_admin) return { ok: false, identity: null }
+  // 22/10/2026: como admin, la sesión tiene que haber pasado por el segundo
+  // factor (misma regla que `admin-actions` e `is_admin()`). El cliente que pide
+  // su propia garantía (`solicitar`) no entra por acá y no lo necesita.
+  if (!tieneSegundoFactor(authHeader)) return { ok: false, identity: null }
   return { ok: true, identity: user.email ?? user.id }
 }
 
