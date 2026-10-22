@@ -7,8 +7,10 @@
 - El carrusel queda **intacto** salvo el reorden (la recomendada primero). Si la recomendación del día es un **recurso de biblioteca** (no está en el carrusel), la barra mantiene el atajo completo "→ recurso".
 - Los otros dos estados de la barra no cambian: "¿Cómo estás hoy?" (sin ánimo) y el hero verde (ánimo intenso).
 - `ToolsCarousel` recibe `destacadoId` y `ToolCard` un prop `destacado`. tsc limpio.
+- **Fix de staleness:** al probarlo no cambiaba nada → Recursos es una tab y no se re-monta al volver del check-in de Inicio, así que `useMoodHistory` quedaba con el ánimo del montaje (la sugerencia del día nunca se actualizaba). Se agregó `refetch` del ánimo en `useFocusEffect`, igual que ya hacía Inicio. **Era un bug preexistente** (la sugerencia del día ya quedaba vieja antes de este rediseño).
+- **Ajuste visual final:** el destacado quedó en **solo el cartel "Para hoy"** sobre el tile recomendado (Joaquín no quería el "cuadrado") — se sacaron el borde FOREST y el ícono relleno; el tile queda igual a los demás, solo con el badge, y va primero.
 
-**Pendiente:** verlo en device (el badge "Para hoy" a top:-8 sobre el primer tile, el reorden del carrusel).
+**Mapa ánimo→herramienta (para probar):** cualquier ánimo de hoy da una herramienta. Normal/Bien/Brillando → barra "Hoy: …" + tile destacado (Gratitud, o la secundaria si se hizo esta semana); Bajón/Cansado → hero verde + tile destacado (Diario/Respiración).
 
 ## 2026-10-22 — Joaquín (Claude · rediseño pantalla de Respiración)
 
