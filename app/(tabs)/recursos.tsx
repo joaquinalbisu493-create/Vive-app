@@ -515,8 +515,14 @@ export default function RecursosScreen() {
       });
   }, []);
 
-  const { entries: moodEntries } = useMoodHistory(user?.id, 1);
+  const { entries: moodEntries, refetch: refetchMood } = useMoodHistory(user?.id, 1);
   const todayMoodEntry = moodEntries[0];
+
+  // Recursos es una tab: no se re-monta al volver del check-in de Inicio, así
+  // que sin esto el ánimo de hoy quedaba viejo y la sugerencia del día (y el
+  // destacado "Para hoy" del carrusel) no se actualizaban hasta un remonte.
+  // Inicio ya hace lo mismo con su propio refetch.
+  useFocusEffect(useCallback(() => { refetchMood(); }, [refetchMood]));
 
   const { completedInLast7Days } = useResourceProgress(user?.id);
 
