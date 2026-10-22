@@ -10,6 +10,10 @@
 - **Analítica:** `respiracion_iniciada` / `respiracion_completada` / `respiracion_abandonada`.
 - **Serif:** el proyecto no tiene serif (Fraunces fuera desde 24/08). Joaquín eligió Plus Jakarta (orbe en `title`, cita del cierre en italic). Tipografía 100% desde `ViveFonts`, sin tamaños nuevos (17/24/40 ya existían).
 
+**Ajustes de iteración (mismo día, sobre device):**
+- **Verdes de la barra de ritmo:** primero se derivaban oscureciendo el token salvia hacia el negro → se veían grises. Se pasó a interpolar entre dos salvia-verdes; tras un par de vueltas (muy brillantes → suaves → apenas más oscuros) quedó: **el último tramo = el verde del botón "Empezar" (`FOREST #3A4F2A`)** y la rampa aclara hacia el primero (`#88B58A`). Se agregó `lerpHex`; sigue siendo genérica para N fases.
+- **Bloque de duración:** de "DURACIÓN" a la izquierda + chips en la misma fila, pasó a **"DURACIÓN" centrado justo debajo de la barra** con los chips 3/8 min centrados debajo.
+
 **Pendiente para la próxima sesión:**
 - Device: la práctica (orbe creciendo/achicándose en el fondo oscuro), el clip del grano del orbe en Android, y que la pantalla efectivamente no se apague.
 - Confirmar el copy del cierre ("Quedate un momento, sin apuro, con lo que quede.") y la línea itálica.
