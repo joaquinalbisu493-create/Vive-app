@@ -83,8 +83,8 @@
   .tile span { font-size: 12px; color: var(--soft); }
 
   /* Pestañas */
-  .pestanas { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
-  .pestanas button { background: none; border: 0; padding: 10px 14px; font-weight: 600; color: var(--soft); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .pestanas { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+  .pestanas button { white-space: nowrap; background: none; border: 0; padding: 10px 14px; font-weight: 600; color: var(--soft); border-bottom: 2px solid transparent; margin-bottom: -1px; }
   .pestanas button[aria-selected="true"] { color: var(--forest); border-bottom-color: var(--forest); }
   .contador { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 999px; background: var(--terra-bg); color: var(--terra-ink); font-size: 12px; }
   .contador:empty { display: none; }
@@ -146,6 +146,9 @@
   td, th { text-align: left; padding: 8px 6px; border-top: 1px solid var(--line); vertical-align: middle; }
   th { font-size: 12px; color: var(--soft); font-weight: 600; }
   td.mail { word-break: break-all; }
+  code { word-break: break-all; }
+  .tabla { overflow-x: auto; }
+  .caja, .ficha { min-width: 0; }
   @media (max-width: 560px) { .col-fecha { display: none; } .fila { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -185,7 +188,43 @@
       <button role="tab" data-pestana="resumen" aria-selected="true">Resumen</button>
       <button role="tab" data-pestana="profesionales" aria-selected="false">Profesionales <span class="contador" id="contProfesionales"></span></button>
       <button role="tab" data-pestana="moderacion" aria-selected="false">Moderación <span class="contador" id="contModeracion"></span></button>
+      <button role="tab" data-pestana="plata" aria-selected="false">Plata <span class="contador" id="contPlata"></span></button>
+      <button role="tab" data-pestana="registro" aria-selected="false">Registro</button>
     </nav>
+
+    <!-- ── Plata ──
+         Este panel NO mueve plata: las transferencias se hacen a mano desde el
+         banco o la billetera. Acá se ve qué hay que hacer y se registra el
+         comprobante. Todas las escrituras van por `admin-actions`. -->
+    <div id="vistaPlata" hidden>
+      <h2>USDT en revisión</h2>
+      <p class="suave" style="margin-top:-6px">Lo que llegó a la billetera y no se acreditó solo: comprobantes que presentó alguien y transferencias que nadie reclamó.</p>
+      <p class="error" id="errorUsdt"></p>
+      <div id="listaUsdt"></div>
+
+      <h2 style="margin-top:32px">Reembolsos pendientes</h2>
+      <p class="error" id="errorReembolsos"></p>
+      <div id="listaReembolsos"></div>
+
+      <h2 style="margin-top:32px">Pagos a profesionales (sesiones internacionales)</h2>
+      <p class="suave" style="margin-top:-6px">Sesiones ya realizadas y cobradas, todavía sin transferir. Con Mercado Pago no hay nada que pagar: el profesional cobra en el momento.</p>
+      <p class="error" id="errorPagos"></p>
+      <div id="listaPagos"></div>
+
+      <h2 style="margin-top:32px">Comisiones</h2>
+      <p class="suave" style="margin-top:-6px">Comisión de Sere por mes y profesional. Es material para el contador, no una factura: qué corresponde facturar, a quién y cada cuánto todavía está sin definir.</p>
+      <p class="error" id="errorComisiones"></p>
+      <div id="listaComisiones"></div>
+    </div>
+
+    <!-- ── Registro ── `admin_audit_log`: se escribe solo con service role y
+         nadie lo puede editar, ni siendo admin. -->
+    <div id="vistaRegistro" hidden>
+      <h2>Registro de acciones</h2>
+      <p class="suave" style="margin-top:-6px">Quién hizo qué desde la administración, en la app o en la web. Las últimas 200.</p>
+      <p class="error" id="errorRegistro"></p>
+      <div class="caja" id="listaRegistro"></div>
+    </div>
 
     <!-- ── Moderación ──
          Problemas de sesión, denuncias y sanciones van por `admin-actions`;
@@ -284,10 +323,10 @@
       <summary>Cuentas de prueba</summary>
       <p class="suave">Las cuentas marcadas no cuentan en las métricas. Las de administración, las de la carga de ejemplo y las dadas de baja ya se descartan solas y no aparecen acá.</p>
       <p class="error" id="errorCuentas"></p>
-      <table>
+      <div class="tabla"><table>
         <thead><tr><th>De prueba</th><th>Nombre</th><th>Mail</th><th>Tipo</th><th class="col-fecha">Creada</th></tr></thead>
         <tbody id="filasCuentas"></tbody>
-      </table>
+      </table></div>
     </details>
     </div>
   </section>
@@ -584,6 +623,8 @@ async function cargarPendientes() {
   $('contProfesionales').textContent = deProfesionales > 0 ? deProfesionales : '';
   const deModeracion = (p.problemas?.cantidad ?? 0) + (p.denuncias?.cantidad ?? 0) + (p.garantias?.cantidad ?? 0);
   $('contModeracion').textContent = deModeracion > 0 ? deModeracion : '';
+  const dePlata = ['reembolsos', 'usdt_reclamos', 'usdt_sueltas', 'pagos'].reduce((n, k) => n + (p[k]?.cantidad ?? 0), 0);
+  $('contPlata').textContent = dePlata > 0 ? dePlata : '';
 }
 
 async function cargarObjetivos() {
@@ -1389,8 +1430,299 @@ $('vistaModeracion').addEventListener('change', async (e) => {
 });
 $('garantiaReserva').addEventListener('keydown', (e) => { if (e.key === 'Enter') verificarGarantia(); });
 
+// ── Plata ────────────────────────────────────────────────────────────────────
+// Las fórmulas son copia de `lib/payout.ts` y `lib/billing.ts` (redondeo
+// incluido): el número de "a transferir" se tipea en una transferencia que no
+// se deshace, y tiene que dar EXACTAMENTE lo mismo que en la app.
+const coachNetFor = (amount, feePct) => Math.round((amount - Math.round(amount * feePct) / 100) * 100) / 100;
+const USDT_NETWORK_FEE_USD = 1.5;
+const platformDeliveryCost = (neto, rail) => (rail === 'usdt' ? USDT_NETWORK_FEE_USD : Math.round(neto * 2) / 100);
+const comisionDe = (b) => {
+  const amount = Number(b.amount ?? NaN), pct = Number(b.platform_fee_pct ?? NaN);
+  return Number.isFinite(amount) && Number.isFinite(pct) ? Math.round(amount * pct) / 100 : 0;
+};
+const HASH_RE = /^[0-9a-fA-F]{64}$/;
+const dinero = (n) => Number(n).toFixed(2);
+const fechaIso = (f) => (f ? String(f).slice(0, 10).split('-').reverse().join('/') : '');
+
+let usdt = { claims: [], transfers: [] };
+let pagos = [];
+
+async function cargarPlata() {
+  await Promise.all([cargarUsdt(), cargarReembolsos(), cargarPagos(), cargarComisiones()]);
+}
+
+async function cargarUsdt() {
+  $('errorUsdt').textContent = '';
+  try {
+    const r = await accionAdmin({ action: 'list_usdt_review' });
+    usdt = { claims: r.claims ?? [], transfers: r.transfers ?? [] };
+  } catch (e) {
+    usdt = { claims: [], transfers: [] };
+    $('errorUsdt').textContent = `No se pudo leer: ${e.message}`;
+  }
+  const claims = usdt.claims.map((c) => {
+    const situacion = !c.reservaVencida ? 'La reserva todavía espera el pago. Aprobar acredita la sesión.'
+      : c.puedeReactivar ? 'La reserva venció esperando el pago, pero el horario sigue libre: podés volver a dar la sesión o devolver el dinero.'
+      : 'La reserva venció esperando el pago y el horario ya no está libre. Aprobar la deja para reintegro.';
+    return `<article class="caja ficha">
+      <h3>Comprobante en revisión · ${esc(dinero(c.recibido))} USDT</h3>
+      <div class="suave datos">${c.esperado != null ? `Se esperaban ${esc(dinero(c.esperado))}` : 'Monto esperado desconocido'}${c.fecha ? ` · sesión del ${esc(fechaIso(c.fecha))} ${esc(String(c.hora ?? '').slice(0, 5))} hs` : ''}${c.coachName ? ` · ${esc(c.coachName)}` : ''}</div>
+      <p>${esc(situacion)}</p>
+      <div class="suave"><code>${esc(c.txId)}</code><br>desde <code>${esc(c.desde)}</code></div>
+      <div class="formulario-linea">
+        <input id="nota-${c.id}" placeholder="Motivo (obligatorio para rechazar)">
+        <div class="botonera">
+          ${c.reservaVencida && c.puedeReactivar ? `<button class="btn chico" data-claim="${c.id}" data-modo="reactivar">Acreditar y dar la sesión</button>` : ''}
+          <button class="btn ${c.reservaVencida && c.puedeReactivar ? 'sec ' : ''}chico" data-claim="${c.id}" data-modo="aprobar">${c.reservaVencida ? 'Aprobar para reintegro' : 'Acreditar'}</button>
+          <button class="btn sec chico" data-claim="${c.id}" data-modo="rechazar">Rechazar</button>
+        </div>
+      </div>
+    </article>`;
+  });
+  const sueltas = usdt.transfers.map((t) => `<article class="caja ficha">
+      <h3>Llegaron ${esc(dinero(t.monto))} USDT sin reserva</h3>
+      <div class="suave datos">${esc(new Date(t.fecha).toLocaleString('es-AR'))}${t.estado === 'monto_menor' ? ' · los centavos coinciden con una reserva en espera, pero llegó de menos' : ''}</div>
+      <p>Nadie presentó todavía un comprobante por esta transferencia. Si la persona escribe, pedile que lo cargue desde la pantalla de pago.</p>
+      <div class="suave"><code>${esc(t.txId)}</code><br>desde <code>${esc(t.desde)}</code></div>
+      <div class="formulario-linea">
+        <input id="nota-${esc(t.txId)}" placeholder="Nota para descartarla (por ejemplo: prueba nuestra)">
+        <div class="botonera"><button class="btn sec chico" data-descartar="${esc(t.txId)}">Descartar</button></div>
+      </div>
+    </article>`);
+  $('listaUsdt').innerHTML = [...claims, ...sueltas].join('') || '<p class="vacio">No hay nada en revisión.</p>';
+}
+
+async function cargarReembolsos() {
+  $('errorReembolsos').textContent = '';
+  try {
+    const filas = await api('bookings?payment_status=eq.reembolso_pendiente&select=id,payment_provider,usdt_amount,charged_amount,amount,currency,scheduled_date,scheduled_time,coach_name,refund_address,refund_network,created_at&order=scheduled_date.asc&limit=100');
+    const deUsdt = filas.filter((b) => b.payment_provider === 'usdt');
+    const automaticos = filas.filter((b) => b.payment_provider !== 'usdt');
+    const html = deUsdt.map((r) => {
+      const monto = r.charged_amount != null ? Number(r.charged_amount) : r.usdt_amount != null ? Number(r.usdt_amount) : null;
+      return `<article class="caja ficha">
+        <h3>${monto != null ? `${esc(dinero(monto))} USDT` : 'Monto desconocido'}</h3>
+        <div class="suave datos">Reembolso a mano · sesión del ${esc(fechaIso(r.scheduled_date))} ${esc(String(r.scheduled_time ?? '').slice(0, 5))} hs${r.coach_name ? ` · ${esc(r.coach_name)}` : ''}</div>
+        ${r.refund_address ? `<div><code>${esc(r.refund_network)} · ${esc(r.refund_address)}</code></div>
+          <div class="formulario-linea">
+            <input id="tx-${r.id}" placeholder="Hash de la transacción (64 caracteres)" autocomplete="off" spellcheck="false">
+            <div class="botonera"><button class="btn chico" data-reembolsado="${r.id}">Marcar reembolsado</button></div>
+          </div>`
+        : '<div class="aviso">La persona todavía no dio su dirección de reembolso. Pedísela por chat.</div>'}
+      </article>`;
+    });
+    // Mercado Pago y PayPal se reembolsan solos (`mp-process-refunds` y
+    // `paypal-process-refunds`, cada 5 minutos). Si uno sigue acá más de un
+    // día, el cron no lo pudo procesar y hay que mirarlo.
+    const auto = automaticos.map((r) => {
+      const dias = Math.floor((Date.now() - new Date(r.created_at).getTime()) / 86_400_000);
+      return `<article class="caja ficha">
+        <h3>${esc(r.payment_provider === 'paypal' ? 'PayPal' : 'Mercado Pago')} · ${esc(r.currency ?? '')} ${esc(r.amount ?? '')}</h3>
+        <div class="suave datos">Sesión del ${esc(fechaIso(r.scheduled_date))}${r.coach_name ? ` · ${esc(r.coach_name)}` : ''} · reserva <code>${esc(r.id)}</code></div>
+        <div class="aviso">Se reembolsa solo cada 5 minutos. Si lleva más de un día acá, algo falló y hay que revisarlo.${dias > 0 ? ` La reserva es de hace ${dias} días.` : ''}</div>
+      </article>`;
+    });
+    $('listaReembolsos').innerHTML = [...html, ...auto].join('') || '<p class="vacio">No hay reembolsos pendientes.</p>';
+  } catch (e) {
+    $('errorReembolsos').textContent = 'No se pudieron cargar.';
+  }
+}
+
+async function cargarPagos() {
+  $('errorPagos').textContent = '';
+  try {
+    // Dos consultas y no un embed, igual que la app: un profesional sin datos
+    // de cobro desaparecería de la lista en vez de aparecer marcado.
+    const filas = await api('bookings?payment_provider=neq.mp&status=eq.completada&payment_status=eq.aprobado&paid_out_at=is.null&select=id,coach_id,coach_name,scheduled_date,amount,platform_fee_pct,payment_provider&order=scheduled_date.asc&limit=500');
+    const ids = [...new Set(filas.map((b) => b.coach_id).filter(Boolean))];
+    const cuentas = ids.length ? await api(`coach_payout_accounts?coach_id=in.(${ids.join(',')})&select=coach_id,wallet,network,paypal_email`) : [];
+    const porClave = new Map();
+    for (const b of filas) {
+      const amount = Number(b.amount ?? 0);
+      const feePct = Number(b.platform_fee_pct ?? 20);
+      const neto = coachNetFor(amount, feePct);
+      // Una fila por (profesional, riel): un mismo profesional puede recibir
+      // un pago por PayPal y otro por USDT, y no se pueden mezclar.
+      const rail = b.payment_provider === 'usdt' ? 'usdt' : 'paypal';
+      const clave = `${b.coach_id}|${rail}`;
+      if (!porClave.has(clave)) {
+        porClave.set(clave, { clave, coachName: b.coach_name, rail, bruto: 0, neto: 0, sesiones: [], destino: cuentas.find((c) => c.coach_id === b.coach_id) ?? null });
+      }
+      const e = porClave.get(clave);
+      e.bruto += amount; e.neto += neto;
+      e.sesiones.push({ bookingId: b.id, fecha: b.scheduled_date, amount, feePct, neto });
+    }
+    pagos = [...porClave.values()].map((e) => {
+      const neto = Math.round(e.neto * 100) / 100;
+      return { ...e, bruto: Math.round(e.bruto * 100) / 100, aTransferir: neto, costoPlataforma: platformDeliveryCost(neto, e.rail), noAlcanza: neto <= 0 };
+    }).sort((a, b) => b.aTransferir - a.aTransferir);
+  } catch (e) {
+    // Vacía por error y vacía de verdad significan lo opuesto: "no le debemos
+    // nada a nadie" contra "no pudimos averiguarlo". Se dice cuál es.
+    pagos = [];
+    $('errorPagos').textContent = `No se pudo leer la lista: ${e.message}`;
+    $('listaPagos').innerHTML = '';
+    return;
+  }
+  $('listaPagos').innerHTML = pagos.length ? pagos.map((p, i) => {
+    const destino = p.rail === 'usdt'
+      ? (p.destino?.wallet && p.destino?.network ? `${p.destino.network} · ${p.destino.wallet}` : null)
+      : (p.destino?.paypal_email ? `PayPal · ${p.destino.paypal_email}` : null);
+    return `<article class="caja ficha">
+      <h3>${esc(p.coachName ?? 'Profesional sin nombre')}</h3>
+      <div class="suave datos">${p.sesiones.length} ${p.sesiones.length === 1 ? 'sesión' : 'sesiones'} · bruto USD ${esc(dinero(p.bruto))} · se paga por ${p.rail === 'usdt' ? 'USDT' : 'PayPal'}</div>
+      <div style="font-size:20px;font-weight:700">A transferir: USD ${esc(dinero(p.aTransferir))}</div>
+      ${p.costoPlataforma > 0 ? `<div class="suave">Nos cuesta USD ${esc(dinero(p.costoPlataforma))} ${p.rail === 'usdt' ? 'de red' : 'de comisión de PayPal'} (no se le descuenta)</div>` : ''}
+      ${p.noAlcanza ? '<div class="aviso">No hay nada que transferir en este riel todavía.</div>' : ''}
+      <div class="bloque">${p.sesiones.map((x) => `<div class="suave"><code>${esc(fechaIso(x.fecha))} · USD ${esc(dinero(x.amount))} − ${esc(x.feePct)}% = ${esc(dinero(x.neto))}</code></div>`).join('')}</div>
+      ${destino ? `<div><code>${esc(destino)}</code></div>
+        <div class="formulario-linea">
+          <input id="ref-${i}" placeholder="Hash de la tx o número de operación" autocomplete="off" spellcheck="false">
+          <div class="botonera"><button class="btn chico" data-pagado="${i}"${p.noAlcanza ? ' disabled' : ''}>Marcar pagado</button></div>
+        </div>`
+      : `<div class="aviso">No tiene cargado el destino de ${p.rail === 'usdt' ? 'USDT (wallet y red)' : 'PayPal (mail)'}. Pedíselo antes de transferir.</div>`}
+    </article>`;
+  }).join('') : '<p class="vacio">No hay pagos pendientes a profesionales.</p>';
+}
+
+function agrupar(filas) {
+  const mapa = new Map();
+  for (const b of filas) {
+    const mes = String(b.scheduled_date ?? '').slice(0, 7);
+    if (mes.length !== 7) continue;
+    const moneda = b.currency ?? 'ARS';
+    const riel = b.payment_provider === 'mp' ? 'mp' : 'internacional';
+    const clave = `${mes}|${b.coach_id}|${moneda}|${riel}`;
+    if (!mapa.has(clave)) mapa.set(clave, { mes, coachName: b.coach_name, moneda, riel, sesiones: 0, bruto: 0, comision: 0 });
+    const g = mapa.get(clave);
+    g.sesiones += 1; g.bruto += Number(b.amount ?? 0); g.comision += comisionDe(b);
+  }
+  return [...mapa.values()]
+    .map((g) => ({ ...g, bruto: Math.round(g.bruto * 100) / 100, comision: Math.round(g.comision * 100) / 100 }))
+    .sort((a, b) => b.mes.localeCompare(a.mes) || b.comision - a.comision);
+}
+
+async function cargarComisiones() {
+  $('errorComisiones').textContent = '';
+  try {
+    const filas = await api('bookings?payment_status=in.(aprobado,reembolsado,contracargo)&select=scheduled_date,coach_id,coach_name,amount,platform_fee_pct,currency,payment_provider,payment_status&order=scheduled_date.desc&limit=2000');
+    const cobradas = agrupar(filas.filter((b) => b.payment_status === 'aprobado'));
+    const reembolsadas = agrupar(filas.filter((b) => b.payment_status !== 'aprobado'));
+    const totales = {};
+    for (const g of cobradas) totales[g.moneda] = Math.round(((totales[g.moneda] ?? 0) + g.comision) * 100) / 100;
+    const fila = (g) => `<tr><td>${esc(g.mes)}</td><td>${esc(g.coachName ?? 'Sin nombre')}</td><td>${g.sesiones}</td><td>${esc(g.moneda)} ${esc(dinero(g.bruto))}</td><td><b>${esc(g.moneda)} ${esc(dinero(g.comision))}</b></td><td class="col-fecha">${g.riel === 'mp' ? 'Mercado Pago' : 'Internacional'}</td></tr>`;
+    const tabla = (gs) => `<div class="tabla"><table><thead><tr><th>Mes</th><th>Profesional</th><th>Sesiones</th><th>Bruto</th><th>Comisión</th><th class="col-fecha">Cómo se cobró</th></tr></thead><tbody>${gs.map(fila).join('')}</tbody></table></div>`;
+    $('listaComisiones').innerHTML = `
+      ${Object.keys(totales).length ? `<div class="caja" style="margin-bottom:12px"><h3>Total de comisión cobrada</h3>${Object.entries(totales).map(([m, t]) => `<div style="font-size:20px;font-weight:700">${esc(m)} ${esc(dinero(t))}</div>`).join('')}<p class="suave" style="margin:6px 0 0">Mercado Pago: la retuvo el procesador, no pasó por una cuenta de Sere. Internacional: entró todo a Sere y se descontó al pagarle al profesional.</p></div>` : ''}
+      <div class="caja">${cobradas.length ? tabla(cobradas) : '<p class="vacio">Todavía no hay comisiones cobradas.</p>'}</div>
+      ${reembolsadas.length ? `<details class="caja" style="margin-top:12px"><summary>Reembolsadas o con contracargo (separadas, no restadas)</summary>${tabla(reembolsadas)}</details>` : ''}`;
+  } catch (e) {
+    $('errorComisiones').textContent = `No se pudo leer: ${e.message}`;
+  }
+}
+
+$('vistaPlata').addEventListener('click', async (e) => {
+  const t = e.target.closest('button');
+  if (!t || t.disabled) return;
+  const d = t.dataset;
+
+  if (d.claim) {
+    const c = usdt.claims.find((x) => x.id === d.claim);
+    const motivo = $(`nota-${c.id}`).value.trim();
+    const diferencia = c.esperado != null && Math.abs(c.recibido - c.esperado) >= 0.005
+      ? ` Llegaron ${dinero(c.recibido)} y se esperaban ${dinero(c.esperado)}: la diferencia la absorbe Sere.` : '';
+    if (d.modo === 'rechazar' && !motivo) return alert('Para rechazar un comprobante escribí por qué.');
+    const pregunta = d.modo === 'reactivar' ? `¿Acreditar y volver a dar la sesión?\n\nEl horario sigue libre. Se crea de nuevo la reserva, ya pagada, y se avisa al profesional.${diferencia}`
+      : d.modo === 'rechazar' ? '¿Rechazar el comprobante?'
+      : c.reservaVencida ? '¿Aprobar para reintegro?\n\nLa reserva venció esperando el pago. No se reactiva: queda en reembolsos pendientes para que le devuelvas el dinero.'
+      : `¿Acreditar el pago?\n\nSe confirma la sesión y se avisa al profesional.${diferencia}`;
+    if (!confirm(pregunta)) return;
+    t.disabled = true;
+    try {
+      const r = await accionAdmin({ action: 'resolve_usdt_claim', claim_id: c.id, approve: d.modo !== 'rechazar', motivo: motivo || undefined, reactivar: d.modo === 'reactivar' || undefined });
+      if (r.warning) alert(`Hecho, con un aviso: ${r.warning}`);
+      await Promise.all([cargarUsdt(), cargarReembolsos(), cargarPendientes()]);
+    } catch (err) { alert(`No se pudo: ${err.message}`); t.disabled = false; }
+    return;
+  }
+  if (d.descartar) {
+    const nota = document.getElementById(`nota-${d.descartar}`).value.trim();
+    if (!nota) return alert('Escribí por qué se descarta esta transferencia.');
+    t.disabled = true;
+    try {
+      await accionAdmin({ action: 'discard_usdt_transfer', tx_id: d.descartar, nota });
+      await Promise.all([cargarUsdt(), cargarPendientes()]);
+    } catch (err) { alert(`No se pudo: ${err.message}`); t.disabled = false; }
+    return;
+  }
+  if (d.reembolsado) {
+    const tx = $(`tx-${d.reembolsado}`).value.trim();
+    if (!HASH_RE.test(tx)) return alert('Pegá el hash de la transacción: 64 caracteres, letras de la a a la f y números.');
+    if (!confirm('¿Ya mandaste el reembolso? Queda registrado con ese hash como prueba.')) return;
+    t.disabled = true;
+    try {
+      await accionAdmin({ action: 'mark_usdt_refunded', booking_id: d.reembolsado, refund_tx_id: tx });
+      await Promise.all([cargarReembolsos(), cargarPendientes()]);
+    } catch (err) { alert(`No se pudo registrar: ${err.message}`); t.disabled = false; }
+    return;
+  }
+  if (d.pagado !== undefined) {
+    const p = pagos[Number(d.pagado)];
+    const ref = $(`ref-${d.pagado}`).value.trim();
+    if (!ref) return alert('Pegá el hash de la transacción o el número de operación: es el comprobante.');
+    // Marcar es irreversible desde el panel y declara que la plata ya salió.
+    if (!confirm(`¿Ya transferiste USD ${dinero(p.aTransferir)} a ${p.coachName ?? 'este profesional'}?\n\nSe van a marcar ${p.sesiones.length} ${p.sesiones.length === 1 ? 'sesión' : 'sesiones'} como pagadas.`)) return;
+    t.disabled = true;
+    try {
+      const r = await accionAdmin({ action: 'mark_coach_paid', booking_ids: p.sesiones.map((x) => x.bookingId), payout_reference: ref });
+      if (r.warning) alert(`Registrado con un aviso: ${r.warning}`);
+      await Promise.all([cargarPagos(), cargarPendientes()]);
+    } catch (err) { alert(`No se pudo registrar: ${err.message}`); t.disabled = false; }
+  }
+});
+
+// ── Registro ─────────────────────────────────────────────────────────────────
+const ACCIONES = {
+  set_coach_verified: 'cambió la publicación de un profesional',
+  record_coach_interview: 'registró una entrevista',
+  reject_coach_application: 'rechazó una postulación',
+  set_coach_name: 'corrigió el nombre de un profesional',
+  identity_file_url: 'abrió una foto de identidad',
+  verify_identity: 'verificó la identidad de un profesional',
+  credential_file_url: 'abrió un título o matrícula',
+  review_credential: 'revisó un título o matrícula',
+  resolve_report: 'resolvió una denuncia',
+  respond_session_issue: 'respondió un problema de sesión',
+  apply_sanction: 'aplicó una sanción',
+  revoke_sanction: 'levantó una sanción',
+  sanction_evidence_register: 'adjuntó evidencia a una sanción',
+  sanction_evidence_url: 'abrió evidencia de una sanción',
+  resolve_usdt_claim: 'resolvió un comprobante de USDT',
+  discard_usdt_transfer: 'descartó una transferencia de USDT',
+  mark_usdt_refunded: 'registró un reembolso en USDT',
+  mark_coach_paid: 'registró un pago a un profesional',
+};
+
+async function cargarRegistro() {
+  $('errorRegistro').textContent = '';
+  try {
+    const filas = await api('admin_audit_log?select=id,admin_email,action,target_type,target_id,details,created_at&order=created_at.desc&limit=200');
+    $('listaRegistro').innerHTML = filas.length ? filas.map((e) => {
+      const detalles = e.details ? Object.entries(e.details).filter(([, v]) => v !== null && v !== undefined && v !== '')
+        .map(([k, v]) => `${k}: ${typeof v === 'object' ? JSON.stringify(v) : v}`).join(' · ') : '';
+      return `<div class="obj">
+        <div class="obj-cab"><span class="obj-titulo">${esc(e.admin_email ?? 'Cuenta eliminada')} ${esc(ACCIONES[e.action] ?? e.action)}</span><span class="suave">${esc(new Date(e.created_at).toLocaleString('es-AR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))}</span></div>
+        ${detalles ? `<div class="suave">${esc(detalles)}</div>` : ''}
+      </div>`;
+    }).join('') : '<p class="vacio">Todavía no hay acciones registradas.</p>';
+  } catch (e) {
+    $('errorRegistro').textContent = 'No se pudo cargar.';
+  }
+}
+
 // ── Pestañas ─────────────────────────────────────────────────────────────────
-const VISTAS = { resumen: 'vistaResumen', profesionales: 'vistaProfesionales', moderacion: 'vistaModeracion' };
+const VISTAS = { resumen: 'vistaResumen', profesionales: 'vistaProfesionales', moderacion: 'vistaModeracion', plata: 'vistaPlata', registro: 'vistaRegistro' };
 const cargadas = new Set(['resumen']);
 document.querySelector('.pestanas').addEventListener('click', (e) => {
   const b = e.target.closest('[data-pestana]');
@@ -1402,6 +1734,8 @@ document.querySelector('.pestanas').addEventListener('click', (e) => {
   cargadas.add(elegida);
   if (elegida === 'profesionales') cargarProfesionales();
   if (elegida === 'moderacion') cargarModeracion();
+  if (elegida === 'plata') cargarPlata();
+  if (elegida === 'registro') cargarRegistro();
 });
 
 // ── Eventos ──────────────────────────────────────────────────────────────────
