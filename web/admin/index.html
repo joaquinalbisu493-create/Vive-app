@@ -184,7 +184,47 @@
     <nav class="pestanas" role="tablist">
       <button role="tab" data-pestana="resumen" aria-selected="true">Resumen</button>
       <button role="tab" data-pestana="profesionales" aria-selected="false">Profesionales <span class="contador" id="contProfesionales"></span></button>
+      <button role="tab" data-pestana="moderacion" aria-selected="false">Moderación <span class="contador" id="contModeracion"></span></button>
     </nav>
+
+    <!-- ── Moderación ──
+         Problemas de sesión, denuncias y sanciones van por `admin-actions`;
+         garantías por `guarantee-claim`, que tiene las condiciones de §9.3.
+         Las LECTURAS de problemas, denuncias y garantías van directo con las
+         políticas `*_select_admin`, igual que en la app. -->
+    <div id="vistaModeracion" hidden>
+      <h2>Problemas reportados desde una sesión</h2>
+      <p class="suave" style="margin-top:-6px">La respuesta la lee la persona en la sala de esa sesión y le avisamos. Plazo: 24 h.</p>
+      <p class="error" id="errorProblemas"></p>
+      <div id="listaProblemas"></div>
+
+      <h2 style="margin-top:32px">Denuncias</h2>
+      <p class="error" id="errorDenuncias"></p>
+      <div id="listaDenuncias"></div>
+
+      <h2 style="margin-top:32px">Garantía de primera sesión</h2>
+      <p class="suave" style="margin-top:-6px">Revisá si una reserva califica antes de decidir (T&amp;C §9.3). Las pedidas desde la app aparecen acá; las que llegan por mail, pegá el ID de la reserva.</p>
+      <p class="error" id="errorGarantias"></p>
+      <div id="listaGarantias"></div>
+      <div class="caja ficha">
+        <label for="garantiaReserva" style="margin-top:0">ID de la reserva</label>
+        <div class="botonera" style="margin-top:0">
+          <input id="garantiaReserva" style="flex:1;min-width:220px" autocomplete="off" spellcheck="false">
+          <button class="btn chico" id="btnVerificarGarantia">Verificar</button>
+        </div>
+        <div id="resultadoGarantia"></div>
+      </div>
+      <details class="caja" id="cajaGarantiasResueltas" style="margin-top:14px">
+        <summary>Garantías resueltas</summary>
+        <div id="listaGarantiasResueltas"></div>
+      </details>
+
+      <h2 style="margin-top:32px">Sanciones</h2>
+      <p class="suave" style="margin-top:-6px">Advertencia, suspensión, baja (T&amp;C §10). El motivo lo lee el profesional en su app: escribilo como se lo dirías de frente. La evidencia solo la ve el equipo.</p>
+      <p class="error" id="errorSanciones"></p>
+      <div id="formSancion"></div>
+      <div id="listaSanciones"></div>
+    </div>
 
     <!-- ── Profesionales: postulaciones y credenciales ──
          Mismas acciones y mismas exigencias que Administración en la app: todo
@@ -205,12 +245,24 @@
       <h2 style="margin-top:32px">Títulos y matrículas por revisar</h2>
       <p class="error" id="errorCredenciales"></p>
       <div id="listaCredenciales"></div>
+
+      <details class="caja" id="cajaNombre" style="margin-top:32px">
+        <summary>Corregir el nombre de un profesional</summary>
+        <p class="suave">Los profesionales aprobados no pueden cambiar su nombre desde la app. Usalo para errores de tipeo o cambios de apellido, comparando con su documento. Se ve en su perfil, sus reservas y sus reseñas; el link de su página no cambia.</p>
+        <label for="nombreCoach">Profesional</label>
+        <select id="nombreCoach"><option value="">Elegí…</option></select>
+        <label for="nombreNuevo">Nombre correcto</label>
+        <input id="nombreNuevo" maxlength="80">
+        <label for="nombreMotivo">Motivo (queda en la auditoría)</label>
+        <input id="nombreMotivo" maxlength="300">
+        <div class="botonera"><button class="btn chico" id="btnCorregirNombre">Corregir nombre</button></div>
+      </details>
     </div>
 
     <div id="vistaResumen">
     <section class="caja atencion" id="cajaAtencion">
       <h2>Necesita atención</h2>
-      <p class="suave" style="margin-top:-6px">Lo que espera una acción. Postulaciones, identidad y credenciales se resuelven en la pestaña Profesionales; el resto, desde Administración en la app.</p>
+      <p class="suave" style="margin-top:-6px">Lo que espera una acción. Postulaciones, identidad y credenciales se resuelven en Profesionales; problemas, denuncias y garantías, en Moderación. Lo de plata, por ahora, desde Administración en la app.</p>
       <ul id="listaAtencion"></ul>
     </section>
 
@@ -530,6 +582,8 @@ async function cargarPendientes() {
   $('listaAtencion').innerHTML = filas.length ? filas.join('') : '<li class="nada">Nada pendiente.</li>';
   const deProfesionales = (p.postulaciones?.cantidad ?? 0) + (p.credenciales?.cantidad ?? 0);
   $('contProfesionales').textContent = deProfesionales > 0 ? deProfesionales : '';
+  const deModeracion = (p.problemas?.cantidad ?? 0) + (p.denuncias?.cantidad ?? 0) + (p.garantias?.cantidad ?? 0);
+  $('contModeracion').textContent = deModeracion > 0 ? deModeracion : '';
 }
 
 async function cargarObjetivos() {
@@ -697,17 +751,25 @@ async function marcarInterna(id, interna, casilla) {
 // ── Acciones de admin (`admin-actions`) ──────────────────────────────────────
 // La misma función que usa la app. Valida el token, confirma `is_admin` con la
 // base y audita; acá solo se arma el pedido y se muestra lo que contesta.
-async function accionAdmin(body) {
+async function llamarFuncion(fn, body) {
   const token = await tokenVigente();
   if (!token) throw new Error('Sesión vencida. Volvé a entrar.');
-  const r = await fetch(`${SUPABASE_URL}/functions/v1/admin-actions`, {
+  const r = await fetch(`${SUPABASE_URL}/functions/v1/${fn}`, {
     method: 'POST',
     headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
   });
-  const cuerpo = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(cuerpo.error || `Error ${r.status}`);
-  if (cuerpo.warning) console.warn('[admin-actions]', cuerpo.warning);
+  // `guarantee-claim` contesta 401 en texto plano, no JSON.
+  const texto = await r.text();
+  let cuerpo = {};
+  try { cuerpo = texto ? JSON.parse(texto) : {}; } catch { cuerpo = { error: texto }; }
+  if (cuerpo.warning) console.warn(`[${fn}]`, cuerpo.warning);
+  return { ok: r.ok, status: r.status, cuerpo };
+}
+
+async function accionAdmin(body) {
+  const { ok, status, cuerpo } = await llamarFuncion('admin-actions', body);
+  if (!ok) throw new Error(cuerpo.error || `Error ${status}`);
   return cuerpo;
 }
 
@@ -951,16 +1013,395 @@ $('vistaProfesionales').addEventListener('click', (e) => {
 
 $('filtroPostulaciones').addEventListener('change', () => { abierto = null; cargarPostulaciones(); });
 
+// ── Corregir nombre ──────────────────────────────────────────────────────────
+let nombreCargado = false;
+async function cargarAprobados() {
+  try {
+    const filas = await api('coaches?application_status=eq.aprobada&select=id,profiles!inner(name)&order=created_at.asc');
+    $('nombreCoach').innerHTML = '<option value="">Elegí…</option>' + filas
+      .map((c) => ({ id: c.id, nombre: (Array.isArray(c.profiles) ? c.profiles[0] : c.profiles)?.name ?? 'Sin nombre' }))
+      .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
+      .map((c) => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('');
+    nombreCargado = true;
+  } catch (e) {
+    alert('No se pudieron cargar los profesionales.');
+  }
+}
+$('cajaNombre').addEventListener('toggle', () => { if ($('cajaNombre').open && !nombreCargado) cargarAprobados(); });
+$('nombreCoach').addEventListener('change', () => {
+  const op = $('nombreCoach').selectedOptions[0];
+  $('nombreNuevo').value = $('nombreCoach').value ? op.textContent : '';
+});
+$('btnCorregirNombre').addEventListener('click', async () => {
+  const id = $('nombreCoach').value;
+  const actual = $('nombreCoach').selectedOptions[0]?.textContent;
+  const nuevo = $('nombreNuevo').value.trim().replace(/\s+/g, ' ');
+  const motivo = $('nombreMotivo').value.trim();
+  if (!id) return alert('Elegí a quién le corregís el nombre.');
+  if (nuevo.length < 2) return alert('Escribí el nombre correcto.');
+  if (!motivo) return alert('Falta el motivo: queda en la auditoría.');
+  if (!confirm(`¿Cambiar "${actual}" por "${nuevo}"?`)) return;
+  try {
+    await accionAdmin({ action: 'set_coach_name', coach_id: id, name: nuevo, reason: motivo });
+    alert('Nombre corregido.');
+    $('nombreMotivo').value = '';
+    await cargarAprobados();
+  } catch (e) { alert(`No se pudo: ${e.message}`); }
+});
+
+// ── Moderación ───────────────────────────────────────────────────────────────
+const MOTIVO_PROBLEMA = {
+  no_puedo_entrar: 'No puede entrar a la llamada',
+  audio_video: 'No se ve o no se escucha',
+  otro_no_llego: 'La otra parte no llegó',
+  cobro: 'Problema con el cobro',
+  otro: 'Otra cosa',
+};
+// Misma lista que `lib/reports.ts` (REPORT_REASONS).
+const MOTIVO_DENUNCIA = {
+  comportamiento: 'Comportamiento inapropiado o falta de respeto',
+  contenido_ofensivo: 'Contenido ofensivo o inseguro',
+  spam_estafa: 'Spam o intento de estafa',
+  no_se_presento: 'No se presentó a la sesión',
+  perfil_falso: 'Perfil falso o suplantación',
+  otro: 'Otro',
+};
+const NIVELES = { advertencia: 'Advertencia', suspension: 'Suspensión', baja: 'Baja' };
+
+let problemas = [];
+let denuncias = [];
+let sanciones = [];
+let coachesVerificados = [];
+let sancionAbierta = false;
+let levantando = null;
+
+async function nombresDe(ids) {
+  const unicos = [...new Set(ids.filter(Boolean))];
+  if (!unicos.length) return new Map();
+  const filas = await api(`profiles?id=in.(${unicos.join(',')})&select=id,name`);
+  return new Map(filas.map((p) => [p.id, p.name]));
+}
+
+async function cargarModeracion() {
+  await Promise.all([cargarProblemas(), cargarDenuncias(), cargarGarantias(), cargarSanciones()]);
+}
+
+async function cargarProblemas() {
+  $('errorProblemas').textContent = '';
+  try {
+    problemas = await api('session_issues?estado=neq.resuelto&select=id,booking_id,reporter_id,rol,motivo,detalle,estado,respuesta,contexto_tecnico,created_at,bookings(scheduled_date,scheduled_time)&order=created_at.asc');
+    const nombres = await nombresDe(problemas.map((p) => p.reporter_id));
+    problemas.forEach((p) => { p.nombre = nombres.get(p.reporter_id) ?? 'Alguien'; });
+  } catch (e) {
+    problemas = [];
+    $('errorProblemas').textContent = 'No se pudieron cargar.';
+  }
+  $('listaProblemas').innerHTML = problemas.length ? problemas.map((c) => {
+    const horas = Math.floor((Date.now() - new Date(c.created_at).getTime()) / 3_600_000);
+    const b = Array.isArray(c.bookings) ? c.bookings[0] : c.bookings;
+    const ctx = c.contexto_tecnico ?? {};
+    const tecnico = [ctx.plataforma, ctx.version_so && `SO ${ctx.version_so}`, ctx.version_app && `app ${ctx.version_app}`, ctx.estado_sesion && `sesión ${ctx.estado_sesion}`].filter(Boolean).join(' · ');
+    return `<article class="caja ficha">
+      <h3>${esc(MOTIVO_PROBLEMA[c.motivo] ?? c.motivo)}</h3>
+      <div class="suave datos">${esc(c.nombre)} (${esc(c.rol)}) · hace ${horas} h · ${c.estado === 'en_revision' ? 'en revisión' : 'sin responder'}
+        ${horas >= 24 && c.estado !== 'en_revision' ? ' · <span class="urgente" style="color:var(--error);font-weight:600">fuera de plazo</span>' : ''}
+        ${b ? `<br>Sesión del ${esc(String(b.scheduled_date).split('-').reverse().join('/'))} a las ${esc(String(b.scheduled_time).slice(0, 5))} hs` : ''}${tecnico ? `<br>${esc(tecnico)}` : ''}</div>
+      ${c.detalle ? `<div class="cita">${esc(c.detalle)}</div>` : ''}
+      ${c.respuesta ? `<div class="bloque"><b>Respuesta anterior</b><div class="cita">${esc(c.respuesta)}</div></div>` : ''}
+      <div class="formulario-linea">
+        <textarea id="resp-${c.id}" rows="2" maxlength="2000" placeholder="Respuesta (la lee la persona en la app)"></textarea>
+        <div class="botonera" style="margin-top:0">
+          <button class="btn sec chico" data-responder="${c.id}" data-estado="en_revision">Responder y dejar abierto</button>
+          <button class="btn chico" data-responder="${c.id}" data-estado="resuelto">Responder y cerrar</button>
+        </div>
+      </div>
+    </article>`;
+  }).join('') : '<p class="vacio">No hay problemas abiertos.</p>';
+}
+
+async function cargarDenuncias() {
+  $('errorDenuncias').textContent = '';
+  try {
+    denuncias = await api('reports?status=eq.pendiente&select=id,reason,details,created_at,reporter_id,reported_id&order=created_at.asc');
+    const nombres = await nombresDe(denuncias.flatMap((r) => [r.reporter_id, r.reported_id]));
+    denuncias.forEach((r) => { r.denunciante = nombres.get(r.reporter_id) ?? 'Alguien'; r.denunciado = nombres.get(r.reported_id) ?? 'Cuenta eliminada'; });
+  } catch (e) {
+    denuncias = [];
+    $('errorDenuncias').textContent = 'No se pudieron cargar.';
+  }
+  $('listaDenuncias').innerHTML = denuncias.length ? denuncias.map((r) => `<article class="caja ficha">
+      <h3>${esc(MOTIVO_DENUNCIA[r.reason] ?? r.reason)}</h3>
+      <div class="suave datos">${esc(r.denunciante)} denunció a ${esc(r.denunciado)} · ${esc(fecha(r.created_at))}</div>
+      ${r.details ? `<div class="cita">${esc(r.details)}</div>` : ''}
+      <div class="botonera">
+        <button class="btn chico" data-denuncia="${r.id}" data-resolucion="accionado" title="Se tomó una medida (por ejemplo, una sanción)">Accionado</button>
+        <button class="btn sec chico" data-denuncia="${r.id}" data-resolucion="revisado" title="Se miró y no requiere medida">Revisado</button>
+        <button class="btn sec chico" data-denuncia="${r.id}" data-resolucion="descartado" title="No corresponde">Descartado</button>
+      </div>
+    </article>`).join('') : '<p class="vacio">No hay denuncias sin revisar.</p>';
+}
+
+async function cargarGarantias() {
+  $('errorGarantias').textContent = '';
+  try {
+    const todas = await api('guarantee_claims?select=id,booking_id,status,requested_at,resolved_at,resolved_by,notes&order=requested_at.desc&limit=50');
+    const pendientes = todas.filter((c) => c.status === 'pendiente');
+    const resueltas = todas.filter((c) => c.status !== 'pendiente');
+    $('listaGarantias').innerHTML = pendientes.map((c) => `<article class="caja ficha">
+        <h3>Pedido de garantía</h3>
+        <div class="suave datos">Pedida el ${esc(fecha(c.requested_at))} · reserva <code>${esc(c.booking_id)}</code></div>
+        <div class="botonera"><button class="btn chico" data-revisar-garantia="${esc(c.booking_id)}">Revisar</button></div>
+      </article>`).join('');
+    $('listaGarantiasResueltas').innerHTML = resueltas.length ? resueltas.map((c) => `<div class="obj">
+        <div class="obj-cab"><span class="obj-titulo">${esc(c.status)}</span><span class="suave">${esc(fecha(c.resolved_at ?? c.requested_at))}${c.resolved_by ? ` · ${esc(c.resolved_by)}` : ''}</span></div>
+        ${c.notes ? `<div class="suave">${esc(c.notes)}</div>` : ''}
+        <div class="suave"><code>${esc(c.booking_id)}</code></div>
+      </div>`).join('') : '<p class="vacio">Todavía no hay.</p>';
+  } catch (e) {
+    $('errorGarantias').textContent = 'No se pudieron cargar.';
+  }
+}
+
+let garantiaRevisada = null;
+
+async function verificarGarantia() {
+  const id = $('garantiaReserva').value.trim();
+  if (!id) return;
+  $('resultadoGarantia').innerHTML = '<p class="suave">Verificando…</p>';
+  try {
+    // `dry_run`: corre las condiciones de §9.3 sin escribir nada. Un 422 no es
+    // un fallo: es "no califica, y estos son los motivos".
+    const { ok, cuerpo } = await llamarFuncion('guarantee-claim', { booking_id: id, dry_run: true });
+    const alertas = Array.isArray(cuerpo.alertas) ? cuerpo.alertas : [];
+    const motivos = Array.isArray(cuerpo.reasons) ? cuerpo.reasons : [];
+    if (!ok && !motivos.length) { garantiaRevisada = null; $('resultadoGarantia').innerHTML = `<p class="error">${esc(cuerpo.error || 'No se pudo verificar.')}</p>`; return; }
+    garantiaRevisada = { id, califica: ok };
+    $('resultadoGarantia').innerHTML = `
+      ${alertas.length ? `<div class="aviso"><b>Revisar antes de aprobar</b>${alertas.map((a) => `<br>· ${esc(a)}`).join('')}</div>` : ''}
+      ${ok ? `<div class="requisitos"><div class="req"><span class="ok">✓</span><span>Califica. ${cuerpo.amount != null ? `Reintegro total: $${esc(Number(cuerpo.amount).toLocaleString('es-AR'))}` : 'Reintegro total'}${cuerpo.hours_since_session != null ? ` · ${esc(cuerpo.hours_since_session)} h desde la sesión` : ''}</span></div></div>`
+        : `<div class="requisitos"><b style="color:var(--terra-ink)">No califica</b>${motivos.map((m) => `<div class="req"><span class="falta">•</span><span>${esc(m)}</span></div>`).join('')}<span class="suave">Podés rechazarla igual y dejar constancia: §9.3 permite denegar por abuso, y sin registro el reincidente es invisible.</span></div>`}
+      <label for="garantiaMotivo">Motivo del rechazo (solo si vas a rechazar). La persona puede leerlo.</label>
+      <textarea id="garantiaMotivo" rows="2"></textarea>
+      <div class="botonera">
+        ${ok ? '<button class="btn chico" id="btnAprobarGarantia">Aprobar y reembolsar</button>' : ''}
+        <button class="btn peligro chico" id="btnRechazarGarantia">Rechazar</button>
+      </div>`;
+  } catch (e) {
+    $('resultadoGarantia').innerHTML = `<p class="error">${esc(e.message)}</p>`;
+  }
+}
+
+async function resolverGarantia(aprobar) {
+  if (!garantiaRevisada) return;
+  const motivo = $('garantiaMotivo')?.value.trim();
+  if (!aprobar && !motivo) return alert('Falta el motivo: queda registrado para detectar reincidencia.');
+  if (aprobar && !confirm('¿Aprobar y reembolsar? El reembolso se ejecuta solo en los próximos minutos.')) return;
+  const body = aprobar ? { booking_id: garantiaRevisada.id } : { booking_id: garantiaRevisada.id, reject: motivo };
+  const { ok, cuerpo } = await llamarFuncion('guarantee-claim', body);
+  if (!ok) return alert(`No se pudo: ${cuerpo.error || 'probá de nuevo.'}`);
+  alert(aprobar ? 'Aprobada. El reembolso queda marcado y se ejecuta en la próxima corrida (cada 5 min).' : 'Rechazada. Queda registrada la denegación.');
+  garantiaRevisada = null;
+  $('garantiaReserva').value = '';
+  $('resultadoGarantia').innerHTML = '';
+  await Promise.all([cargarGarantias(), cargarPendientes()]);
+}
+
+function sancionVigente(s) {
+  if (s.revocadaAt || s.nivel === 'advertencia') return false;
+  if (s.hasta === 'infinity') return true;
+  const t = s.hasta ? new Date(s.hasta).getTime() : NaN;
+  return Number.isFinite(t) && t > Date.now();
+}
+
+async function cargarSanciones() {
+  $('errorSanciones').textContent = '';
+  try {
+    const [r, filas] = await Promise.all([
+      accionAdmin({ action: 'list_sanctions' }),
+      api('coaches?verified=eq.true&select=id,profiles!inner(name)&order=created_at.asc'),
+    ]);
+    sanciones = r.sanciones ?? [];
+    coachesVerificados = filas
+      .map((c) => ({ id: c.id, nombre: (Array.isArray(c.profiles) ? c.profiles[0] : c.profiles)?.name ?? 'Sin nombre' }))
+      .sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
+  } catch (e) {
+    $('errorSanciones').textContent = `No se pudieron cargar: ${e.message}`;
+  }
+  pintarSanciones();
+}
+
+function pintarSanciones() {
+  $('formSancion').innerHTML = !sancionAbierta
+    ? '<div class="botonera" style="margin:0 0 14px"><button class="btn chico" id="btnNuevaSancion">Aplicar una sanción</button></div>'
+    : `<div class="caja ficha">
+        <h3>Nueva sanción</h3>
+        <label for="sCoach">Profesional</label>
+        <select id="sCoach"><option value="">Elegí…</option>${coachesVerificados.map((c) => `<option value="${esc(c.id)}">${esc(c.nombre)}</option>`).join('')}</select>
+        <div class="fila">
+          <div><label for="sNivel">Escalón</label>
+            <select id="sNivel"><option value="advertencia">Advertencia</option><option value="suspension">Suspensión</option><option value="baja">Baja</option></select></div>
+          <div id="sCampoDias" hidden><label for="sDias">Días</label><input id="sDias" type="number" min="1" max="365" value="14"></div>
+        </div>
+        <label for="sMotivo">Motivo: lo lee el profesional</label>
+        <textarea id="sMotivo" rows="3" placeholder="Qué pasó, en una o dos frases."></textarea>
+        <label for="sEvidencia">Evidencia: solo la ve el equipo</label>
+        <input id="sEvidencia" placeholder="Notas: IDs de reserva, qué se ve en las capturas.">
+        <label for="sArchivos">Capturas o PDF (opcional)</label>
+        <input id="sArchivos" type="file" multiple accept="image/jpeg,image/png,image/webp,image/heic,application/pdf">
+        <div class="botonera"><button class="btn sec chico" id="btnCancelarSancion">Cancelar</button><button class="btn peligro chico" id="btnAplicarSancion">Aplicar</button></div>
+      </div>`;
+  $('listaSanciones').innerHTML = sanciones.length ? sanciones.map((s) => {
+    const vigente = sancionVigente(s);
+    const hasta = s.hasta === 'infinity' ? 'sin vencimiento' : s.hasta ? `hasta el ${fecha(s.hasta)}` : '';
+    return `<article class="caja ficha" style="${s.revocadaAt ? 'opacity:.7' : ''}">
+      <div class="obj-cab"><h3 style="flex:1">${esc(s.coachName)}</h3><span class="chip ${vigente ? 'resultado' : ''}">${esc(NIVELES[s.nivel] ?? s.nivel)}${vigente ? ' vigente' : ''}</span></div>
+      <div class="suave datos">${esc(fecha(s.createdAt))}${hasta ? ` · ${esc(hasta)}` : ''}${s.revocadaAt ? ` · levantada el ${esc(fecha(s.revocadaAt))}` : ''}</div>
+      <div class="bloque"><b>Motivo (lo ve el profesional)</b><div class="cita">${esc(s.motivo)}</div></div>
+      ${s.evidencia ? `<div class="bloque"><b>Evidencia (solo el equipo)</b>${esc(s.evidencia)}</div>` : ''}
+      ${s.revocadaMotivo ? `<div class="bloque"><b>Por qué se levantó</b>${esc(s.revocadaMotivo)}</div>` : ''}
+      <div class="botonera">
+        ${(s.adjuntos ?? []).map((a, i) => `<button class="btn sec chico" data-adjunto="${a.id}">${a.mime === 'application/pdf' ? 'PDF' : 'Captura'} ${i + 1}</button>`).join('')}
+        <label class="btn sec chico" style="margin:0;cursor:pointer">Adjuntar<input type="file" multiple hidden data-adjuntar="${s.id}" accept="image/jpeg,image/png,image/webp,image/heic,application/pdf"></label>
+        ${!s.revocadaAt && levantando !== s.id ? `<button class="btn sec chico" data-levantar="${s.id}">Levantar</button>` : ''}
+      </div>
+      ${levantando === s.id ? `<div class="formulario-linea">
+        <label for="txtLevantar">Por qué se levanta (queda registrado)</label>
+        <textarea id="txtLevantar" rows="2"></textarea>
+        <div class="botonera"><button class="btn sec chico" data-cancelar-levantar>Cancelar</button><button class="btn chico" data-confirmar-levantar="${s.id}">Levantar sanción</button></div>
+      </div>` : ''}
+    </article>`;
+  }).join('') : '<p class="vacio">No hay sanciones registradas.</p>';
+}
+
+const MIMES_EVIDENCIA = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'application/pdf'];
+
+// El archivo no pasa por la función: ella firma una subida a un path que elige,
+// el archivo va directo a storage y después ella confirma y registra. Sube de a
+// uno y cuenta los que fallan, para que una captura mala no tire las demás.
+async function subirEvidencia(sancionId, archivos) {
+  let fallidos = 0;
+  for (const f of archivos) {
+    try {
+      if (!MIMES_EVIDENCIA.includes(f.type)) throw new Error(`tipo no aceptado: ${f.type || 'desconocido'}`);
+      const { path, token } = await accionAdmin({ action: 'sanction_evidence_upload', sancion_id: sancionId, mime: f.type });
+      const r = await fetch(`${SUPABASE_URL}/storage/v1/object/upload/sign/sanction-evidence/${path}?token=${encodeURIComponent(token)}`, {
+        method: 'PUT',
+        headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': f.type, 'x-upsert': 'false' },
+        body: f,
+      });
+      if (!r.ok) throw new Error(`subida ${r.status}`);
+      await accionAdmin({ action: 'sanction_evidence_register', sancion_id: sancionId, path, mime: f.type });
+    } catch (e) {
+      fallidos += 1;
+      console.warn('[sanciones] adjunto', f.name, e);
+    }
+  }
+  return fallidos;
+}
+
+async function aplicarSancion() {
+  const coachId = $('sCoach').value;
+  const nivel = $('sNivel').value;
+  const motivo = $('sMotivo').value.trim();
+  const evidencia = $('sEvidencia').value.trim();
+  const dias = Number($('sDias').value);
+  const archivos = [...$('sArchivos').files];
+  if (!coachId) return alert('Elegí a quién se le aplica.');
+  if (motivo.length < 10) return alert('Falta el motivo: lo va a leer el profesional y tiene que explicar qué pasó.');
+  if (nivel === 'suspension' && (!Number.isFinite(dias) || dias < 1 || dias > 365)) return alert('Una suspensión necesita una duración de 1 a 365 días.');
+  const nombre = coachesVerificados.find((c) => c.id === coachId)?.nombre ?? 'el profesional';
+  const pregunta = nivel === 'advertencia' ? `¿Advertir a ${nombre}?\n\nNo cambia su visibilidad. Le llega una notificación con el motivo y queda registrada.`
+    : `${nivel === 'suspension' ? `¿Suspender a ${nombre} ${dias} días?` : `¿Dar de baja a ${nombre}?`}\n\nSale del catálogo y no puede recibir reservas nuevas. Las sesiones ya agendadas las sigue atendiendo. Le llega una notificación con el motivo, y a la gente que atendía en los últimos 90 días le avisamos que no está tomando reservas, sin mencionar la sanción.`;
+  if (!confirm(pregunta)) return;
+  $('btnAplicarSancion').disabled = true;
+  try {
+    const r = await accionAdmin({ action: 'apply_sanction', coach_id: coachId, nivel, motivo, ...(nivel === 'suspension' ? { dias } : {}), ...(evidencia ? { evidencia } : {}) });
+    // La sanción ya quedó. Los adjuntos van después porque necesitan su id; si
+    // alguno falla, la sanción no se deshace y se puede adjuntar desde la ficha.
+    const fallidos = r.sancion?.id && archivos.length ? await subirEvidencia(r.sancion.id, archivos) : 0;
+    const avisados = Number(r.avisados ?? 0);
+    alert(['Sanción aplicada.',
+      avisados > 0 ? `Les avisamos a ${avisados === 1 ? '1 persona' : `${avisados} personas`} que atendían con este profesional, sin mencionar la sanción.` : '',
+      fallidos > 0 ? `${fallidos} de ${archivos.length} adjuntos no se pudieron subir: agregalos desde la ficha.` : ''].filter(Boolean).join('\n\n'));
+    sancionAbierta = false;
+    await cargarSanciones();
+  } catch (e) {
+    alert(`No se pudo: ${e.message}`);
+    $('btnAplicarSancion').disabled = false;
+  }
+}
+
+$('vistaModeracion').addEventListener('click', async (e) => {
+  const t = e.target.closest('button');
+  if (!t) return;
+  const d = t.dataset;
+
+  if (d.responder) {
+    const texto = $(`resp-${d.responder}`).value.trim();
+    if (!texto) return alert('Falta la respuesta: la persona la lee en la sala de esa sesión.');
+    t.disabled = true;
+    try {
+      await accionAdmin({ action: 'respond_session_issue', issue_id: d.responder, respuesta: texto, estado: d.estado });
+      alert(d.estado === 'resuelto' ? 'Respondido y cerrado. Le avisamos.' : 'Respondido. Sigue abierto y le avisamos.');
+      await Promise.all([cargarProblemas(), cargarPendientes()]);
+    } catch (err) { alert(`No se pudo: ${err.message}`); t.disabled = false; }
+    return;
+  }
+  if (d.denuncia) {
+    t.disabled = true;
+    try {
+      await accionAdmin({ action: 'resolve_report', report_id: d.denuncia, status: d.resolucion });
+      await Promise.all([cargarDenuncias(), cargarPendientes()]);
+    } catch (err) { alert(`No se pudo: ${err.message}`); t.disabled = false; }
+    return;
+  }
+  if (d.revisarGarantia) { $('garantiaReserva').value = d.revisarGarantia; return verificarGarantia(); }
+  if (t.id === 'btnVerificarGarantia') return verificarGarantia();
+  if (t.id === 'btnAprobarGarantia') return resolverGarantia(true);
+  if (t.id === 'btnRechazarGarantia') return resolverGarantia(false);
+  if (t.id === 'btnNuevaSancion') { sancionAbierta = true; pintarSanciones(); return; }
+  if (t.id === 'btnCancelarSancion') { sancionAbierta = false; pintarSanciones(); return; }
+  if (t.id === 'btnAplicarSancion') return aplicarSancion();
+  if (d.adjunto) return abrirDocumento({ action: 'sanction_evidence_url', evidencia_id: d.adjunto });
+  if (d.levantar) { levantando = d.levantar; pintarSanciones(); $('txtLevantar').focus(); return; }
+  if (d.cancelarLevantar !== undefined) { levantando = null; pintarSanciones(); return; }
+  if (d.confirmarLevantar) {
+    const motivo = $('txtLevantar').value.trim();
+    if (!motivo) return alert('Falta el motivo: el historial tiene que poder contar también nuestros errores.');
+    t.disabled = true;
+    try {
+      await accionAdmin({ action: 'revoke_sanction', sancion_id: d.confirmarLevantar, motivo });
+      levantando = null;
+      await cargarSanciones();
+    } catch (err) { alert(`No se pudo: ${err.message}`); t.disabled = false; }
+  }
+});
+
+$('vistaModeracion').addEventListener('change', async (e) => {
+  if (e.target.id === 'sNivel') { $('sCampoDias').hidden = e.target.value !== 'suspension'; return; }
+  const input = e.target.closest('[data-adjuntar]');
+  if (input && input.files.length) {
+    const archivos = [...input.files];
+    const fallidos = await subirEvidencia(input.dataset.adjuntar, archivos);
+    if (fallidos > 0) alert(`${fallidos} de ${archivos.length} no se pudieron subir. Probá de nuevo con esos.`);
+    await cargarSanciones();
+  }
+});
+$('garantiaReserva').addEventListener('keydown', (e) => { if (e.key === 'Enter') verificarGarantia(); });
+
 // ── Pestañas ─────────────────────────────────────────────────────────────────
-let profesionalesCargado = false;
+const VISTAS = { resumen: 'vistaResumen', profesionales: 'vistaProfesionales', moderacion: 'vistaModeracion' };
+const cargadas = new Set(['resumen']);
 document.querySelector('.pestanas').addEventListener('click', (e) => {
   const b = e.target.closest('[data-pestana]');
   if (!b) return;
+  const elegida = b.dataset.pestana;
   document.querySelectorAll('.pestanas [data-pestana]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
-  const pro = b.dataset.pestana === 'profesionales';
-  $('vistaProfesionales').hidden = !pro;
-  $('vistaResumen').hidden = pro;
-  if (pro && !profesionalesCargado) { profesionalesCargado = true; cargarProfesionales(); }
+  Object.entries(VISTAS).forEach(([k, id]) => { $(id).hidden = k !== elegida; });
+  if (cargadas.has(elegida)) return;
+  cargadas.add(elegida);
+  if (elegida === 'profesionales') cargarProfesionales();
+  if (elegida === 'moderacion') cargarModeracion();
 });
 
 // ── Eventos ──────────────────────────────────────────────────────────────────
