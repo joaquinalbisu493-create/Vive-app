@@ -1,3 +1,20 @@
+## 2026-10-22 — Joaquín (Claude · rediseño card "De tu profesional" en Recursos)
+
+**Tocado:** `app/(tabs)/recursos.tsx`. **Datos:** fechas de la data semilla `[SEED]` de `resource_recommendations` (ver abajo).
+
+**Resumen:**
+- **Card "De tu profesional" → fila horizontal compacta** (antes bloque vertical). Avatar 42px (foto desde `profiles.avatar_url` —se agregó al select del query— o iniciales) con badge de formato 19px superpuesto (color del formato, ícono crema, borde del color de card). Dos renglones: mensaje del coach en Plus Jakarta **italic** 13.5 + "título · duración" chico apagado. Botón 34px con `resourceFormatGradient(formato)` y sombra del color; **ícono play para audio/podcast/video, flecha para lectura** (en lectura no se reproduce nada). Contenedor `SurfaceCard` con lavado terracota ~9%, grano 3.5%, sombra cálida, radio 18.
+- **Bug contador duplicado:** el eyebrow pasó de mostrar el total (que ya se dice en "+N más") a **"N sin ver"** (`opened_at` null, lo accionable). Si no hay nada sin ver, no se muestra el pill.
+- **Bug "orden invertido" — NO era bug.** El `ORDER BY` ya estaba en `created_at DESC` (más nueva primero). Verificado en la DB: para la cuenta de prueba las 4 recos eran todas de julio y el 28/jul era la más nueva → la card mostraba bien la más reciente. La sensación de "hace meses" era por data semilla vieja, no por el orden. **No se tocó el ORDER BY.**
+- **Fuente del mensaje:** se pidió serif de display, pero el proyecto no tiene serif (Fraunces se sacó el 24/08) ni itálica cargada. Joaquín eligió usar **Plus Jakarta con `fontStyle:'italic'`** (sin instalar nada; en Android la itálica sintética puede verse recta — a confirmar en device).
+- **Analítica:** `recomendacion_abierta {formato, dias_desde_envio}` al abrir; `recomendaciones_todas_abiertas {total}` al tocar "+N más". Reusa `registrarEvento` → `analytics_events`. tsc limpio.
+
+**Cambio de datos (coordinación con Andre):** se refrescaron los `created_at` de las recomendaciones semilla (`resource_recommendations` unidas a `coach_resources` con título `[SEED]%`) a fechas recientes (la más nueva ≈ hoy, el resto cada 3 días), preservando el orden relativo por usuario. Solo filas `[SEED]`, para que al probar no se sienta que el profesional "no escribe hace meses". No tocó schema ni datos reales de usuarios.
+
+**Pendiente para la próxima sesión:**
+- Verle en device: la itálica del mensaje (Android), el badge de formato sobre el avatar a 42px, y que el botón abra bien (toda la fila es tocable).
+- Edge case `note` null: hoy cae a "{coach} te recomendó esto"; confirmar si está ok así.
+
 ## 2026-10-21 — Andre (Claude · paquete del abogado: normas al día y preguntas abiertas)
 
 **Tocado:** `docs/paquete-abogado.md`, `docs/politica-de-privacidad.md`, `screens/BookingScreen_Confirm.tsx`, `supabase/functions/revocacion/index.ts`, `docs/boton-de-arrepentimiento.md`, `docs/terminos-y-condiciones.md`, `constants/legal.ts`, `web/legal/*`, `web/legal-version.js`, `web/index.html`, `scripts/sync-legal.mjs`, `docs/hosting.md`, `docs/editar-la-web.md`. Fuera del repo: los 5 Word de `~/Desktop/SERE para el abogado` regenerados (decían "Vita").
