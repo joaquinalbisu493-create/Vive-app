@@ -82,6 +82,30 @@
   .tile b { display: block; font-size: 24px; line-height: 1.1; font-variant-numeric: tabular-nums; }
   .tile span { font-size: 12px; color: var(--soft); }
 
+  /* Pestañas */
+  .pestanas { display: flex; gap: 4px; margin-bottom: 24px; border-bottom: 1px solid var(--line); }
+  .pestanas button { background: none; border: 0; padding: 10px 14px; font-weight: 600; color: var(--soft); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .pestanas button[aria-selected="true"] { color: var(--forest); border-bottom-color: var(--forest); }
+  .contador { display: inline-block; min-width: 20px; padding: 0 6px; border-radius: 999px; background: var(--terra-bg); color: var(--terra-ink); font-size: 12px; }
+  .contador:empty { display: none; }
+
+  /* Fichas de profesionales */
+  .ficha { margin-bottom: 14px; }
+  .ficha h3 { text-transform: none; letter-spacing: 0; font-size: 18px; color: var(--forest); margin: 0; }
+  .ficha .datos { margin: 4px 0 12px; }
+  .ficha .bloque { margin: 12px 0; }
+  .ficha .bloque > b { display: block; font-size: 12px; color: var(--soft); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 2px; }
+  .ficha .cita { background: var(--cream); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; }
+  .requisitos { display: grid; gap: 6px; margin: 14px 0; padding: 12px; border-radius: 12px; background: var(--cream); }
+  .req { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .req .ok { color: var(--verde); font-weight: 700; }
+  .req .falta { color: var(--terra-ink); font-weight: 700; }
+  .botonera { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .btn.peligro { background: var(--error); }
+  .formulario-linea { margin-top: 10px; }
+  .formulario-linea textarea { margin-bottom: 8px; }
+  .aviso { background: var(--terra-bg); color: var(--terra-ink); border-radius: 10px; padding: 8px 12px; font-size: 14px; margin: 8px 0; }
+
   /* Necesita atención */
   .atencion { margin-bottom: 32px; }
   .atencion ul { list-style: none; margin: 0; padding: 0; }
@@ -157,9 +181,36 @@
       </div>
     </header>
 
+    <nav class="pestanas" role="tablist">
+      <button role="tab" data-pestana="resumen" aria-selected="true">Resumen</button>
+      <button role="tab" data-pestana="profesionales" aria-selected="false">Profesionales <span class="contador" id="contProfesionales"></span></button>
+    </nav>
+
+    <!-- ── Profesionales: postulaciones y credenciales ──
+         Mismas acciones y mismas exigencias que Administración en la app: todo
+         pasa por `admin-actions`, que valida admin, audita y avisa al
+         profesional. Esta pantalla no decide nada que el servidor no controle. -->
+    <div id="vistaProfesionales" hidden>
+      <div class="barra-mes">
+        <h2>Postulaciones</h2>
+        <select id="filtroPostulaciones" style="width:auto">
+          <option value="pendiente">Por revisar</option>
+          <option value="rechazada">Rechazadas</option>
+          <option value="aprobada">Aprobadas</option>
+        </select>
+      </div>
+      <p class="error" id="errorPostulaciones"></p>
+      <div id="listaPostulaciones"></div>
+
+      <h2 style="margin-top:32px">Títulos y matrículas por revisar</h2>
+      <p class="error" id="errorCredenciales"></p>
+      <div id="listaCredenciales"></div>
+    </div>
+
+    <div id="vistaResumen">
     <section class="caja atencion" id="cajaAtencion">
       <h2>Necesita atención</h2>
-      <p class="suave" style="margin-top:-6px">Lo que espera una acción. Se resuelve desde Administración en la app.</p>
+      <p class="suave" style="margin-top:-6px">Lo que espera una acción. Postulaciones, identidad y credenciales se resuelven en la pestaña Profesionales; el resto, desde Administración en la app.</p>
       <ul id="listaAtencion"></ul>
     </section>
 
@@ -186,6 +237,7 @@
         <tbody id="filasCuentas"></tbody>
       </table>
     </details>
+    </div>
   </section>
 
   <dialog id="dlgObjetivo">
@@ -476,6 +528,8 @@ async function cargarPendientes() {
     return `<li><b>${esc(c.cantidad)}</b><span class="que">${esc(titulo)}${vencidos}<br><span class="suave">${esc(detalle)}</span></span></li>`;
   });
   $('listaAtencion').innerHTML = filas.length ? filas.join('') : '<li class="nada">Nada pendiente.</li>';
+  const deProfesionales = (p.postulaciones?.cantidad ?? 0) + (p.credenciales?.cantidad ?? 0);
+  $('contProfesionales').textContent = deProfesionales > 0 ? deProfesionales : '';
 }
 
 async function cargarObjetivos() {
@@ -639,6 +693,275 @@ async function marcarInterna(id, interna, casilla) {
     casilla.disabled = false;
   }
 }
+
+// ── Acciones de admin (`admin-actions`) ──────────────────────────────────────
+// La misma función que usa la app. Valida el token, confirma `is_admin` con la
+// base y audita; acá solo se arma el pedido y se muestra lo que contesta.
+async function accionAdmin(body) {
+  const token = await tokenVigente();
+  if (!token) throw new Error('Sesión vencida. Volvé a entrar.');
+  const r = await fetch(`${SUPABASE_URL}/functions/v1/admin-actions`, {
+    method: 'POST',
+    headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const cuerpo = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(cuerpo.error || `Error ${r.status}`);
+  if (cuerpo.warning) console.warn('[admin-actions]', cuerpo.warning);
+  return cuerpo;
+}
+
+// Un documento firmado (DNI, selfie, matrícula) vence en 5 minutos y abrirlo
+// queda auditado. La pestaña se abre ANTES de pedir el link: si se abre después
+// de esperar la respuesta, el navegador lo toma como ventana emergente y la
+// bloquea.
+async function abrirDocumento(pedido) {
+  const w = window.open('', '_blank');
+  try {
+    const { url } = await accionAdmin(pedido);
+    if (w) { w.opener = null; w.location.href = url; } else location.href = url;
+  } catch (e) {
+    if (w) w.close();
+    alert(`No se pudo abrir: ${e.message}`);
+  }
+}
+
+// Solo links web. El link del video lo escribe quien se postula, y un
+// `javascript:` en un href se ejecutaría con la sesión de un admin.
+const linkSeguro = (u) => (typeof u === 'string' && /^https?:\/\//i.test(u.trim()) ? u.trim() : null);
+const fecha = (f) => (f ? new Date(f).toLocaleDateString('es-AR') : '');
+const EXIGE_MATRICULA = ['Psicólogo/a', 'Nutricionista'];
+
+let postulaciones = [];
+let credenciales = [];
+let abierto = null; // { id, tipo: 'entrevista' | 'rechazo' | 'rechazo-cred' }
+
+async function cargarProfesionales() {
+  await Promise.all([cargarPostulaciones(), cargarCredenciales()]);
+}
+
+async function cargarPostulaciones() {
+  $('errorPostulaciones').textContent = '';
+  try {
+    const r = await accionAdmin({ action: 'list_coach_applications', status: $('filtroPostulaciones').value });
+    postulaciones = r.applications ?? [];
+  } catch (e) {
+    postulaciones = [];
+    $('errorPostulaciones').textContent = `No se pudieron cargar: ${e.message}`;
+  }
+  pintarPostulaciones();
+}
+
+async function cargarCredenciales() {
+  $('errorCredenciales').textContent = '';
+  try {
+    const r = await accionAdmin({ action: 'list_pending_credentials' });
+    credenciales = r.credentials ?? [];
+  } catch (e) {
+    credenciales = [];
+    $('errorCredenciales').textContent = `No se pudieron cargar: ${e.message}`;
+  }
+  pintarCredenciales();
+}
+
+function requisito(cumple, texto, faltaTexto) {
+  return `<div class="req"><span class="${cumple ? 'ok' : 'falta'}">${cumple ? '✓' : '•'}</span><span>${esc(cumple ? texto : faltaTexto)}</span></div>`;
+}
+
+function fichaPostulacion(c) {
+  const pendiente = c.status === 'pendiente';
+  const exigeMatricula = EXIGE_MATRICULA.includes(c.specialty);
+  const video = linkSeguro(c.applicationVideoUrl);
+  const datos = [c.specialty || 'Sin especialidad', c.price ? `$${Number(c.price).toLocaleString('es-AR')}` : '', c.nationality].filter(Boolean).join(' · ');
+
+  let pasos = '';
+  if (pendiente) {
+    pasos = `<div class="requisitos">
+      ${requisito(!!c.interviewedAt, `Entrevista registrada el ${fecha(c.interviewedAt)}`, 'Falta registrar la entrevista')}
+      ${requisito(c.identidad === 'verificada', 'Identidad verificada',
+        c.identidad === 'pendiente' ? 'Identidad: fotos cargadas, falta revisarlas' : 'Identidad: todavía no subió las fotos')}
+      ${exigeMatricula ? requisito(c.matriculaVerificada, 'Matrícula verificada para esta profesión',
+        c.matriculaPendiente ? 'Matrícula cargada: revisala abajo, en títulos y matrículas' : 'Matrícula: falta cargarla o corregirla') : ''}
+    </div>`;
+  }
+
+  const identidad = pendiente && c.identidad === 'pendiente' ? `<div class="botonera">
+      <button class="btn sec chico" data-foto="dni-frente" data-coach="${c.coachId}">Ver DNI, frente</button>
+      <button class="btn sec chico" data-foto="dni-dorso" data-coach="${c.coachId}">Ver DNI, dorso</button>
+      <button class="btn sec chico" data-foto="selfie" data-coach="${c.coachId}">Ver selfie con DNI</button>
+      <button class="btn chico" data-identidad="${c.coachId}">Marcar identidad verificada</button>
+    </div>` : '';
+
+  let formulario = '';
+  if (abierto?.id === c.coachId && abierto.tipo === 'entrevista') {
+    formulario = `<div class="formulario-linea">
+      <label for="txtEntrevista">Resumen privado de la entrevista</label>
+      <textarea id="txtEntrevista" rows="3" maxlength="2000" placeholder="Criterio, experiencia y límites observados"></textarea>
+      <div class="botonera"><button class="btn sec chico" data-cerrar>Cancelar</button><button class="btn chico" data-guardar-entrevista="${c.coachId}">Guardar entrevista</button></div>
+    </div>`;
+  } else if (abierto?.id === c.coachId && abierto.tipo === 'rechazo') {
+    formulario = `<div class="formulario-linea">
+      <label for="txtRechazo">Este texto le llega a ${esc(c.name)}. Decile qué corregir: puede volver a enviarla.</label>
+      <textarea id="txtRechazo" rows="3" placeholder="El video no se ve o el link no abre."></textarea>
+      <div class="botonera"><button class="btn sec chico" data-cerrar>Cancelar</button><button class="btn peligro chico" data-enviar-rechazo="${c.coachId}">Enviar rechazo</button></div>
+    </div>`;
+  }
+
+  const acciones = pendiente && !abierto ? `<div class="botonera">
+      ${!c.interviewedAt ? `<button class="btn sec chico" data-abrir="entrevista" data-coach="${c.coachId}">Registrar entrevista</button>` : ''}
+      <button class="btn chico" data-aprobar="${c.coachId}">Aprobar</button>
+      <button class="btn sec chico" data-abrir="rechazo" data-coach="${c.coachId}">Rechazar</button>
+    </div>` : '';
+
+  return `<article class="caja ficha">
+    <h3>${esc(c.name)}</h3>
+    <div class="suave datos">${esc(datos)}<br>
+      ${c.paisAtencion ? `Atiende desde ${esc([c.provinciaAtencion, c.paisAtencion].filter(Boolean).join(', '))} · ` : ''}Se postuló el ${esc(fecha(c.createdAt))}${c.email ? ` · ${esc(c.email)}` : ''}
+      ${c.status === 'rechazada' && c.reviewedAt ? `<br>Rechazada el ${esc(fecha(c.reviewedAt))}` : ''}
+    </div>
+    ${pasos}
+    ${identidad}
+    ${c.bio ? `<div class="bloque"><b>Presentación</b>${esc(c.bio)}</div>` : ''}
+    <div class="bloque"><b>Temas</b>${esc(c.topics?.join(', ') || 'Sin temas')}</div>
+    <div class="bloque"><b>Cómo acompaña</b>${esc(c.estilo ?? 'Sin respuesta')} · Guía: ${esc(c.guia ?? 'sin respuesta')}<br>Focos: ${esc(c.focos?.join(', ') || 'sin respuesta')}</div>
+    ${c.respuestaRiesgo ? `<div class="bloque"><b>Si alguien piensa en hacerse daño</b><div class="cita">${esc(c.respuestaRiesgo)}</div></div>` : ''}
+    ${c.compromisoDerivar != null ? `<div class="bloque">${c.compromisoDerivar ? '✓ Se comprometió a derivar lo clínico' : 'No confirmó que deriva lo clínico'}</div>` : ''}
+    ${c.notes ? `<div class="bloque"><b>${pendiente ? 'Rechazada antes por' : 'Motivo del rechazo'}</b><div class="cita">${esc(c.notes)}</div></div>` : ''}
+    ${video ? `<div class="bloque"><a class="link" href="${esc(video)}" target="_blank" rel="noopener noreferrer">Ver video de postulación</a></div>`
+      : c.applicationVideoUrl ? `<div class="aviso">El link del video no es una dirección web válida: ${esc(c.applicationVideoUrl)}</div>` : ''}
+    ${formulario}
+    ${acciones}
+  </article>`;
+}
+
+function pintarPostulaciones() {
+  $('listaPostulaciones').innerHTML = postulaciones.length
+    ? postulaciones.map(fichaPostulacion).join('')
+    : '<p class="vacio">No hay postulaciones en este estado.</p>';
+}
+
+const TIPO_CREDENCIAL = { matricula: 'Matrícula', titulo: 'Título', certificacion: 'Certificación' };
+
+function fichaCredencial(c) {
+  const esMatricula = c.kind === 'matricula';
+  const rechazando = abierto?.id === c.id && abierto.tipo === 'rechazo-cred';
+  const detalle = [c.institution, c.year, c.registration_number ? `N.º ${c.registration_number}` : ''].filter(Boolean).join(' · ');
+  return `<article class="caja ficha">
+    <h3>${esc(c.title)}</h3>
+    <div class="suave datos">${esc(TIPO_CREDENCIAL[c.kind] ?? c.kind)} de ${esc(c.coach_name ?? 'Sin nombre')}${c.specialty ? ` (${esc(c.specialty)})` : ''}<br>${esc(detalle)}${detalle ? ' · ' : ''}Cargada el ${esc(fecha(c.created_at))}</div>
+    ${!esMatricula && !c.coach_has_matricula ? '<div class="aviso">No tiene matrícula verificada. Aprobar esto suma a su perfil, pero no le da la marca de profesional: eso solo lo hace la matrícula.</div>' : ''}
+    ${c.review_notes ? `<div class="bloque"><b>Nota anterior</b><div class="cita">${esc(c.review_notes)}</div></div>` : ''}
+    ${c.has_file ? `<div class="botonera"><button class="btn sec chico" data-doc="${c.id}">Ver documento</button></div>` : '<div class="aviso">No subió documento.</div>'}
+    ${rechazando ? `<div class="formulario-linea">
+        <label for="txtRechazoCred">Este texto le llega al profesional. Decile qué corregir.</label>
+        <textarea id="txtRechazoCred" rows="3"></textarea>
+        <div class="botonera"><button class="btn sec chico" data-cerrar>Cancelar</button><button class="btn peligro chico" data-enviar-rechazo-cred="${c.id}">Enviar rechazo</button></div>
+      </div>` : !abierto ? `<div class="botonera">
+        ${esMatricula ? `<select id="prof-${c.id}" style="width:auto" aria-label="Profesión de la matrícula">
+          <option value="">Profesión de la matrícula…</option>
+          <option value="psicologia">Psicología</option>
+          <option value="nutricion">Nutrición</option>
+          <option value="otra">Otra</option>
+        </select>` : ''}
+        <button class="btn chico" data-verificar-cred="${c.id}">Verificar</button>
+        <button class="btn sec chico" data-abrir="rechazo-cred" data-cred="${c.id}">Rechazar</button>
+      </div>` : ''}
+  </article>`;
+}
+
+function pintarCredenciales() {
+  $('listaCredenciales').innerHTML = credenciales.length
+    ? credenciales.map(fichaCredencial).join('')
+    : '<p class="vacio">No hay títulos ni matrículas esperando.</p>';
+}
+
+function repintar() { pintarPostulaciones(); pintarCredenciales(); }
+
+// Envuelve una acción: deshabilita los botones mientras corre, muestra el error
+// tal como lo dice el servidor y recarga las listas y la atención al terminar.
+async function hacer(boton, fn, okMsg) {
+  const botones = document.querySelectorAll('#vistaProfesionales button');
+  botones.forEach((b) => { b.disabled = true; });
+  try {
+    await fn();
+    abierto = null;
+    if (okMsg) alert(okMsg);
+    await Promise.all([cargarProfesionales(), cargarPendientes()]);
+  } catch (e) {
+    alert(`No se pudo: ${e.message}`);
+    botones.forEach((b) => { b.disabled = false; });
+  }
+}
+
+function aprobar(c) {
+  // Las mismas exigencias que la app. El servidor vuelve a controlarlas
+  // (entrevista en `admin-actions`, identidad y matrícula en
+  // `approve_coach_application`): esto es para avisar antes, no para proteger.
+  if (!c.interviewedAt) return alert('Registrá la entrevista antes de aprobar.');
+  if (c.identidad !== 'verificada') return alert('Mirá las fotos del DNI y la selfie, y marcá la identidad como verificada antes de aprobar.');
+  if (EXIGE_MATRICULA.includes(c.specialty) && !c.matriculaVerificada) return alert('Verificá la matrícula correspondiente antes de aprobar.');
+  if (!confirm(`¿Aprobar a ${c.name}?\n\nSe habilita su panel profesional. Aparece en las búsquedas cuando complete cobro y horarios.`)) return;
+  hacer(null, () => accionAdmin({ action: 'set_coach_verified', coach_id: c.coachId, verified: true }), `Aprobaste a ${c.name}.`);
+}
+
+$('vistaProfesionales').addEventListener('click', (e) => {
+  const t = e.target.closest('button');
+  if (!t) return;
+  const d = t.dataset;
+  const coach = (id) => postulaciones.find((c) => c.coachId === id);
+
+  if (d.foto) return abrirDocumento({ action: 'identity_file_url', coach_id: d.coach, which: d.foto });
+  if (d.doc) return abrirDocumento({ action: 'credential_file_url', credential_id: d.doc });
+  if (d.cerrar !== undefined) { abierto = null; return repintar(); }
+  if (d.abrir) {
+    abierto = { id: d.coach || d.cred, tipo: d.abrir };
+    repintar();
+    document.querySelector('#vistaProfesionales textarea')?.focus();
+    return;
+  }
+  if (d.identidad) {
+    const c = coach(d.identidad);
+    if (!confirm(`¿Identidad verificada?\n\nConfirmá que el nombre del DNI es "${c.name}" y que la cara de la selfie es la del DNI. Las tres fotos se borran al confirmar. Si algo no coincide, rechazá la postulación diciendo qué foto volver a subir.`)) return;
+    return hacer(t, () => accionAdmin({ action: 'verify_identity', coach_id: c.coachId }), `Identidad de ${c.name} verificada. Las fotos se borraron.`);
+  }
+  if (d.guardarEntrevista) {
+    const nota = $('txtEntrevista').value.trim();
+    if (nota.length < 10) return alert('Anotá brevemente qué evaluaron en la entrevista (al menos 10 caracteres).');
+    return hacer(t, () => accionAdmin({ action: 'record_coach_interview', coach_id: d.guardarEntrevista, notes: nota }), 'Entrevista registrada.');
+  }
+  if (d.aprobar) return aprobar(coach(d.aprobar));
+  if (d.enviarRechazo) {
+    const motivo = $('txtRechazo').value.trim();
+    if (!motivo) return alert('Falta el motivo: le llega al profesional para que sepa qué corregir.');
+    return hacer(t, () => accionAdmin({ action: 'reject_coach_application', coach_id: d.enviarRechazo, reason: motivo }), 'Rechazo enviado.');
+  }
+  if (d.verificarCred) {
+    const c = credenciales.find((x) => x.id === d.verificarCred);
+    const profesion = c.kind === 'matricula' ? $(`prof-${c.id}`).value : null;
+    if (c.kind === 'matricula' && !profesion) return alert('Elegí de qué profesión es la matrícula, según el documento.');
+    if (!confirm(`¿Verificar "${c.title}" de ${c.coach_name ?? 'este profesional'}?`)) return;
+    return hacer(t, () => accionAdmin({ action: 'review_credential', credential_id: c.id, verified: true, profesion }), 'Credencial verificada.');
+  }
+  if (d.enviarRechazoCred) {
+    const motivo = $('txtRechazoCred').value.trim();
+    if (!motivo) return alert('Falta el motivo: le llega al profesional.');
+    return hacer(t, () => accionAdmin({ action: 'review_credential', credential_id: d.enviarRechazoCred, verified: false, notes: motivo }), 'Rechazo enviado.');
+  }
+});
+
+$('filtroPostulaciones').addEventListener('change', () => { abierto = null; cargarPostulaciones(); });
+
+// ── Pestañas ─────────────────────────────────────────────────────────────────
+let profesionalesCargado = false;
+document.querySelector('.pestanas').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-pestana]');
+  if (!b) return;
+  document.querySelectorAll('.pestanas [data-pestana]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
+  const pro = b.dataset.pestana === 'profesionales';
+  $('vistaProfesionales').hidden = !pro;
+  $('vistaResumen').hidden = pro;
+  if (pro && !profesionalesCargado) { profesionalesCargado = true; cargarProfesionales(); }
+});
 
 // ── Eventos ──────────────────────────────────────────────────────────────────
 $('btnCodigo').addEventListener('click', pedirCodigo);

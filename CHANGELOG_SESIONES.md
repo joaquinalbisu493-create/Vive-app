@@ -1,6 +1,6 @@
 ## 2026-10-22 — Andre (Claude · tablero de administración en sere.ar/admin)
 
-**Tocado:** `supabase/migrations/20261022010000_tablero_admin.sql` (nuevo), `web/admin/index.html` (nuevo), `web/robots.txt`, `SCHEMA.md`.
+**Tocado:** `supabase/migrations/20261022010000_tablero_admin.sql` y `20261022020000_tablero_pendientes.sql` (nuevos), `web/admin/index.html` (nuevo), `web/robots.txt`, `supabase/functions/admin-actions/index.ts` (CORS), `SCHEMA.md`.
 
 **Resumen:**
 - Decisión: la operación (aprobar coaches, denuncias, garantías) sigue en la app; el tablero de métricas y objetivos va en la web, que se lee mejor en la compu y se cambia sin actualizar la app. La seguridad no depende de dónde esté: todo lo controla la base con `is_admin()` (verificado de nuevo: nadie puede auto-nombrarse admin; `approve_coach_application` no es ejecutable por el cliente).
@@ -9,11 +9,12 @@
 - Las métricas descartan admins, bajas y la carga de ejemplo; las gmail de prueba hay que marcarlas a mano desde el tablero (hoy filtrado da 7 aprobados, 1 activo, 16 personas, 6 sesiones).
 - Los 3 admins son Andre y dos cuentas de Joaquín.
 - Sección "Necesita atención" arriba del tablero (`admin_pendientes()`, migración `20261022020000`, aplicada y verificada): cuenta las colas pendientes con los mismos filtros que el panel de la app; solo lee, la acción sigue en la app. Hoy muestra 2 reembolsos pendientes y 1 pago internacional sin transferir desde agosto, 1 sesión del 24/09 sin cerrar y 1 postulación (probablemente de pruebas: revisarlas).
+- Pestaña "Profesionales" en el tablero web: postulaciones (por revisar / rechazadas / aprobadas) y títulos y matrículas, con las mismas acciones y exigencias que la app (entrevista, fotos de identidad, marcar identidad, aprobar, rechazar con motivo, verificar o rechazar credenciales con profesión). Todo va por `admin-actions`, que ahora acepta CORS de `https://sere.ar` (`_shared/cors.ts`; deployada v53, verificada: anon → "token inválido", preflight OK). El link del video se muestra solo si es http(s) (lo escribe quien se postula). La app conserva todo.
 - Las 23 cuentas no-admin que no se descartaban solas quedaron marcadas como de prueba (pedido de Andre, incluida la coach de prueba viveappp@gmail.com): las métricas arrancan en cero.
 
 **Pendiente para la próxima sesión:**
 - Andre: probar el ingreso en sere.ar/admin después del deploy.
-- Decidir si las acciones de admin de la app se mudan a la web (requiere CORS en `admin-actions` y `guarantee-claim`, hoy sin CORS) o si la web queda como tablero de lectura.
+- Probar en sere.ar una revisión real de punta a punta (abrir una foto de identidad, registrar entrevista). Siguientes módulos a mudar: pagos internacionales y comisiones; `guarantee-claim` todavía no tiene CORS.
 - Cargar los objetivos del primer mes cuando se cierren con Joaquín (videollamada 31/10 o 1/11). Hay una propuesta alternativa por etapas guardada fuera del repo, para analizar después.
 - El ingreso por código no se pudo probar de punta a punta en local (Turnstile no acepta localhost): probarlo en sere.ar.
 
