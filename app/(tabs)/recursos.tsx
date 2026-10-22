@@ -400,14 +400,10 @@ function ToolCard({ tool, destacado = false }: { tool: Tool; destacado?: boolean
       style={s.toolTileWrap}
       onPress={() => { if (tool.route) router.push(tool.route as any); }}
       activeOpacity={0.75}>
-      <SurfaceCard
-        variant="subtle"
-        backgroundColor={CARD}
-        borderRadius={18}
-        style={destacado ? s.toolTileDestacado : undefined}>
+      <SurfaceCard variant="subtle" backgroundColor={CARD} borderRadius={18}>
         <View style={s.toolTile}>
-          <View style={[s.toolIconWrap, destacado && s.toolIconWrapDestacado]}>
-            <Ionicons name={tool.icon} size={16} color={destacado ? CREAM_LIGHT : FOREST} />
+          <View style={s.toolIconWrap}>
+            <Ionicons name={tool.icon} size={16} color={FOREST} />
           </View>
           <Text style={s.toolLabel}>{TILE_LABEL[tool.id] ?? tool.label}</Text>
         </View>
@@ -943,13 +939,6 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(235,229,215,0.70)',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  toolTileDestacado: {
-    borderWidth: 1.5,
-    borderColor: FOREST,
-  },
-  toolIconWrapDestacado: {
-    backgroundColor: FOREST,
   },
   toolBadgeWrap: {
     position: 'absolute',
