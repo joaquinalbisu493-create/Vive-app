@@ -8,9 +8,12 @@
 - Base: tablas `objetivos` y `cuentas_internas`, funciones `admin_metricas()`, `admin_cuentas()` y `es_cuenta_interna()`. Aplicado en producción y verificado como admin, usuario común y anon. SCHEMA.md actualizado.
 - Las métricas descartan admins, bajas y la carga de ejemplo; las gmail de prueba hay que marcarlas a mano desde el tablero (hoy filtrado da 7 aprobados, 1 activo, 16 personas, 6 sesiones).
 - Los 3 admins son Andre y dos cuentas de Joaquín.
+- Sección "Necesita atención" arriba del tablero (`admin_pendientes()`, migración `20261022020000`, aplicada y verificada): cuenta las colas pendientes con los mismos filtros que el panel de la app; solo lee, la acción sigue en la app. Hoy muestra 2 reembolsos pendientes y 1 pago internacional sin transferir desde agosto, 1 sesión del 24/09 sin cerrar y 1 postulación (probablemente de pruebas: revisarlas).
+- Las 23 cuentas no-admin que no se descartaban solas quedaron marcadas como de prueba (pedido de Andre, incluida la coach de prueba viveappp@gmail.com): las métricas arrancan en cero.
 
 **Pendiente para la próxima sesión:**
-- Andre: entrar a sere.ar/admin (después del deploy) y marcar las cuentas de prueba.
+- Andre: probar el ingreso en sere.ar/admin después del deploy.
+- Decidir si las acciones de admin de la app se mudan a la web (requiere CORS en `admin-actions` y `guarantee-claim`, hoy sin CORS) o si la web queda como tablero de lectura.
 - Cargar los objetivos del primer mes cuando se cierren con Joaquín (videollamada 31/10 o 1/11). Hay una propuesta alternativa por etapas guardada fuera del repo, para analizar después.
 - El ingreso por código no se pudo probar de punta a punta en local (Turnstile no acepta localhost): probarlo en sere.ar.
 
