@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F7EFE4">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Tablero · Sere</title>
+
+<!-- Tablero de administración (22/10/2026): métricas, objetivos del mes y
+     cuentas de prueba. Solo para cuentas con `profiles.is_admin`.
+
+     🔴 Esta página es pública: cualquiera puede abrir sere.ar/admin. Lo que
+     protege los datos NO es esconderla, es la base: `admin_metricas()` y
+     `admin_cuentas()` levantan `no_autorizado` si quien llama no es admin, y
+     `objetivos` / `cuentas_internas` tienen RLS con `is_admin()`. Ver
+     `supabase/migrations/20261022010000_tablero_admin.sql`.
+
+     La operación (aprobar coaches, denuncias, garantías) sigue en la app. -->
+
+<link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 200 800; font-display: swap; src: url(/fonts/plus-jakarta-sans-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 200 800; font-display: swap; src: url(/fonts/plus-jakarta-sans-latin-ext.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+  :root {
+    color-scheme: light;
+    --cream: #F7EFE4;
+    --paper: #FBF8F1;
+    --olive: #565E32;
+    --soft: #566245;
+    --forest: #2D4A3E;
+    --verde: #42542F;
+    --verde-bg: #DCE5CB;
+    --terra: #C1694F;
+    --terra-ink: #A25842;
+    --terra-bg: #F3DDD2;
+    --line: rgba(86, 94, 50, .16);
+    --error: #B3392E;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--cream); color: var(--forest);
+    font: 15px/1.5 "Plus Jakarta Sans", Arial, sans-serif;
+  }
+  [hidden] { display: none !important; }
+  main { max-width: 1080px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: -.01em; }
+  h2 { font-size: 17px; margin: 0 0 12px; }
+  h3 { font-size: 13px; margin: 0 0 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--soft); }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  .btn {
+    border: 0; border-radius: 999px; padding: 9px 18px; font-weight: 600;
+    background: var(--forest); color: var(--paper);
+  }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn.sec { background: transparent; color: var(--forest); border: 1px solid var(--line); }
+  .btn.chico { padding: 5px 12px; font-size: 13px; }
+  .link { background: none; border: 0; padding: 0; color: var(--terra-ink); font-weight: 600; font-size: 13px; }
+  input, select, textarea {
+    width: 100%; padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper);
+  }
+  label { display: block; font-size: 13px; font-weight: 600; margin: 10px 0 4px; color: var(--soft); }
+  .caja { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 18px; }
+  .error { color: var(--error); font-size: 14px; min-height: 1em; margin: 8px 0 0; }
+  .suave { color: var(--soft); font-size: 13px; }
+
+  /* Ingreso */
+  #ingreso { max-width: 380px; margin: 12vh auto 0; }
+  #ingreso h1 { margin-bottom: 4px; }
+
+  /* Encabezado */
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+  .marca { display: flex; align-items: baseline; gap: 10px; }
+
+  /* Métricas */
+  .grupos { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tile { background: var(--cream); border-radius: 12px; padding: 10px 12px; }
+  .tile b { display: block; font-size: 24px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .tile span { font-size: 12px; color: var(--soft); }
+
+  /* Objetivos */
+  .barra-mes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .barra-mes h2 { margin: 0 auto 0 0; }
+  .mes-nombre { min-width: 130px; text-align: center; font-weight: 600; }
+  .columnas { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; margin-bottom: 32px; }
+  .obj { border-top: 1px solid var(--line); padding: 12px 0; }
+  .obj:first-of-type { border-top: 0; padding-top: 0; }
+  .obj-cab { display: flex; gap: 8px; align-items: flex-start; }
+  .obj-titulo { flex: 1; font-weight: 600; }
+  .chip { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--cream); color: var(--soft); white-space: nowrap; }
+  .chip.esencial { background: var(--verde-bg); color: var(--verde); }
+  .chip.resultado { background: var(--terra-bg); color: var(--terra-ink); }
+  .progreso { height: 6px; border-radius: 999px; background: var(--cream); margin: 8px 0 4px; overflow: hidden; }
+  .progreso i { display: block; height: 100%; background: var(--verde); border-radius: 999px; transition: width .4s ease; }
+  .obj-pie { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  .obj-pie select { width: auto; padding: 4px 8px; font-size: 13px; }
+  .vacio { color: var(--soft); font-size: 14px; margin: 0; }
+
+  /* Formulario de objetivo */
+  dialog { border: 0; border-radius: 16px; padding: 22px; width: min(520px, calc(100vw - 32px)); background: var(--paper); color: var(--forest); }
+  dialog::backdrop { background: rgba(45, 74, 62, .35); }
+  .fila { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .acciones { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+
+  /* Cuentas */
+  details summary { cursor: pointer; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 12px; }
+  td, th { text-align: left; padding: 8px 6px; border-top: 1px solid var(--line); vertical-align: middle; }
+  th { font-size: 12px; color: var(--soft); font-weight: 600; }
+  td.mail { word-break: break-all; }
+  @media (max-width: 560px) { .col-fecha { display: none; } .fila { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+
+  <!-- ── Ingreso ── -->
+  <section id="ingreso" class="caja" hidden>
+    <h1>Tablero de Sere</h1>
+    <p class="suave">Solo para administración. Entrás con el mail de tu cuenta de Sere y un código.</p>
+    <div id="pasoMail">
+      <label for="mail">Mail</label>
+      <input id="mail" type="email" autocomplete="email">
+      <p class="error" id="errorMail"></p>
+      <button class="btn" id="btnCodigo">Enviarme el código</button>
+    </div>
+    <div id="pasoCodigo" hidden>
+      <p class="suave" id="mandadoA"></p>
+      <label for="codigo">Código</label>
+      <input id="codigo" inputmode="numeric" autocomplete="one-time-code">
+      <p class="error" id="errorCodigo"></p>
+      <button class="btn" id="btnConfirmar">Entrar</button>
+    </div>
+  </section>
+
+  <!-- ── Tablero ── -->
+  <section id="tablero" hidden>
+    <header>
+      <div class="marca"><h1>Sere</h1><span class="suave" id="actualizado"></span></div>
+      <div>
+        <button class="btn sec chico" id="btnRecargar">Actualizar</button>
+        <button class="btn sec chico" id="btnSalir">Salir</button>
+      </div>
+    </header>
+
+    <div class="barra-mes">
+      <h2>Objetivos</h2>
+      <button class="btn sec chico" id="mesAnterior" aria-label="Mes anterior">‹</button>
+      <span class="mes-nombre" id="mesNombre"></span>
+      <button class="btn sec chico" id="mesSiguiente" aria-label="Mes siguiente">›</button>
+      <button class="btn chico" id="btnNuevo">Agregar objetivo</button>
+    </div>
+    <p class="error" id="errorObjetivos"></p>
+    <div class="columnas" id="columnas"></div>
+
+    <h2>Métricas</h2>
+    <p class="suave" id="notaMetricas" style="margin-top:-6px"></p>
+    <div class="grupos" id="grupos"></div>
+
+    <details class="caja" id="cajaCuentas">
+      <summary>Cuentas de prueba</summary>
+      <p class="suave">Las cuentas marcadas no cuentan en las métricas. Las de administración, las de la carga de ejemplo y las dadas de baja ya se descartan solas y no aparecen acá.</p>
+      <p class="error" id="errorCuentas"></p>
+      <table>
+        <thead><tr><th>De prueba</th><th>Nombre</th><th>Mail</th><th>Tipo</th><th class="col-fecha">Creada</th></tr></thead>
+        <tbody id="filasCuentas"></tbody>
+      </table>
+    </details>
+  </section>
+
+  <dialog id="dlgObjetivo">
+    <form id="formObjetivo" method="dialog">
+      <h2 id="dlgTitulo">Nuevo objetivo</h2>
+      <label for="fTitulo">Objetivo</label>
+      <input id="fTitulo" maxlength="200" required>
+      <div class="fila">
+        <div>
+          <label for="fDueno">De quién</label>
+          <select id="fDueno">
+            <option value="andre">Andre</option>
+            <option value="joaquin">Joaquín</option>
+            <option value="ambos">Ambos</option>
+          </select>
+        </div>
+        <div>
+          <label for="fTipo">Tipo</label>
+          <select id="fTipo">
+            <option value="esencial">Esencial</option>
+            <option value="entregable">Entregable</option>
+            <option value="resultado">Resultado</option>
+          </select>
+        </div>
+      </div>
+      <label for="fVerificacion">Cómo se verifica</label>
+      <input id="fVerificacion" maxlength="300">
+      <div class="fila">
+        <div>
+          <label for="fMeta">Meta (número, opcional)</label>
+          <input id="fMeta" type="number" min="0" step="any">
+        </div>
+        <div>
+          <label for="fMetrica">Avance automático</label>
+          <select id="fMetrica"><option value="">Lo cargo a mano</option></select>
+        </div>
+      </div>
+      <div id="campoAvance">
+        <label for="fAvance">Avance</label>
+        <input id="fAvance" type="number" min="0" step="any">
+      </div>
+      <label for="fNota">Nota</label>
+      <textarea id="fNota" rows="2" maxlength="1000"></textarea>
+      <p class="error" id="errorForm"></p>
+      <div class="acciones">
+        <button type="button" class="link" id="btnBorrar" hidden>Borrar</button>
+        <span style="flex:1"></span>
+        <button type="button" class="btn sec" id="btnCancelar">Cancelar</button>
+        <button type="submit" class="btn" id="btnGuardar">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+
+<script src="/captcha.js"></script>
+<script>
+// Clave pública por diseño, la misma de la app y de /c (ver el comentario
+// largo en `web/c/index.html`). Lo que protege los datos es la base.
+const SUPABASE_URL = 'https://ggygiihhnkjrerpinhha.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdneWdpaWhobmtqcmVycGluaGhhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1Mjc5NjEsImV4cCI6MjA5NzEwMzk2MX0.lHPjyKjJIYD_lUTCF7uMBCKj9tCK_67OyrIFkCLQ-BI';
+
+// Mismas claves que `objetivos.metrica` acepta en la base (CHECK de la migración).
+const METRICAS = {
+  profesionales_activos: 'Profesionales activos',
+  profesionales_aprobados: 'Profesionales aprobados',
+  postulaciones_pendientes: 'Postulaciones por revisar',
+  usuarios_registrados: 'Personas registradas',
+  usuarios_nuevos_mes: 'Personas nuevas en el mes',
+  sesiones_completadas_mes: 'Sesiones completadas en el mes',
+  sesiones_completadas_total: 'Sesiones completadas en total',
+  clientes_primera_sesion_pagada: 'Clientes con sesión pagada',
+  clientes_primera_sesion_pagada_mes: 'Clientes nuevos con sesión pagada en el mes',
+  clientes_que_volvieron: 'Clientes que volvieron',
+  lista_espera_personas: 'Lista de espera: personas',
+  lista_espera_profesionales: 'Lista de espera: profesionales',
+};
+
+const GRUPOS = [
+  ['Profesionales', [
+    ['profesionales_activos', 'Activos'],
+    ['profesionales_aprobados', 'Aprobados'],
+    ['postulaciones_pendientes', 'Postulaciones por revisar'],
+    ['profesionales_sin_cobro', 'Aprobados sin cobro'],
+    ['profesionales_sin_agenda', 'Aprobados sin agenda'],
+  ]],
+  ['Personas', [
+    ['usuarios_registrados', 'Registradas'],
+    ['usuarios_nuevos_mes', 'Nuevas este mes'],
+    ['clientes_primera_sesion_pagada', 'Con sesión pagada'],
+    ['clientes_primera_sesion_pagada_mes', 'Primera sesión pagada este mes'],
+    ['clientes_que_volvieron', 'Volvieron a reservar'],
+  ]],
+  ['Sesiones', [
+    ['sesiones_proximas', 'Próximas confirmadas'],
+    ['sesiones_completadas_mes', 'Completadas este mes'],
+    ['sesiones_completadas_total', 'Completadas en total'],
+    ['cancelaciones_mes', 'Canceladas este mes'],
+  ]],
+  ['Lista de espera', [
+    ['lista_espera_personas', 'Personas'],
+    ['lista_espera_profesionales', 'Profesionales'],
+  ]],
+];
+
+const DUENOS = [['andre', 'Andre'], ['joaquin', 'Joaquín'], ['ambos', 'Ambos']];
+const TIPOS = { esencial: 'Esencial', entregable: 'Entregable', resultado: 'Resultado' };
+const ESTADOS = [['pendiente', 'Pendiente'], ['en_curso', 'En curso'], ['cumplido', 'Cumplido'], ['parcial', 'Parcial'], ['no_cumplido', 'No cumplido']];
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+// ── Sesión ───────────────────────────────────────────────────────────────────
+// `sessionStorage`, igual que /c: muere al cerrar la pestaña. Un tablero con
+// datos de otros no tiene por qué quedar abierto en una compu prestada.
+const CLAVE_SESION = 'sere_admin_sesion';
+let sesion = null;
+function guardarSesion(s) { sesion = s; try { sessionStorage.setItem(CLAVE_SESION, JSON.stringify(s)); } catch (e) { /* modo privado */ } }
+function leerSesion() { try { return JSON.parse(sessionStorage.getItem(CLAVE_SESION) || 'null'); } catch { return null; } }
+function borrarSesion() { sesion = null; try { sessionStorage.removeItem(CLAVE_SESION); } catch (e) { /* nada */ } }
+
+function desdeRespuestaAuth(c) {
+  return { access_token: c.access_token, refresh_token: c.refresh_token, expira: Date.now() + (c.expires_in || 3600) * 1000 };
+}
+
+// El token dura una hora; con el tablero abierto más que eso, se renueva solo.
+async function tokenVigente() {
+  if (!sesion) return null;
+  if (Date.now() < sesion.expira - 60_000) return sesion.access_token;
+  const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+    method: 'POST',
+    headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ refresh_token: sesion.refresh_token }),
+  });
+  const c = await r.json().catch(() => ({}));
+  if (!r.ok || !c.access_token) { salir(); return null; }
+  guardarSesion(desdeRespuestaAuth(c));
+  return sesion.access_token;
+}
+
+class ErrorApi extends Error { constructor(status, cuerpo) { super(cuerpo?.message || `Error ${status}`); this.status = status; this.cuerpo = cuerpo; } }
+
+async function api(ruta, { method = 'GET', body, prefer } = {}) {
+  const token = await tokenVigente();
+  if (!token) throw new ErrorApi(401, { message: 'Sesión vencida' });
+  const headers = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
+  if (prefer) headers.Prefer = prefer;
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/${ruta}`, { method, headers, body: body ? JSON.stringify(body) : undefined });
+  const texto = await r.text();
+  const cuerpo = texto ? JSON.parse(texto) : null;
+  if (!r.ok) throw new ErrorApi(r.status, cuerpo);
+  return cuerpo;
+}
+
+// ── Ingreso ──────────────────────────────────────────────────────────────────
+async function pedirCodigo() {
+  const mail = $('mail').value.trim().toLowerCase();
+  $('errorMail').textContent = '';
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) { $('errorMail').textContent = 'Revisá el mail.'; return; }
+  $('btnCodigo').disabled = true;
+  try {
+    const captchaToken = await window.pedirCaptchaToken?.();
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+      // `create_user: false`: acá no se crean cuentas. Un mail sin cuenta no
+      // recibe código y nadie se entera de si existía.
+      body: JSON.stringify({ email: mail, create_user: false, gotrue_meta_security: { captcha_token: captchaToken } }),
+    });
+    if (r.status === 429) { $('errorMail').textContent = 'Ya te mandamos uno recién. Esperá un minuto.'; return; }
+    // Con `create_user: false` un mail inexistente también da error; se muestra
+    // el paso del código igual, para no confirmar qué mails tienen cuenta.
+    $('mandadoA').textContent = `Si ${mail} tiene cuenta en Sere, te llegó un código.`;
+    $('pasoMail').hidden = true; $('pasoCodigo').hidden = false;
+    $('codigo').focus();
+  } catch (e) {
+    $('errorMail').textContent = 'No pudimos mandar el código. Probá en un momento.';
+  } finally {
+    $('btnCodigo').disabled = false;
+  }
+}
+
+async function confirmarCodigo() {
+  const mail = $('mail').value.trim().toLowerCase();
+  const token = $('codigo').value.replace(/\D/g, '');
+  $('errorCodigo').textContent = '';
+  if (!token) { $('errorCodigo').textContent = 'Escribí el código.'; return; }
+  $('btnConfirmar').disabled = true;
+  try {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/verify`, {
+      method: 'POST',
+      headers: { apikey: SUPABASE_ANON_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: mail, token, type: 'email' }),
+    });
+    const c = await r.json().catch(() => ({}));
+    if (!r.ok || !c.access_token) {
+      $('errorCodigo').textContent = r.status === 429 ? 'Probaste varias veces seguidas. Esperá un momento.' : 'Ese código no coincide, o ya venció.';
+      return;
+    }
+    guardarSesion(desdeRespuestaAuth(c));
+    await abrirTablero();
+  } catch (e) {
+    $('errorCodigo').textContent = 'No pudimos confirmar el código. Probá de nuevo.';
+  } finally {
+    $('btnConfirmar').disabled = false;
+  }
+}
+
+function mostrarIngreso() {
+  $('tablero').hidden = true; $('ingreso').hidden = false;
+  $('pasoMail').hidden = false; $('pasoCodigo').hidden = true; $('codigo').value = '';
+}
+
+function salir() { borrarSesion(); mostrarIngreso(); }
+
+// ── Tablero ──────────────────────────────────────────────────────────────────
+let metricas = {};
+let objetivos = [];
+let mesVisto = primeroDelMes(new Date());
+
+function primeroDelMes(d) { return new Date(d.getFullYear(), d.getMonth(), 1); }
+function isoMes(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-01`; }
+function esMesActual() { return isoMes(mesVisto) === isoMes(primeroDelMes(new Date())); }
+
+async function abrirTablero() {
+  try {
+    await cargarMetricas();
+  } catch (e) {
+    // `no_autorizado` (42501): la cuenta existe pero no es de administración.
+    if (e.cuerpo?.code === '42501' || e.status === 403) {
+      borrarSesion(); mostrarIngreso();
+      $('errorMail').textContent = 'Esa cuenta no es de administración.';
+      return;
+    }
+    if (e.status === 401) { salir(); return; }
+    throw e;
+  }
+  $('ingreso').hidden = true; $('tablero').hidden = false;
+  await cargarObjetivos();
+}
+
+async function cargarMetricas() {
+  metricas = await api('rpc/admin_metricas', { method: 'POST', body: {} });
+  const hora = new Date(metricas.generado).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+  $('actualizado').textContent = `Actualizado ${hora}`;
+  $('notaMetricas').textContent = `Sin contar ${metricas.cuentas_descartadas} cuentas de prueba, de administración o dadas de baja. Los números de "este mes" son del mes en curso.`;
+  $('grupos').innerHTML = GRUPOS.map(([titulo, items]) => `
+    <div class="caja"><h3>${esc(titulo)}</h3><div class="tiles">
+      ${items.map(([k, et]) => `<div class="tile"><b>${esc(metricas[k] ?? 0)}</b><span>${esc(et)}</span></div>`).join('')}
+    </div></div>`).join('');
+}
+
+async function cargarObjetivos() {
+  const nombreMes = mesVisto.toLocaleDateString('es-AR', { month: 'long', year: 'numeric' });
+  $('mesNombre').textContent = nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1);
+  $('errorObjetivos').textContent = '';
+  try {
+    objetivos = await api(`objetivos?mes=eq.${isoMes(mesVisto)}&order=created_at.asc`);
+  } catch (e) {
+    $('errorObjetivos').textContent = 'No se pudieron cargar los objetivos.';
+    objetivos = [];
+  }
+  pintarObjetivos();
+}
+
+// El avance automático es el valor de HOY. Para un mes que no es el actual no
+// dice nada sobre ese mes, así que ahí se muestra el avance guardado.
+function avanceDe(o) {
+  if (o.metrica && esMesActual()) return { valor: Number(metricas[o.metrica] ?? 0), auto: true };
+  return { valor: o.avance == null ? null : Number(o.avance), auto: false };
+}
+
+function pintarObjetivos() {
+  $('columnas').innerHTML = DUENOS.map(([clave, nombre]) => {
+    const lista = objetivos.filter((o) => o.dueno === clave);
+    const cuerpo = lista.length ? lista.map(tarjetaObjetivo).join('') : '<p class="vacio">Sin objetivos cargados.</p>';
+    return `<div class="caja"><h3>${esc(nombre)}</h3>${cuerpo}</div>`;
+  }).join('');
+}
+
+function tarjetaObjetivo(o) {
+  const { valor, auto } = avanceDe(o);
+  let barra = '';
+  if (o.meta) {
+    const pct = valor == null ? 0 : Math.min(100, Math.round((valor / Number(o.meta)) * 100));
+    const texto = valor == null ? `Meta: ${o.meta}` : `${valor} de ${o.meta}${auto ? ' (automático)' : ''}`;
+    barra = `<div class="progreso"><i style="width:${pct}%"></i></div><div class="suave">${esc(texto)}</div>`;
+  } else if (valor != null) {
+    barra = `<div class="suave">Avance: ${esc(valor)}${auto ? ' (automático)' : ''}</div>`;
+  }
+  const congelar = o.metrica && esMesActual()
+    ? `<button class="link" data-congelar="${o.id}" title="Guarda el valor de hoy como avance del mes">Guardar valor de hoy</button>` : '';
+  return `<div class="obj">
+    <div class="obj-cab"><span class="obj-titulo">${esc(o.titulo)}</span><span class="chip ${esc(o.tipo)}">${esc(TIPOS[o.tipo] ?? o.tipo)}</span></div>
+    ${o.verificacion ? `<div class="suave">${esc(o.verificacion)}</div>` : ''}
+    ${barra}
+    ${o.nota ? `<div class="suave" style="margin-top:4px">${esc(o.nota)}</div>` : ''}
+    <div class="obj-pie">
+      <select data-estado="${o.id}" aria-label="Estado">${ESTADOS.map(([v, t]) => `<option value="${v}"${v === o.estado ? ' selected' : ''}>${t}</option>`).join('')}</select>
+      <button class="link" data-editar="${o.id}">Editar</button>
+      ${congelar}
+    </div>
+  </div>`;
+}
+
+// ── Formulario ───────────────────────────────────────────────────────────────
+let editando = null;
+
+function abrirFormulario(o) {
+  editando = o || null;
+  $('dlgTitulo').textContent = o ? 'Editar objetivo' : 'Nuevo objetivo';
+  $('fTitulo').value = o?.titulo ?? '';
+  $('fDueno').value = o?.dueno ?? 'andre';
+  $('fTipo').value = o?.tipo ?? 'entregable';
+  $('fVerificacion').value = o?.verificacion ?? '';
+  $('fMeta').value = o?.meta ?? '';
+  $('fMetrica').value = o?.metrica ?? '';
+  $('fAvance').value = o?.avance ?? '';
+  $('fNota').value = o?.nota ?? '';
+  $('btnBorrar').hidden = !o;
+  $('errorForm').textContent = '';
+  $('dlgObjetivo').showModal();
+  $('fTitulo').focus();
+}
+
+const numeroONull = (v) => (v === '' || v == null ? null : Number(v));
+
+async function guardarFormulario(ev) {
+  ev.preventDefault();
+  const datos = {
+    titulo: $('fTitulo').value.trim(),
+    dueno: $('fDueno').value,
+    tipo: $('fTipo').value,
+    verificacion: $('fVerificacion').value.trim() || null,
+    meta: numeroONull($('fMeta').value),
+    metrica: $('fMetrica').value || null,
+    avance: numeroONull($('fAvance').value),
+    nota: $('fNota').value.trim() || null,
+  };
+  if (!datos.titulo) { $('errorForm').textContent = 'Escribí el objetivo.'; return; }
+  if (datos.meta !== null && !(datos.meta > 0)) { $('errorForm').textContent = 'La meta tiene que ser mayor que cero.'; return; }
+  $('btnGuardar').disabled = true;
+  try {
+    if (editando) await api(`objetivos?id=eq.${editando.id}`, { method: 'PATCH', body: datos });
+    else await api('objetivos', { method: 'POST', body: { ...datos, mes: isoMes(mesVisto) } });
+    $('dlgObjetivo').close();
+    await cargarObjetivos();
+  } catch (e) {
+    $('errorForm').textContent = 'No se pudo guardar. Probá de nuevo.';
+  } finally {
+    $('btnGuardar').disabled = false;
+  }
+}
+
+async function borrarObjetivo() {
+  if (!editando || !confirm(`¿Borrar "${editando.titulo}"?`)) return;
+  try {
+    await api(`objetivos?id=eq.${editando.id}`, { method: 'DELETE' });
+    $('dlgObjetivo').close();
+    await cargarObjetivos();
+  } catch (e) {
+    $('errorForm').textContent = 'No se pudo borrar.';
+  }
+}
+
+async function cambiarEstado(id, estado) {
+  try { await api(`objetivos?id=eq.${id}`, { method: 'PATCH', body: { estado } }); }
+  catch (e) { $('errorObjetivos').textContent = 'No se pudo cambiar el estado.'; }
+  await cargarObjetivos();
+}
+
+async function congelarAvance(id) {
+  const o = objetivos.find((x) => x.id === id);
+  if (!o?.metrica) return;
+  try { await api(`objetivos?id=eq.${id}`, { method: 'PATCH', body: { avance: Number(metricas[o.metrica] ?? 0) } }); }
+  catch (e) { $('errorObjetivos').textContent = 'No se pudo guardar el avance.'; }
+  await cargarObjetivos();
+}
+
+// ── Cuentas de prueba ────────────────────────────────────────────────────────
+let cuentasCargadas = false;
+
+async function cargarCuentas() {
+  $('errorCuentas').textContent = '';
+  try {
+    const filas = await api('rpc/admin_cuentas', { method: 'POST', body: {} });
+    $('filasCuentas').innerHTML = filas.map((c) => `<tr>
+      <td><input type="checkbox" data-interna="${c.id}"${c.interna ? ' checked' : ''} aria-label="De prueba" style="width:auto"></td>
+      <td>${esc(c.nombre)}</td>
+      <td class="mail">${esc(c.email)}</td>
+      <td>${c.rol === 'coach' ? 'Profesional' : 'Persona'}</td>
+      <td class="col-fecha">${esc(new Date(c.creada).toLocaleDateString('es-AR'))}</td>
+    </tr>`).join('');
+    cuentasCargadas = true;
+  } catch (e) {
+    $('errorCuentas').textContent = 'No se pudieron cargar las cuentas.';
+  }
+}
+
+async function marcarInterna(id, interna, casilla) {
+  casilla.disabled = true;
+  try {
+    if (interna) await api('cuentas_internas', { method: 'POST', body: { profile_id: id }, prefer: 'resolution=ignore-duplicates' });
+    else await api(`cuentas_internas?profile_id=eq.${id}`, { method: 'DELETE' });
+    await cargarMetricas();
+    if (esMesActual()) pintarObjetivos();
+  } catch (e) {
+    casilla.checked = !interna;
+    $('errorCuentas').textContent = 'No se pudo guardar el cambio.';
+  } finally {
+    casilla.disabled = false;
+  }
+}
+
+// ── Eventos ──────────────────────────────────────────────────────────────────
+$('btnCodigo').addEventListener('click', pedirCodigo);
+$('mail').addEventListener('keydown', (e) => { if (e.key === 'Enter') pedirCodigo(); });
+$('btnConfirmar').addEventListener('click', confirmarCodigo);
+$('codigo').addEventListener('keydown', (e) => { if (e.key === 'Enter') confirmarCodigo(); });
+$('btnSalir').addEventListener('click', salir);
+$('btnRecargar').addEventListener('click', async () => { await cargarMetricas(); await cargarObjetivos(); });
+$('mesAnterior').addEventListener('click', () => { mesVisto = new Date(mesVisto.getFullYear(), mesVisto.getMonth() - 1, 1); cargarObjetivos(); });
+$('mesSiguiente').addEventListener('click', () => { mesVisto = new Date(mesVisto.getFullYear(), mesVisto.getMonth() + 1, 1); cargarObjetivos(); });
+$('btnNuevo').addEventListener('click', () => abrirFormulario(null));
+$('btnCancelar').addEventListener('click', () => $('dlgObjetivo').close());
+$('btnBorrar').addEventListener('click', borrarObjetivo);
+$('formObjetivo').addEventListener('submit', guardarFormulario);
+$('fMetrica').innerHTML += Object.entries(METRICAS).map(([k, t]) => `<option value="${k}">${esc(t)}</option>`).join('');
+$('fMetrica').addEventListener('change', () => { $('campoAvance').hidden = !!$('fMetrica').value; });
+$('dlgObjetivo').addEventListener('close', () => { $('campoAvance').hidden = false; });
+
+$('columnas').addEventListener('click', (e) => {
+  const ed = e.target.closest('[data-editar]');
+  if (ed) { abrirFormulario(objetivos.find((o) => o.id === ed.dataset.editar)); setTimeout(() => { $('campoAvance').hidden = !!$('fMetrica').value; }); return; }
+  const cg = e.target.closest('[data-congelar]');
+  if (cg) congelarAvance(cg.dataset.congelar);
+});
+$('columnas').addEventListener('change', (e) => {
+  const sel = e.target.closest('[data-estado]');
+  if (sel) cambiarEstado(sel.dataset.estado, sel.value);
+});
+$('cajaCuentas').addEventListener('toggle', () => { if ($('cajaCuentas').open && !cuentasCargadas) cargarCuentas(); });
+$('filasCuentas').addEventListener('change', (e) => {
+  const c = e.target.closest('[data-interna]');
+  if (c) marcarInterna(c.dataset.interna, c.checked, c);
+});
+
+// ── Arranque ─────────────────────────────────────────────────────────────────
+sesion = leerSesion();
+if (sesion) abrirTablero().catch(() => salir());
+else mostrarIngreso();
+</script>
+</body>
+</html>

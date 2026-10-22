@@ -1,3 +1,19 @@
+## 2026-10-22 — Andre (Claude · tablero de administración en sere.ar/admin)
+
+**Tocado:** `supabase/migrations/20261022010000_tablero_admin.sql` (nuevo), `web/admin/index.html` (nuevo), `web/robots.txt`, `SCHEMA.md`.
+
+**Resumen:**
+- Decisión: la operación (aprobar coaches, denuncias, garantías) sigue en la app; el tablero de métricas y objetivos va en la web, que se lee mejor en la compu y se cambia sin actualizar la app. La seguridad no depende de dónde esté: todo lo controla la base con `is_admin()` (verificado de nuevo: nadie puede auto-nombrarse admin; `approve_coach_application` no es ejecutable por el cliente).
+- `sere.ar/admin`: ingreso con mail + código (`create_user: false`, no crea cuentas), métricas en vivo agrupadas (profesionales, personas, sesiones, lista de espera), objetivos por mes y por dueño (Andre / Joaquín / Ambos) con avance manual o atado a una métrica, y lista para marcar cuentas de prueba.
+- Base: tablas `objetivos` y `cuentas_internas`, funciones `admin_metricas()`, `admin_cuentas()` y `es_cuenta_interna()`. Aplicado en producción y verificado como admin, usuario común y anon. SCHEMA.md actualizado.
+- Las métricas descartan admins, bajas y la carga de ejemplo; las gmail de prueba hay que marcarlas a mano desde el tablero (hoy filtrado da 7 aprobados, 1 activo, 16 personas, 6 sesiones).
+- Los 3 admins son Andre y dos cuentas de Joaquín.
+
+**Pendiente para la próxima sesión:**
+- Andre: entrar a sere.ar/admin (después del deploy) y marcar las cuentas de prueba.
+- Cargar los objetivos del primer mes cuando se cierren con Joaquín (videollamada 31/10 o 1/11). Hay una propuesta alternativa por etapas guardada fuera del repo, para analizar después.
+- El ingreso por código no se pudo probar de punta a punta en local (Turnstile no acepta localhost): probarlo en sere.ar.
+
 ## 2026-10-22 — Joaquín (Claude · conectar barra del día ↔ carrusel en Recursos)
 
 **Tocado:** `app/(tabs)/recursos.tsx`.
