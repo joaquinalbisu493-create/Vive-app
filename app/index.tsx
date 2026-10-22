@@ -1,4 +1,4 @@
-import { useEffect, useState, type ComponentType } from 'react';
+import { useEffect, useRef, useState, type ComponentType } from 'react';
 import { View, Text, Pressable, ActivityIndicator, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter, useRootNavigationState } from 'expo-router';
@@ -78,10 +78,20 @@ export default function Index() {
     if (mostrando) anotar('onboarding_variante', { variante: opcion });
   }, [mostrando, opcion, vuelta]);
 
+  // Se sale de acá una sola vez. Si `user` o `role` cambian mientras se
+  // resuelve el destino (la sesión termina de cargar, el rol llega después),
+  // el efecto corría dos veces y el segundo `replace('/(tabs)')` caía cuando ya
+  // estábamos en las pestañas: expo-router se lo manda al navegador de
+  // pestañas como "REPLACE index", que no sabe hacerlo, y saltaba el LogBox
+  // "not handled by any navigator".
+  const salio = useRef(false);
+
   useEffect(() => {
     if (!navState?.key) return;
     if (loading) return;
     if (user) {
+      if (salio.current) return;
+      salio.current = true;
       // Entrar a la app es el final del onboarding: el tono del camino elegido
       // deja de aplicar. Si no, queda guardado para siempre y tiñe pantallas de
       // auth a las que se llega por cualquier otro lado.

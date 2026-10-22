@@ -33,6 +33,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { guaranteeFailures, alertasDeAbuso, scheduledAtMs } from '../_shared/guarantee.ts'
 import { esServiceRole } from '../_shared/service-role.ts'
 import { enviarMail, nombreSeguro } from '../_shared/email.ts'
+import { WEB_ORIGIN } from '../_shared/cors.ts'
+import { tieneSegundoFactor } from '../_shared/aal.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -40,10 +42,18 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 // Las condiciones de §9.3 viven en ../_shared/guarantee.ts: son puras, así que
 // se pueden testear sin levantar Supabase. Esta función solo consulta y escribe.
 
+// 22/10/2026: el tablero de sere.ar/admin resuelve garantías desde el
+// navegador. La app no manda Origin y no le cambia nada; la autorización
+// (service role, admin o el propio cliente) sigue igual.
+const cors = {
+  'Access-Control-Allow-Origin': WEB_ORIGIN,
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { ...cors, 'Content-Type': 'application/json' },
   })
 }
 
@@ -74,6 +84,10 @@ async function authorize(authHeader: string): Promise<{ ok: boolean; identity: s
     .from('profiles').select('is_admin').eq('id', user.id).maybeSingle()
 
   if (!profile?.is_admin) return { ok: false, identity: null }
+  // 22/10/2026: como admin, la sesión tiene que haber pasado por el segundo
+  // factor (misma regla que `admin-actions` e `is_admin()`). El cliente que pide
+  // su propia garantía (`solicitar`) no entra por acá y no lo necesita.
+  if (!tieneSegundoFactor(authHeader)) return { ok: false, identity: null }
   return { ok: true, identity: user.email ?? user.id }
 }
 
@@ -88,6 +102,8 @@ async function quienPide(authHeader: string): Promise<string | null> {
 }
 
 serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors })
+
   const authHeader = req.headers.get('Authorization') ?? ''
 
   let body: { booking_id?: string; resolved_by?: string; reject?: string; dry_run?: boolean; solicitar?: boolean }
@@ -112,13 +128,13 @@ serve(async (req) => {
   // `guaranteeFailures` del runbook. Esta rama solo decide QUIÉN puede pedir.
   const solicitante = body.solicitar === true ? await quienPide(authHeader) : null
   if (body.solicitar === true && !solicitante) {
-    return new Response('Unauthorized', { status: 401 })
+    return new Response('Unauthorized', { status: 401, headers: cors })
   }
 
   let identidadAdmin: string | null = null
   if (!solicitante) {
     const auth = await authorize(authHeader)
-    if (!auth.ok) return new Response('Unauthorized', { status: 401 })
+    if (!auth.ok) return new Response('Unauthorized', { status: 401, headers: cors })
     identidadAdmin = auth.identity
   }
 
@@ -144,7 +160,7 @@ serve(async (req) => {
   // El cliente solo puede pedir sobre SU propia reserva. Va acá y no antes
   // porque necesita la fila de la reserva para comparar.
   if (solicitante && booking.user_id !== solicitante) {
-    return new Response('Unauthorized', { status: 401 })
+    return new Response('Unauthorized', { status: 401, headers: cors })
   }
 
   // ── Rechazo explícito ──────────────────────────────────────────────────────

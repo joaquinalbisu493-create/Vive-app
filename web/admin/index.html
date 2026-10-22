@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#F7EFE4">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Tablero · Sere</title>
+
+<!-- Tablero de administración (22/10/2026): métricas, objetivos del mes y
+     cuentas de prueba. Solo para cuentas con `profiles.is_admin`.
+
+     🔴 Esta página es pública: cualquiera puede abrir sere.ar/admin. Lo que
+     protege los datos NO es esconderla, es la base: `admin_metricas()` y
+     `admin_cuentas()` levantan `no_autorizado` si quien llama no es admin, y
+     `objetivos` / `cuentas_internas` tienen RLS con `is_admin()`. Ver
+     `supabase/migrations/20261022010000_tablero_admin.sql`.
+
+     La operación (aprobar coaches, denuncias, garantías) sigue en la app. -->
+
+<link rel="preload" href="/fonts/plus-jakarta-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 200 800; font-display: swap; src: url(/fonts/plus-jakarta-sans-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: "Plus Jakarta Sans"; font-style: normal; font-weight: 200 800; font-display: swap; src: url(/fonts/plus-jakarta-sans-latin-ext.woff2) format("woff2"); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+
+  :root {
+    color-scheme: light;
+    --cream: #F7EFE4;
+    --paper: #FFFDF8;
+    --tile: #F8F1E6;
+    --olive: #565E32;
+    --soft: #566245;
+    --mute: #8B8A6E;
+    --forest: #2D4A3E;
+    --verde: #42542F;
+    --verde-bg: #DCE5CB;
+    --terra: #C1694F;
+    --terra-ink: #A25842;
+    --terra-bg: #F5E1D6;
+    --line: rgba(86, 94, 50, .14);
+    --error: #B3392E;
+    --sombra: 0 1px 2px rgba(45, 74, 62, .04), 0 6px 20px rgba(45, 74, 62, .06);
+    --radio: 18px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; color: var(--forest);
+    /* Un brillo cálido arriba, como la landing: el fondo no es un plano. */
+    background: radial-gradient(1200px 500px at 50% -200px, #FBF3E6 0%, rgba(251, 243, 230, 0) 70%), var(--cream);
+    background-attachment: fixed;
+    font: 15px/1.55 "Plus Jakarta Sans", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  [hidden] { display: none !important; }
+  main { max-width: 1120px; margin: 0 auto; padding: 0 20px 80px; }
+  h1 { font-size: 22px; margin: 0; letter-spacing: -.02em; }
+  h2 { font-size: 19px; margin: 0 0 14px; letter-spacing: -.015em; font-weight: 700; }
+  h3 { font-size: 12px; margin: 0 0 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--soft); font-weight: 700; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--terra); outline-offset: 2px; }
+  code { font-size: 12.5px; background: var(--tile); border-radius: 6px; padding: 1px 6px; word-break: break-all; }
+
+  .btn {
+    border: 0; border-radius: 999px; padding: 10px 20px; min-height: 40px; font-weight: 650;
+    background: var(--forest); color: #FBF8F1;
+    transition: transform .12s ease, background-color .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover:not(:disabled) { background: #24403A; box-shadow: 0 4px 12px rgba(45, 74, 62, .18); }
+  .btn:active:not(:disabled) { transform: scale(.97); }
+  .btn:disabled { opacity: .45; cursor: default; }
+  .btn.sec { background: var(--paper); color: var(--forest); border: 1px solid var(--line); box-shadow: none; }
+  .btn.sec:hover:not(:disabled) { background: #fff; border-color: rgba(86, 94, 50, .28); box-shadow: none; }
+  .btn.chico { padding: 6px 14px; min-height: 34px; font-size: 13px; }
+  .btn.peligro { background: var(--error); }
+  .btn.peligro:hover:not(:disabled) { background: #9C2F25; }
+  .link { background: none; border: 0; padding: 4px 0; color: var(--terra-ink); font-weight: 650; font-size: 13px; text-decoration: underline; text-decoration-color: rgba(162, 88, 66, .3); text-underline-offset: 3px; }
+  .link:hover { text-decoration-color: currentColor; }
+  input, select, textarea {
+    width: 100%; padding: 10px 13px; border: 1px solid var(--line); border-radius: 12px; background: #fff;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--terra); box-shadow: 0 0 0 3px rgba(193, 105, 79, .15); }
+  label { display: block; font-size: 13px; font-weight: 650; margin: 12px 0 5px; color: var(--soft); }
+  .caja { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radio); padding: 20px; box-shadow: var(--sombra); }
+  .error { color: var(--error); font-size: 14px; min-height: 1em; margin: 8px 0 0; }
+  .error:empty { margin: 0; min-height: 0; }
+  .suave { color: var(--soft); font-size: 13px; }
+
+  /* Marca */
+  .wordmark { display: inline-flex; align-items: center; gap: .28em; font-weight: 800; font-size: 24px; letter-spacing: -0.03em; color: var(--olive); line-height: 1; }
+  .vmark { width: .95em; height: .95em; fill: none; stroke: currentColor; stroke-width: 7; }
+  .etiqueta-admin { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--terra-ink); background: var(--terra-bg); padding: 3px 9px; border-radius: 999px; }
+
+  /* Ingreso */
+  #ingreso { max-width: 400px; margin: 14vh auto 0; padding: 28px; }
+  #ingreso .wordmark { margin-bottom: 18px; }
+  #ingreso h1 { margin-bottom: 4px; font-size: 21px; }
+  #ingreso .btn { width: 100%; margin-top: 14px; }
+
+  /* Encabezado fijo: marca, hora y acciones arriba; pestañas abajo. */
+  .cabecera {
+    position: sticky; top: 0; z-index: 10; margin: 0 -20px 24px; padding: 16px 20px 0;
+    background: rgba(247, 239, 228, .86); backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .marca { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .acciones-cab { display: flex; gap: 8px; }
+  #actualizado { font-size: 12px; }
+
+  /* Pestañas */
+  .pestanas { display: flex; gap: 4px; margin-top: 12px; overflow-x: auto; scrollbar-width: none; }
+  .pestanas::-webkit-scrollbar { display: none; }
+  .pestanas button {
+    white-space: nowrap; background: none; border: 0; padding: 10px 14px 12px; font-weight: 650; color: var(--soft);
+    border-bottom: 2px solid transparent; display: inline-flex; align-items: center; gap: 7px; transition: color .15s ease, border-color .15s ease;
+  }
+  .pestanas button:hover { color: var(--forest); }
+  .pestanas button[aria-selected="true"] { color: var(--forest); border-bottom-color: var(--terra); }
+  .contador { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--terra); color: #fff; font-size: 11px; font-weight: 700; }
+  .contador:empty { display: none; }
+  #cargandoVista { margin: -8px 0 16px; }
+  #cargandoVista::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%; border: 2px solid var(--terra); border-right-color: transparent; vertical-align: -1px; animation: girar .8s linear infinite; }
+  @keyframes girar { to { transform: rotate(360deg); } }
+
+  /* Cada vista entra con un fundido corto: se nota que cambió, sin distraer. */
+  [role="tabpanel"]:not([hidden]) { animation: entrar .28s ease-out; }
+  @keyframes entrar { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  /* Métricas */
+  /* Los grupos de cinco números van a todo el ancho, en una fila; los chicos,
+     de a dos. Así ningún rótulo queda apretado en una columna angosta. */
+  .grupos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 36px; }
+  .grupos .ancho { grid-column: 1 / -1; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+  .tile { background: var(--tile); border-radius: 14px; padding: 12px 14px; }
+  .tile b { display: block; font-size: 28px; line-height: 1.05; font-weight: 750; letter-spacing: -.02em; font-variant-numeric: tabular-nums; margin-bottom: 4px; }
+  .tile.cero b { color: var(--mute); font-weight: 600; }
+  .tile span { font-size: 12px; color: var(--soft); line-height: 1.35; display: block; }
+
+  /* Fichas */
+  .ficha { margin-bottom: 14px; }
+  .ficha h3 { text-transform: none; letter-spacing: -.01em; font-size: 18px; color: var(--forest); margin: 0; font-weight: 700; }
+  .ficha .datos { margin: 4px 0 12px; }
+  .ficha .bloque { margin: 14px 0; }
+  .ficha .bloque > b { display: block; font-size: 11px; color: var(--soft); text-transform: uppercase; letter-spacing: .07em; margin-bottom: 4px; }
+  .ficha .cita, .cita { background: var(--tile); border-radius: 12px; padding: 11px 14px; white-space: pre-wrap; border-left: 3px solid rgba(86, 94, 50, .18); }
+  .requisitos { display: grid; gap: 6px; margin: 14px 0; padding: 12px 14px; border-radius: 14px; background: var(--tile); }
+  .req { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+  .req .ok { color: var(--verde); font-weight: 700; }
+  .req .falta { color: var(--terra); font-weight: 700; }
+  .botonera { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; align-items: center; }
+  .formulario-linea { margin-top: 12px; }
+  .formulario-linea textarea, .formulario-linea input { margin-bottom: 8px; }
+  .aviso { background: var(--terra-bg); color: var(--terra-ink); border-radius: 12px; padding: 10px 14px; font-size: 14px; margin: 8px 0; }
+  .aviso-parcial { margin-bottom: 12px; box-shadow: var(--sombra); }
+
+  /* Necesita atención: cada fila con una franja según urgencia. */
+  .atencion { margin-bottom: 36px; }
+  .atencion ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; }
+  .atencion li {
+    display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; background: var(--tile);
+    border-left: 3px solid var(--terra);
+  }
+  .atencion li.con-urgencia { border-left-color: var(--error); background: #F8E6DF; }
+  .atencion li.nada { border-left-color: var(--verde); background: rgba(220, 229, 203, .55); color: var(--verde); font-weight: 650; }
+  .atencion b { min-width: 30px; font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; text-align: center; }
+  .atencion .que { flex: 1; }
+  .atencion .urgente { color: var(--error); font-weight: 650; }
+  .atencion li .btn { flex: none; }
+
+  /* Objetivos */
+  .barra-mes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .barra-mes h2 { margin: 0 auto 0 0; }
+  .mes-nombre { min-width: 130px; text-align: center; font-weight: 650; }
+  .columnas { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-bottom: 36px; }
+  .obj { border-top: 1px solid var(--line); padding: 14px 0; }
+  .obj:first-of-type { border-top: 0; padding-top: 0; }
+  .obj-cab { display: flex; gap: 10px; align-items: flex-start; }
+  .obj-titulo { flex: 1; font-weight: 650; }
+  .chip { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--tile); color: var(--soft); white-space: nowrap; }
+  .chip.esencial { background: var(--verde-bg); color: var(--verde); }
+  .chip.resultado { background: var(--terra-bg); color: var(--terra-ink); }
+  .progreso { height: 8px; border-radius: 999px; background: var(--tile); margin: 10px 0 5px; overflow: hidden; }
+  .progreso i { display: block; height: 100%; background: linear-gradient(90deg, #6E8A4E, var(--verde)); border-radius: 999px; transition: width .6s cubic-bezier(.2, .8, .2, 1); }
+  .obj-pie { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  .obj-pie select { width: auto; padding: 5px 10px; font-size: 13px; }
+  .vacio { color: var(--soft); font-size: 14px; margin: 0; }
+
+  /* Formulario de objetivo */
+  dialog { border: 0; border-radius: 22px; padding: 26px; width: min(540px, calc(100vw - 32px)); background: var(--paper); color: var(--forest); box-shadow: 0 24px 60px rgba(45, 74, 62, .25); }
+  dialog::backdrop { background: rgba(45, 74, 62, .32); backdrop-filter: blur(3px); }
+  dialog[open] { animation: entrar .22s ease-out; }
+  .fila { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .acciones { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; align-items: center; }
+
+  /* Tablas y desplegables */
+  details summary { cursor: pointer; font-weight: 650; list-style: none; display: flex; align-items: center; gap: 8px; }
+  details summary::-webkit-details-marker { display: none; }
+  details summary::before { content: "›"; display: inline-block; transition: transform .2s ease; font-size: 18px; line-height: 1; color: var(--terra); }
+  details[open] summary::before { transform: rotate(90deg); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 12px; }
+  td, th { text-align: left; padding: 10px 8px; border-top: 1px solid var(--line); vertical-align: middle; }
+  th { font-size: 11px; color: var(--soft); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; border-top: 0; }
+  tbody tr:hover { background: rgba(248, 241, 230, .7); }
+  td.mail { word-break: break-all; }
+  .tabla { overflow-x: auto; }
+  .caja, .ficha { min-width: 0; }
+
+  @media (max-width: 560px) {
+    .col-fecha { display: none; }
+    .fila { grid-template-columns: 1fr; }
+    main { padding: 0 16px 64px; }
+    /* En el celular el encabezado no queda fijo: ocuparía un cuarto de la pantalla. */
+    .cabecera { position: static; margin: 0 -16px 20px; padding: 12px 16px 0; }
+    .caja { padding: 16px; }
+    .tile b { font-size: 24px; }
+    .grupos { grid-template-columns: 1fr; }
+    .tiles { grid-template-columns: 1fr 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main>
+
+  <!-- ── Ingreso ── -->
+  <section id="ingreso" class="caja" hidden>
+    <span class="wordmark" aria-label="Sere"><svg class="vmark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="34" r="26"/><circle cx="31.52" cy="66" r="26"/><circle cx="68.48" cy="66" r="26"/></svg>sere</span>
+    <h1>Administración</h1>
+    <p class="suave">Entrás con el mail de tu cuenta de Sere y un código.</p>
+    <div id="pasoMail">
+      <label for="mail">Mail</label>
+      <input id="mail" type="email" autocomplete="email">
+      <p class="error" id="errorMail"></p>
+      <button class="btn" id="btnCodigo">Enviarme el código</button>
+    </div>
+    <div id="pasoCodigo" hidden>
+      <p class="suave" id="mandadoA"></p>
+      <label for="codigo">Código</label>
+      <input id="codigo" inputmode="numeric" autocomplete="one-time-code">
+      <p class="error" id="errorCodigo"></p>
+      <button class="btn" id="btnConfirmar">Seguir</button>
+    </div>
+    <!-- Segundo factor: lo exige la base (`is_admin()` pide aal2) y las
+         funciones de admin. Sin él, una cuenta admin no ve nada. -->
+    <div id="pasoAlta" hidden>
+      <p><b>Un paso más, solo esta vez.</b> Para administrar Sere hace falta un segundo factor además del mail. Escaneá este código con una app de autenticación (Google Authenticator, 1Password, Authy o la de tu preferencia).</p>
+      <img id="qrAlta" alt="Código QR para registrar Sere en tu app de autenticación" width="180" height="180" style="display:block;margin:12px auto;background:#fff;border-radius:12px;padding:8px">
+      <p class="suave">¿No podés escanear? Cargá esta clave a mano: <code id="claveAlta"></code></p>
+      <label for="codigoAlta">Código de 6 dígitos que muestra la app</label>
+      <input id="codigoAlta" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+      <p class="error" id="errorAlta"></p>
+      <button class="btn" id="btnAlta">Activar y entrar</button>
+    </div>
+    <div id="pasoFactor" hidden>
+      <p>Abrí tu app de autenticación y escribí el código de Sere.</p>
+      <label for="codigoFactor">Código de 6 dígitos</label>
+      <input id="codigoFactor" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+      <p class="error" id="errorFactor"></p>
+      <button class="btn" id="btnFactor">Entrar</button>
+      <p class="suave">¿Perdiste el teléfono? Pedile al otro admin que te reinicie el segundo factor.</p>
+    </div>
+  </section>
+
+  <!-- ── Tablero ── -->
+  <section id="tablero" hidden>
+    <div class="cabecera">
+    <header>
+      <div class="marca"><span class="wordmark" aria-label="Sere"><svg class="vmark" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="34" r="26"/><circle cx="31.52" cy="66" r="26"/><circle cx="68.48" cy="66" r="26"/></svg>sere</span><span class="etiqueta-admin">Administración</span><span class="suave" id="actualizado"></span></div>
+      <div class="acciones-cab">
+        <button class="btn sec chico" id="btnRecargar">Actualizar</button>
+        <button class="btn sec chico" id="btnSalir">Salir</button>
+      </div>
+    </header>
+
+    <nav class="pestanas" role="tablist" aria-label="Secciones del tablero">
+      <button role="tab" id="tab-resumen" aria-controls="vistaResumen" data-pestana="resumen" aria-selected="true">Resumen</button>
+      <button role="tab" id="tab-profesionales" aria-controls="vistaProfesionales" data-pestana="profesionales" aria-selected="false">Profesionales <span class="contador" id="contProfesionales"></span></button>
+      <button role="tab" id="tab-moderacion" aria-controls="vistaModeracion" data-pestana="moderacion" aria-selected="false">Moderación <span class="contador" id="contModeracion"></span></button>
+      <button role="tab" id="tab-plata" aria-controls="vistaPlata" data-pestana="plata" aria-selected="false">Plata <span class="contador" id="contPlata"></span></button>
+      <button role="tab" id="tab-registro" aria-controls="vistaRegistro" data-pestana="registro" aria-selected="false">Registro</button>
+    </nav>
+    </div>
+
+    <div id="avisosParciales"></div>
+    <p class="suave" id="cargandoVista" hidden>Cargando…</p>
+
+    <!-- ── Plata ──
+         Este panel NO mueve plata: las transferencias se hacen a mano desde el
+         banco o la billetera. Acá se ve qué hay que hacer y se registra el
+         comprobante. Todas las escrituras van por `admin-actions`. -->
+    <div id="vistaPlata" role="tabpanel" aria-labelledby="tab-plata" hidden>
+      <h2>USDT en revisión</h2>
+      <p class="suave" style="margin-top:-6px">Lo que llegó a la billetera y no se acreditó solo: comprobantes que presentó alguien y transferencias que nadie reclamó.</p>
+      <p class="error" id="errorUsdt"></p>
+      <div id="listaUsdt"></div>
+
+      <h2 style="margin-top:32px">Reembolsos pendientes</h2>
+      <p class="error" id="errorReembolsos"></p>
+      <div id="listaReembolsos"></div>
+
+      <h2 style="margin-top:32px">Pagos a profesionales (sesiones internacionales)</h2>
+      <p class="suave" style="margin-top:-6px">Sesiones ya realizadas y cobradas, todavía sin transferir. Con Mercado Pago no hay nada que pagar: el profesional cobra en el momento.</p>
+      <p class="error" id="errorPagos"></p>
+      <div id="listaPagos"></div>
+
+      <h2 style="margin-top:32px">Comisiones</h2>
+      <p class="suave" style="margin-top:-6px">Comisión de Sere por mes y profesional. Es material para el contador, no una factura: qué corresponde facturar, a quién y cada cuánto todavía está sin definir.</p>
+      <p class="error" id="errorComisiones"></p>
+      <div id="listaComisiones"></div>
+    </div>
+
+    <!-- ── Registro ── `admin_audit_log`: se escribe solo con service role y
+         nadie lo puede editar, ni siendo admin. -->
+    <div id="vistaRegistro" role="tabpanel" aria-labelledby="tab-registro" hidden>
+      <h2>Registro de acciones</h2>
+      <p class="suave" style="margin-top:-6px">Quién hizo qué desde la administración, en la app o en la web. Las últimas 200.</p>
+      <p class="error" id="errorRegistro"></p>
+      <div class="caja" id="listaRegistro"></div>
+    </div>
+
+    <!-- ── Moderación ──
+         Problemas de sesión, denuncias y sanciones van por `admin-actions`;
+         garantías por `guarantee-claim`, que tiene las condiciones de §9.3.
+         Las LECTURAS de problemas, denuncias y garantías van directo con las
+         políticas `*_select_admin`, igual que en la app. -->
+    <div id="vistaModeracion" role="tabpanel" aria-labelledby="tab-moderacion" hidden>
+      <h2>Problemas reportados desde una sesión</h2>
+      <p class="suave" style="margin-top:-6px">La respuesta la lee la persona en la sala de esa sesión y le avisamos. Plazo: 24 h.</p>
+      <p class="error" id="errorProblemas"></p>
+      <div id="listaProblemas"></div>
+
+      <h2 style="margin-top:32px">Denuncias</h2>
+      <p class="error" id="errorDenuncias"></p>
+      <div id="listaDenuncias"></div>
+
+      <h2 style="margin-top:32px">Garantía de primera sesión</h2>
+      <p class="suave" style="margin-top:-6px">Revisá si una reserva califica antes de decidir (T&amp;C §9.3). Las pedidas desde la app aparecen acá; las que llegan por mail, pegá el ID de la reserva.</p>
+      <p class="error" id="errorGarantias"></p>
+      <div id="listaGarantias"></div>
+      <div class="caja ficha">
+        <label for="garantiaReserva" style="margin-top:0">ID de la reserva</label>
+        <div class="botonera" style="margin-top:0">
+          <input id="garantiaReserva" style="flex:1;min-width:220px" autocomplete="off" spellcheck="false">
+          <button class="btn chico" id="btnVerificarGarantia">Verificar</button>
+        </div>
+        <div id="resultadoGarantia"></div>
+      </div>
+      <details class="caja" id="cajaGarantiasResueltas" style="margin-top:14px">
+        <summary>Garantías resueltas</summary>
+        <div id="listaGarantiasResueltas"></div>
+      </details>
+
+      <h2 style="margin-top:32px">Sanciones</h2>
+      <p class="suave" style="margin-top:-6px">Advertencia, suspensión, baja (T&amp;C §10). El motivo lo lee el profesional en su app: escribilo como se lo dirías de frente. La evidencia solo la ve el equipo.</p>
+      <p class="error" id="errorSanciones"></p>
+      <div id="formSancion"></div>
+      <div id="listaSanciones"></div>
+    </div>
+
+    <!-- ── Profesionales: postulaciones y credenciales ──
+         Mismas acciones y mismas exigencias que Administración en la app: todo
+         pasa por `admin-actions`, que valida admin, audita y avisa al
+         profesional. Esta pantalla no decide nada que el servidor no controle. -->
+    <div id="vistaProfesionales" role="tabpanel" aria-labelledby="tab-profesionales" hidden>
+      <div class="barra-mes">
+        <h2>Postulaciones</h2>
+        <select id="filtroPostulaciones" style="width:auto" aria-label="Qué postulaciones mostrar">
+          <option value="pendiente">Por revisar</option>
+          <option value="rechazada">Rechazadas</option>
+          <option value="aprobada">Aprobadas</option>
+        </select>
+      </div>
+      <p class="error" id="errorPostulaciones"></p>
+      <div id="listaPostulaciones"></div>
+
+      <h2 style="margin-top:32px">Títulos y matrículas por revisar</h2>
+      <p class="error" id="errorCredenciales"></p>
+      <div id="listaCredenciales"></div>
+
+      <details class="caja" id="cajaNombre" style="margin-top:32px">
+        <summary>Corregir el nombre de un profesional</summary>
+        <p class="suave">Los profesionales aprobados no pueden cambiar su nombre desde la app. Usalo para errores de tipeo o cambios de apellido, comparando con su documento. Se ve en su perfil, sus reservas y sus reseñas; el link de su página no cambia.</p>
+        <label for="nombreCoach">Profesional</label>
+        <select id="nombreCoach"><option value="">Elegí…</option></select>
+        <label for="nombreNuevo">Nombre correcto</label>
+        <input id="nombreNuevo" maxlength="80">
+        <label for="nombreMotivo">Motivo (queda en la auditoría)</label>
+        <input id="nombreMotivo" maxlength="300">
+        <div class="botonera"><button class="btn chico" id="btnCorregirNombre">Corregir nombre</button></div>
+      </details>
+    </div>
+
+    <div id="vistaResumen" role="tabpanel" aria-labelledby="tab-resumen">
+    <section class="caja atencion" id="cajaAtencion">
+      <h2>Necesita atención</h2>
+      <p class="suave" style="margin-top:-6px">Lo que espera una acción. Postulaciones, identidad y credenciales se resuelven en Profesionales; problemas, denuncias y garantías, en Moderación. Reembolsos, USDT y pagos, en Plata.</p>
+      <ul id="listaAtencion"></ul>
+    </section>
+
+    <div class="barra-mes">
+      <h2>Objetivos</h2>
+      <button class="btn sec chico" id="mesAnterior" aria-label="Mes anterior">‹</button>
+      <span class="mes-nombre" id="mesNombre"></span>
+      <button class="btn sec chico" id="mesSiguiente" aria-label="Mes siguiente">›</button>
+      <button class="btn chico" id="btnNuevo">Agregar objetivo</button>
+    </div>
+    <p class="error" id="errorObjetivos"></p>
+    <div class="columnas" id="columnas"></div>
+
+    <h2>Métricas</h2>
+    <p class="suave" id="notaMetricas" style="margin-top:-6px"></p>
+    <div class="grupos" id="grupos"></div>
+
+    <details class="caja" id="cajaCuentas">
+      <summary>Cuentas de prueba</summary>
+      <p class="suave">Las cuentas marcadas no cuentan en las métricas. Las de administración, las de la carga de ejemplo y las dadas de baja ya se descartan solas y no aparecen acá.</p>
+      <p class="error" id="errorCuentas"></p>
+      <div class="tabla"><table>
+        <thead><tr><th>De prueba</th><th>Nombre</th><th>Mail</th><th>Tipo</th><th class="col-fecha">Creada</th></tr></thead>
+        <tbody id="filasCuentas"></tbody>
+      </table></div>
+    </details>
+    </div>
+  </section>
+
+  <dialog id="dlgObjetivo">
+    <form id="formObjetivo" method="dialog">
+      <h2 id="dlgTitulo">Nuevo objetivo</h2>
+      <label for="fTitulo">Objetivo</label>
+      <input id="fTitulo" maxlength="200" required>
+      <div class="fila">
+        <div>
+          <label for="fDueno">De quién</label>
+          <select id="fDueno">
+            <option value="andre">Andre</option>
+            <option value="joaquin">Joaquín</option>
+            <option value="ambos">Ambos</option>
+          </select>
+        </div>
+        <div>
+          <label for="fTipo">Tipo</label>
+          <select id="fTipo">
+            <option value="esencial">Esencial</option>
+            <option value="entregable">Entregable</option>
+            <option value="resultado">Resultado</option>
+          </select>
+        </div>
+      </div>
+      <label for="fVerificacion">Cómo se verifica</label>
+      <input id="fVerificacion" maxlength="300">
+      <div class="fila">
+        <div>
+          <label for="fMeta">Meta (número, opcional)</label>
+          <input id="fMeta" type="number" min="0" step="any">
+        </div>
+        <div>
+          <label for="fMetrica">Avance automático</label>
+          <select id="fMetrica"><option value="">Lo cargo a mano</option></select>
+        </div>
+      </div>
+      <div id="campoAvance">
+        <label for="fAvance">Avance</label>
+        <input id="fAvance" type="number" min="0" step="any">
+      </div>
+      <label for="fNota">Nota</label>
+      <textarea id="fNota" rows="2" maxlength="1000"></textarea>
+      <p class="error" id="errorForm"></p>
+      <div class="acciones">
+        <button type="button" class="link" id="btnBorrar" hidden>Borrar</button>
+        <span style="flex:1"></span>
+        <button type="button" class="btn sec" id="btnCancelar">Cancelar</button>
+        <button type="submit" class="btn" id="btnGuardar">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+</main>
+
+<script src="/captcha.js"></script>
+<script src="/admin/admin.js"></script>
+</body>
+</html>

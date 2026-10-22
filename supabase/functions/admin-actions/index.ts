@@ -38,6 +38,8 @@ import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supa
 // lo que se retuvo. Duplicar la fórmula es exactamente cómo se desincronizan.
 import { marketplaceFeeFor } from '../_shared/commission.ts'
 import { processPaidBookingEffects } from '../_shared/paid-effects-recovery.ts'
+import { WEB_ORIGIN } from '../_shared/cors.ts'
+import { tieneSegundoFactor } from '../_shared/aal.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!
@@ -50,10 +52,18 @@ const PROFESIONES = ['psicologia', 'nutricion', 'otra']
 // las sube la app (`lib/identidad.ts`) y las busca `enviar_identidad()`.
 const FOTOS_IDENTIDAD = ['dni-frente', 'dni-dorso', 'selfie']
 
+// 22/10/2026: el tablero de sere.ar/admin también llama a esta función, desde
+// un navegador. La app no manda Origin y no le cambia nada. Permitir el origen
+// no abre nada: sin el token de un admin la respuesta sigue siendo 401/403.
+const cors = {
+  'Access-Control-Allow-Origin': WEB_ORIGIN,
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+}
+
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { ...cors, 'Content-Type': 'application/json' },
   })
 }
 
@@ -191,6 +201,8 @@ async function notifyProfile(
 }
 
 serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors })
+
   const authHeader = req.headers.get('Authorization') ?? ''
   if (!authHeader.startsWith('Bearer ')) {
     return json({ error: 'falta el token' }, 401)
@@ -218,6 +230,13 @@ serve(async (req) => {
   if (!profile?.is_admin) {
     console.warn(`[admin-actions] intento no autorizado de ${user.id}`)
     return json({ error: 'no autorizado' }, 403)
+  }
+
+  // 3) ¿Pasó por el segundo factor? (22/10/2026) Ser admin no alcanza: la
+  //    sesión tiene que ser `aal2`. El token ya se validó en (1), así que leer
+  //    su claim es seguro. Misma regla que `is_admin()` en la base.
+  if (!tieneSegundoFactor(authHeader)) {
+    return json({ error: 'falta el segundo factor: entrá a sere.ar/admin y confirmá el código de tu app de autenticación', code: 'aal2_requerido' }, 403)
   }
 
   const actor = { adminId: user.id, adminEmail: user.email ?? null }
