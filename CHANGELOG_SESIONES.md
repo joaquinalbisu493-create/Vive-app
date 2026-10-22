@@ -39,7 +39,9 @@
 - **Fix de staleness:** al probarlo no cambiaba nada → Recursos es una tab y no se re-monta al volver del check-in de Inicio, así que `useMoodHistory` quedaba con el ánimo del montaje (la sugerencia del día nunca se actualizaba). Se agregó `refetch` del ánimo en `useFocusEffect`, igual que ya hacía Inicio. **Era un bug preexistente** (la sugerencia del día ya quedaba vieja antes de este rediseño).
 - **Ajuste visual final:** el destacado quedó en **solo el cartel "Para hoy"** sobre el tile recomendado (Joaquín no quería el "cuadrado") — se sacaron el borde FOREST y el ícono relleno; el tile queda igual a los demás, solo con el badge, y va primero.
 
-**Mapa ánimo→herramienta (para probar):** cualquier ánimo de hoy da una herramienta. Normal/Bien/Brillando → barra "Hoy: …" + tile destacado (Gratitud, o la secundaria si se hizo esta semana); Bajón/Cansado → hero verde + tile destacado (Diario/Respiración).
+**Mapa ánimo→herramienta (para probar):** cualquier ánimo de hoy da una herramienta. Normal/Bien/Brillando → barra "Hoy: …" + tile destacado (Gratitud, o la secundaria si se hizo esta semana); Bajón/Cansado → tile destacado (Diario/Respiración).
+
+**Ajuste final (duplicación que reapareció):** con Bajón/Cansado la barra se transformaba en un **hero verde** que recomendaba la herramienta con su propio botón, y como el carrusel también la marca "Para hoy" quedaba duplicado de nuevo. Joaquín pidió que el diseño no cambie según el ánimo. Se **quitó la variante hero**: ahora TODOS los ánimos usan la misma barra compacta (la razón) + el carrusel con "Para hoy". Se sacaron el prop `todayMoodEntry` (sin uso), el import `MoodLite` y los estilos muertos del hero. tsc limpio.
 
 ## 2026-10-22 — Joaquín (Claude · rediseño pantalla de Respiración)
 
