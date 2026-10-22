@@ -138,16 +138,24 @@ function RecommendedCard({
     );
   }
 
+  // Si la recomendación es una herramienta, la barra queda solo con la RAZÓN
+  // ("Hoy: …") y la herramienta a la que apunta vive destacada en el carrusel de
+  // abajo (marcada "Para hoy"): la barra explica, el carrusel ejecuta. Si es un
+  // recurso de biblioteca (no está en el carrusel), la barra mantiene el atajo
+  // completo "→ recurso".
+  const esTool = reco.kind === 'tool';
   return (
     <TouchableOpacity style={s.moodLine} onPress={onPress} activeOpacity={0.85}>
       <Ionicons name={icon} size={17} color={FOREST} />
       <View style={s.moodLineTextRow}>
-        <Text style={s.moodLineWhy} numberOfLines={1}>
+        <Text style={s.moodLineWhy} numberOfLines={esTool ? 2 : 1}>
           Hoy: <Text style={s.moodLineBold}>{reco.why}</Text>
         </Text>
-        <Text style={s.moodLineTool} numberOfLines={1}>
-          {' '}→ {title}{duration ? ` · ${duration}` : ''}
-        </Text>
+        {!esTool && (
+          <Text style={s.moodLineTool} numberOfLines={1}>
+            {' '}→ {title}{duration ? ` · ${duration}` : ''}
+          </Text>
+        )}
       </View>
       <Ionicons name="chevron-forward" size={18} color={FOREST_SOFT} />
     </TouchableOpacity>
@@ -385,21 +393,32 @@ const TILE_LABEL: Record<string, string> = {
 };
 
 // ─── ToolCard ─────────────────────────────────────────────────────────────────
-function ToolCard({ tool }: { tool: Tool }) {
+function ToolCard({ tool, destacado = false }: { tool: Tool; destacado?: boolean }) {
   const router = useRouter();
   return (
     <ScaleCard
       style={s.toolTileWrap}
       onPress={() => { if (tool.route) router.push(tool.route as any); }}
       activeOpacity={0.75}>
-      <SurfaceCard variant="subtle" backgroundColor={CARD} borderRadius={18}>
+      <SurfaceCard
+        variant="subtle"
+        backgroundColor={CARD}
+        borderRadius={18}
+        style={destacado ? s.toolTileDestacado : undefined}>
         <View style={s.toolTile}>
-          <View style={s.toolIconWrap}>
-            <Ionicons name={tool.icon} size={16} color={FOREST} />
+          <View style={[s.toolIconWrap, destacado && s.toolIconWrapDestacado]}>
+            <Ionicons name={tool.icon} size={16} color={destacado ? CREAM_LIGHT : FOREST} />
           </View>
           <Text style={s.toolLabel}>{TILE_LABEL[tool.id] ?? tool.label}</Text>
         </View>
       </SurfaceCard>
+      {/* La recomendación del día: la razón vive en la barra de arriba, acá queda
+          marcada la herramienta a la que apunta (se dan valor, no se duplican). */}
+      {destacado && (
+        <View style={s.toolBadgeWrap} pointerEvents="none">
+          <Text style={s.toolBadge}>Para hoy</Text>
+        </View>
+      )}
     </ScaleCard>
   );
 }
@@ -407,7 +426,7 @@ function ToolCard({ tool }: { tool: Tool }) {
 // ─── ToolsCarousel ────────────────────────────────────────────────────────────
 // Todas las tools de Sere en una fila fija (no scrollea — son 4, entran enteras).
 // El orden sale de TOOL_GROUPS, aplanado: Diario, Gratitud, Ruidos, Respirar.
-function ToolsCarousel() {
+function ToolsCarousel({ destacadoId }: { destacadoId?: string }) {
   const seen = new Set<string>();
   const tools: Tool[] = [];
   for (const g of TOOL_GROUPS) {
@@ -419,10 +438,15 @@ function ToolsCarousel() {
     }
   }
 
+  // La herramienta recomendada del día va al frente (si está en el carrusel).
+  // Si la recomendación no es una herramienta visible acá, no se reordena nada.
+  const dest = destacadoId ? tools.find(t => t.id === destacadoId) : undefined;
+  const ordered = dest ? [dest, ...tools.filter(t => t.id !== dest.id)] : tools;
+
   return (
     <View style={s.toolsRow}>
-      {tools.map(tool => (
-        <ToolCard key={tool.id} tool={tool} />
+      {ordered.map(tool => (
+        <ToolCard key={tool.id} tool={tool} destacado={!!dest && tool.id === dest.id} />
       ))}
     </View>
   );
@@ -583,7 +607,7 @@ export default function RecursosScreen() {
             todayMoodEntry={todayMoodEntry}
             onGoToCheckIn={() => router.push('/')}
           />
-          <ToolsCarousel />
+          <ToolsCarousel destacadoId={reco?.kind === 'tool' ? reco.toolId : undefined} />
 
           {/* 2. Recomendado por tu coach — recomendaciones personalizadas por chat */}
           <CoachRecoSection
@@ -913,6 +937,32 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(235,229,215,0.70)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  toolTileDestacado: {
+    borderWidth: 1.5,
+    borderColor: FOREST,
+  },
+  toolIconWrapDestacado: {
+    backgroundColor: FOREST,
+  },
+  toolBadgeWrap: {
+    position: 'absolute',
+    top: -8,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+  toolBadge: {
+    fontFamily: ViveFonts.semibold,
+    fontSize: 8.5,
+    letterSpacing: 0.4,
+    textTransform: 'uppercase',
+    color: CREAM_LIGHT,
+    backgroundColor: FOREST,
+    borderRadius: 8,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    overflow: 'hidden',
   },
   toolLabel: {
     fontFamily: ViveFonts.semibold,
