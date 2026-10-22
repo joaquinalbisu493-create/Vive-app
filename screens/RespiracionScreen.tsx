@@ -39,8 +39,8 @@ const CIERRE_GRAD: [string, string] = [PASTEL_SALVIA, FOREST];
 // secuencia. Son el verde del token salvia pero SATURADO: oscurecer el token
 // pastel hacia el negro lo volvía gris, así que en vez de eso se interpola entre
 // dos salvia-verdes vivos. Genérico para N fases (no fijo a 4).
-const BARRA_CLARO  = '#7FC08A'; // salvia claro y brillante
-const BARRA_OSCURO = '#3E8F5B'; // salvia saturado, más oscuro
+const BARRA_CLARO  = '#93BE95'; // salvia-verde suave (claro)
+const BARRA_OSCURO = '#55895F'; // salvia-verde suave (oscuro)
 function lerpHex(a: string, b: string, t: number): string {
   const ca = a.replace('#', ''), cb = b.replace('#', '');
   const mix = (i: number) => {
@@ -489,21 +489,24 @@ export default function RespiracionScreen() {
             </View>
           </View>
 
-          {/* Duración: etiqueta a la izquierda + chips pegados. */}
-          <View style={s.durationRow}>
+          {/* Duración: etiqueta centrada justo debajo de la barra, y los chips
+              centrados debajo. */}
+          <View style={s.durationBlock}>
             <Text style={s.durationEyebrow}>DURACIÓN</Text>
-            {DURATIONS.map(d => {
-              const activo = duration === d.seconds;
-              return (
-                <TouchableOpacity
-                  key={d.seconds}
-                  style={[s.durationChip, activo && s.durationChipActive]}
-                  onPress={() => { if (!activo) vibrarToque(); setDuration(d.seconds); }}
-                  activeOpacity={0.8}>
-                  <Text style={[s.durationLabel, activo && s.durationLabelActive]}>{d.label}</Text>
-                </TouchableOpacity>
-              );
-            })}
+            <View style={s.durationChips}>
+              {DURATIONS.map(d => {
+                const activo = duration === d.seconds;
+                return (
+                  <TouchableOpacity
+                    key={d.seconds}
+                    style={[s.durationChip, activo && s.durationChipActive]}
+                    onPress={() => { if (!activo) vibrarToque(); setDuration(d.seconds); }}
+                    activeOpacity={0.8}>
+                    <Text style={[s.durationLabel, activo && s.durationLabelActive]}>{d.label}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
           </View>
 
           {/* Orbe en reposo: late despacio, sin texto, grano ~9%. */}
@@ -594,8 +597,9 @@ const s = StyleSheet.create({
   ritmoLabel:  { fontFamily: ViveFonts.semibold, fontSize: 9.5, letterSpacing: 0.6, color: FOREST_SOFT, textAlign: 'center' },
 
   // Duración.
-  durationRow:    { flexDirection: 'row', alignItems: 'center', gap: 10, alignSelf: 'stretch' },
-  durationEyebrow: { fontFamily: ViveFonts.semibold, fontSize: 9.5, letterSpacing: 1.2, color: FOREST_SOFT, marginRight: 2 },
+  durationBlock:  { alignSelf: 'stretch', alignItems: 'center', gap: 10 },
+  durationChips:  { flexDirection: 'row', gap: 12, justifyContent: 'center' },
+  durationEyebrow: { fontFamily: ViveFonts.semibold, fontSize: 9.5, letterSpacing: 1.2, color: FOREST_SOFT, textAlign: 'center' },
   durationChip:   { paddingHorizontal: 18, paddingVertical: 8, borderRadius: 16, borderWidth: 1.5, borderColor: 'rgba(63,81,47,0.22)', backgroundColor: 'rgba(255,248,240,0.55)' },
   durationChipActive: { borderColor: FOREST, backgroundColor: FOREST },
   durationLabel:  { fontFamily: ViveFonts.medium, fontSize: 13, color: FOREST_SOFT },
