@@ -40,7 +40,7 @@ const CIERRE_GRAD: [string, string] = [PASTEL_SALVIA, FOREST];
 // pastel hacia el negro lo volvía gris, así que en vez de eso se interpola entre
 // dos salvia-verdes vivos. Genérico para N fases (no fijo a 4).
 const BARRA_CLARO  = '#88B58A'; // salvia-verde suave (claro)
-const BARRA_OSCURO = '#4D7D56'; // salvia-verde suave (oscuro)
+const BARRA_OSCURO = FOREST;    // el último tramo = verde del botón "Empezar"
 function lerpHex(a: string, b: string, t: number): string {
   const ca = a.replace('#', ''), cb = b.replace('#', '');
   const mix = (i: number) => {
