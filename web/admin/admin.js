@@ -326,11 +326,11 @@ async function abrirTablero() {
 async function cargarMetricas() {
   metricas = await api('rpc/admin_metricas', { method: 'POST', body: {} });
   const hora = new Date(metricas.generado).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
-  $('actualizado').textContent = `Actualizado ${hora}`;
+  $('actualizado').textContent = `Actualizado a las ${hora}`;
   $('notaMetricas').textContent = `Sin contar ${metricas.cuentas_descartadas} cuentas de prueba, de administración o dadas de baja. "Este mes" es el mes en curso. "Hecha y pagada" es una sesión que ya ocurrió, con prueba de asistencia y cobro aprobado: las futuras ya pagadas no cuentan todavía.`;
   $('grupos').innerHTML = GRUPOS.map(([titulo, items]) => `
-    <div class="caja"><h3>${esc(titulo)}</h3><div class="tiles">
-      ${items.map(([k, et]) => `<div class="tile"><b>${esc(metricas[k] ?? 0)}</b><span>${esc(et)}</span></div>`).join('')}
+    <div class="caja${items.length >= 5 ? ' ancho' : ''}"><h3>${esc(titulo)}</h3><div class="tiles">
+      ${items.map(([k, et]) => `<div class="tile${Number(metricas[k] ?? 0) === 0 ? ' cero' : ''}"><b>${esc(metricas[k] ?? 0)}</b><span>${esc(et)}</span></div>`).join('')}
     </div></div>`).join('');
 }
 
@@ -354,9 +354,9 @@ async function cargarPendientes() {
     const vencidos = c.vencidos > 0 ? ` <span class="urgente">${c.vencidos} ${esc(VENCIDOS[k] ?? 'fuera de plazo')}</span>` : '';
     const detalle = [c.mas_antiguo ? haceCuanto(c.mas_antiguo) : '', aclaracion ?? ''].filter(Boolean).join('. ');
     const ir = pestana ? `<button class="btn sec chico" data-ir="${pestana}">Ver</button>` : '';
-    return `<li><b>${esc(c.cantidad)}</b><span class="que">${esc(titulo)}${vencidos}<br><span class="suave">${esc(detalle)}</span></span>${ir}</li>`;
+    return `<li${c.vencidos > 0 ? ' class="con-urgencia"' : ''}><b>${esc(c.cantidad)}</b><span class="que">${esc(titulo)}${vencidos}<br><span class="suave">${esc(detalle)}</span></span>${ir}</li>`;
   });
-  $('listaAtencion').innerHTML = filas.length ? filas.join('') : '<li class="nada">Nada pendiente.</li>';
+  $('listaAtencion').innerHTML = filas.length ? filas.join('') : '<li class="nada">✓ Nada pendiente. Todo al día.</li>';
   const deProfesionales = (p.postulaciones?.cantidad ?? 0) + (p.credenciales?.cantidad ?? 0);
   $('contProfesionales').textContent = deProfesionales > 0 ? deProfesionales : '';
   const deModeracion = (p.problemas?.cantidad ?? 0) + (p.denuncias?.cantidad ?? 0) + (p.garantias?.cantidad ?? 0);
