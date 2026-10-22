@@ -68,6 +68,7 @@ export function SaveScreen({
   crossInvite,
   origen,
   reduced = false,
+  doneLabel = 'Listo',
 }: {
   visible: boolean;
   onDone: () => void;
@@ -78,6 +79,9 @@ export function SaveScreen({
   crossInvite?: { label: string; onPress: () => void };
   origen: string;
   reduced?: boolean;
+  // Etiqueta del botón de salida. Default "Listo" (Gratitud/Diario, que vuelven
+  // a la misma pantalla); Respiración usa "Volver" porque sale de la práctica.
+  doneLabel?: string;
 }) {
   const pop = useRef(new Animated.Value(reduced ? 1 : 0.4)).current;
   // La invitación cruzada aparece una sola vez por origen: quien ya la vio (la
@@ -138,7 +142,7 @@ export function SaveScreen({
               onPress={onDone}
               accessibilityRole="button"
             >
-              <Text style={styles.doneText}>Listo</Text>
+              <Text style={styles.doneText}>{doneLabel}</Text>
             </Pressable>
 
             {verInvitacion && crossInvite && (
