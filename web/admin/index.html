@@ -106,6 +106,9 @@
   .formulario-linea textarea { margin-bottom: 8px; }
   .aviso { background: var(--terra-bg); color: var(--terra-ink); border-radius: 10px; padding: 8px 12px; font-size: 14px; margin: 8px 0; }
 
+  .aviso-parcial { margin-bottom: 10px; }
+  .atencion li .btn { align-self: center; }
+
   /* Necesita atención */
   .atencion { margin-bottom: 32px; }
   .atencion ul { list-style: none; margin: 0; padding: 0; }
@@ -184,19 +187,22 @@
       </div>
     </header>
 
-    <nav class="pestanas" role="tablist">
-      <button role="tab" data-pestana="resumen" aria-selected="true">Resumen</button>
-      <button role="tab" data-pestana="profesionales" aria-selected="false">Profesionales <span class="contador" id="contProfesionales"></span></button>
-      <button role="tab" data-pestana="moderacion" aria-selected="false">Moderación <span class="contador" id="contModeracion"></span></button>
-      <button role="tab" data-pestana="plata" aria-selected="false">Plata <span class="contador" id="contPlata"></span></button>
-      <button role="tab" data-pestana="registro" aria-selected="false">Registro</button>
+    <div id="avisosParciales"></div>
+
+    <nav class="pestanas" role="tablist" aria-label="Secciones del tablero">
+      <button role="tab" id="tab-resumen" aria-controls="vistaResumen" data-pestana="resumen" aria-selected="true">Resumen</button>
+      <button role="tab" id="tab-profesionales" aria-controls="vistaProfesionales" data-pestana="profesionales" aria-selected="false">Profesionales <span class="contador" id="contProfesionales"></span></button>
+      <button role="tab" id="tab-moderacion" aria-controls="vistaModeracion" data-pestana="moderacion" aria-selected="false">Moderación <span class="contador" id="contModeracion"></span></button>
+      <button role="tab" id="tab-plata" aria-controls="vistaPlata" data-pestana="plata" aria-selected="false">Plata <span class="contador" id="contPlata"></span></button>
+      <button role="tab" id="tab-registro" aria-controls="vistaRegistro" data-pestana="registro" aria-selected="false">Registro</button>
     </nav>
+    <p class="suave" id="cargandoVista" hidden>Cargando…</p>
 
     <!-- ── Plata ──
          Este panel NO mueve plata: las transferencias se hacen a mano desde el
          banco o la billetera. Acá se ve qué hay que hacer y se registra el
          comprobante. Todas las escrituras van por `admin-actions`. -->
-    <div id="vistaPlata" hidden>
+    <div id="vistaPlata" role="tabpanel" aria-labelledby="tab-plata" hidden>
       <h2>USDT en revisión</h2>
       <p class="suave" style="margin-top:-6px">Lo que llegó a la billetera y no se acreditó solo: comprobantes que presentó alguien y transferencias que nadie reclamó.</p>
       <p class="error" id="errorUsdt"></p>
@@ -219,7 +225,7 @@
 
     <!-- ── Registro ── `admin_audit_log`: se escribe solo con service role y
          nadie lo puede editar, ni siendo admin. -->
-    <div id="vistaRegistro" hidden>
+    <div id="vistaRegistro" role="tabpanel" aria-labelledby="tab-registro" hidden>
       <h2>Registro de acciones</h2>
       <p class="suave" style="margin-top:-6px">Quién hizo qué desde la administración, en la app o en la web. Las últimas 200.</p>
       <p class="error" id="errorRegistro"></p>
@@ -231,7 +237,7 @@
          garantías por `guarantee-claim`, que tiene las condiciones de §9.3.
          Las LECTURAS de problemas, denuncias y garantías van directo con las
          políticas `*_select_admin`, igual que en la app. -->
-    <div id="vistaModeracion" hidden>
+    <div id="vistaModeracion" role="tabpanel" aria-labelledby="tab-moderacion" hidden>
       <h2>Problemas reportados desde una sesión</h2>
       <p class="suave" style="margin-top:-6px">La respuesta la lee la persona en la sala de esa sesión y le avisamos. Plazo: 24 h.</p>
       <p class="error" id="errorProblemas"></p>
@@ -269,10 +275,10 @@
          Mismas acciones y mismas exigencias que Administración en la app: todo
          pasa por `admin-actions`, que valida admin, audita y avisa al
          profesional. Esta pantalla no decide nada que el servidor no controle. -->
-    <div id="vistaProfesionales" hidden>
+    <div id="vistaProfesionales" role="tabpanel" aria-labelledby="tab-profesionales" hidden>
       <div class="barra-mes">
         <h2>Postulaciones</h2>
-        <select id="filtroPostulaciones" style="width:auto">
+        <select id="filtroPostulaciones" style="width:auto" aria-label="Qué postulaciones mostrar">
           <option value="pendiente">Por revisar</option>
           <option value="rechazada">Rechazadas</option>
           <option value="aprobada">Aprobadas</option>
@@ -298,10 +304,10 @@
       </details>
     </div>
 
-    <div id="vistaResumen">
+    <div id="vistaResumen" role="tabpanel" aria-labelledby="tab-resumen">
     <section class="caja atencion" id="cajaAtencion">
       <h2>Necesita atención</h2>
-      <p class="suave" style="margin-top:-6px">Lo que espera una acción. Postulaciones, identidad y credenciales se resuelven en Profesionales; problemas, denuncias y garantías, en Moderación. Lo de plata, por ahora, desde Administración en la app.</p>
+      <p class="suave" style="margin-top:-6px">Lo que espera una acción. Postulaciones, identidad y credenciales se resuelven en Profesionales; problemas, denuncias y garantías, en Moderación. Reembolsos, USDT y pagos, en Plata.</p>
       <ul id="listaAtencion"></ul>
     </section>
 
@@ -393,40 +399,45 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 // Mismas claves que `objetivos.metrica` acepta en la base (CHECK de la migración).
 const METRICAS = {
-  profesionales_activos: 'Profesionales activos',
+  profesionales_activos: 'Profesionales activos (aprobados, con cobro y agenda cargados)',
   profesionales_aprobados: 'Profesionales aprobados',
   postulaciones_pendientes: 'Postulaciones por revisar',
   usuarios_registrados: 'Personas registradas',
   usuarios_nuevos_mes: 'Personas nuevas en el mes',
-  sesiones_completadas_mes: 'Sesiones completadas en el mes',
-  sesiones_completadas_total: 'Sesiones completadas en total',
-  clientes_primera_sesion_pagada: 'Clientes con sesión pagada',
-  clientes_primera_sesion_pagada_mes: 'Clientes nuevos con sesión pagada en el mes',
-  clientes_que_volvieron: 'Clientes que volvieron',
+  sesiones_completadas_mes: 'Sesiones hechas en el mes',
+  sesiones_completadas_total: 'Sesiones hechas en total',
+  clientes_primera_sesion_pagada: 'Clientes con al menos una sesión hecha y pagada',
+  clientes_primera_sesion_pagada_mes: 'Clientes con su primera sesión hecha y pagada en el mes',
+  clientes_que_volvieron: 'Clientes con 2 o más sesiones hechas y pagadas',
   lista_espera_personas: 'Lista de espera: personas',
   lista_espera_profesionales: 'Lista de espera: profesionales',
 };
 
 const GRUPOS = [
   ['Profesionales', [
-    ['profesionales_activos', 'Activos'],
+    // Los rótulos dicen exactamente lo que cuenta `admin_metricas()` (auditoría
+    // del 22/10/2026, hallazgo 5). "Activos" es configuración cargada, no prueba
+    // que haya un turno libre ni que el cobro funcione.
+    ['profesionales_activos', 'Activos: aprobados, con cobro y agenda cargados'],
     ['profesionales_aprobados', 'Aprobados'],
     ['postulaciones_pendientes', 'Postulaciones por revisar'],
-    ['profesionales_sin_cobro', 'Aprobados sin cobro'],
-    ['profesionales_sin_agenda', 'Aprobados sin agenda'],
+    ['profesionales_sin_cobro', 'Aprobados sin cobro cargado'],
+    ['profesionales_sin_agenda', 'Aprobados sin agenda cargada'],
   ]],
   ['Personas', [
     ['usuarios_registrados', 'Registradas'],
-    ['usuarios_nuevos_mes', 'Nuevas este mes'],
-    ['clientes_primera_sesion_pagada', 'Con sesión pagada'],
-    ['clientes_primera_sesion_pagada_mes', 'Primera sesión pagada este mes'],
-    ['clientes_que_volvieron', 'Volvieron a reservar'],
+    ['usuarios_nuevos_mes', 'Registradas este mes'],
+    ['clientes_primera_sesion_pagada', 'Con al menos una sesión hecha y pagada'],
+    ['clientes_primera_sesion_pagada_mes', 'Primera sesión hecha y pagada este mes'],
+    ['clientes_que_volvieron', 'Con 2 o más sesiones hechas y pagadas'],
   ]],
   ['Sesiones', [
     ['sesiones_proximas', 'Próximas confirmadas'],
-    ['sesiones_completadas_mes', 'Completadas este mes'],
-    ['sesiones_completadas_total', 'Completadas en total'],
-    ['cancelaciones_mes', 'Canceladas este mes'],
+    ['sesiones_completadas_mes', 'Hechas este mes'],
+    ['sesiones_completadas_total', 'Hechas en total'],
+    // La base no guarda cuándo se canceló una reserva: esto cuenta las
+    // creadas este mes que ya están canceladas.
+    ['cancelaciones_mes', 'Reservas de este mes ya canceladas'],
   ]],
   ['Lista de espera', [
     ['lista_espera_personas', 'Personas'],
@@ -436,18 +447,19 @@ const GRUPOS = [
 
 // Mismas claves que devuelve `admin_pendientes()`. El orden es el de urgencia:
 // primero lo que tiene plazo con personas esperando, después lo administrativo.
+// El tercer elemento es la pestaña donde se resuelve: la fila lleva ahí.
 const COLAS = [
-  ['problemas', 'Problemas reportados desde una sesión', 'Plazo de respuesta: 24 h.'],
-  ['denuncias', 'Denuncias sin resolver'],
-  ['garantias', 'Pedidos de garantía'],
-  ['reembolsos', 'Reembolsos pendientes'],
-  ['usdt_reclamos', 'Reclamos de pago en USDT'],
-  ['usdt_sueltas', 'Transferencias USDT sin reserva'],
-  ['pagos', 'Sesiones internacionales por pagarle al profesional'],
-  ['sin_cerrar', 'Sesiones confirmadas que terminaron hace más de 24 h sin cerrarse', 'No hay prueba de asistencia: hay que revisarlas a mano.'],
-  ['postulaciones', 'Postulaciones de profesionales'],
-  ['identidad', 'Verificaciones de identidad'],
-  ['credenciales', 'Títulos y matrículas por revisar'],
+  ['problemas', 'Problemas reportados desde una sesión', 'moderacion', 'Plazo de respuesta: 24 h.'],
+  ['denuncias', 'Denuncias sin resolver', 'moderacion'],
+  ['garantias', 'Pedidos de garantía', 'moderacion'],
+  ['reembolsos', 'Reembolsos pendientes', 'plata'],
+  ['usdt_reclamos', 'Reclamos de pago en USDT', 'plata'],
+  ['usdt_sueltas', 'Transferencias USDT sin reserva', 'plata'],
+  ['pagos', 'Sesiones internacionales por pagarle al profesional', 'plata'],
+  ['sin_cerrar', 'Sesiones confirmadas que terminaron hace más de 24 h sin cerrarse', null, 'No hay prueba de asistencia. Todavía no tienen lista en el tablero: se revisan en la base, mirando la evidencia antes de decidir.'],
+  ['postulaciones', 'Postulaciones de profesionales', 'profesionales'],
+  ['identidad', 'Verificaciones de identidad', 'profesionales'],
+  ['credenciales', 'Títulos y matrículas por revisar', 'profesionales'],
 ];
 
 // Qué significa `vencidos` en cada cola que lo usa.
@@ -564,7 +576,22 @@ function mostrarIngreso() {
   $('pasoMail').hidden = false; $('pasoCodigo').hidden = true; $('codigo').value = '';
 }
 
-function salir() { borrarSesion(); mostrarIngreso(); }
+// Cierra la sesión también en el servidor (el token deja de servir) y recarga
+// la página: así no queda en memoria nada de lo que se vio, ni listas ni
+// estados de pestañas. Si el pedido al servidor falla, igual se sale.
+async function salir() {
+  const token = sesion?.access_token;
+  borrarSesion();
+  if (token) {
+    try {
+      await fetch(`${SUPABASE_URL}/auth/v1/logout?scope=local`, {
+        method: 'POST',
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${token}` },
+      });
+    } catch (e) { /* sin red: la sesión local ya se borró */ }
+  }
+  location.reload();
+}
 
 // ── Tablero ──────────────────────────────────────────────────────────────────
 let metricas = {};
@@ -596,7 +623,7 @@ async function cargarMetricas() {
   metricas = await api('rpc/admin_metricas', { method: 'POST', body: {} });
   const hora = new Date(metricas.generado).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
   $('actualizado').textContent = `Actualizado ${hora}`;
-  $('notaMetricas').textContent = `Sin contar ${metricas.cuentas_descartadas} cuentas de prueba, de administración o dadas de baja. Los números de "este mes" son del mes en curso.`;
+  $('notaMetricas').textContent = `Sin contar ${metricas.cuentas_descartadas} cuentas de prueba, de administración o dadas de baja. "Este mes" es el mes en curso. "Hecha y pagada" es una sesión que ya ocurrió, con prueba de asistencia y cobro aprobado: las futuras ya pagadas no cuentan todavía.`;
   $('grupos').innerHTML = GRUPOS.map(([titulo, items]) => `
     <div class="caja"><h3>${esc(titulo)}</h3><div class="tiles">
       ${items.map(([k, et]) => `<div class="tile"><b>${esc(metricas[k] ?? 0)}</b><span>${esc(et)}</span></div>`).join('')}
@@ -618,11 +645,12 @@ async function cargarPendientes() {
     $('listaAtencion').innerHTML = '<li class="error">No se pudo cargar.</li>';
     return;
   }
-  const filas = COLAS.filter(([k]) => (p[k]?.cantidad ?? 0) > 0).map(([k, titulo, aclaracion]) => {
+  const filas = COLAS.filter(([k]) => (p[k]?.cantidad ?? 0) > 0).map(([k, titulo, pestana, aclaracion]) => {
     const c = p[k];
     const vencidos = c.vencidos > 0 ? ` <span class="urgente">${c.vencidos} ${esc(VENCIDOS[k] ?? 'fuera de plazo')}</span>` : '';
     const detalle = [c.mas_antiguo ? haceCuanto(c.mas_antiguo) : '', aclaracion ?? ''].filter(Boolean).join('. ');
-    return `<li><b>${esc(c.cantidad)}</b><span class="que">${esc(titulo)}${vencidos}<br><span class="suave">${esc(detalle)}</span></span></li>`;
+    const ir = pestana ? `<button class="btn sec chico" data-ir="${pestana}">Ver</button>` : '';
+    return `<li><b>${esc(c.cantidad)}</b><span class="que">${esc(titulo)}${vencidos}<br><span class="suave">${esc(detalle)}</span></span>${ir}</li>`;
   });
   $('listaAtencion').innerHTML = filas.length ? filas.join('') : '<li class="nada">Nada pendiente.</li>';
   const deProfesionales = (p.postulaciones?.cantidad ?? 0) + (p.credenciales?.cantidad ?? 0);
@@ -810,8 +838,20 @@ async function llamarFuncion(fn, body) {
   const texto = await r.text();
   let cuerpo = {};
   try { cuerpo = texto ? JSON.parse(texto) : {}; } catch { cuerpo = { error: texto }; }
-  if (cuerpo.warning) console.warn(`[${fn}]`, cuerpo.warning);
+  // Un `warning` es un éxito parcial: la acción se hizo, pero algo de lo que
+  // venía después falló (casi siempre, el registro de auditoría). Se muestra
+  // en pantalla y queda hasta que alguien lo cierre.
+  if (cuerpo.warning) mostrarAvisoParcial(body.action ?? fn, cuerpo.warning);
   return { ok: r.ok, status: r.status, cuerpo };
+}
+
+function mostrarAvisoParcial(accion, texto) {
+  const hora = new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+  const div = document.createElement('div');
+  div.className = 'aviso aviso-parcial';
+  div.innerHTML = `<b>Hecho, pero con un problema</b> (${esc(accion)}, ${esc(hora)}): ${esc(texto)} <button class="link" data-cerrar-aviso>Entendido</button>`;
+  $('avisosParciales').appendChild(div);
+  div.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 async function accionAdmin(body) {
@@ -916,9 +956,19 @@ function fichaPostulacion(c) {
     </div>`;
   }
 
+  // Aprobar se ofrece solo cuando no falta nada; si falta algo, se dice qué en
+  // vez de dejar tocar el botón para recibir un rechazo (el servidor lo vuelve
+  // a controlar igual).
+  const faltan = [
+    !c.interviewedAt && 'la entrevista',
+    c.identidad !== 'verificada' && 'la identidad',
+    exigeMatricula && !c.matriculaVerificada && 'la matrícula',
+  ].filter(Boolean);
   const acciones = pendiente && !abierto ? `<div class="botonera">
       ${!c.interviewedAt ? `<button class="btn sec chico" data-abrir="entrevista" data-coach="${c.coachId}">Registrar entrevista</button>` : ''}
-      <button class="btn chico" data-aprobar="${c.coachId}">Aprobar</button>
+      ${faltan.length
+        ? `<button class="btn chico" disabled title="Falta ${esc(faltan.join(', '))}">Aprobar</button><span class="suave" style="align-self:center">Para aprobar falta ${esc(faltan.join(', ').replace(/, ([^,]*)$/, ' y $1'))}.</span>`
+        : `<button class="btn chico" data-aprobar="${c.coachId}">Aprobar</button>`}
       <button class="btn sec chico" data-abrir="rechazo" data-coach="${c.coachId}">Rechazar</button>
     </div>` : '';
 
@@ -1191,9 +1241,13 @@ async function cargarDenuncias() {
 async function cargarGarantias() {
   $('errorGarantias').textContent = '';
   try {
-    const todas = await api('guarantee_claims?select=id,booking_id,status,requested_at,resolved_at,resolved_by,notes&order=requested_at.desc&limit=50');
-    const pendientes = todas.filter((c) => c.status === 'pendiente');
-    const resueltas = todas.filter((c) => c.status !== 'pendiente');
+    // Las pendientes van en su propia consulta y sin tope: antes salían de las
+    // últimas 50 de cualquier estado, y una pendiente vieja podía quedar afuera
+    // (auditoría del 22/10/2026, hallazgo 2).
+    const [pendientes, resueltas] = await Promise.all([
+      api('guarantee_claims?status=eq.pendiente&select=id,booking_id,status,requested_at&order=requested_at.asc'),
+      api('guarantee_claims?status=neq.pendiente&select=id,booking_id,status,requested_at,resolved_at,resolved_by,notes&order=requested_at.desc&limit=50'),
+    ]);
     $('listaGarantias').innerHTML = pendientes.map((c) => `<article class="caja ficha">
         <h3>Pedido de garantía</h3>
         <div class="suave datos">Pedida el ${esc(fecha(c.requested_at))} · reserva <code>${esc(c.booking_id)}</code></div>
@@ -1203,7 +1257,7 @@ async function cargarGarantias() {
         <div class="obj-cab"><span class="obj-titulo">${esc(c.status)}</span><span class="suave">${esc(fecha(c.resolved_at ?? c.requested_at))}${c.resolved_by ? ` · ${esc(c.resolved_by)}` : ''}</span></div>
         ${c.notes ? `<div class="suave">${esc(c.notes)}</div>` : ''}
         <div class="suave"><code>${esc(c.booking_id)}</code></div>
-      </div>`).join('') : '<p class="vacio">Todavía no hay.</p>';
+      </div>`).join('') + (resueltas.length === 50 ? '<p class="suave">Se muestran las últimas 50.</p>' : '') : '<p class="vacio">Todavía no hay.</p>';
   } catch (e) {
     $('errorGarantias').textContent = 'No se pudieron cargar.';
   }
@@ -1448,11 +1502,17 @@ const comisionDe = (b) => {
   return Number.isFinite(amount) && Number.isFinite(pct) ? Math.round(amount * pct) / 100 : 0;
 };
 const HASH_RE = /^[0-9a-fA-F]{64}$/;
+// Si una consulta trae exactamente su tope, puede haber más filas que no
+// llegaron: se dice, para no presentar una lista o un total parcial como
+// completo (auditoría del 22/10/2026, hallazgo 2).
+const avisoTope = (filas, tope, que) => (filas.length >= tope
+  ? `<div class="aviso"><b>Lista incompleta:</b> se trajeron ${tope} ${que} y puede haber más. Hay que ampliar la consulta antes de confiar en este número.</div>` : '');
 const dinero = (n) => Number(n).toFixed(2);
 const fechaIso = (f) => (f ? String(f).slice(0, 10).split('-').reverse().join('/') : '');
 
 let usdt = { claims: [], transfers: [] };
 let pagos = [];
+let topePagos = '';
 
 async function cargarPlata() {
   await Promise.all([cargarUsdt(), cargarReembolsos(), cargarPagos(), cargarComisiones()]);
@@ -1534,7 +1594,7 @@ async function cargarReembolsos() {
           : `<p class="suave">Se reembolsa solo en los próximos minutos${r.refund_attempts ? ` (lleva ${esc(r.refund_attempts)} intentos fallidos)` : ''}.</p>`}
       </article>`;
     });
-    $('listaReembolsos').innerHTML = [...html, ...auto].join('') || '<p class="vacio">No hay reembolsos pendientes.</p>';
+    $('listaReembolsos').innerHTML = avisoTope(filas, 100, 'reembolsos') + ([...html, ...auto].join('') || '<p class="vacio">No hay reembolsos pendientes.</p>');
   } catch (e) {
     $('errorReembolsos').textContent = 'No se pudieron cargar.';
   }
@@ -1546,6 +1606,7 @@ async function cargarPagos() {
     // Dos consultas y no un embed, igual que la app: un profesional sin datos
     // de cobro desaparecería de la lista en vez de aparecer marcado.
     const filas = await api('bookings?payment_provider=neq.mp&status=eq.completada&payment_status=eq.aprobado&paid_out_at=is.null&select=id,coach_id,coach_name,scheduled_date,amount,platform_fee_pct,payment_provider&order=scheduled_date.asc&limit=500');
+    topePagos = avisoTope(filas, 500, 'sesiones por pagar');
     const ids = [...new Set(filas.map((b) => b.coach_id).filter(Boolean))];
     const cuentas = ids.length ? await api(`coach_payout_accounts?coach_id=in.(${ids.join(',')})&select=coach_id,wallet,network,paypal_email`) : [];
     const porClave = new Map();
@@ -1576,7 +1637,7 @@ async function cargarPagos() {
     $('listaPagos').innerHTML = '';
     return;
   }
-  $('listaPagos').innerHTML = pagos.length ? pagos.map((p, i) => {
+  $('listaPagos').innerHTML = topePagos + (pagos.length ? pagos.map((p, i) => {
     const destino = p.rail === 'usdt'
       ? (p.destino?.wallet && p.destino?.network ? `${p.destino.network} · ${p.destino.wallet}` : null)
       : (p.destino?.paypal_email ? `PayPal · ${p.destino.paypal_email}` : null);
@@ -1594,7 +1655,7 @@ async function cargarPagos() {
         </div>`
       : `<div class="aviso">No tiene cargado el destino de ${p.rail === 'usdt' ? 'USDT (wallet y red)' : 'PayPal (mail)'}. Pedíselo antes de transferir.</div>`}
     </article>`;
-  }).join('') : '<p class="vacio">No hay pagos pendientes a profesionales.</p>';
+  }).join('') : '<p class="vacio">No hay pagos pendientes a profesionales.</p>');
 }
 
 function agrupar(filas) {
@@ -1625,6 +1686,7 @@ async function cargarComisiones() {
     const fila = (g) => `<tr><td>${esc(g.mes)}</td><td>${esc(g.coachName ?? 'Sin nombre')}</td><td>${g.sesiones}</td><td>${esc(g.moneda)} ${esc(dinero(g.bruto))}</td><td><b>${esc(g.moneda)} ${esc(dinero(g.comision))}</b></td><td class="col-fecha">${g.riel === 'mp' ? 'Mercado Pago' : 'Internacional'}</td></tr>`;
     const tabla = (gs) => `<div class="tabla"><table><thead><tr><th>Mes</th><th>Profesional</th><th>Sesiones</th><th>Bruto</th><th>Comisión</th><th class="col-fecha">Cómo se cobró</th></tr></thead><tbody>${gs.map(fila).join('')}</tbody></table></div>`;
     $('listaComisiones').innerHTML = `
+      ${avisoTope(filas, 2000, 'reservas cobradas o reembolsadas: los totales pueden ser parciales')}
       ${Object.keys(totales).length ? `<div class="caja" style="margin-bottom:12px"><h3>Total de comisión cobrada</h3>${Object.entries(totales).map(([m, t]) => `<div style="font-size:20px;font-weight:700">${esc(m)} ${esc(dinero(t))}</div>`).join('')}<p class="suave" style="margin:6px 0 0">Mercado Pago: la retuvo el procesador, no pasó por una cuenta de Sere. Internacional: entró todo a Sere y se descontó al pagarle al profesional.</p></div>` : ''}
       <div class="caja">${cobradas.length ? tabla(cobradas) : '<p class="vacio">Todavía no hay comisiones cobradas.</p>'}</div>
       ${reembolsadas.length ? `<details class="caja" style="margin-top:12px"><summary>Reembolsadas o con contracargo (separadas, no restadas)</summary>${tabla(reembolsadas)}</details>` : ''}`;
@@ -1652,7 +1714,6 @@ $('vistaPlata').addEventListener('click', async (e) => {
     t.disabled = true;
     try {
       const r = await accionAdmin({ action: 'resolve_usdt_claim', claim_id: c.id, approve: d.modo !== 'rechazar', motivo: motivo || undefined, reactivar: d.modo === 'reactivar' || undefined });
-      if (r.warning) alert(`Hecho, con un aviso: ${r.warning}`);
       await Promise.all([cargarUsdt(), cargarReembolsos(), cargarPendientes()]);
     } catch (err) { alert(`No se pudo: ${err.message}`); t.disabled = false; }
     return;
@@ -1687,7 +1748,6 @@ $('vistaPlata').addEventListener('click', async (e) => {
     t.disabled = true;
     try {
       const r = await accionAdmin({ action: 'mark_coach_paid', booking_ids: p.sesiones.map((x) => x.bookingId), payout_reference: ref });
-      if (r.warning) alert(`Registrado con un aviso: ${r.warning}`);
       await Promise.all([cargarPagos(), cargarPendientes()]);
     } catch (err) { alert(`No se pudo registrar: ${err.message}`); t.disabled = false; }
   }
@@ -1715,38 +1775,134 @@ const ACCIONES = {
   mark_coach_paid: 'registró un pago a un profesional',
 };
 
-async function cargarRegistro() {
+Object.assign(ACCIONES, {
+  objetivo_creado: 'creó un objetivo',
+  objetivo_editado: 'editó un objetivo',
+  objetivo_borrado: 'borró un objetivo',
+  cuenta_marcada_prueba: 'marcó una cuenta como de prueba',
+  cuenta_desmarcada_prueba: 'desmarcó una cuenta de prueba',
+});
+const TIPOS_OBJETO = { coach: 'Profesional', coach_credential: 'Título o matrícula', report: 'Denuncia', booking: 'Reserva', objetivo: 'Objetivo', profile: 'Cuenta', session_issue: 'Problema de sesión', sancion: 'Sanción', usdt_claim: 'Comprobante USDT', usdt_transfer: 'Transferencia USDT' };
+const PAGINA_REGISTRO = 100;
+let registro = [];
+let registroHayMas = false;
+const nombresObjeto = new Map();
+
+// Nombre legible del objeto de cada entrada: profesionales y cuentas por su
+// nombre; el resto por tipo y un id corto (sobrevive aunque se borre el objeto).
+async function resolverNombres(filas) {
+  const coaches = [...new Set(filas.filter((e) => e.target_type === 'coach' && e.target_id && !nombresObjeto.has(e.target_id)).map((e) => e.target_id))];
+  const cuentas = [...new Set(filas.filter((e) => e.target_type === 'profile' && e.target_id && !nombresObjeto.has(e.target_id)).map((e) => e.target_id))];
+  try {
+    if (coaches.length) (await api(`coaches?id=in.(${coaches.join(',')})&select=id,profiles!inner(name)`))
+      .forEach((c) => nombresObjeto.set(c.id, (Array.isArray(c.profiles) ? c.profiles[0] : c.profiles)?.name));
+    if (cuentas.length) (await api(`profiles?id=in.(${cuentas.join(',')})&select=id,name`))
+      .forEach((p) => nombresObjeto.set(p.id, p.name));
+  } catch (e) { /* sin nombres se muestra el id */ }
+}
+
+async function cargarRegistro(desdeCero) {
   $('errorRegistro').textContent = '';
   try {
-    const filas = await api('admin_audit_log?select=id,admin_email,action,target_type,target_id,details,created_at&order=created_at.desc&limit=200');
-    $('listaRegistro').innerHTML = filas.length ? filas.map((e) => {
-      const detalles = e.details ? Object.entries(e.details).filter(([, v]) => v !== null && v !== undefined && v !== '')
-        .map(([k, v]) => `${k}: ${typeof v === 'object' ? JSON.stringify(v) : v}`).join(' · ') : '';
-      return `<div class="obj">
-        <div class="obj-cab"><span class="obj-titulo">${esc(e.admin_email ?? 'Cuenta eliminada')} ${esc(ACCIONES[e.action] ?? e.action)}</span><span class="suave">${esc(new Date(e.created_at).toLocaleString('es-AR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }))}</span></div>
-        ${detalles ? `<div class="suave">${esc(detalles)}</div>` : ''}
-      </div>`;
-    }).join('') : '<p class="vacio">Todavía no hay acciones registradas.</p>';
+    const desde = desdeCero ? 0 : registro.length;
+    const filas = await api(`admin_audit_log?select=id,admin_email,action,target_type,target_id,details,created_at&order=created_at.desc&limit=${PAGINA_REGISTRO}&offset=${desde}`);
+    await resolverNombres(filas);
+    registro = desdeCero ? filas : registro.concat(filas);
+    registroHayMas = filas.length === PAGINA_REGISTRO;
   } catch (e) {
     $('errorRegistro').textContent = 'No se pudo cargar.';
   }
+  pintarRegistro();
+}
+
+function pintarRegistro() {
+  const admins = [...new Set(registro.map((e) => e.admin_email ?? 'Cuenta eliminada'))].sort();
+  const acciones = [...new Set(registro.map((e) => e.action))].sort((a, b) => (ACCIONES[a] ?? a).localeCompare(ACCIONES[b] ?? b, 'es'));
+  const fAdmin = $('filtroRegAdmin')?.value ?? '';
+  const fAccion = $('filtroRegAccion')?.value ?? '';
+  const fTexto = ($('filtroRegTexto')?.value ?? '').trim().toLowerCase();
+  const visibles = registro.filter((e) => (!fAdmin || (e.admin_email ?? 'Cuenta eliminada') === fAdmin)
+    && (!fAccion || e.action === fAccion)
+    && (!fTexto || JSON.stringify([e.target_id, nombresObjeto.get(e.target_id), e.details]).toLowerCase().includes(fTexto)));
+  $('listaRegistro').innerHTML = `
+    <div class="fila" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:12px">
+      <select id="filtroRegAdmin" aria-label="Filtrar por admin"><option value="">Todos los admins</option>${admins.map((a) => `<option${a === fAdmin ? ' selected' : ''}>${esc(a)}</option>`).join('')}</select>
+      <select id="filtroRegAccion" aria-label="Filtrar por acción"><option value="">Todas las acciones</option>${acciones.map((a) => `<option value="${esc(a)}"${a === fAccion ? ' selected' : ''}>${esc(ACCIONES[a] ?? a)}</option>`).join('')}</select>
+      <input id="filtroRegTexto" placeholder="Buscar nombre o id" aria-label="Buscar en el registro" value="${esc(fTexto)}">
+    </div>
+    ${visibles.length ? visibles.map((e) => {
+      const detalles = e.details ? Object.entries(e.details).filter(([, v]) => v !== null && v !== undefined && v !== '')
+        .map(([k, v]) => `${k}: ${typeof v === 'object' ? JSON.stringify(v) : v}`).join(' · ') : '';
+      const nombre = nombresObjeto.get(e.target_id);
+      const objeto = e.target_type ? `${TIPOS_OBJETO[e.target_type] ?? e.target_type}${nombre ? `: ${nombre}` : ''}${e.target_id ? ` (${String(e.target_id).slice(0, 8)})` : ''}` : '';
+      return `<div class="obj">
+        <div class="obj-cab"><span class="obj-titulo">${esc(e.admin_email ?? 'Cuenta eliminada')} ${esc(ACCIONES[e.action] ?? e.action)}</span><span class="suave">${esc(new Date(e.created_at).toLocaleString('es-AR', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }))}</span></div>
+        ${objeto ? `<div>${esc(objeto)}</div>` : ''}
+        ${detalles ? `<div class="suave">${esc(detalles)}</div>` : ''}
+      </div>`;
+    }).join('') : '<p class="vacio">No hay acciones con ese filtro.</p>'}
+    ${registroHayMas ? '<div class="botonera"><button class="btn sec chico" id="btnMasRegistro">Ver más antiguas</button></div>' : ''}`;
+}
+
+$('vistaRegistro').addEventListener('change', (e) => {
+  if (e.target.id === 'filtroRegAdmin' || e.target.id === 'filtroRegAccion') cargarRegistroFiltrado();
+});
+$('vistaRegistro').addEventListener('input', (e) => {
+  if (e.target.id === 'filtroRegTexto') { clearTimeout(cargarRegistroFiltrado.t); cargarRegistroFiltrado.t = setTimeout(cargarRegistroFiltrado, 250); }
+});
+$('vistaRegistro').addEventListener('click', (e) => {
+  if (e.target.id === 'btnMasRegistro') cargarRegistro(false);
+});
+// Filtrar no vuelve a pedir nada: repinta lo que ya se trajo, y devuelve el
+// foco al campo donde se estaba escribiendo.
+function cargarRegistroFiltrado() {
+  const enfocado = document.activeElement?.id;
+  const pos = document.activeElement?.selectionStart;
+  pintarRegistro();
+  if (enfocado) { const el = $(enfocado); el?.focus(); if (pos != null && el?.setSelectionRange) el.setSelectionRange(pos, pos); }
 }
 
 // ── Pestañas ─────────────────────────────────────────────────────────────────
+// 🔴 Cada pestaña se vuelve a leer CADA VEZ que se entra, y "Actualizar"
+// recarga la que se está mirando. Antes se cargaban una sola vez y "Actualizar"
+// solo tocaba el Resumen: se podía hacer una transferencia mirando una lista
+// que otra persona ya había resuelto (auditoría del 22/10/2026, hallazgo 1).
 const VISTAS = { resumen: 'vistaResumen', profesionales: 'vistaProfesionales', moderacion: 'vistaModeracion', plata: 'vistaPlata', registro: 'vistaRegistro' };
-const cargadas = new Set(['resumen']);
+const CARGAS = { profesionales: () => cargarProfesionales(), moderacion: () => cargarModeracion(), plata: () => cargarPlata(), registro: () => cargarRegistro(true) };
+let pestanaActual = 'resumen';
+
+async function cargarPestana(nombre) {
+  if (!CARGAS[nombre]) return;
+  $('cargandoVista').hidden = false;
+  try { await CARGAS[nombre](); } finally { $('cargandoVista').hidden = true; }
+}
+
+function irAPestana(nombre) {
+  pestanaActual = nombre;
+  document.querySelectorAll('.pestanas [data-pestana]').forEach((x) => x.setAttribute('aria-selected', String(x.dataset.pestana === nombre)));
+  Object.entries(VISTAS).forEach(([k, id]) => { $(id).hidden = k !== nombre; });
+  window.scrollTo({ top: 0 });
+  return cargarPestana(nombre);
+}
+
 document.querySelector('.pestanas').addEventListener('click', (e) => {
   const b = e.target.closest('[data-pestana]');
-  if (!b) return;
-  const elegida = b.dataset.pestana;
-  document.querySelectorAll('.pestanas [data-pestana]').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
-  Object.entries(VISTAS).forEach(([k, id]) => { $(id).hidden = k !== elegida; });
-  if (cargadas.has(elegida)) return;
-  cargadas.add(elegida);
-  if (elegida === 'profesionales') cargarProfesionales();
-  if (elegida === 'moderacion') cargarModeracion();
-  if (elegida === 'plata') cargarPlata();
-  if (elegida === 'registro') cargarRegistro();
+  if (b) irAPestana(b.dataset.pestana);
+});
+// Flechas izquierda y derecha entre pestañas, como pide el patrón de pestañas.
+document.querySelector('.pestanas').addEventListener('keydown', (e) => {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const nombres = Object.keys(VISTAS);
+  const i = nombres.indexOf(pestanaActual) + (e.key === 'ArrowRight' ? 1 : -1);
+  const siguiente = nombres[(i + nombres.length) % nombres.length];
+  irAPestana(siguiente);
+  $(`tab-${siguiente}`).focus();
+});
+$('tablero').addEventListener('click', (e) => {
+  const ir = e.target.closest('[data-ir]');
+  if (ir) { irAPestana(ir.dataset.ir); return; }
+  const cerrar = e.target.closest('[data-cerrar-aviso]');
+  if (cerrar) cerrar.closest('.aviso-parcial').remove();
 });
 
 // ── Eventos ──────────────────────────────────────────────────────────────────
@@ -1755,7 +1911,13 @@ $('mail').addEventListener('keydown', (e) => { if (e.key === 'Enter') pedirCodig
 $('btnConfirmar').addEventListener('click', confirmarCodigo);
 $('codigo').addEventListener('keydown', (e) => { if (e.key === 'Enter') confirmarCodigo(); });
 $('btnSalir').addEventListener('click', salir);
-$('btnRecargar').addEventListener('click', async () => { await cargarMetricas(); await Promise.all([cargarPendientes(), cargarObjetivos()]); });
+$('btnRecargar').addEventListener('click', async () => {
+  $('btnRecargar').disabled = true;
+  try {
+    await cargarMetricas();
+    await Promise.all([cargarPendientes(), cargarObjetivos(), cargarPestana(pestanaActual)]);
+  } finally { $('btnRecargar').disabled = false; }
+});
 $('mesAnterior').addEventListener('click', () => { mesVisto = new Date(mesVisto.getFullYear(), mesVisto.getMonth() - 1, 1); cargarObjetivos(); });
 $('mesSiguiente').addEventListener('click', () => { mesVisto = new Date(mesVisto.getFullYear(), mesVisto.getMonth() + 1, 1); cargarObjetivos(); });
 $('btnNuevo').addEventListener('click', () => abrirFormulario(null));
