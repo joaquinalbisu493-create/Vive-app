@@ -320,7 +320,7 @@ function CoachRecoSection({
             router.push('/mis-recomendaciones' as any);
           }}
           hitSlop={8} activeOpacity={0.7} style={s.recoMoreLink}>
-          <Text style={s.exploreLink}>+{recos.length - MAX_RECOS_VISIBLE} más →</Text>
+          <Text style={s.exploreLink}>{recos.length - MAX_RECOS_VISIBLE} más →</Text>
         </TouchableOpacity>
       )}
     </View>

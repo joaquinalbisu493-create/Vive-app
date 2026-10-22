@@ -642,7 +642,7 @@ export default function SessionsScreen() {
                         style={{ width: proximasVigentes.length > 1 ? CARD_W : CARD_FULL }}
                       >
                         <LinearGradient
-                          colors={['#42542F', '#354526']}
+                          colors={['#3F512F', '#324226']}
                           start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
                           style={styles.heroCard}
                         >

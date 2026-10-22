@@ -134,7 +134,7 @@ export default function CoachResourcesScreen() {
           </View>
 
           {/* Stats del mes (resource_events instrumentado — ver get_my_resource_stats_month) */}
-          <LinearGradient colors={['#42542F', '#354526']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={s.stats}>
+          <LinearGradient colors={['#3F512F', '#324226']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={s.stats}>
             <View style={s.statsGlow} pointerEvents="none" />
             <Text style={s.eyebrow}>Este mes</Text>
             <View style={s.statsRow}>
