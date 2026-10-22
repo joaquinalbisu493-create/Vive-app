@@ -22,7 +22,7 @@ import { useAuth } from '@/context/AuthContext';
 import { supabase, registrarEvento } from '@/lib/supabase';
 import { useMoodHistory } from '@/hooks/useMoodHistory';
 import { useResourceProgress } from '@/hooks/useResourceProgress';
-import { useRecommendedResource, type Reco, type MoodLite } from '@/hooks/useRecommendedResource';
+import { useRecommendedResource, type Reco } from '@/hooks/useRecommendedResource';
 import { TOOL_MAP, TOOL_GROUPS, type Tool, type IoniconName } from '@/constants/tools';
 import { HERRAMIENTAS_BAJADA } from '@/constants/herramientasParaQue';
 import { screenHeader } from '@/constants/screenHeader';
@@ -78,11 +78,9 @@ const GLASS_BORDER = 'rgba(255,255,255,0.65)';
 //     pero con reco por interés/quiz)                 sugerencia real
 function RecommendedCard({
   reco,
-  todayMoodEntry,
   onGoToCheckIn,
 }: {
   reco: Reco | null;
-  todayMoodEntry: MoodLite | undefined;
   onGoToCheckIn: () => void;
 }) {
   const router = useRouter();
@@ -115,34 +113,16 @@ function RecommendedCard({
     onPress = () => router.push({ pathname: '/recurso', params: { id: reco.resource.id } });
   }
 
-  const isIntense = !!todayMoodEntry && todayMoodEntry.mood_id <= 2;
-
-  if (isIntense) {
-    return (
-      <SurfaceCard variant="elevated" tone="dark" backgroundColor="#3A4A28" borderRadius={18} style={s.moodCardWrap} onPress={onPress}>
-        <LinearGradient
-          colors={['#42542F', '#354526']}
-          start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
-          style={s.moodCard}>
-          <Text style={s.moodEyebrow}>{reco.eyebrow}</Text>
-          <Text style={s.moodTitle} numberOfLines={2}>{reco.why}</Text>
-          <View style={s.moodPillBtn}>
-            <View style={s.moodPillIconWrap}>
-              <Ionicons name={icon} size={14} color={CREAM_LIGHT} />
-            </View>
-            <Text style={s.moodPillText}>{title}{duration ? ` · ${duration}` : ''}</Text>
-            <Ionicons name="arrow-forward" size={14} color="#C9CFAF" />
-          </View>
-        </LinearGradient>
-      </SurfaceCard>
-    );
-  }
-
+  // Un solo diseño para TODOS los ánimos: la barra compacta. Antes, con ánimo
+  // intenso (bajón/cansado) la card se transformaba en un hero verde que
+  // recomendaba la herramienta con su propio botón — y como el carrusel también
+  // la marca "Para hoy", quedaba duplicado. El diseño ya no cambia según el
+  // ánimo: la barra da la razón y el carrusel destaca la herramienta.
+  //
   // Si la recomendación es una herramienta, la barra queda solo con la RAZÓN
   // ("Hoy: …") y la herramienta a la que apunta vive destacada en el carrusel de
-  // abajo (marcada "Para hoy"): la barra explica, el carrusel ejecuta. Si es un
-  // recurso de biblioteca (no está en el carrusel), la barra mantiene el atajo
-  // completo "→ recurso".
+  // abajo (marcada "Para hoy"). Si es un recurso de biblioteca (no está en el
+  // carrusel), la barra mantiene el atajo completo "→ recurso".
   const esTool = reco.kind === 'tool';
   return (
     <TouchableOpacity style={s.moodLine} onPress={onPress} activeOpacity={0.85}>
@@ -606,7 +586,6 @@ export default function RecursosScreen() {
           <Text style={s.herramientasBajada}>{HERRAMIENTAS_BAJADA}</Text>
           <RecommendedCard
             reco={reco}
-            todayMoodEntry={todayMoodEntry}
             onGoToCheckIn={() => router.push('/')}
           />
           <ToolsCarousel destacadoId={reco?.kind === 'tool' ? reco.toolId : undefined} />
@@ -696,53 +675,6 @@ const s = StyleSheet.create({
   },
 
   // ── MoodContextBlock — compacta (mood-hero-minimalista.html, opción A) ──────
-  moodCardWrap: {
-    marginBottom: 12,
-  },
-  moodCard: {
-    paddingVertical: 14,
-    paddingHorizontal: 16,
-  },
-  moodEyebrow: {
-    fontFamily: ViveFonts.medium,
-    fontSize: 9.5,
-    letterSpacing: 0.8,
-    color: 'rgba(201,207,175,0.9)',
-    marginBottom: 8,
-  },
-  moodTitle: {
-    // Texto de recomendación generado (reco.why) — feedback, no título.
-    fontFamily: ViveFonts.feedback,
-    fontSize: 14.5,
-    color: CREAM_LIGHT,
-    lineHeight: 20,
-    marginBottom: 10,
-  },
-  moodPillBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-start',
-    gap: 8,
-    backgroundColor: 'rgba(255,255,255,0.12)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.14)',
-    borderRadius: 13,
-    paddingHorizontal: 11,
-    paddingVertical: 9,
-  },
-  moodPillIconWrap: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  moodPillText: {
-    fontFamily: ViveFonts.semibold,
-    fontSize: 12,
-    color: CREAM_LIGHT,
-  },
   moodLine: {
     flexDirection: 'row',
     alignItems: 'center',
