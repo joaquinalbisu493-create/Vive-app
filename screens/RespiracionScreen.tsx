@@ -23,6 +23,8 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useRecursoAbierto } from '@/hooks/useRecursoAbierto';
 import ParaQueSirve from '@/components/ParaQueSirve';
 import { vibrarToque } from '@/lib/vibracion';
+import { useIndicadorDeslizante } from '@/components/ui/useIndicadorDeslizante';
+import { RellenoElegido } from '@/components/ui/RellenoElegido';
 
 const FOREST       = '#3A4F2A';
 const FOREST_SOFT  = '#566245';
@@ -193,6 +195,7 @@ export default function RespiracionScreen() {
   const [rachaTick, setRachaTick] = useState(0);
 
   const patron = PATRONES.find(p => p.id === patronId) ?? PATRONES[0];
+  const { alMedir, estiloIndicador } = useIndicadorDeslizante(PATRONES.indexOf(patron));
   // Guarda: al cambiar de patrón, breathPhase puede quedar un frame apuntando a
   // una fase del patrón anterior (cuadrada tiene 4, diafragmática 2).
   const faseIdx = breathPhase % patron.fases.length;
@@ -449,12 +452,14 @@ export default function RespiracionScreen() {
 
           {/* Técnica: control segmentado, fondo cream-deep, activo en card con sombra. */}
           <View style={s.segmented}>
-            {PATRONES.map(p => {
+            <Animated.View style={[s.segmentActive, estiloIndicador, s.segmentIndicador]} />
+            {PATRONES.map((p, i) => {
               const activo = patronId === p.id;
               return (
                 <TouchableOpacity
                   key={p.id}
-                  style={[s.segment, activo && s.segmentActive]}
+                  onLayout={alMedir(i)}
+                  style={s.segment}
                   onPress={() => { if (!activo) vibrarToque(); setPatronId(p.id); }}
                   activeOpacity={0.8}>
                   <Text style={[s.segmentText, activo && s.segmentTextActive]}>{p.nombre}</Text>
@@ -502,6 +507,7 @@ export default function RespiracionScreen() {
                     style={[s.durationChip, activo && s.durationChipActive]}
                     onPress={() => { if (!activo) vibrarToque(); setDuration(d.seconds); }}
                     activeOpacity={0.8}>
+                    <RellenoElegido activo={activo} radio={14.5} color={FOREST} />
                     <Text style={[s.durationLabel, activo && s.durationLabelActive]}>{d.label}</Text>
                   </TouchableOpacity>
                 );
@@ -573,7 +579,10 @@ const s = StyleSheet.create({
     alignSelf: 'stretch',
   },
   segment: { flex: 1, paddingVertical: 9, borderRadius: 10, alignItems: 'center' },
+  // La card con sombra del activo es una sola, que se desliza de una técnica
+  // a la otra (useIndicadorDeslizante), en vez de saltar.
   segmentActive: {
+    borderRadius: 10,
     backgroundColor: CARD,
     shadowColor: '#3A4F2A',
     shadowOffset: { width: 0, height: 2 },
@@ -581,6 +590,7 @@ const s = StyleSheet.create({
     shadowRadius: 5,
     elevation: 2,
   },
+  segmentIndicador: { top: 4, bottom: 4 },
   segmentText:       { fontFamily: ViveFonts.medium, fontSize: 14, color: FOREST_SOFT },
   segmentTextActive: { fontFamily: ViveFonts.semibold, color: FOREST },
 
@@ -601,7 +611,7 @@ const s = StyleSheet.create({
   durationChips:  { flexDirection: 'row', gap: 12, justifyContent: 'center' },
   durationEyebrow: { fontFamily: ViveFonts.semibold, fontSize: 9.5, letterSpacing: 1.2, color: FOREST_SOFT, textAlign: 'center' },
   durationChip:   { paddingHorizontal: 18, paddingVertical: 8, borderRadius: 16, borderWidth: 1.5, borderColor: 'rgba(63,81,47,0.22)', backgroundColor: 'rgba(255,248,240,0.55)' },
-  durationChipActive: { borderColor: FOREST, backgroundColor: FOREST },
+  durationChipActive: { borderColor: FOREST },
   durationLabel:  { fontFamily: ViveFonts.medium, fontSize: 13, color: FOREST_SOFT },
   durationLabelActive: { color: CREAM_LIGHT },
 
