@@ -16,7 +16,8 @@
 
 **Pendiente para la próxima sesión:**
 - Andre: probar el ingreso en sere.ar/admin después del deploy.
-- Hay un reembolso de Mercado Pago en `reembolso_pendiente` desde agosto que el cron no procesó (probablemente de pruebas): revisar por qué no se ejecutó antes de la prueba cerrada.
+- Investigado el reembolso trabado: es un pago de prueba de $1 ARS (09/08, cuentas de prueba) que `mp-process-refunds` intentó 6 veces y abandonó (dead-letter, `refund_attempts = 6`) sin avisar a nadie; el motivo del fallo ya no está en los logs. El otro pendiente es 1 USDT de prueba (06/10) sin dirección de reembolso. Arreglo: el tablero distingue "se rindió, hay que hacerlo a mano" (migración `20261022030000`, aplicada y verificada; y la ficha en Plata). Pendiente: Andre se fija en Mercado Pago si ese $1 se devolvió; decidir cómo cerrar los dos de prueba.
+- Hueco a cerrar: cuando un reembolso automático cae al dead-letter, hoy solo se entera quien abre el tablero. Conviene un aviso por mail a los admins.
 - Probar en sere.ar una revisión real de punta a punta (abrir una foto de identidad, registrar entrevista). Siguientes módulos a mudar: plata (pagos internacionales, USDT, reembolsos, comisiones) y auditoría. La subida de evidencia de sanciones desde la web (PUT directo a la URL firmada de storage) se probó solo con datos simulados: confirmarla con la primera sanción real.
 - Cargar los objetivos del primer mes cuando se cierren con Joaquín (videollamada 31/10 o 1/11). Hay una propuesta alternativa por etapas guardada fuera del repo, para analizar después.
 - El ingreso por código no se pudo probar de punta a punta en local (Turnstile no acepta localhost): probarlo en sere.ar.

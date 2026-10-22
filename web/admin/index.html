@@ -450,6 +450,12 @@ const COLAS = [
   ['credenciales', 'Títulos y matrículas por revisar'],
 ];
 
+// Qué significa `vencidos` en cada cola que lo usa.
+const VENCIDOS = {
+  problemas: 'fuera de plazo',
+  reembolsos: 'que el automático ya no va a intentar: hay que hacerlos a mano',
+};
+
 const DUENOS = [['andre', 'Andre'], ['joaquin', 'Joaquín'], ['ambos', 'Ambos']];
 const TIPOS = { esencial: 'Esencial', entregable: 'Entregable', resultado: 'Resultado' };
 const ESTADOS = [['pendiente', 'Pendiente'], ['en_curso', 'En curso'], ['cumplido', 'Cumplido'], ['parcial', 'Parcial'], ['no_cumplido', 'No cumplido']];
@@ -614,7 +620,7 @@ async function cargarPendientes() {
   }
   const filas = COLAS.filter(([k]) => (p[k]?.cantidad ?? 0) > 0).map(([k, titulo, aclaracion]) => {
     const c = p[k];
-    const vencidos = c.vencidos > 0 ? ` <span class="urgente">${c.vencidos} fuera de plazo</span>` : '';
+    const vencidos = c.vencidos > 0 ? ` <span class="urgente">${c.vencidos} ${esc(VENCIDOS[k] ?? 'fuera de plazo')}</span>` : '';
     const detalle = [c.mas_antiguo ? haceCuanto(c.mas_antiguo) : '', aclaracion ?? ''].filter(Boolean).join('. ');
     return `<li><b>${esc(c.cantidad)}</b><span class="que">${esc(titulo)}${vencidos}<br><span class="suave">${esc(detalle)}</span></span></li>`;
   });
@@ -1496,7 +1502,7 @@ async function cargarUsdt() {
 async function cargarReembolsos() {
   $('errorReembolsos').textContent = '';
   try {
-    const filas = await api('bookings?payment_status=eq.reembolso_pendiente&select=id,payment_provider,usdt_amount,charged_amount,amount,currency,scheduled_date,scheduled_time,coach_name,refund_address,refund_network,created_at&order=scheduled_date.asc&limit=100');
+    const filas = await api('bookings?payment_status=eq.reembolso_pendiente&select=id,payment_provider,usdt_amount,charged_amount,amount,currency,scheduled_date,scheduled_time,coach_name,refund_address,refund_network,refund_attempts,created_at&order=scheduled_date.asc&limit=100');
     const deUsdt = filas.filter((b) => b.payment_provider === 'usdt');
     const automaticos = filas.filter((b) => b.payment_provider !== 'usdt');
     const html = deUsdt.map((r) => {
@@ -1513,14 +1519,19 @@ async function cargarReembolsos() {
       </article>`;
     });
     // Mercado Pago y PayPal se reembolsan solos (`mp-process-refunds` y
-    // `paypal-process-refunds`, cada 5 minutos). Si uno sigue acá más de un
-    // día, el cron no lo pudo procesar y hay que mirarlo.
+    // `paypal-process-refunds`, cada 5 minutos). Cada uno se rinde a los 6
+    // intentos fallidos (MAX_ATTEMPTS) y deja la fila acá SIN avisar a nadie:
+    // ese es el caso que hay que ver, porque la persona sigue sin su plata.
+    // Encontrado el 22/10/2026 con un pago de prueba de $1 trabado desde agosto.
     const auto = automaticos.map((r) => {
-      const dias = Math.floor((Date.now() - new Date(r.created_at).getTime()) / 86_400_000);
+      const rendido = (r.refund_attempts ?? 0) >= 6;
+      const medio = r.payment_provider === 'paypal' ? 'PayPal' : 'Mercado Pago';
       return `<article class="caja ficha">
-        <h3>${esc(r.payment_provider === 'paypal' ? 'PayPal' : 'Mercado Pago')} · ${esc(r.currency ?? '')} ${esc(r.amount ?? '')}</h3>
+        <h3>${esc(medio)} · ${esc(r.currency ?? '')} ${esc(r.amount ?? '')}</h3>
         <div class="suave datos">Sesión del ${esc(fechaIso(r.scheduled_date))}${r.coach_name ? ` · ${esc(r.coach_name)}` : ''} · reserva <code>${esc(r.id)}</code></div>
-        <div class="aviso">Se reembolsa solo cada 5 minutos. Si lleva más de un día acá, algo falló y hay que revisarlo.${dias > 0 ? ` La reserva es de hace ${dias} días.` : ''}</div>
+        ${rendido
+          ? `<div class="aviso"><b>El reembolso automático se rindió</b> después de ${esc(r.refund_attempts)} intentos fallidos y no lo va a volver a intentar. Hay que revisarlo y, si corresponde, devolverlo a mano desde ${esc(medio)}.</div>`
+          : `<p class="suave">Se reembolsa solo en los próximos minutos${r.refund_attempts ? ` (lleva ${esc(r.refund_attempts)} intentos fallidos)` : ''}.</p>`}
       </article>`;
     });
     $('listaReembolsos').innerHTML = [...html, ...auto].join('') || '<p class="vacio">No hay reembolsos pendientes.</p>';
