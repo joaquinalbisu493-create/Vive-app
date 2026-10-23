@@ -318,27 +318,6 @@ export default function CoachEnfoqueScreen() {
 
 const s = StyleSheet.create({
   safe: { flex: 1, backgroundColor: 'transparent' },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 14,
-  },
-  backBtn: {
-    width: 36, height: 36, borderRadius: 18,
-    backgroundColor: 'rgba(255,248,240,0.62)',
-    alignItems: 'center', justifyContent: 'center',
-    ...Platform.select({
-      ios: { shadowColor: 'rgba(0,0,0,0.5)', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.12, shadowRadius: 4 },
-      android: { elevation: 2 },
-    }),
-  },
-  headerTitle: {
-    flex: 1, fontFamily: ViveFonts.semibold, fontSize: 18,
-    color: '#565E32', textAlign: 'center', letterSpacing: -0.2,
-  },
-  headerSpacer: { width: 36 },
 
   loadingWrap: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 30 },
   emptyText: { fontFamily: ViveFonts.regular, fontSize: 14, color: 'rgba(135,131,92,0.72)', textAlign: 'center' },

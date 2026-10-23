@@ -333,13 +333,6 @@ const s = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 30 },
   emptyTxt: { fontFamily: ViveFonts.regular, fontSize: 14, color: FOREST_SOFT, textAlign: 'center' },
 
-  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 12, paddingBottom: 14 },
-  backBtn: {
-    width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,248,240,0.62)',
-    alignItems: 'center', justifyContent: 'center', ...shadow,
-  },
-  headerTitle: { flex: 1, fontFamily: ViveFonts.semibold, fontSize: 18, color: FOREST, textAlign: 'center', letterSpacing: -0.2 },
-  headerSpacer: { width: 36 },
 
   // Hero
   hero: { backgroundColor: '#3E4E2C', borderRadius: 24, padding: 18, overflow: 'hidden' },

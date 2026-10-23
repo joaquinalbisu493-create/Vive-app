@@ -351,8 +351,6 @@ export default function CoachCredentialsScreen() {
 
 const s = StyleSheet.create({
   safe: { flex: 1 },
-  header: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingHorizontal: 16, paddingTop: 20, paddingBottom: 8 },
-  back: { padding: 4 },
   title: { fontFamily: ViveFonts.title, fontSize: 28, color: FOREST },
   container: { paddingHorizontal: 20, paddingTop: 4 },
 

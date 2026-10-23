@@ -270,13 +270,6 @@ const s = StyleSheet.create({
   safe: { flex: 1 },
   container: { paddingHorizontal: 20, paddingBottom: 20 },
 
-  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 12, paddingBottom: 14 },
-  backBtn: {
-    width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(255,248,240,0.62)',
-    alignItems: 'center', justifyContent: 'center',
-  },
-  headerTitle: { flex: 1, fontFamily: ViveFonts.semibold, fontSize: 18, color: FOREST, textAlign: 'center' },
-  headerSpacer: { width: 36 },
 
   hero: { backgroundColor: GREEN_BG, borderRadius: 24, padding: 18, overflow: 'hidden' },
   heroGlow: {

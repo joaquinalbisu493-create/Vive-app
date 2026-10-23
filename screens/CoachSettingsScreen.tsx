@@ -254,21 +254,6 @@ export default function CoachSettingsScreen() {
 
 const s = StyleSheet.create({
   safe: { flex: 1 },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 12,
-  },
-  backBtn: { minWidth: 40 },
-  headerSide: { minWidth: 40 },
-  headerTitle: {
-    fontFamily: ViveFonts.semibold,
-    fontSize: 17,
-    color: '#565E32',
-  },
   container: { paddingHorizontal: 20, paddingTop: 8 },
 
   pointer: {

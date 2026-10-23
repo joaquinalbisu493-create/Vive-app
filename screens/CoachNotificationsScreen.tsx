@@ -132,26 +132,6 @@ export default function CoachNotificationsScreen() {
 const s = StyleSheet.create({
   safe: { flex: 1 },
 
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    backgroundColor: 'rgba(255,248,240,0.48)',
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(86,94,50,0.14)',
-    gap: 12,
-  },
-  backBtn: { padding: 4 },
-  headerTitle: {
-    flex: 1,
-    fontFamily: ViveFonts.semibold,
-    fontSize: 17,
-    color: '#565E32',
-    textAlign: 'center',
-    marginRight: 30,
-  },
-  headerSpacer: { width: 30 },
   divider: { height: 1, backgroundColor: 'rgba(86,94,50,0.08)' },
 
   loadingState: { flex: 1, alignItems: 'center', justifyContent: 'center' },

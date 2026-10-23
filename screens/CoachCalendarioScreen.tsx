@@ -157,14 +157,6 @@ export default function CoachCalendarioScreen() {
 
 const s = StyleSheet.create({
   safe: { flex: 1, backgroundColor: 'transparent' },
-  header: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 12, paddingBottom: 14 },
-  backBtn: {
-    width: 36, height: 36, borderRadius: 18,
-    backgroundColor: 'rgba(255,248,240,0.62)',
-    alignItems: 'center', justifyContent: 'center',
-  },
-  headerTitle: { flex: 1, fontFamily: ViveFonts.semibold, fontSize: 18, color: '#565E32', textAlign: 'center', letterSpacing: -0.2 },
-  headerSpacer: { width: 36 },
   body: { paddingHorizontal: 20, paddingBottom: 40, gap: 12 },
   lead: { fontFamily: ViveFonts.regular, fontSize: 15, lineHeight: 22, color: FOREST },
   nota: { fontFamily: ViveFonts.regular, fontSize: 13, lineHeight: 19, color: MUTED, marginBottom: 8 },

@@ -278,20 +278,6 @@ export default function CoachAgendaScreen() {
 
 const s = StyleSheet.create({
   safe: { flex: 1 },
-  header: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: 16, paddingTop: 12, paddingBottom: 14,
-  },
-  backBtn: {
-    width: 36, height: 36, borderRadius: 18,
-    backgroundColor: 'rgba(255,248,240,0.62)',
-    alignItems: 'center', justifyContent: 'center',
-  },
-  headerTitle: {
-    flex: 1, fontFamily: ViveFonts.semibold, fontSize: 18,
-    color: '#565E32', textAlign: 'center', letterSpacing: -0.2,
-  },
-  headerSpacer: { width: 36 },
 
   content: { paddingHorizontal: 16, paddingTop: 12 },
   monthNav: {
