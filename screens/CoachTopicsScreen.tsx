@@ -18,6 +18,7 @@ import { ViveColors, ViveFonts } from '@/constants/theme';
 import { AXES } from '@/constants/searchData';
 import { AxisIcon } from '@/components/ui/AxisIcon';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 
@@ -100,17 +101,7 @@ export default function CoachTopicsScreen() {
     <AppBg>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
-        <View style={s.header}>
-          <TouchableOpacity
-            style={s.backBtn}
-            onPress={() => router.back()}
-            activeOpacity={0.7}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <MaterialIcons name="arrow-back-ios" size={18} color="#565E32" />
-          </TouchableOpacity>
-          <Text style={s.headerTitle}>Temas que trabajo</Text>
-          <View style={s.headerSpacer} />
-        </View>
+        <CoachHeader title="Temas que trabajo" />
 
         {loading ? (
           <View style={s.loadingWrap}>

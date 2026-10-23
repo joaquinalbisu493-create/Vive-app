@@ -12,6 +12,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 
 /**
  * Las reglas del trabajo del coach, en un solo lugar.
@@ -200,17 +201,7 @@ export default function CoachComoFuncionaScreen() {
   return (
     <AppBg>
       <SafeAreaView style={s.safe}>
-        <View style={s.header}>
-          <TouchableOpacity
-            onPress={() => { if (router.canGoBack()) router.back(); else router.replace('/(coach)'); }}
-            style={s.backBtn}
-            hitSlop={8}
-          >
-            <MaterialCommunityIcons name="arrow-left" size={20} color="#565E32" />
-          </TouchableOpacity>
-          <Text style={s.headerTitle}>Cómo funciona</Text>
-          <View style={s.headerSpacer} />
-        </View>
+        <CoachHeader title="Cómo funciona" onBack={() => { if (router.canGoBack()) router.back(); else router.replace('/(coach)'); }} />
 
         <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
           <View style={s.hero}>

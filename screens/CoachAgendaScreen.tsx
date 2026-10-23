@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import { ScaleCard } from '@/components/ScaleCard';
 import { supabase } from '@/lib/supabase';
@@ -177,13 +178,7 @@ export default function CoachAgendaScreen() {
     <AppBg>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
-        <View style={s.header}>
-          <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8} activeOpacity={0.7}>
-            <MaterialIcons name="arrow-back-ios" size={18} color="#565E32" />
-          </TouchableOpacity>
-          <Text style={s.headerTitle}>Agenda</Text>
-          <View style={s.headerSpacer} />
-        </View>
+        <CoachHeader title="Agenda" />
 
         <ScrollView contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
           <View style={s.monthNav}>

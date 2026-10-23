@@ -33,6 +33,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import {
@@ -147,19 +148,7 @@ export default function CoachEnfoqueScreen() {
     <AppBg>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
-        <View style={s.header}>
-          <TouchableOpacity
-            style={s.backBtn}
-            onPress={() => router.back()}
-            activeOpacity={0.7}
-            accessibilityRole="button"
-            accessibilityLabel="Volver"
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <MaterialIcons name="arrow-back-ios" size={18} color="#565E32" />
-          </TouchableOpacity>
-          <Text style={s.headerTitle}>Cómo trabajo</Text>
-          <View style={s.headerSpacer} />
-        </View>
+        <CoachHeader title="Cómo trabajo" />
 
         {loading ? (
           <View style={s.loadingWrap}>

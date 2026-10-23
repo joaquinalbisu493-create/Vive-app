@@ -19,6 +19,7 @@ import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 
 const MONTH_NAMES = [
   'Enero','Febrero','Marzo','Abril','Mayo','Junio',
@@ -194,13 +195,7 @@ export default function CoachAvailabilityScreen() {
   return (
     <AppBg>
     <SafeAreaView style={s.safe} edges={['top']}>
-      <View style={s.header}>
-        <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8} activeOpacity={0.7}>
-          <MaterialCommunityIcons name="arrow-left" size={22} color="#565E32" />
-        </TouchableOpacity>
-        <Text style={s.headerTitle}>Disponibilidad</Text>
-        <View style={{ width: 36 }} />
-      </View>
+        <CoachHeader title="Disponibilidad" />
       <View style={s.divider} />
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={s.scroll}>

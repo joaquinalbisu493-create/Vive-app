@@ -14,6 +14,7 @@ import { ViveColors, ViveFonts } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 
 type Notif = {
   id: string;
@@ -74,13 +75,7 @@ export default function CoachNotificationsScreen() {
     <AppBg>
     <SafeAreaView style={s.safe} edges={['top']}>
       {/* Header */}
-      <View style={s.header}>
-        <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8} activeOpacity={0.7}>
-          <Feather name="arrow-left" size={22} color="#565E32" />
-        </TouchableOpacity>
-        <Text style={s.headerTitle}>Notificaciones</Text>
-        <View style={s.headerSpacer} />
-      </View>
+        <CoachHeader title="Notificaciones" />
       <View style={s.divider} />
 
       {loading ? (

@@ -16,6 +16,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveFonts } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 import { deleteMyAccount } from '@/lib/accountDeletion';
 import { FRASE_BORRAR, coincideBorrado } from '@/lib/confirmarBorrado';
 
@@ -157,17 +158,7 @@ export default function CoachSettingsScreen() {
   return (
     <AppBg>
       <SafeAreaView style={s.safe}>
-        <View style={s.header}>
-          <TouchableOpacity
-            onPress={() => { if (router.canGoBack()) router.back(); else router.replace('/(coach)'); }}
-            style={s.backBtn}
-            hitSlop={8}
-          >
-            <MaterialCommunityIcons name="arrow-left" size={20} color="#565E32" />
-          </TouchableOpacity>
-          <Text style={s.headerTitle}>Ajustes</Text>
-          <View style={s.headerSide} />
-        </View>
+        <CoachHeader title="Ajustes" onBack={() => { if (router.canGoBack()) router.back(); else router.replace('/(coach)'); }} />
 
         <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
           {/* El puntero al perfil va acá y no al revés: quien entra a "Ajustes"

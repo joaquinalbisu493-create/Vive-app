@@ -12,6 +12,7 @@ import { ViveFonts, TAB_BAR_CLEARANCE } from '@/constants/theme';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 import {
   listOwnCredentials, createCredential, deleteCredential, uploadCredentialFile,
   validarCredencial, lineaCredencial, KIND_LABEL, KIND_LABEL_FORM,
@@ -157,12 +158,7 @@ export default function CoachCredentialsScreen() {
   return (
     <AppBg>
       <SafeAreaView style={s.safe} edges={['top']}>
-        <View style={s.header}>
-          <TouchableOpacity onPress={() => router.back()} hitSlop={10} style={s.back}>
-            <Feather name="chevron-left" size={22} color={FOREST} />
-          </TouchableOpacity>
-          <Text style={s.title}>Formación</Text>
-        </View>
+        <CoachHeader title="Formación" />
 
         <KeyboardAvoidingView
           style={{ flex: 1 }}

@@ -16,6 +16,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { generateWeeklySlots } from '@/lib/availabilityGenerator';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 import CampoHora, { horaVisible } from '@/components/ui/CampoHora';
 
 const DAY_NAMES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -191,13 +192,7 @@ export default function CoachWeeklyPatternScreen() {
     return (
       <AppBg>
       <SafeAreaView style={s.safe} edges={['top']}>
-        <View style={s.header}>
-          <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8}>
-            <MaterialCommunityIcons name="arrow-left" size={22} color="#565E32" />
-          </TouchableOpacity>
-          <Text style={s.headerTitle}>Horario semanal</Text>
-          <View style={{ width: 36 }} />
-        </View>
+        <CoachHeader title="Horario semanal" />
         <View style={s.divider} />
         <ActivityIndicator color={ViveColors.primary} style={{ marginTop: 48 }} />
       </SafeAreaView>
@@ -208,13 +203,7 @@ export default function CoachWeeklyPatternScreen() {
   return (
     <AppBg>
     <SafeAreaView style={s.safe} edges={['top']}>
-      <View style={s.header}>
-        <TouchableOpacity onPress={() => router.back()} style={s.backBtn} hitSlop={8} activeOpacity={0.7}>
-          <MaterialCommunityIcons name="arrow-left" size={22} color="#565E32" />
-        </TouchableOpacity>
-        <Text style={s.headerTitle}>Horario semanal</Text>
-        <View style={{ width: 36 }} />
-      </View>
+        <CoachHeader title="Horario semanal" />
       <View style={s.divider} />
 
       {generating && (

@@ -30,6 +30,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 import { COMMISSION_INTL_FIRST, COMMISSION_INTL_RECURRING, COMMISSION_LOCAL_FIRST, COMMISSION_LOCAL_RECURRING, MP_FEE_PCT_OBSERVED } from '@/lib/pricing';
 import { desglose, type Riel } from '@/lib/desglosePago';
 import { supabase } from '@/lib/supabase';
@@ -191,17 +192,7 @@ export default function CoachPayoutScreen() {
     <AppBg>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
-        <View style={s.header}>
-          <TouchableOpacity
-            style={s.backBtn}
-            onPress={() => router.back()}
-            activeOpacity={0.7}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <MaterialIcons name="arrow-back-ios" size={18} color="#565E32" />
-          </TouchableOpacity>
-          <Text style={s.headerTitle}>Cómo te pagamos</Text>
-          <View style={s.headerSpacer} />
-        </View>
+        <CoachHeader title="Cómo te pagamos" />
 
         {loading ? (
           <View style={s.loadingWrap}>

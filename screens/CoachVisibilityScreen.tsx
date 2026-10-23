@@ -17,6 +17,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 import { ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 import { useAuth } from '@/context/AuthContext';
 import { type CachedCoach } from '@/lib/coachesCache';
 import { loadVisibilitySelf } from '@/lib/coachVisibilityData';
@@ -100,13 +101,7 @@ export default function CoachVisibilityScreen() {
   }, [load]);
 
   const header = (
-    <View style={s.header}>
-      <TouchableOpacity style={s.backBtn} onPress={() => router.back()} activeOpacity={0.7} hitSlop={8}>
-        <MaterialIcons name="arrow-back-ios" size={18} color={FOREST} />
-      </TouchableOpacity>
-      <Text style={s.headerTitle}>Cómo aparecer</Text>
-      <View style={s.headerSpacer} />
-    </View>
+      <CoachHeader title="Cómo aparecer" />
   );
 
   if (loading) {

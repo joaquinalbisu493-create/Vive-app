@@ -20,6 +20,7 @@ import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
+import { CoachHeader } from '@/components/ui/CoachHeader';
 import { supabase } from '@/lib/supabase';
 import { logError } from '@/lib/logging';
 
@@ -91,13 +92,7 @@ export default function CoachCalendarioScreen() {
     <AppBg>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
-        <View style={s.header}>
-          <TouchableOpacity style={s.backBtn} onPress={() => router.back()} activeOpacity={0.7} hitSlop={8}>
-            <MaterialIcons name="arrow-back-ios" size={18} color="#565E32" />
-          </TouchableOpacity>
-          <Text style={s.headerTitle}>Tu calendario</Text>
-          <View style={s.headerSpacer} />
-        </View>
+        <CoachHeader title="Tu calendario" />
 
         <ScrollView contentContainerStyle={s.body}>
           <Text style={s.lead}>
