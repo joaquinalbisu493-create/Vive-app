@@ -16,9 +16,12 @@
 
 **Modernización del coach — COMPLETA:** fondo `AppBg` (ya estaba), bordes blancos → olivo, SurfaceCard (piloto Agenda) + sombra cálida (Profile), verde viejo → FOREST, y header unificado. 
 
+- **Limpieza de estilos muertos:** borrados los estilos `header`/`backBtn`/`headerTitle`/`headerSpacer`/`headerSide`/`back` que quedaron sin uso tras `CoachHeader`, en las 12 pantallas (171 líneas). tsc 0.
+- **"Tus recursos" (CoachResources) adopta el estilo del usuario:** cada recurso pasó de card a mano a `SurfaceCard` (grano+sombra+borde olivo) + `ScaleCard`, y el título a `screenHeader` (Plus Jakarta 30 #565E32), igual que la tab Recursos del usuario.
+- **Tipografía:** verificado que las 20 pantallas del coach usan `ViveFonts` y ninguna una familia cruda → la tipografía es **idéntica** a la del lado del usuario (Plus Jakarta títulos / Poppins cuerpo, misma escala).
+
 **Pendiente / opcional:**
 - Conversión estructural real a `<SurfaceCard>` (con grano) en CoachProfile u otras — solo si hace falta el grano; va screen por screen por el riesgo.
-- Limpieza de estilos de header viejos sin uso en las 12 pantallas (cosmético).
 
 ## 2026-10-22 — Andre (Claude · tablero de administración en sere.ar/admin)
 
