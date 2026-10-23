@@ -1,3 +1,18 @@
+## 2026-10-23 — Joaquín (Claude · modernizar el lado del profesional)
+
+**Tocado:** `screens/CoachAgendaScreen.tsx`, `CoachProfileScreen.tsx`, `CoachNotificationsScreen.tsx`, `CoachAvailabilityScreen.tsx`, `CoachTopicsScreen.tsx`, `CoachWeeklyPatternScreen.tsx`, `CoachEnfoqueScreen.tsx`, `CoachApplicationScreen.tsx`, `CoachLoginScreen.tsx`.
+
+**Contexto:** Joaquín pidió revisar qué del apartado del profesional quedó desactualizado vs. los cambios estéticos del lado del usuario. Diagnóstico (corrigiendo un error inicial mío): el fondo `AppBg` **ya está en las 20 pantallas del coach**; los gaps reales eran: cards a mano (solo 3 usan `SurfaceCard`), **borde blanco glass** en 9 pantallas (el que arreglamos en Progreso), ningún uso de `screenHeader` (que igual es convención de *tabs*, no de pantallas pusheadas), y verde viejo `#42542F` en 5.
+
+**Hecho:**
+- **Piloto — CoachAgenda:** la card de sesión pasó de fondo+borde-blanco a `SurfaceCard` (variant subtle: borde olivo, grano 3%, sombra cálida) envuelta en `ScaleCard` para el tap, igual que las cards del usuario (Recursos).
+- **Rollout — 8 pantallas:** se unificó el borde blanco glass (`rgba(255,255,255,0.65)`) al **olivo `rgba(63,81,47,0.14)`** (token `LINE`, el mismo borde de `SurfaceCard`). En CoachProfile el `GLASS_BORDER` se usaba en 8 lugares (dividers + cards), todos arreglados de una. **Cambio de color solamente** (sin refactor estructural): el resultado visible (borde olivo, no blanco) coincide con el piloto, pero estas 8 no tienen el grano/sombra del `SurfaceCard` completo. tsc limpio.
+
+**Pendiente / decisiones abiertas:**
+- Si se quiere el tratamiento `SurfaceCard` completo (grano+sombra) en pantallas de alto valor como CoachProfile, va screen por screen (refactor estructural, no se hizo en masa por riesgo).
+- Verde viejo `#42542F` en Chats/Home/Resources/Credentials/Visibility (inks de estado "OK") — sin unificar; evaluar si conviene (puede ser un verde intencional distinto a FOREST).
+- Header unificado para las pantallas pusheadas del coach: decisión transversal, no se tocó.
+
 ## 2026-10-22 — Andre (Claude · tablero de administración en sere.ar/admin)
 
 **Tocado:** `supabase/migrations/20261022010000_tablero_admin.sql` y `20261022020000_tablero_pendientes.sql` (nuevos), `web/admin/index.html` (nuevo), `web/robots.txt`, `supabase/functions/admin-actions/index.ts` y `guarantee-claim/index.ts` (CORS), `mail-notificaciones/index.ts` (plantilla nueva), migraciones `20261022030000` y `20261022040000`, `SCHEMA.md`.
