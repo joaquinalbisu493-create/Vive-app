@@ -15,6 +15,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { AppBg } from '@/components/ui/AppBg';
 import { CoachHeader } from '@/components/ui/CoachHeader';
+import { CoachCard } from '@/components/ui/CoachCard';
 
 type Notif = {
   id: string;
@@ -38,7 +39,6 @@ function formatTimeAgo(isoString: string): string {
 }
 
 const GLASS = 'rgba(255,248,240,0.55)';
-const GLASS_BORDER = 'rgba(63,81,47,0.14)';
 
 export default function CoachNotificationsScreen() {
   const router = useRouter();
@@ -93,11 +93,12 @@ export default function CoachNotificationsScreen() {
             const isProposal = n.type === 'propuesta_publicada' || n.type === 'propuesta_ajustes';
             const tappable = !!n.booking_id || isProposal || n.type === 'problema_sesion_nuevo';
             return (
-              <TouchableOpacity
+              <CoachCard
                 key={n.id}
-                style={[s.item, !n.read && s.itemUnread]}
-                activeOpacity={tappable ? 0.7 : 1}
-                onPress={async () => {
+                innerStyle={s.item}
+                bg={!n.read ? 'rgba(232,116,59,0.1)' : GLASS}
+                radius={14}
+                onPress={!tappable ? undefined : async () => {
                   if (isProposal) router.navigate('/resource-proposals');
                   else if (n.type === 'problema_sesion_nuevo') router.navigate('/admin');
                   else if (n.type === 'problema_sesion_respondido' && n.booking_id) {
@@ -118,7 +119,7 @@ export default function CoachNotificationsScreen() {
                 {tappable && (
                   <Feather name="chevron-right" size={16} color="rgba(135,131,92,0.52)" style={s.chevron} />
                 )}
-              </TouchableOpacity>
+              </CoachCard>
             );
           })}
           <View style={{ height: 32 }} />
@@ -157,14 +158,6 @@ const s = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: GLASS,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: GLASS_BORDER,
-    overflow: 'hidden',
-  },
-  itemUnread: {
-    backgroundColor: 'rgba(232,116,59,0.1)',
   },
   unreadBar: {
     width: 3,
