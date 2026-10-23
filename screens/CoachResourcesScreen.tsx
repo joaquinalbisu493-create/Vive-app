@@ -14,6 +14,9 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ViveColors, ViveFonts, TAB_BAR_CLEARANCE } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
+import { SurfaceCard } from '@/components/ui/SurfaceCard';
+import { ScaleCard } from '@/components/ScaleCard';
+import { screenHeader } from '@/constants/screenHeader';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { DOORS } from '@/constants/conexionesDoors';
@@ -129,7 +132,7 @@ export default function CoachResourcesScreen() {
 
           {/* Header */}
           <View style={s.header}>
-            <Text style={s.title}>Tus recursos</Text>
+            <Text style={screenHeader.title}>Tus recursos</Text>
             <View style={s.chip}><Text style={s.chipTxt}>{publishedCount}/10 publicados</Text></View>
           </View>
 
@@ -193,44 +196,48 @@ export default function CoachResourcesScreen() {
               const metaLine = [fmt.label, fmtDuration(r.duration_seconds), r.topic_id ? TOPIC_LABEL[r.topic_id] : '']
                 .filter(Boolean).join(' · ');
               return (
-                <TouchableOpacity
+                <ScaleCard
                   key={r.id}
-                  style={s.res}
+                  style={s.resWrap}
                   activeOpacity={0.85}
                   onPress={() => router.push({ pathname: '/coach-recurso', params: { id: r.id } } as any)}>
-                  <View style={s.resTop}>
-                    <View style={[s.cover, { backgroundColor: fmt.color }]}>
-                      <Feather name={fmt.icon} size={16} color="#FFF6EC" />
-                    </View>
-                    <View style={{ flex: 1, minWidth: 0 }}>
-                      <Text style={s.resTitle} numberOfLines={2}>{r.title}</Text>
-                      <Text style={s.resMeta}>{metaLine}</Text>
-                    </View>
-                    <View style={[s.badge, { backgroundColor: st.bg }]}>
-                      <Text style={[s.badgeTxt, { color: st.ink }]}>{st.label}</Text>
-                    </View>
-                  </View>
-                  {r.status === 'published' && (
-                    <View style={s.line2}>
-                      {/* Íconos de verdad y no ▶ / ◈ de texto: "◈" para guardados
-                          no se entendía. */}
-                      <View style={s.line2Item} accessible accessibilityLabel={`${counts[r.id]?.plays ?? 0} reproducciones`}>
-                        <Feather name="play" size={12} color={FOREST_SOFT} />
-                        <Text style={s.line2StatN}>{counts[r.id]?.plays ?? 0}</Text>
+                  <SurfaceCard variant="subtle" backgroundColor={CARD} borderRadius={20}>
+                    <View style={s.resInner}>
+                      <View style={s.resTop}>
+                        <View style={[s.cover, { backgroundColor: fmt.color }]}>
+                          <Feather name={fmt.icon} size={16} color="#FFF6EC" />
+                        </View>
+                        <View style={{ flex: 1, minWidth: 0 }}>
+                          <Text style={s.resTitle} numberOfLines={2}>{r.title}</Text>
+                          <Text style={s.resMeta}>{metaLine}</Text>
+                        </View>
+                        <View style={[s.badge, { backgroundColor: st.bg }]}>
+                          <Text style={[s.badgeTxt, { color: st.ink }]}>{st.label}</Text>
+                        </View>
                       </View>
-                      <View style={s.line2Item} accessible accessibilityLabel={`${counts[r.id]?.saves ?? 0} guardados`}>
-                        <Feather name="bookmark" size={12} color={FOREST_SOFT} />
-                        <Text style={s.line2StatN}>{counts[r.id]?.saves ?? 0}</Text>
-                      </View>
-                      <TouchableOpacity style={s.recBtn} activeOpacity={0.8} onPress={() => recommend(r)}>
-                        <Text style={s.recBtnTxt}>Recomendar</Text>
-                      </TouchableOpacity>
+                      {r.status === 'published' && (
+                        <View style={s.line2}>
+                          {/* Íconos de verdad y no ▶ / ◈ de texto: "◈" para guardados
+                              no se entendía. */}
+                          <View style={s.line2Item} accessible accessibilityLabel={`${counts[r.id]?.plays ?? 0} reproducciones`}>
+                            <Feather name="play" size={12} color={FOREST_SOFT} />
+                            <Text style={s.line2StatN}>{counts[r.id]?.plays ?? 0}</Text>
+                          </View>
+                          <View style={s.line2Item} accessible accessibilityLabel={`${counts[r.id]?.saves ?? 0} guardados`}>
+                            <Feather name="bookmark" size={12} color={FOREST_SOFT} />
+                            <Text style={s.line2StatN}>{counts[r.id]?.saves ?? 0}</Text>
+                          </View>
+                          <TouchableOpacity style={s.recBtn} activeOpacity={0.8} onPress={() => recommend(r)}>
+                            <Text style={s.recBtnTxt}>Recomendar</Text>
+                          </TouchableOpacity>
+                        </View>
+                      )}
+                      {r.status === 'rejected' && r.rejection_rule ? (
+                        <Text style={s.rejectNote}>Rechazado por la regla {r.rejection_rule}. Editá y volvé a enviar.</Text>
+                      ) : null}
                     </View>
-                  )}
-                  {r.status === 'rejected' && r.rejection_rule ? (
-                    <Text style={s.rejectNote}>Rechazado por la regla {r.rejection_rule}. Editá y volvé a enviar.</Text>
-                  ) : null}
-                </TouchableOpacity>
+                  </SurfaceCard>
+                </ScaleCard>
               );
             })
           )}
@@ -255,7 +262,6 @@ const s = StyleSheet.create({
   container: { paddingHorizontal: 20, paddingTop: 12 },
 
   header: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: 8 },
-  title: { fontFamily: ViveFonts.title, fontSize: 28, color: FOREST },
   chip: { backgroundColor: 'rgba(255,255,255,0.55)', borderWidth: 1, borderColor: LINE, borderRadius: 18, paddingVertical: 6, paddingHorizontal: 12, marginBottom: 3 },
   chipTxt: { fontSize: 11.5, fontFamily: ViveFonts.semibold, color: FOREST },
 
@@ -285,7 +291,8 @@ const s = StyleSheet.create({
   empty: { padding: 18, borderWidth: 1.5, borderColor: LINE, borderRadius: 20, borderStyle: 'dashed', alignItems: 'center' },
   emptyTxt: { textAlign: 'center', fontSize: 12.5, color: FOREST_SOFT, lineHeight: 18, fontFamily: ViveFonts.regular },
 
-  res: { backgroundColor: CARD, borderWidth: 1, borderColor: LINE, borderRadius: 20, padding: 13, marginBottom: 8 },
+  resWrap: { marginBottom: 8 },
+  resInner: { padding: 13 },
   resTop: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
   cover: { width: 40, height: 40, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
   resTitle: { fontSize: 12.5, fontFamily: ViveFonts.semibold, color: FOREST, lineHeight: 17 },
