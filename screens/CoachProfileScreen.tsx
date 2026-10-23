@@ -34,6 +34,7 @@ import { etiquetaEstilo, etiquetasEnfoques } from '@/lib/enfoque';
 
 const GLASS = 'rgba(255,248,240,0.55)';
 const GLASS_BORDER = 'rgba(63,81,47,0.14)';
+const CARD_SHADOW = { shadowColor: '#2E261A', shadowOpacity: 0.12, shadowOffset: { width: 0, height: 6 }, shadowRadius: 10, elevation: 3 };
 
 type CoachProfile = {
   name: string;
@@ -1381,6 +1382,7 @@ const s = StyleSheet.create({
     marginBottom: 4,
   },
   bioCard: {
+    ...CARD_SHADOW,
     backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 16,
     borderWidth: 1,
@@ -1536,6 +1538,7 @@ const s = StyleSheet.create({
 
   // Price
   priceCard: {
+    ...CARD_SHADOW,
     backgroundColor: GLASS,
     borderRadius: 16,
     borderWidth: 1,
@@ -1627,6 +1630,7 @@ const s = StyleSheet.create({
 
   // Toggle
   toggleCard: {
+    ...CARD_SHADOW,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: GLASS,
@@ -1705,6 +1709,7 @@ const s = StyleSheet.create({
 
   // Video
   videoCard: {
+    ...CARD_SHADOW,
     backgroundColor: GLASS,
     borderRadius: 16,
     borderWidth: 1,
@@ -1815,6 +1820,7 @@ const s = StyleSheet.create({
 
   // Reviews recibidas
   reviewsEmpty: {
+    ...CARD_SHADOW,
     backgroundColor: GLASS,
     borderRadius: 16,
     borderWidth: 1,
@@ -1836,6 +1842,7 @@ const s = StyleSheet.create({
     gap: 14,
   },
   ratingSummary: {
+    ...CARD_SHADOW,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 14,
@@ -1860,6 +1867,7 @@ const s = StyleSheet.create({
   },
   reviewsList: { gap: 10 },
   reviewCard: {
+    ...CARD_SHADOW,
     backgroundColor: GLASS,
     borderRadius: 14,
     borderWidth: 1,
