@@ -20,8 +20,10 @@
 - **"Tus recursos" (CoachResources) adopta el estilo del usuario:** cada recurso pasó de card a mano a `SurfaceCard` (grano+sombra+borde olivo) + `ScaleCard`, y el título a `screenHeader` (Plus Jakarta 30 #565E32), igual que la tab Recursos del usuario.
 - **Tipografía:** verificado que las 20 pantallas del coach usan `ViveFonts` y ninguna una familia cruda → la tipografía es **idéntica** a la del lado del usuario (Plus Jakarta títulos / Poppins cuerpo, misma escala).
 
+- **CoachProfile — SurfaceCard completo (con grano):** Joaquín pidió la conversión estructural real. Se convirtieron las **13 cards** del perfil a `<SurfaceCard>` de verdad (grano 3% + sombra + borde) vía un componente local **`PCard`** (SurfaceCard subtle; padding/layout en `innerStyle`, margen en `wrapStyle`; las 2 pulsables envueltas en `ScaleCard`). Reemplaza la sombra-vía-estilo anterior (se removió `CARD_SHADOW`). Para ubicar los cierres que matcheaban cada apertura se usó un contador de profundidad de tags. tsc 0 errores.
+
 **Pendiente / opcional:**
-- Conversión estructural real a `<SurfaceCard>` (con grano) en CoachProfile u otras — solo si hace falta el grano; va screen por screen por el riesgo.
+- Nada grande abierto en la modernización del coach. (Reservas quedó con su header condicional a propósito.)
 
 ## 2026-10-22 — Andre (Claude · tablero de administración en sere.ar/admin)
 
