@@ -20,6 +20,7 @@ import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { AppBg } from '@/components/ui/AppBg';
 import { CoachHeader } from '@/components/ui/CoachHeader';
+import { CoachCard } from '@/components/ui/CoachCard';
 
 const MONTH_NAMES = [
   'Enero','Febrero','Marzo','Abril','Mayo','Junio',
@@ -268,7 +269,7 @@ export default function CoachAvailabilityScreen() {
         </View>
 
         {selectedDate ? (
-          <View style={s.slotsCard}>
+          <CoachCard wrapStyle={s.slotsWrap} radius={18} innerStyle={s.slotsCard}>
             <Text style={s.slotsTitle}>
               Horarios del{' '}
               <Text style={s.slotsTitleDate}>{formatDate(selectedDate)}</Text>
@@ -344,7 +345,7 @@ export default function CoachAvailabilityScreen() {
                 )}
               </>
             )}
-          </View>
+          </CoachCard>
         ) : (
           <View style={s.emptyState}>
             <MaterialCommunityIcons name="calendar-blank-outline" size={44} color="rgba(135,131,92,0.30)" />
@@ -408,15 +409,8 @@ const s = StyleSheet.create({
   dayText: { fontFamily: ViveFonts.medium, fontSize: 14, color: '#565E32' },
   dayTextSelected: { fontFamily: ViveFonts.semibold, color: '#565E32' },
   dayTextPast: { color: 'rgba(135,131,92,0.38)', fontFamily: ViveFonts.regular },
-  slotsCard: {
-    backgroundColor: GLASS,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: GLASS_BORDER,
-    marginHorizontal: 16,
-    marginTop: 12,
-    padding: 18,
-  },
+  slotsCard: { padding: 18 },
+  slotsWrap: { marginHorizontal: 16, marginTop: 12 },
   slotsTitle: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,

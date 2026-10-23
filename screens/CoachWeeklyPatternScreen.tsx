@@ -17,6 +17,7 @@ import { useAuth } from '@/context/AuthContext';
 import { generateWeeklySlots } from '@/lib/availabilityGenerator';
 import { AppBg } from '@/components/ui/AppBg';
 import { CoachHeader } from '@/components/ui/CoachHeader';
+import { CoachCard } from '@/components/ui/CoachCard';
 import CampoHora, { horaVisible } from '@/components/ui/CampoHora';
 
 const DAY_NAMES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -224,7 +225,7 @@ export default function CoachWeeklyPatternScreen() {
           const isAdding = addingFor === day;
 
           return (
-            <View key={day} style={s.dayCard}>
+            <CoachCard key={day} wrapStyle={s.dayWrap} radius={18} innerStyle={s.dayCard}>
               <Text style={s.dayName}>{dayName}</Text>
 
               {dayBlocks.length > 0 && (
@@ -316,7 +317,7 @@ export default function CoachWeeklyPatternScreen() {
                   <Text style={s.addBtnText}>Agregar bloque</Text>
                 </TouchableOpacity>
               )}
-            </View>
+            </CoachCard>
           );
         })}
 
@@ -363,15 +364,8 @@ const s = StyleSheet.create({
     marginBottom: 16,
   },
 
-  dayCard: {
-    backgroundColor: GLASS,
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: GLASS_BORDER,
-    marginHorizontal: 16,
-    marginBottom: 10,
-    padding: 16,
-  },
+  dayCard: { padding: 16 },
+  dayWrap: { marginHorizontal: 16, marginBottom: 10 },
   dayName: {
     fontFamily: ViveFonts.semibold,
     fontSize: 15,
