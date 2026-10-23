@@ -12,6 +12,8 @@ import {
   Image,
   Modal,
   Share,
+  type StyleProp,
+  type ViewStyle,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -30,11 +32,35 @@ import { ViveColors, ViveFonts, TAB_BAR_CLEARANCE } from '@/constants/theme';
 import { priceUsdError } from '@/lib/pricing';
 import { faltaParaInternacional, rielesTexto } from '@/lib/payout';
 import { AppBg } from '@/components/ui/AppBg';
+import { SurfaceCard } from '@/components/ui/SurfaceCard';
+import { ScaleCard } from '@/components/ScaleCard';
 import { etiquetaEstilo, etiquetasEnfoques } from '@/lib/enfoque';
 
 const GLASS = 'rgba(255,248,240,0.55)';
 const GLASS_BORDER = 'rgba(63,81,47,0.14)';
-const CARD_SHADOW = { shadowColor: '#2E261A', shadowOpacity: 0.12, shadowOffset: { width: 0, height: 6 }, shadowRadius: 10, elevation: 3 };
+// Card del perfil = SurfaceCard subtle (grano 3% + sombra cálida + borde olivo),
+// igual que las cards del lado del usuario. El padding/layout va en `innerStyle`
+// (SurfaceCard no padea su contenido) y el margen en `wrapStyle`. Si lleva
+// `onPress`, se envuelve en ScaleCard (SurfaceCard subtle no es pulsable solo).
+function PCard({ wrapStyle, innerStyle, radius = 16, onPress, children }: {
+  wrapStyle?: ViewStyle | ViewStyle[];
+  innerStyle?: StyleProp<ViewStyle>;
+  radius?: number;
+  onPress?: () => void;
+  children: React.ReactNode;
+}) {
+  const card = (
+    <SurfaceCard variant="subtle" backgroundColor={GLASS} borderRadius={radius} style={onPress ? undefined : wrapStyle}>
+      <View style={innerStyle}>{children}</View>
+    </SurfaceCard>
+  );
+  if (!onPress) return card;
+  return (
+    <ScaleCard style={wrapStyle} onPress={onPress} activeOpacity={0.85}>
+      {card}
+    </ScaleCard>
+  );
+}
 
 type CoachProfile = {
   name: string;
@@ -750,13 +776,13 @@ export default function CoachProfileScreen() {
         {/* ── Tu link ─────────────────────────────────────────
             Primero del grupo: es la puerta a todo lo que sigue. */}
         <Text style={s.sectionTitle}>Tu link</Text>
-        <View style={[s.bioCard, s.linkCard]}>
+        <PCard wrapStyle={[s.bioWrap, s.linkCard]} innerStyle={s.bioCard}>
           {profile && <TuLink coach={profile} />}
-        </View>
+        </PCard>
 
         {/* ── Presentación ──────────────────────────────────── */}
         <Text style={s.sectionTitle}>Presentación</Text>
-        <View style={s.bioCard}>
+        <PCard wrapStyle={s.bioWrap} innerStyle={s.bioCard}>
           {editingBio ? (
             <View>
               <TextInput
@@ -809,7 +835,7 @@ export default function CoachProfileScreen() {
               <MaterialCommunityIcons name="pencil-outline" size={16} color={ViveColors.primary} />
             </TouchableOpacity>
           )}
-        </View>
+        </PCard>
 
         {/* ── Temas ─────────────────────────────────────────── */}
         <Text style={[s.sectionTitle, s.sectionSpaced]}>Temas que trabajo</Text>
@@ -856,7 +882,7 @@ export default function CoachProfileScreen() {
 
         {/* ── Video perfil ──────────────────────────────────── */}
         <Text style={[s.sectionTitle, s.sectionSpaced]}>Video de perfil</Text>
-        <View style={s.videoCard}>
+        <PCard wrapStyle={s.cardMx} innerStyle={s.videoCard}>
           {profile?.video_url ? (
             <TouchableOpacity activeOpacity={0.9} onPress={openVideoModal} style={s.videoPlayerWrap}>
               <VideoView
@@ -885,7 +911,7 @@ export default function CoachProfileScreen() {
               {uploadingVideo ? 'Subiendo…' : profile?.video_url ? 'Cambiar video' : 'Grabar nuevo video'}
             </Text>
           </TouchableOpacity>
-        </View>
+        </PCard>
 
         <View style={s.groupHead}>
           <Text style={s.groupTitle}>Tu trabajo</Text>
@@ -912,7 +938,7 @@ export default function CoachProfileScreen() {
 
         {/* ── Precios ───────────────────────────────────────── */}
         <Text style={[s.sectionTitle, s.sectionSpaced]}>Precio y paquetes</Text>
-        <View style={s.priceCard}>
+        <PCard wrapStyle={s.cardMx} innerStyle={s.priceCard}>
           {editingPrice ? (
             <View>
               <Text style={s.priceLabel}>Sesión individual</Text>
@@ -972,11 +998,11 @@ export default function CoachProfileScreen() {
               </View>
             </TouchableOpacity>
           )}
-        </View>
+        </PCard>
 
         {/* ── Modo de reserva ───────────────────────────────── */}
         <Text style={[s.sectionTitle, s.sectionSpaced]}>Modalidad de reserva</Text>
-        <View style={s.toggleCard}>
+        <PCard wrapStyle={s.cardMx} innerStyle={s.toggleCard}>
           <View style={s.toggleInfo}>
             <Text style={s.toggleTitle}>{profile?.instant_booking ? 'Instantánea' : 'Con confirmación'}</Text>
             <Text style={s.toggleDesc}>
@@ -993,7 +1019,7 @@ export default function CoachProfileScreen() {
             thumbColor="#FFFFFF"
             ios_backgroundColor={`${ViveColors.text}25`}
           />
-        </View>
+        </PCard>
 
         {/* ── Mercado Pago ──────────────────────────────────── */}
         <Text
@@ -1001,7 +1027,7 @@ export default function CoachProfileScreen() {
           onLayout={e => setCobroY(e.nativeEvent.layout.y)}>
           Mercado Pago
         </Text>
-        <View style={s.toggleCard}>
+        <PCard wrapStyle={s.cardMx} innerStyle={s.toggleCard}>
           <View style={s.toggleInfo}>
             <Text style={s.toggleTitle}>
               {mpConnected ? 'Cuenta conectada' : 'Sin cuenta conectada'}
@@ -1045,7 +1071,7 @@ export default function CoachProfileScreen() {
               )}
             </TouchableOpacity>
           )}
-        </View>
+        </PCard>
 
         {/* Comisión decreciente — incentiva sostener la relación en la app (anti-fuga).
             Sin IVA a propósito (depende de la figura fiscal, TBD). */}
@@ -1074,10 +1100,7 @@ export default function CoachProfileScreen() {
             ese precio es el circuito cerrado que ya arreglamos una vez. Cuelga
             de `intlAbiertoReal`, que es estado de pantalla y arranca abierto si
             ya hay algo cargado. */}
-        <TouchableOpacity
-          style={s.toggleCard}
-          onPress={() => setIntlAbierto(!intlAbiertoReal)}
-          activeOpacity={0.85}>
+        <PCard wrapStyle={s.cardMx} innerStyle={s.toggleCard} onPress={() => setIntlAbierto(!intlAbiertoReal)}>
           <View style={s.toggleInfo}>
             <Text style={s.toggleTitle}>
               {profile?.accepts_international ? 'Activadas' : 'Desactivadas'}
@@ -1093,7 +1116,7 @@ export default function CoachProfileScreen() {
             size={22}
             color="rgba(135,131,92,0.6)"
           />
-        </TouchableOpacity>
+        </PCard>
 
         {/* El aviso de qué falta queda AFUERA del pliegue: es el motivo para
             abrirlo. Escondido adentro, el coach cierra la sección y no se
@@ -1111,7 +1134,7 @@ export default function CoachProfileScreen() {
                 precio en pesos: el de afuera es una decisión comercial distinta,
                 y una conversión dejaría a VIVE en el medio de la discusión de
                 cotización cada vez que se mueve el dólar. */}
-            <View style={[s.toggleCard, s.stackedCard]}>
+            <PCard wrapStyle={[s.cardMx, s.stackedCard]} innerStyle={s.toggleCard}>
               <View style={s.toggleInfo}>
                 <Text style={s.toggleTitle}>Precio en dólares</Text>
               </View>
@@ -1134,13 +1157,9 @@ export default function CoachProfileScreen() {
                 />
                 {savingPriceUsd && <ActivityIndicator size="small" color={ViveColors.primary} />}
               </View>
-            </View>
+            </PCard>
 
-            <TouchableOpacity
-              style={[s.toggleCard, s.stackedCard]}
-              onPress={() => router.push('/coach-datos-cobro')}
-              activeOpacity={0.85}
-            >
+            <PCard wrapStyle={[s.cardMx, s.stackedCard]} innerStyle={s.toggleCard} onPress={() => router.push('/coach-datos-cobro')}>
               <View style={s.toggleInfo}>
                 <Text style={s.toggleTitle}>Cómo te pagamos</Text>
                 <Text style={s.toggleDesc}>
@@ -1148,7 +1167,7 @@ export default function CoachProfileScreen() {
                 </Text>
               </View>
               <MaterialIcons name="arrow-forward-ios" size={16} color="rgba(135,131,92,0.6)" />
-            </TouchableOpacity>
+            </PCard>
           </>
         )}
 
@@ -1159,7 +1178,7 @@ export default function CoachProfileScreen() {
 
         {/* ── Pausar el perfil ──────────────────────────────── */}
         <Text style={s.sectionTitle}>Aparecer en búsquedas</Text>
-        <View style={s.toggleCard}>
+        <PCard wrapStyle={s.cardMx} innerStyle={s.toggleCard}>
           <View style={s.toggleInfo}>
             <Text style={s.toggleTitle}>
               {profile?.availability_status === 'activo' ? 'Aparecés' : 'En pausa'}
@@ -1178,7 +1197,7 @@ export default function CoachProfileScreen() {
             thumbColor="#FFFFFF"
             ios_backgroundColor={`${ViveColors.text}25`}
           />
-        </View>
+        </PCard>
 
         {/* 🔴 `/coach-visibilidad` vivía SOLO en Home, a pesar de ser la
             respuesta a "¿por qué no aparezco?" — la misma pregunta que hace el
@@ -1217,16 +1236,16 @@ export default function CoachProfileScreen() {
         {/* ── Reseñas recibidas ─────────────────────────────── */}
         <Text style={s.sectionTitle}>Reseñas recibidas</Text>
         {!reviewsLoaded ? null : reviews.length === 0 ? (
-          <View style={s.reviewsEmpty}>
+          <PCard wrapStyle={s.cardMx} innerStyle={s.reviewsEmpty}>
             <MaterialCommunityIcons name="star-outline" size={28} color="rgba(135,131,92,0.38)" />
             <Text style={s.reviewsEmptyText}>
               Todavía no recibiste reseñas.{'\n'}Aparecerán acá después de cada sesión completada.
             </Text>
-          </View>
+          </PCard>
         ) : (
           <View style={s.reviewsPanel}>
             {/* Resumen de rating */}
-            <View style={s.ratingSummary}>
+            <PCard innerStyle={s.ratingSummary}>
               <Text style={s.ratingBig}>{avgRating?.toFixed(1)}</Text>
               <View style={s.ratingSummaryRight}>
                 <View style={s.starsRow}>
@@ -1241,12 +1260,12 @@ export default function CoachProfileScreen() {
                 </View>
                 <Text style={s.reviewCount}>{reviews.length} {reviews.length === 1 ? 'reseña' : 'reseñas'}</Text>
               </View>
-            </View>
+            </PCard>
 
             {/* Lista */}
             <View style={s.reviewsList}>
               {reviews.map((r, i) => (
-                <View key={i} style={s.reviewCard}>
+                <PCard key={i} radius={14} innerStyle={s.reviewCard}>
                   <View style={s.reviewHeader}>
                     <View style={s.reviewAvatar}>
                       <Text style={s.reviewAvatarText}>{r.reviewerName.charAt(0).toUpperCase()}</Text>
@@ -1274,7 +1293,7 @@ export default function CoachProfileScreen() {
                   {!!r.comment && (
                     <Text style={s.reviewComment}>{r.comment}</Text>
                   )}
-                </View>
+                </PCard>
               ))}
             </View>
           </View>
@@ -1381,15 +1400,9 @@ const s = StyleSheet.create({
     color: ViveColors.primary,
     marginBottom: 4,
   },
-  bioCard: {
-    ...CARD_SHADOW,
-    backgroundColor: 'rgba(255,248,240,0.55)',
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(63,81,47,0.14)',
-    padding: 16,
-    marginBottom: 4,
-  },
+  bioCard: { padding: 16 },
+  bioWrap: { marginBottom: 4 },
+  cardMx: { marginHorizontal: 20 },
   bioRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -1537,15 +1550,7 @@ const s = StyleSheet.create({
   },
 
   // Price
-  priceCard: {
-    ...CARD_SHADOW,
-    backgroundColor: GLASS,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: GLASS_BORDER,
-    padding: 16,
-    marginHorizontal: 20,
-  },
+  priceCard: { padding: 16 },
   priceRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1630,15 +1635,9 @@ const s = StyleSheet.create({
 
   // Toggle
   toggleCard: {
-    ...CARD_SHADOW,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: GLASS,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: GLASS_BORDER,
     padding: 16,
-    marginHorizontal: 20,
     gap: 16,
   },
   // `toggleCard` no trae margen propio arriba a propósito: la mayoría de los
@@ -1709,13 +1708,7 @@ const s = StyleSheet.create({
 
   // Video
   videoCard: {
-    ...CARD_SHADOW,
-    backgroundColor: GLASS,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: GLASS_BORDER,
     padding: 16,
-    marginHorizontal: 20,
     alignItems: 'center',
     gap: 16,
   },
@@ -1820,13 +1813,7 @@ const s = StyleSheet.create({
 
   // Reviews recibidas
   reviewsEmpty: {
-    ...CARD_SHADOW,
-    backgroundColor: GLASS,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: GLASS_BORDER,
     padding: 24,
-    marginHorizontal: 20,
     alignItems: 'center',
     gap: 10,
   },
@@ -1842,14 +1829,9 @@ const s = StyleSheet.create({
     gap: 14,
   },
   ratingSummary: {
-    ...CARD_SHADOW,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 14,
-    backgroundColor: GLASS,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: GLASS_BORDER,
     padding: 16,
   },
   ratingBig: {
@@ -1866,14 +1848,7 @@ const s = StyleSheet.create({
     color: 'rgba(135,131,92,0.80)',
   },
   reviewsList: { gap: 10 },
-  reviewCard: {
-    ...CARD_SHADOW,
-    backgroundColor: GLASS,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: GLASS_BORDER,
-    padding: 14,
-  },
+  reviewCard: { padding: 14 },
   reviewHeader: {
     flexDirection: 'row',
     alignItems: 'center',
