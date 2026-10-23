@@ -33,7 +33,7 @@ import { AppBg } from '@/components/ui/AppBg';
 import { etiquetaEstilo, etiquetasEnfoques } from '@/lib/enfoque';
 
 const GLASS = 'rgba(255,248,240,0.55)';
-const GLASS_BORDER = 'rgba(255,255,255,0.65)';
+const GLASS_BORDER = 'rgba(63,81,47,0.14)';
 
 type CoachProfile = {
   name: string;
@@ -1384,7 +1384,7 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(255,248,240,0.55)',
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.65)',
+    borderColor: 'rgba(63,81,47,0.14)',
     padding: 16,
     marginBottom: 4,
   },

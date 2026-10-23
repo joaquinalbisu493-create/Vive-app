@@ -950,7 +950,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     borderRadius: 14,
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.6)',
+    borderColor: 'rgba(63,81,47,0.14)',
     backgroundColor: 'rgba(255,248,240,0.48)',
   },
   fotoIdLista: { borderColor: 'rgba(107,191,138,0.55)' },
@@ -1083,7 +1083,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: 'rgba(255,248,240,0.48)',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.65)',
+    borderColor: 'rgba(63,81,47,0.14)',
   },
   // 🔴 Oliva lleno, no el verde menta de antes (24/09/2026). El menta venía de
   // `ViveColors.accent` y no aparece en ninguna otra pantalla del profesional:
@@ -1112,7 +1112,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#565E32',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.65)',
+    borderColor: 'rgba(63,81,47,0.14)',
   },
   bioInput: { minHeight: 120, paddingTop: 14 },
   limitesSep: { height: 1, backgroundColor: 'rgba(86,94,50,0.14)', marginTop: 4, marginBottom: 12 },

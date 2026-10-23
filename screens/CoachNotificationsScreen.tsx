@@ -37,7 +37,7 @@ function formatTimeAgo(isoString: string): string {
 }
 
 const GLASS = 'rgba(255,248,240,0.55)';
-const GLASS_BORDER = 'rgba(255,255,255,0.65)';
+const GLASS_BORDER = 'rgba(63,81,47,0.14)';
 
 export default function CoachNotificationsScreen() {
   const router = useRouter();
