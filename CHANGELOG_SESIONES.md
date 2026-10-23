@@ -8,8 +8,10 @@
 - **Piloto — CoachAgenda:** la card de sesión pasó de fondo+borde-blanco a `SurfaceCard` (variant subtle: borde olivo, grano 3%, sombra cálida) envuelta en `ScaleCard` para el tap, igual que las cards del usuario (Recursos).
 - **Rollout — 8 pantallas:** se unificó el borde blanco glass (`rgba(255,255,255,0.65)`) al **olivo `rgba(63,81,47,0.14)`** (token `LINE`, el mismo borde de `SurfaceCard`). En CoachProfile el `GLASS_BORDER` se usaba en 8 lugares (dividers + cards), todos arreglados de una. **Cambio de color solamente** (sin refactor estructural): el resultado visible (borde olivo, no blanco) coincide con el piloto, pero estas 8 no tienen el grano/sombra del `SurfaceCard` completo. tsc limpio.
 
+- **CoachProfile — sombra cálida:** Joaquín pidió el "SurfaceCard completo" acá. Como son ~14 instancias de card (pulsables, anidadas, compuestas) en 1937 líneas y sin poder verificar en device, eligió la opción de bajo riesgo: se agregó la **sombra cálida del SurfaceCard subtle** (`#2E261A`, vía un `CARD_SHADOW` compartido) a las 7 cards (bioCard, priceCard, toggleCard, videoCard, ratingSummary, reviewCard, reviewsEmpty), **sin tocar JSX**. Queda igual al piloto salvo el grano 3% (imperceptible).
+
 **Pendiente / decisiones abiertas:**
-- Si se quiere el tratamiento `SurfaceCard` completo (grano+sombra) en pantallas de alto valor como CoachProfile, va screen por screen (refactor estructural, no se hizo en masa por riesgo).
+- Conversión estructural real a `<SurfaceCard>` (con grano) en CoachProfile u otras — solo si hace falta el grano; va screen por screen por el riesgo.
 - Verde viejo `#42542F` en Chats/Home/Resources/Credentials/Visibility (inks de estado "OK") — sin unificar; evaluar si conviene (puede ser un verde intencional distinto a FOREST).
 - Header unificado para las pantallas pusheadas del coach: decisión transversal, no se tocó.
 
