@@ -7,8 +7,12 @@ import { useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
+import { SurfaceCard } from '@/components/ui/SurfaceCard';
+import { ScaleCard } from '@/components/ScaleCard';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+
+const CARD = '#F7F2E7';
 
 const MONTH_NAMES = [
   'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
@@ -245,21 +249,25 @@ export default function CoachAgendaScreen() {
                 selectedBookings.map(b => {
                   const meta = STATUS_META[b.status] ?? { label: b.status, color: '#87835C', bg: 'rgba(135,131,92,0.14)' };
                   return (
-                    <TouchableOpacity
+                    <ScaleCard
                       key={b.id}
-                      style={[s.bookingCard, b.status === 'completada' && s.bookingCardHecha]}
+                      style={[s.bookingWrap, b.status === 'completada' && s.bookingCardHecha]}
                       activeOpacity={0.85}
                       onPress={() => abrirSesion(b)}
                     >
-                      <View style={s.timeTag}><Text style={s.timeTagText}>{b.time}</Text></View>
-                      <View style={s.bookingInfo}>
-                        <Text style={s.bookingUser}>{b.userName}</Text>
-                        <View style={[s.statusBadge, { backgroundColor: meta.bg }]}>
-                          <Text style={[s.statusText, { color: meta.color }]}>{meta.label}</Text>
+                      <SurfaceCard variant="subtle" backgroundColor={CARD} borderRadius={14}>
+                        <View style={s.bookingRow}>
+                          <View style={s.timeTag}><Text style={s.timeTagText}>{b.time}</Text></View>
+                          <View style={s.bookingInfo}>
+                            <Text style={s.bookingUser}>{b.userName}</Text>
+                            <View style={[s.statusBadge, { backgroundColor: meta.bg }]}>
+                              <Text style={[s.statusText, { color: meta.color }]}>{meta.label}</Text>
+                            </View>
+                          </View>
+                          {b.sala_id && <MaterialIcons name="chevron-right" size={20} color="rgba(135,131,92,0.5)" />}
                         </View>
-                      </View>
-                      {b.sala_id && <MaterialIcons name="chevron-right" size={20} color="rgba(135,131,92,0.5)" />}
-                    </TouchableOpacity>
+                      </SurfaceCard>
+                    </ScaleCard>
                   );
                 })
               )}
@@ -317,11 +325,10 @@ const s = StyleSheet.create({
   detailTitle: { fontFamily: ViveFonts.semibold, fontSize: 15, color: '#565E32', marginBottom: 12 },
   emptyDay: { fontFamily: ViveFonts.regular, fontSize: 13, color: 'rgba(135,131,92,0.80)', paddingVertical: 8 },
 
-  bookingCard: {
+  bookingWrap: { marginBottom: 10 },
+  bookingRow: {
     flexDirection: 'row', alignItems: 'center', gap: 12,
-    backgroundColor: 'rgba(255,248,240,0.55)',
-    borderRadius: 14, borderWidth: 1, borderColor: 'rgba(255,255,255,0.65)',
-    padding: 12, marginBottom: 10,
+    padding: 12,
   },
   bookingCardHecha: { opacity: 0.7 },
   timeTag: {
