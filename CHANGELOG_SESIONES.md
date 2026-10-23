@@ -12,9 +12,13 @@
 
 - **Verde viejo `#42542F` → FOREST `#3F512F`:** era el `OK_INK` (ink de estados "OK/confirmado/publicado") en Chats/Home/Credentials/Visibility y el badge PUBLICADO de Resources — un verde casi idéntico pero distinto del FOREST. Unificado a `#3F512F` en las 5; se mantiene el nombre semántico `OK_INK`, solo cambia el valor. Ya no queda verde viejo en el lado del coach.
 
-**Pendiente / decisiones abiertas:**
+- **Header unificado de pantallas pusheadas — nuevo `components/ui/CoachHeader.tsx`.** Antes cada pantalla copiaba su header con variaciones (íconos `arrow-back-ios`/`chevron-left`/`arrow-left`, colores #565E32/FOREST, estilos `backBtn`/`back`). Se estandarizó (decisión de Joaquín: mantener el look actual pero consistente) en un componente: back en círculo crema + título centrado 18px #565E32 + spacer, con slots opcionales `onBack`/`right`. Adoptado en **12 pantallas**: Agenda, Availability, Calendario, Notifications, WeeklyPattern, Topics, Enfoque, Payout, Credentials, ComoFunciona, Visibility, Settings. ComoFunciona/Settings conservan su back custom (`canGoBack → replace`) vía `onBack`. **Reservas quedó afuera** (es tab+pusheada con back condicional `!isInTab`). Los estilos de header viejos quedan sin uso (inofensivos). tsc limpio (0 errores en todo el proyecto).
+
+**Modernización del coach — COMPLETA:** fondo `AppBg` (ya estaba), bordes blancos → olivo, SurfaceCard (piloto Agenda) + sombra cálida (Profile), verde viejo → FOREST, y header unificado. 
+
+**Pendiente / opcional:**
 - Conversión estructural real a `<SurfaceCard>` (con grano) en CoachProfile u otras — solo si hace falta el grano; va screen por screen por el riesgo.
-- Header unificado para las pantallas pusheadas del coach: decisión transversal, no se tocó.
+- Limpieza de estilos de header viejos sin uso en las 12 pantallas (cosmético).
 
 ## 2026-10-22 — Andre (Claude · tablero de administración en sere.ar/admin)
 
