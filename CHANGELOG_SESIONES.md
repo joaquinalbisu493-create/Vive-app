@@ -10,9 +10,10 @@
 
 - **CoachProfile — sombra cálida:** Joaquín pidió el "SurfaceCard completo" acá. Como son ~14 instancias de card (pulsables, anidadas, compuestas) en 1937 líneas y sin poder verificar en device, eligió la opción de bajo riesgo: se agregó la **sombra cálida del SurfaceCard subtle** (`#2E261A`, vía un `CARD_SHADOW` compartido) a las 7 cards (bioCard, priceCard, toggleCard, videoCard, ratingSummary, reviewCard, reviewsEmpty), **sin tocar JSX**. Queda igual al piloto salvo el grano 3% (imperceptible).
 
+- **Verde viejo `#42542F` → FOREST `#3F512F`:** era el `OK_INK` (ink de estados "OK/confirmado/publicado") en Chats/Home/Credentials/Visibility y el badge PUBLICADO de Resources — un verde casi idéntico pero distinto del FOREST. Unificado a `#3F512F` en las 5; se mantiene el nombre semántico `OK_INK`, solo cambia el valor. Ya no queda verde viejo en el lado del coach.
+
 **Pendiente / decisiones abiertas:**
 - Conversión estructural real a `<SurfaceCard>` (con grano) en CoachProfile u otras — solo si hace falta el grano; va screen por screen por el riesgo.
-- Verde viejo `#42542F` en Chats/Home/Resources/Credentials/Visibility (inks de estado "OK") — sin unificar; evaluar si conviene (puede ser un verde intencional distinto a FOREST).
 - Header unificado para las pantallas pusheadas del coach: decisión transversal, no se tocó.
 
 ## 2026-10-22 — Andre (Claude · tablero de administración en sere.ar/admin)
