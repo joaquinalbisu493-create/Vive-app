@@ -25,7 +25,7 @@ const FOREST_SOFT = '#566245';
 const TERRA = '#C06B4A';
 const LINE = 'rgba(63,81,47,0.14)';
 const OK_BG = '#DCE5CB';
-const OK_INK = '#42542F';
+const OK_INK = '#3F512F';
 
 /** El estado de la revisión, dicho desde el lado del coach. */
 function estadoTxt(c: OwnCredential): { txt: string; bg: string; ink: string } {

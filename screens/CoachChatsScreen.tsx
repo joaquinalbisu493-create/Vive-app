@@ -32,7 +32,7 @@ const FOREST_SOFT = '#566245';
 const TERRA = '#C06B4A';
 const LINE = 'rgba(63,81,47,0.14)';
 const OK_BG = '#DCE5CB';
-const OK_INK = '#42542F';
+const OK_INK = '#3F512F';
 // 📝 `RES_BG` salió con las pastillas: el fondo de la etiqueta "RECURSO" ya no
 // se usa en ningún lado. `RES_INK` sobrevive como color del punto.
 const RES_INK = '#8F4A2E';

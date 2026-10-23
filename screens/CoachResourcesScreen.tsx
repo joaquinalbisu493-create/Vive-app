@@ -35,7 +35,7 @@ const FMT: Record<string, { label: string; color: string; icon: React.ComponentP
 };
 
 const STATUS: Record<string, { label: string; bg: string; ink: string }> = {
-  published: { label: 'PUBLICADO', bg: '#DCE5CB', ink: '#42542F' },
+  published: { label: 'PUBLICADO', bg: '#DCE5CB', ink: '#3F512F' },
   pending:   { label: 'EN REVISIÓN', bg: '#F0E4C4', ink: '#8A6A20' },
   rejected:  { label: 'RECHAZADO', bg: 'rgba(224,82,82,0.16)', ink: '#B53B3B' },
   archived:  { label: 'ARCHIVADO', bg: 'rgba(135,131,92,0.16)', ink: '#6B6A4E' },
