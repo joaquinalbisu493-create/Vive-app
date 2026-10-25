@@ -1,6 +1,6 @@
 ## 2026-10-25 — Andre (Claude · tablero: segundo factor activado)
 
-**Tocado:** `web/admin/admin.js`, `supabase/migrations/20261025010000_mi_cuenta_es_admin.sql`, `SCHEMA.md` (+ aplicada `20261022060000`, desplegadas `admin-actions` y `guarantee-claim`).
+**Tocado:** `web/admin/admin.js`, `web/admin/index.html`, `supabase/migrations/20261025010000_mi_cuenta_es_admin.sql`, `20261025020000_ideas_y_pendientes.sql`, `SCHEMA.md` (+ aplicada `20261022060000`, desplegadas `admin-actions` y `guarantee-claim`).
 
 **Resumen:**
 - Bug: sere.ar/admin le decía a Andre "Esa cuenta no es de administración". El tablero leía `profiles.is_admin` directo, y esa columna no es legible por el cliente (a propósito). En las pruebas con datos simulados no se vio.
@@ -9,6 +9,8 @@
 - Segundo bug: el QR del alta no se dibujaba (Supabase manda el SVG sin codificar en un data URI); se recodifica.
 - Andre registró su app de autenticación. **Segundo factor ACTIVADO**: aplicada `20261022060000_admin_exige_segundo_factor.sql` y desplegadas `admin-actions` y `guarantee-claim`. Verificado: `is_admin()` false con aal1 y true con aal2, funciones rechazan sin sesión, cron sigue OK.
 - Cerrados desde la base, a pedido de Andre, los 5 pendientes de prueba (cada uno con su fila en `admin_audit_log` a nombre de Andre y nota): reembolso MP $1 (MP lo devolvió) y USDT 50 (plata entre cuentas de Andre, sin hash) → `reembolsado`; pago internacional de Coach Prueba → `paid_out_at` con referencia "prueba"; sesión del 24/09 → `completada`; postulación de Joaquín → `rechazada` sin aviso. `admin_pendientes()` verificado: todas las colas en 0.
+
+- Nueva pestaña **Pendientes e ideas** en sere.ar/admin (tabla `ideas`, migración `20261025020000` aplicada y verificada; SCHEMA.md actualizado). Arranca con 9 filas: lo que estaba abierto (Joaquín y su segundo factor, objetivos del mes, borrado de pruebas antes de lanzar, segundo factor en la app, y las ideas de la auditoría). De ahora en más, los pendientes de gestión se anotan ahí además de acá.
 
 **Pendiente para la próxima sesión:**
 - ANTES DE LANZAR: reseteo de datos de prueba (197 reservas y lo que cuelga) con respaldo previo, una sola vez. No antes: siguen probando.

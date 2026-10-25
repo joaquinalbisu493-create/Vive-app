@@ -326,7 +326,7 @@ async function abrirTablero() {
     throw e;
   }
   $('ingreso').hidden = true; $('tablero').hidden = false;
-  await Promise.all([cargarPendientes(), cargarObjetivos()]);
+  await Promise.all([cargarPendientes(), cargarObjetivos(), cargarIdeas()]);
 }
 
 async function cargarMetricas() {
@@ -1491,8 +1491,15 @@ Object.assign(ACCIONES, {
   objetivo_borrado: 'borró un objetivo',
   cuenta_marcada_prueba: 'marcó una cuenta como de prueba',
   cuenta_desmarcada_prueba: 'desmarcó una cuenta de prueba',
+  idea_creado: 'anotó un pendiente o idea',
+  idea_editado: 'cambió un pendiente o idea',
+  idea_borrado: 'borró un pendiente o idea',
+  cierre_prueba_reembolso_mp: 'cerró un reembolso de prueba (Mercado Pago)',
+  cierre_prueba_reembolso_usdt: 'cerró un reembolso de prueba (USDT)',
+  cierre_prueba_pago_profesional: 'cerró un pago de prueba a un profesional',
+  cierre_prueba_sesion: 'cerró una sesión de prueba',
 });
-const TIPOS_OBJETO = { coach: 'Profesional', coach_credential: 'Título o matrícula', report: 'Denuncia', booking: 'Reserva', objetivo: 'Objetivo', profile: 'Cuenta', session_issue: 'Problema de sesión', sancion: 'Sanción', usdt_claim: 'Comprobante USDT', usdt_transfer: 'Transferencia USDT' };
+const TIPOS_OBJETO = { coach: 'Profesional', coach_credential: 'Título o matrícula', report: 'Denuncia', booking: 'Reserva', objetivo: 'Objetivo', idea: 'Pendiente o idea', profile: 'Cuenta', session_issue: 'Problema de sesión', sancion: 'Sanción', usdt_claim: 'Comprobante USDT', usdt_transfer: 'Transferencia USDT' };
 const PAGINA_REGISTRO = 100;
 let registro = [];
 let registroHayMas = false;
@@ -1557,6 +1564,126 @@ function pintarRegistro() {
 $('vistaRegistro').addEventListener('change', (e) => {
   if (e.target.id === 'filtroRegAdmin' || e.target.id === 'filtroRegAccion') cargarRegistroFiltrado();
 });
+// ── Pendientes e ideas ───────────────────────────────────────────────────────
+// Tabla `ideas`: lectura y escritura directas con RLS `is_admin()`, igual que
+// los objetivos. El trigger del tablero deja cada cambio en el Registro.
+const PRIORIDADES = { alta: 'Alta', media: 'Media', baja: 'Baja' };
+const ORDEN_PRIORIDAD = { alta: 0, media: 1, baja: 2 };
+const NOMBRE_DUENO = Object.fromEntries(DUENOS);
+let ideas = [];
+let editandoIdea = null;
+
+async function cargarIdeas() {
+  $('errorIdeas').textContent = '';
+  try {
+    ideas = await api('ideas?select=*&order=created_at.asc');
+  } catch (e) {
+    $('errorIdeas').textContent = 'No se pudieron cargar.';
+    ideas = [];
+  }
+  pintarIdeas();
+}
+
+function pintarIdeas() {
+  const filtro = $('filtroIdeas').value;
+  const abiertas = ideas.filter((i) => i.tipo === 'pendiente' && i.estado === 'abierta').length;
+  $('contIdeas').textContent = abiertas > 0 ? abiertas : '';
+  const visibles = ideas.filter((i) => !filtro || i.estado === filtro)
+    .sort((a, b) => ORDEN_PRIORIDAD[a.prioridad] - ORDEN_PRIORIDAD[b.prioridad]);
+  const vacio = { abierta: 'Nada abierto.', hecha: 'Nada hecho todavía.', descartada: 'Nada descartado.', '': 'Nada cargado.' }[filtro];
+  $('columnasIdeas').innerHTML = [['pendiente', 'Pendientes'], ['idea', 'Ideas']].map(([tipo, nombre]) => {
+    const lista = visibles.filter((i) => i.tipo === tipo);
+    return `<div class="caja"><h3>${nombre}</h3>${lista.length ? lista.map(tarjetaIdea).join('') : `<p class="vacio">${vacio}</p>`}</div>`;
+  }).join('');
+}
+
+function tarjetaIdea(i) {
+  const pasar = i.tipo === 'idea' && i.estado === 'abierta'
+    ? `<button class="link" data-idea-pasar="${i.id}">Pasar a pendiente</button>` : '';
+  return `<div class="obj${i.estado === 'abierta' ? '' : ' cerrada'}">
+    <div class="obj-cab"><span class="obj-titulo">${esc(i.titulo)}</span><span class="chip ${esc(i.prioridad)}">${esc(PRIORIDADES[i.prioridad] ?? i.prioridad)}</span></div>
+    ${i.detalle ? `<div class="suave">${esc(i.detalle)}</div>` : ''}
+    <div class="obj-pie">
+      <select data-idea-estado="${i.id}" aria-label="Estado de ${esc(i.titulo)}">${[['abierta', 'Abierta'], ['hecha', 'Hecha'], ['descartada', 'Descartada']].map(([v, t]) => `<option value="${v}"${v === i.estado ? ' selected' : ''}>${t}</option>`).join('')}</select>
+      <span class="suave">${esc(NOMBRE_DUENO[i.dueno] ?? 'Sin asignar')}</span>
+      <button class="link" data-idea-editar="${i.id}">Editar</button>
+      ${pasar}
+    </div>
+  </div>`;
+}
+
+function abrirIdea(i) {
+  editandoIdea = i || null;
+  $('dlgIdeaTitulo').textContent = i ? 'Editar' : 'Nuevo';
+  $('iTitulo').value = i?.titulo ?? '';
+  $('iDetalle').value = i?.detalle ?? '';
+  $('iTipo').value = i?.tipo ?? 'pendiente';
+  $('iPrioridad').value = i?.prioridad ?? 'media';
+  $('iDueno').value = i?.dueno ?? '';
+  $('iEstado').value = i?.estado ?? 'abierta';
+  $('btnBorrarIdea').hidden = !i;
+  $('errorIdea').textContent = '';
+  $('dlgIdea').showModal();
+  $('iTitulo').focus();
+}
+
+async function guardarIdea(ev) {
+  ev.preventDefault();
+  const datos = {
+    titulo: $('iTitulo').value.trim(),
+    detalle: $('iDetalle').value.trim() || null,
+    tipo: $('iTipo').value,
+    prioridad: $('iPrioridad').value,
+    dueno: $('iDueno').value || null,
+    estado: $('iEstado').value,
+  };
+  if (!datos.titulo) { $('errorIdea').textContent = 'Escribí qué es.'; return; }
+  $('btnGuardarIdea').disabled = true;
+  try {
+    if (editandoIdea) await api(`ideas?id=eq.${editandoIdea.id}`, { method: 'PATCH', body: datos });
+    else await api('ideas', { method: 'POST', body: datos });
+    $('dlgIdea').close();
+    await cargarIdeas();
+  } catch (e) {
+    $('errorIdea').textContent = 'No se pudo guardar. Probá de nuevo.';
+  } finally {
+    $('btnGuardarIdea').disabled = false;
+  }
+}
+
+async function borrarIdea() {
+  if (!editandoIdea || !confirm(`¿Borrar "${editandoIdea.titulo}"? Si ya no va, también podés marcarla como descartada y queda a la vista.`)) return;
+  try {
+    await api(`ideas?id=eq.${editandoIdea.id}`, { method: 'DELETE' });
+    $('dlgIdea').close();
+    await cargarIdeas();
+  } catch (e) {
+    $('errorIdea').textContent = 'No se pudo borrar.';
+  }
+}
+
+async function cambiarIdea(id, cambios) {
+  try { await api(`ideas?id=eq.${id}`, { method: 'PATCH', body: cambios }); }
+  catch (e) { $('errorIdeas').textContent = 'No se pudo guardar el cambio.'; }
+  await cargarIdeas();
+}
+
+$('filtroIdeas').addEventListener('change', pintarIdeas);
+$('btnNuevaIdea').addEventListener('click', () => abrirIdea(null));
+$('btnCancelarIdea').addEventListener('click', () => $('dlgIdea').close());
+$('btnBorrarIdea').addEventListener('click', borrarIdea);
+$('formIdea').addEventListener('submit', guardarIdea);
+$('columnasIdeas').addEventListener('click', (e) => {
+  const ed = e.target.closest('[data-idea-editar]');
+  if (ed) { abrirIdea(ideas.find((i) => i.id === ed.dataset.ideaEditar)); return; }
+  const pa = e.target.closest('[data-idea-pasar]');
+  if (pa) cambiarIdea(pa.dataset.ideaPasar, { tipo: 'pendiente' });
+});
+$('columnasIdeas').addEventListener('change', (e) => {
+  const sel = e.target.closest('[data-idea-estado]');
+  if (sel) cambiarIdea(sel.dataset.ideaEstado, { estado: sel.value });
+});
+
 $('vistaRegistro').addEventListener('input', (e) => {
   if (e.target.id === 'filtroRegTexto') { clearTimeout(cargarRegistroFiltrado.t); cargarRegistroFiltrado.t = setTimeout(cargarRegistroFiltrado, 250); }
 });
@@ -1577,8 +1704,8 @@ function cargarRegistroFiltrado() {
 // recarga la que se está mirando. Antes se cargaban una sola vez y "Actualizar"
 // solo tocaba el Resumen: se podía hacer una transferencia mirando una lista
 // que otra persona ya había resuelto (auditoría del 22/10/2026, hallazgo 1).
-const VISTAS = { resumen: 'vistaResumen', profesionales: 'vistaProfesionales', moderacion: 'vistaModeracion', plata: 'vistaPlata', registro: 'vistaRegistro' };
-const CARGAS = { profesionales: () => cargarProfesionales(), moderacion: () => cargarModeracion(), plata: () => cargarPlata(), registro: () => cargarRegistro(true) };
+const VISTAS = { resumen: 'vistaResumen', ideas: 'vistaIdeas', profesionales: 'vistaProfesionales', moderacion: 'vistaModeracion', plata: 'vistaPlata', registro: 'vistaRegistro' };
+const CARGAS = { ideas: () => cargarIdeas(), profesionales: () => cargarProfesionales(), moderacion: () => cargarModeracion(), plata: () => cargarPlata(), registro: () => cargarRegistro(true) };
 let pestanaActual = 'resumen';
 
 async function cargarPestana(nombre) {

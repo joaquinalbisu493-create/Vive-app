@@ -183,6 +183,11 @@
   .chip { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; background: var(--tile); color: var(--soft); white-space: nowrap; }
   .chip.esencial { background: var(--verde-bg); color: var(--verde); }
   .chip.resultado { background: var(--terra-bg); color: var(--terra-ink); }
+  .chip.alta { background: var(--terra-bg); color: var(--terra-ink); }
+  .chip.baja { background: transparent; border: 1px solid var(--line); }
+  .obj.cerrada .obj-titulo { text-decoration: line-through; color: var(--soft); }
+  .chico-select { width: auto; padding: 6px 10px; font-size: 14px; }
+  .oculto { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .progreso { height: 8px; border-radius: 999px; background: var(--tile); margin: 10px 0 5px; overflow: hidden; }
   .progreso i { display: block; height: 100%; background: linear-gradient(90deg, #6E8A4E, var(--verde)); border-radius: 999px; transition: width .6s cubic-bezier(.2, .8, .2, 1); }
   .obj-pie { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
@@ -280,6 +285,7 @@
 
     <nav class="pestanas" role="tablist" aria-label="Secciones del tablero">
       <button role="tab" id="tab-resumen" aria-controls="vistaResumen" data-pestana="resumen" aria-selected="true">Resumen</button>
+      <button role="tab" id="tab-ideas" aria-controls="vistaIdeas" data-pestana="ideas" aria-selected="false">Pendientes e ideas <span class="contador" id="contIdeas"></span></button>
       <button role="tab" id="tab-profesionales" aria-controls="vistaProfesionales" data-pestana="profesionales" aria-selected="false">Profesionales <span class="contador" id="contProfesionales"></span></button>
       <button role="tab" id="tab-moderacion" aria-controls="vistaModeracion" data-pestana="moderacion" aria-selected="false">Moderación <span class="contador" id="contModeracion"></span></button>
       <button role="tab" id="tab-plata" aria-controls="vistaPlata" data-pestana="plata" aria-selected="false">Plata <span class="contador" id="contPlata"></span></button>
@@ -313,6 +319,25 @@
       <p class="suave" style="margin-top:-6px">Comisión de Sere por mes y profesional. Es material para el contador, no una factura: qué corresponde facturar, a quién y cada cuánto todavía está sin definir.</p>
       <p class="error" id="errorComisiones"></p>
       <div id="listaComisiones"></div>
+    </div>
+
+    <!-- ── Pendientes e ideas ── tabla `ideas`, con RLS `is_admin()`; cada
+         cambio queda en el Registro por trigger. La ven todos los admins. -->
+    <div id="vistaIdeas" role="tabpanel" aria-labelledby="tab-ideas" hidden>
+      <div class="barra-mes">
+        <h2>Pendientes e ideas</h2>
+        <label for="filtroIdeas" class="oculto">Mostrar</label>
+        <select id="filtroIdeas" class="chico-select">
+          <option value="abierta">Abiertas</option>
+          <option value="hecha">Hechas</option>
+          <option value="descartada">Descartadas</option>
+          <option value="">Todas</option>
+        </select>
+        <button class="btn chico" id="btnNuevaIdea">Agregar</button>
+      </div>
+      <p class="suave" style="margin-top:-6px">Un pendiente es algo decidido que hay que hacer; una idea, algo para pensar. Lo que se anota acá lo ven todos los admins.</p>
+      <p class="error" id="errorIdeas"></p>
+      <div class="columnas" id="columnasIdeas"></div>
     </div>
 
     <!-- ── Registro ── `admin_audit_log`: se escribe solo con service role y
@@ -476,6 +501,59 @@
         <span style="flex:1"></span>
         <button type="button" class="btn sec" id="btnCancelar">Cancelar</button>
         <button type="submit" class="btn" id="btnGuardar">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlgIdea">
+    <form id="formIdea" method="dialog">
+      <h2 id="dlgIdeaTitulo">Nuevo</h2>
+      <label for="iTitulo">Qué</label>
+      <input id="iTitulo" maxlength="200" required>
+      <label for="iDetalle">Detalle</label>
+      <textarea id="iDetalle" rows="3" maxlength="2000"></textarea>
+      <div class="fila">
+        <div>
+          <label for="iTipo">Es</label>
+          <select id="iTipo">
+            <option value="pendiente">Un pendiente</option>
+            <option value="idea">Una idea</option>
+          </select>
+        </div>
+        <div>
+          <label for="iPrioridad">Prioridad</label>
+          <select id="iPrioridad">
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+            <option value="baja">Baja</option>
+          </select>
+        </div>
+      </div>
+      <div class="fila">
+        <div>
+          <label for="iDueno">De quién</label>
+          <select id="iDueno">
+            <option value="">Sin asignar</option>
+            <option value="andre">Andre</option>
+            <option value="joaquin">Joaquín</option>
+            <option value="ambos">Ambos</option>
+          </select>
+        </div>
+        <div>
+          <label for="iEstado">Estado</label>
+          <select id="iEstado">
+            <option value="abierta">Abierta</option>
+            <option value="hecha">Hecha</option>
+            <option value="descartada">Descartada</option>
+          </select>
+        </div>
+      </div>
+      <p class="error" id="errorIdea"></p>
+      <div class="acciones">
+        <button type="button" class="link" id="btnBorrarIdea" hidden>Borrar</button>
+        <span style="flex:1"></span>
+        <button type="button" class="btn sec" id="btnCancelarIdea">Cancelar</button>
+        <button type="submit" class="btn" id="btnGuardarIdea">Guardar</button>
       </div>
     </form>
   </dialog>
