@@ -252,7 +252,11 @@ async function despuesDelMail() {
   }
   const alta = await auth('factors', { method: 'POST', body: { factor_type: 'totp', friendly_name: `Sere admin ${new Date().toISOString().slice(0, 16)}` } });
   factorId = alta.id;
-  $('qrAlta').src = alta.totp?.qr_code ?? '';
+  // Supabase manda el QR como `data:image/svg+xml;utf-8,<svg ...>` con el SVG
+  // sin codificar, y el navegador no lo dibuja (los `#` de los colores cortan
+  // la dirección). Se recodifica.
+  const svg = (alta.totp?.qr_code ?? '').replace(/^[^<]*/, '');
+  $('qrAlta').src = svg ? `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}` : '';
   $('claveAlta').textContent = alta.totp?.secret ?? '';
   mostrarPaso('pasoAlta');
   $('codigoAlta').focus();
