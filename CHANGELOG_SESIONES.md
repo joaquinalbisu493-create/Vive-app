@@ -8,8 +8,10 @@
 
 - Segundo bug: el QR del alta no se dibujaba (Supabase manda el SVG sin codificar en un data URI); se recodifica.
 - Andre registró su app de autenticación. **Segundo factor ACTIVADO**: aplicada `20261022060000_admin_exige_segundo_factor.sql` y desplegadas `admin-actions` y `guarantee-claim`. Verificado: `is_admin()` false con aal1 y true con aal2, funciones rechazan sin sesión, cron sigue OK.
+- Cerrados desde la base, a pedido de Andre, los 5 pendientes de prueba (cada uno con su fila en `admin_audit_log` a nombre de Andre y nota): reembolso MP $1 (MP lo devolvió) y USDT 50 (plata entre cuentas de Andre, sin hash) → `reembolsado`; pago internacional de Coach Prueba → `paid_out_at` con referencia "prueba"; sesión del 24/09 → `completada`; postulación de Joaquín → `rechazada` sin aviso. `admin_pendientes()` verificado: todas las colas en 0.
 
 **Pendiente para la próxima sesión:**
+- ANTES DE LANZAR: reseteo de datos de prueba (197 reservas y lo que cuelga) con respaldo previo, una sola vez. No antes: siguen probando.
 - Joaquín (joaquinalbisu493 y 494) registra su app al entrar a sere.ar/admin; decidir si una de sus dos cuentas deja de ser admin.
 - Administración en la app no anda hasta que la app pida el segundo factor (próxima versión).
 - No se probó contra la función desplegada un token real aal1 de admin (el 403 `aal2_requerido`); cubierto por la prueba unitaria de `_shared/aal.ts`.
