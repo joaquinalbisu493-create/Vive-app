@@ -1,3 +1,14 @@
+## 2026-10-25 — Andre (Claude · tablero: arreglo del ingreso de admin)
+
+**Tocado:** `web/admin/admin.js`, `supabase/migrations/20261025010000_mi_cuenta_es_admin.sql`, `SCHEMA.md`.
+
+**Resumen:**
+- Bug: sere.ar/admin le decía a Andre "Esa cuenta no es de administración". El tablero leía `profiles.is_admin` directo, y esa columna no es legible por el cliente (a propósito). En las pruebas con datos simulados no se vio.
+- Nueva función `mi_cuenta_es_admin()` (aplicada y verificada en producción; SCHEMA.md actualizado). No usa `is_admin()` porque esa va a pedir `aal2`.
+
+**Pendiente para la próxima sesión:**
+- Los 3 admins registran su app de autenticación en sere.ar/admin; recién ahí aplicar `20261022060000_admin_exige_segundo_factor.sql` y desplegar `admin-actions` y `guarantee-claim`.
+
 ## 2026-10-23 — Joaquín (Claude · modernizar el lado del profesional)
 
 **Tocado:** `screens/CoachAgendaScreen.tsx`, `CoachProfileScreen.tsx`, `CoachNotificationsScreen.tsx`, `CoachAvailabilityScreen.tsx`, `CoachTopicsScreen.tsx`, `CoachWeeklyPatternScreen.tsx`, `CoachEnfoqueScreen.tsx`, `CoachApplicationScreen.tsx`, `CoachLoginScreen.tsx`.

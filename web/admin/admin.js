@@ -224,10 +224,12 @@ function mostrarPaso(id) {
 
 async function despuesDelMail() {
   const datos = datosDelToken(sesion.access_token);
-  // ¿Es admin? Se mira la columna propia (cada uno puede leer la suya): sin
-  // eso, una cuenta común vería el paso del segundo factor sin motivo.
+  // ¿Es admin? Sin esto, una cuenta común vería el paso del segundo factor sin
+  // motivo. `profiles.is_admin` no se puede leer desde el cliente y `is_admin()`
+  // pide `aal2`, por eso hay una función aparte que solo responde por la cuenta
+  // propia (`mi_cuenta_es_admin`).
   let esAdmin = false;
-  try { esAdmin = !!(await api(`profiles?id=eq.${datos.sub}&select=is_admin`))[0]?.is_admin; } catch { /* queda en false */ }
+  try { esAdmin = (await api('rpc/mi_cuenta_es_admin', { method: 'POST', body: {} })) === true; } catch { /* queda en false */ }
   if (!esAdmin) {
     borrarSesion(); mostrarPaso('pasoMail');
     $('errorMail').textContent = 'Esa cuenta no es de administración.';
