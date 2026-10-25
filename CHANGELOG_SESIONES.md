@@ -1,13 +1,18 @@
-## 2026-10-25 — Andre (Claude · tablero: arreglo del ingreso de admin)
+## 2026-10-25 — Andre (Claude · tablero: segundo factor activado)
 
-**Tocado:** `web/admin/admin.js`, `supabase/migrations/20261025010000_mi_cuenta_es_admin.sql`, `SCHEMA.md`.
+**Tocado:** `web/admin/admin.js`, `supabase/migrations/20261025010000_mi_cuenta_es_admin.sql`, `SCHEMA.md` (+ aplicada `20261022060000`, desplegadas `admin-actions` y `guarantee-claim`).
 
 **Resumen:**
 - Bug: sere.ar/admin le decía a Andre "Esa cuenta no es de administración". El tablero leía `profiles.is_admin` directo, y esa columna no es legible por el cliente (a propósito). En las pruebas con datos simulados no se vio.
 - Nueva función `mi_cuenta_es_admin()` (aplicada y verificada en producción; SCHEMA.md actualizado). No usa `is_admin()` porque esa va a pedir `aal2`.
 
+- Segundo bug: el QR del alta no se dibujaba (Supabase manda el SVG sin codificar en un data URI); se recodifica.
+- Andre registró su app de autenticación. **Segundo factor ACTIVADO**: aplicada `20261022060000_admin_exige_segundo_factor.sql` y desplegadas `admin-actions` y `guarantee-claim`. Verificado: `is_admin()` false con aal1 y true con aal2, funciones rechazan sin sesión, cron sigue OK.
+
 **Pendiente para la próxima sesión:**
-- Los 3 admins registran su app de autenticación en sere.ar/admin; recién ahí aplicar `20261022060000_admin_exige_segundo_factor.sql` y desplegar `admin-actions` y `guarantee-claim`.
+- Joaquín (joaquinalbisu493 y 494) registra su app al entrar a sere.ar/admin; decidir si una de sus dos cuentas deja de ser admin.
+- Administración en la app no anda hasta que la app pida el segundo factor (próxima versión).
+- No se probó contra la función desplegada un token real aal1 de admin (el 403 `aal2_requerido`); cubierto por la prueba unitaria de `_shared/aal.ts`.
 
 ## 2026-10-23 — Joaquín (Claude · modernizar el lado del profesional)
 
