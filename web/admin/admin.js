@@ -71,7 +71,7 @@ const COLAS = [
   ['usdt_reclamos', 'Reclamos de pago en USDT', 'plata'],
   ['usdt_sueltas', 'Transferencias USDT sin reserva', 'plata'],
   ['pagos', 'Sesiones internacionales por pagarle al profesional', 'plata'],
-  ['sin_cerrar', 'Sesiones confirmadas que terminaron hace más de 24 h sin cerrarse', null, 'No hay prueba de asistencia. Todavía no tienen lista en el tablero: se revisan en la base, mirando la evidencia antes de decidir.'],
+  ['sin_cerrar', 'Sesiones confirmadas que terminaron hace más de 24 h sin cerrarse', 'moderacion', 'El sistema no pudo decidir solo si se hicieron.'],
   ['postulaciones', 'Postulaciones de profesionales', 'profesionales'],
   ['identidad', 'Verificaciones de identidad', 'profesionales'],
   ['credenciales', 'Títulos y matrículas por revisar', 'profesionales'],
@@ -365,7 +365,7 @@ async function cargarPendientes() {
   $('listaAtencion').innerHTML = filas.length ? filas.join('') : '<li class="nada">✓ Nada pendiente. Todo al día.</li>';
   const deProfesionales = (p.postulaciones?.cantidad ?? 0) + (p.credenciales?.cantidad ?? 0);
   $('contProfesionales').textContent = deProfesionales > 0 ? deProfesionales : '';
-  const deModeracion = (p.problemas?.cantidad ?? 0) + (p.denuncias?.cantidad ?? 0) + (p.garantias?.cantidad ?? 0);
+  const deModeracion = (p.problemas?.cantidad ?? 0) + (p.denuncias?.cantidad ?? 0) + (p.garantias?.cantidad ?? 0) + (p.sin_cerrar?.cantidad ?? 0);
   $('contModeracion').textContent = deModeracion > 0 ? deModeracion : '';
   const dePlata = ['reembolsos', 'usdt_reclamos', 'usdt_sueltas', 'pagos'].reduce((n, k) => n + (p[k]?.cantidad ?? 0), 0);
   $('contPlata').textContent = dePlata > 0 ? dePlata : '';
@@ -890,8 +890,66 @@ async function nombresDe(ids) {
 }
 
 async function cargarModeracion() {
-  await Promise.all([cargarProblemas(), cargarDenuncias(), cargarGarantias(), cargarSanciones()]);
+  await Promise.all([cargarProblemas(), cargarSinCerrar(), cargarDenuncias(), cargarGarantias(), cargarSanciones()]);
 }
+
+// ── Sesiones sin cerrar ──────────────────────────────────────────────────────
+// La evidencia y el veredicto los arma el servidor con la misma regla que usa
+// el cron (`_shared/sesion-sin-cerrar.ts`); acá solo se muestran y se decide.
+let sinCerrar = [];
+const VEREDICTO = {
+  sin_registro: 'No hay registro de la videollamada: Daily no devolvió nada para esta sala.',
+  sin_datos: 'El registro no alcanza para decidir.',
+  sesion_normal: 'Según el registro, los dos estuvieron a tiempo: la sesión se hizo.',
+  cliente_no_entro: 'El profesional estuvo y la persona no entró: según los términos, el profesional cobra.',
+  cliente_llego_tarde: 'La persona llegó con más de 20 minutos de demora: según los términos, el profesional cobra.',
+  profesional_no_entro: 'El profesional no entró en los primeros 10 minutos: según los términos, corresponde devolver la plata.',
+  profesional_se_fue: 'El profesional se fue antes de que llegara la persona: según los términos, corresponde devolver la plata.',
+  no_vino_nadie: 'No entró nadie a la sala: corresponde devolver la plata.',
+};
+const ROL_SALA = { cliente: 'La persona', profesional: 'El profesional', otro: 'Alguien sin identificar' };
+const ROL_REPORTE = { usuario: 'La persona', cliente: 'La persona', coach: 'El profesional', profesional: 'El profesional' };
+const RIEL = { mp: 'Mercado Pago', paypal: 'PayPal', usdt: 'USDT' };
+const minutoSala = (m) => (m === 0 ? 'en el horario' : m < 0 ? `${-m} min antes` : `${m} min después`);
+
+async function cargarSinCerrar() {
+  $('errorSinCerrar').textContent = '';
+  try {
+    sinCerrar = (await accionAdmin({ action: 'list_unclosed_sessions' })).sesiones ?? [];
+  } catch (e) {
+    sinCerrar = [];
+    $('errorSinCerrar').textContent = `No se pudieron cargar: ${e.message}`;
+  }
+  $('listaSinCerrar').innerHTML = sinCerrar.length ? sinCerrar.map((c) => {
+    const v = c.evidencia?.veredicto ?? {};
+    const lectura = VEREDICTO[v.motivo ?? v.veredicto] ?? 'Sin lectura.';
+    const sugerida = v.veredicto === 'reembolso' ? 'reembolso' : v.veredicto === 'cobrar' ? 'no_vino_persona' : v.veredicto === 'sesion_normal' ? 'se_hizo' : null;
+    const partes = c.evidencia?.partes ?? [];
+    return `<article class="caja ficha">
+      <h3>${esc(c.profesional ?? 'Profesional')} con ${esc(c.persona ?? 'alguien sin nombre')}</h3>
+      <div class="suave datos">Sesión del ${esc(fechaIso(c.fecha))} a las ${esc(String(c.hora).slice(0, 5))} hs${c.duracion ? ` · ${c.duracion} min` : ''} · ${esc(c.moneda)} ${esc(dinero(c.monto))} por ${esc(RIEL[c.riel] ?? c.riel)}</div>
+      <div class="bloque"><b>Qué dice el registro</b>${esc(lectura)}
+        ${partes.length ? `<ul style="margin:6px 0 0;padding-left:18px">${partes.map((p) => `<li>${esc(ROL_SALA[p.rol] ?? p.rol)} entró ${esc(minutoSala(p.entroMin))} y estuvo ${p.minutos} min</li>`).join('')}</ul>` : ''}
+        ${c.evidencia?.maxSimultaneos != null ? `<div class="suave">Como máximo hubo ${c.evidencia.maxSimultaneos} a la vez en la sala.</div>` : ''}
+      </div>
+      ${c.reportes?.length ? `<div class="bloque"><b>Reportes de esta sesión</b>${c.reportes.map((r) => `<div class="cita">${esc(ROL_REPORTE[r.rol] ?? r.rol)}: ${esc(MOTIVO_PROBLEMA[r.motivo] ?? r.motivo)}${r.detalle ? `. ${esc(r.detalle)}` : ''}</div>`).join('')}</div>` : ''}
+      <div class="formulario-linea">
+        <textarea id="cierre-${c.id}" rows="2" maxlength="1000" placeholder="Nota: por qué decidís esto (queda en el Registro)"></textarea>
+        <div class="botonera" style="margin-top:0">
+          <button class="btn chico${sugerida === 'se_hizo' ? '' : ' sec'}" data-cerrar-sesion="${c.id}" data-decision="se_hizo">Se hizo</button>
+          <button class="btn chico${sugerida === 'no_vino_persona' ? '' : ' sec'}" data-cerrar-sesion="${c.id}" data-decision="no_vino_persona">La persona no vino: cobra el profesional</button>
+          <button class="btn chico${sugerida === 'reembolso' ? ' peligro' : ' sec'}" data-cerrar-sesion="${c.id}" data-decision="reembolso">No se hizo: devolver la plata</button>
+        </div>
+      </div>
+    </article>`;
+  }).join('') : '<p class="vacio">No hay sesiones sin cerrar.</p>';
+}
+
+const PREGUNTA_CIERRE = {
+  se_hizo: '¿Marcar la sesión como hecha?\n\nEl profesional cobra y a la persona le llega la invitación a dejar una reseña.',
+  no_vino_persona: '¿Cerrar como "la persona no vino"?\n\nEl profesional cobra la sesión entera y no se le pide reseña a nadie.',
+  reembolso: '¿Cancelar y devolver la plata?\n\nLa sesión queda cancelada por el profesional, el reembolso se encola y a la persona le avisamos.',
+};
 
 async function cargarProblemas() {
   $('errorProblemas').textContent = '';
@@ -1146,6 +1204,18 @@ $('vistaModeracion').addEventListener('click', async (e) => {
   const t = e.target.closest('button');
   if (!t) return;
   const d = t.dataset;
+
+  if (d.cerrarSesion) {
+    const nota = $(`cierre-${d.cerrarSesion}`).value.trim();
+    if (nota.length < 3) return alert('Escribí en la nota por qué decidís esto: queda en el Registro.');
+    if (!confirm(PREGUNTA_CIERRE[d.decision])) return;
+    t.disabled = true;
+    try {
+      await accionAdmin({ action: 'close_unclosed_session', booking_id: d.cerrarSesion, decision: d.decision, nota });
+      await Promise.all([cargarSinCerrar(), cargarPendientes()]);
+    } catch (err) { alert(`No se pudo: ${err.message}`); t.disabled = false; }
+    return;
+  }
 
   if (d.responder) {
     const texto = $(`resp-${d.responder}`).value.trim();
@@ -1560,6 +1630,7 @@ const ACCIONES = {
   discard_usdt_transfer: 'descartó una transferencia de USDT',
   mark_usdt_refunded: 'registró un reembolso en USDT',
   mark_coach_paid: 'registró un pago a un profesional',
+  close_unclosed_session: 'cerró una sesión sin cerrar',
 };
 
 Object.assign(ACCIONES, {

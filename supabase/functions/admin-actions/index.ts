@@ -40,6 +40,8 @@ import { marketplaceFeeFor } from '../_shared/commission.ts'
 import { processPaidBookingEffects } from '../_shared/paid-effects-recovery.ts'
 import { WEB_ORIGIN } from '../_shared/cors.ts'
 import { tieneSegundoFactor } from '../_shared/aal.ts'
+import { scheduledAtMs } from '../_shared/guarantee.ts'
+import { evidenciaDeSesion, terminoHaceMasDe24h } from '../_shared/sesion-sin-cerrar.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!
@@ -985,6 +987,150 @@ serve(async (req) => {
     // La respuesta se guarda en el caso y la persona la lee en la Sala. El
     // aviso (campana, push y mail) NO lleva el texto: el push se ve con el
     // teléfono bloqueado, y la respuesta puede hablar de su sesión o su pago.
+    // ── Sesiones sin cerrar (26/10/2026) ─────────────────────────────────────
+    // Reservas `confirmada` que terminaron hace más de 24 h y que ni el cron de
+    // completar ni `session-attendance` pudieron cerrar (ver
+    // `_shared/sesion-sin-cerrar.ts`). La lista va por acá y no por REST porque
+    // junta reserva, asistencia, nombres y reportes con service role, y porque
+    // el veredicto sale de la misma función que usa el cron.
+    case 'list_unclosed_sessions': {
+      const ahora = Date.now()
+      const { data: filas, error } = await admin.from('bookings')
+        .select('id, user_id, coach_id, coach_name, scheduled_date, scheduled_time, duration_minutes, amount, referral_discount, currency, payment_provider, payment_status')
+        .eq('status', 'confirmada')
+        .lte('scheduled_date', new Date(ahora - 24 * 3_600_000).toISOString().slice(0, 10))
+        .order('scheduled_date', { ascending: true })
+        .limit(200)
+      if (error) return json({ error: error.message }, 500)
+
+      const trabadas = (filas ?? []).filter((b: any) =>
+        terminoHaceMasDe24h(scheduledAtMs(b.scheduled_date, b.scheduled_time), b.duration_minutes, ahora))
+      if (trabadas.length === 0) return json({ sesiones: [] })
+
+      const ids = trabadas.map((b: any) => b.id)
+      const coachIds = [...new Set(trabadas.map((b: any) => b.coach_id))]
+      const [asis, coaches, issues] = await Promise.all([
+        admin.from('session_attendance').select('booking_id, raw, participants_count, max_simultaneous').in('booking_id', ids),
+        admin.from('coaches').select('id, profile_id').in('id', coachIds),
+        admin.from('session_issues').select('booking_id, rol, motivo, detalle, estado, created_at').in('booking_id', ids),
+      ])
+      if (asis.error || coaches.error || issues.error) {
+        return json({ error: asis.error?.message ?? coaches.error?.message ?? issues.error?.message }, 500)
+      }
+      const perfilDeCoach = new Map((coaches.data ?? []).map((c: any) => [c.id, c.profile_id]))
+      const userIds = [...new Set(trabadas.map((b: any) => b.user_id))]
+      const { data: perfiles } = await admin.from('profiles').select('id, name').in('id', userIds)
+      const nombre = new Map((perfiles ?? []).map((p: any) => [p.id, p.name]))
+      const asistenciaDe = new Map((asis.data ?? []).map((a: any) => [a.booking_id, a]))
+
+      return json({
+        sesiones: trabadas.map((b: any) => ({
+          id: b.id,
+          fecha: b.scheduled_date,
+          hora: b.scheduled_time,
+          duracion: b.duration_minutes,
+          profesional: b.coach_name,
+          persona: nombre.get(b.user_id) ?? null,
+          monto: Math.round((Number(b.amount ?? 0) - Number(b.referral_discount ?? 0)) * 100) / 100,
+          moneda: b.currency ?? 'ARS',
+          riel: b.payment_provider,
+          pago: b.payment_status,
+          evidencia: evidenciaDeSesion({
+            asistencia: asistenciaDe.get(b.id) ?? null,
+            clienteId: b.user_id,
+            profesionalId: perfilDeCoach.get(b.coach_id) ?? null,
+            inicioMs: scheduledAtMs(b.scheduled_date, b.scheduled_time),
+          }),
+          reportes: (issues.data ?? []).filter((i: any) => i.booking_id === b.id),
+        })),
+      })
+    }
+
+    // Cierra una sesión trabada. Tres decisiones, las mismas salidas que tiene el
+    // sistema cuando decide solo:
+    //   · `se_hizo`         → completada + invitación a reseñar (como el cron)
+    //   · `no_vino_persona` → completada SIN invitación: el profesional cobra (§9.5)
+    //   · `reembolso`       → cancelada por el profesional: `trg_mark_refund_on_cancel`
+    //                         encola el reembolso (como `session-attendance`)
+    // 🔴 Mueve plata (habilita el pago internacional o dispara un reembolso), por
+    // eso exige nota y queda auditada con la forma D8.
+    case 'close_unclosed_session': {
+      const decision = String(body.decision ?? '')
+      if (!['se_hizo', 'no_vino_persona', 'reembolso'].includes(decision)) {
+        return json({ error: 'decision tiene que ser se_hizo, no_vino_persona o reembolso' }, 400)
+      }
+      const nota = typeof body.nota === 'string' ? body.nota.trim() : ''
+      if (nota.length < 3) return json({ error: 'escribí en una nota por qué decidís esto' }, 400)
+      if (nota.length > 1000) return json({ error: 'la nota es muy larga (máx. 1000)' }, 400)
+      if (!body.booking_id) return json({ error: 'falta booking_id' }, 400)
+
+      const { data: b, error: bErr } = await admin.from('bookings')
+        .select('id, user_id, coach_id, coach_name, scheduled_date, scheduled_time, duration_minutes, amount, referral_discount, currency, payment_provider, status, payment_status')
+        .eq('id', body.booking_id).maybeSingle()
+      if (bErr) return json({ error: bErr.message }, 500)
+      if (!b) return json({ error: 'no existe esa reserva' }, 404)
+      if (b.status !== 'confirmada' || b.payment_status !== 'aprobado') {
+        return json({ error: `la reserva ya no está trabada (estado ${b.status}, pago ${b.payment_status})` }, 409)
+      }
+      if (!terminoHaceMasDe24h(scheduledAtMs(b.scheduled_date, b.scheduled_time), b.duration_minutes, Date.now())) {
+        return json({ error: 'la sesión todavía no cumplió 24 h de terminada: el sistema puede cerrarla solo' }, 409)
+      }
+
+      const update = decision === 'reembolso'
+        ? { status: 'cancelada', cancelled_by: 'coach' }
+        : { status: 'completada' }
+      // Condicional sobre el estado leído: si el cron la cerró en el medio, no
+      // se pisa su decisión.
+      const { data: cambiada, error: upErr } = await admin.from('bookings')
+        .update(update)
+        .eq('id', b.id).eq('status', 'confirmada').eq('payment_status', 'aprobado')
+        .select('id, status, payment_status')
+      if (upErr) return json({ error: upErr.message }, 500)
+      if (!cambiada?.length) return json({ error: 'la reserva cambió mientras decidías: recargá la lista' }, 409)
+      const fila = cambiada[0]
+
+      // Que `session-attendance` no la vuelva a evaluar.
+      await admin.from('session_attendance').update({ refund_resolution: 'resolved' }).eq('booking_id', b.id)
+
+      if (decision === 'se_hizo') {
+        await admin.from('notifications').insert({
+          recipient_id: b.user_id, type: 'invitacion_review', booking_id: b.id,
+          title: '¿Cómo estuvo tu sesión?',
+          body: `Contanos cómo te fue con ${b.coach_name ?? 'tu coach'} — tu reseña ayuda a otros a elegir mejor.`,
+        })
+      } else if (decision === 'reembolso') {
+        await admin.from('notifications').insert({
+          recipient_id: b.user_id, type: 'reserva_cancelada', booking_id: b.id,
+          title: 'No se hizo tu sesión',
+          body: 'La sesión no se hizo. Te devolvemos todo lo que pagaste.',
+        })
+      }
+
+      const cobrado = Math.round((Number(b.amount ?? 0) - Number(b.referral_discount ?? 0)) * 100) / 100
+      const auditErr = await audit(admin, {
+        ...actor,
+        action: 'close_unclosed_session',
+        targetType: 'booking',
+        targetId: b.id,
+        details: {
+          decision,
+          nota,
+          estado_final: fila.status,
+          pago_final: fila.payment_status,
+          ...(decision === 'reembolso' ? { monto: cobrado, moneda: b.currency ?? 'ARS', riel: b.payment_provider } : {}),
+        },
+      })
+
+      // El reembolso lo encola el trigger. Si no quedó encolado, que se vea.
+      const avisos = [
+        decision === 'reembolso' && fila.payment_status !== 'reembolso_pendiente'
+          ? `la sesión quedó cancelada pero el reembolso no se encoló (pago: ${fila.payment_status}); revisalo` : null,
+        auditErr ? `acción hecha, auditoría fallida: ${auditErr}` : null,
+      ].filter(Boolean)
+
+      return json({ result: 'ok', estado: fila.status, pago: fila.payment_status, ...(avisos.length ? { warning: avisos.join(' · ') } : {}) })
+    }
+
     case 'respond_session_issue': {
       if (!body.issue_id) return json({ error: 'falta issue_id' }, 400)
       if (!['en_revision', 'resuelto'].includes(body.estado)) {

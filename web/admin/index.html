@@ -374,6 +374,14 @@
       <p class="error" id="errorProblemas"></p>
       <div id="listaProblemas"></div>
 
+      <!-- Sesiones sin cerrar (26/10/2026): confirmadas que terminaron hace más
+           de 24 h y que el sistema no pudo cerrar solo. La lista y el cierre van
+           por `admin-actions` (list_unclosed_sessions / close_unclosed_session). -->
+      <h2 style="margin-top:32px">Sesiones sin cerrar</h2>
+      <p class="suave" style="margin-top:-6px">Terminaron hace más de 24 h y el sistema no pudo decidir solo si se hicieron. Mirá la evidencia y cerrala: de eso depende si el profesional cobra o si se le devuelve la plata a la persona.</p>
+      <p class="error" id="errorSinCerrar"></p>
+      <div id="listaSinCerrar"></div>
+
       <h2 style="margin-top:32px">Denuncias</h2>
       <p class="error" id="errorDenuncias"></p>
       <div id="listaDenuncias"></div>

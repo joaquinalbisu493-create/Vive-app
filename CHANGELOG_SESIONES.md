@@ -1,6 +1,6 @@
 ## 2026-10-26 — Andre (Claude · facturación: descuento y tope del monotributo)
 
-**Tocado:** `lib/billing.ts`, `lib/admin.ts`, `__tests__/billing.test.ts`, `web/admin/admin.js`, `web/admin/index.html`, `screens/AdminScreen.tsx`.
+**Tocado:** `lib/billing.ts`, `lib/admin.ts`, `__tests__/billing.test.ts`, `web/admin/admin.js`, `web/admin/index.html`, `screens/AdminScreen.tsx`, `supabase/functions/admin-actions/index.ts` (desplegada v55), `supabase/functions/_shared/sesion-sin-cerrar.ts` y `__tests__/sesion-sin-cerrar.test.ts` (nuevos).
 
 **Resumen:**
 - Decisión de Andre: mientras sea monotributista hace las facturas él, a mano en ARCA. No se programa emisión automática; el sistema solo le da los números.
@@ -9,7 +9,10 @@
 - Sin cambios en la base; SCHEMA.md no se tocó.
 - Administración en la app pide el segundo factor (`screens/AdminScreen.tsx`, componente `SegundoFactor`): si la sesión es `aal1`, antes de cargar el panel pide los 6 dígitos y hace `mfa.challengeAndVerify`, que deja la sesión de la app en `aal2`. Solo verifica: el alta (QR) se hace en sere.ar/admin, porque el factor es de la cuenta y sirve en los dos lados. Sin factor registrado, manda a sere.ar/admin. tsc y lint limpios, 983 pruebas en verde. NO probado de punta a punta: vita-pruebas está pausado (INACTIVE) y no se reactivó. Llega con la próxima compilación (no hay actualizaciones a distancia).
 
+- **Sesiones sin cerrar** en sere.ar/admin → Moderación (la idea de la auditoría del 22/10). Lista las confirmadas que terminaron hace más de 24 h, con la ficha: quién entró a la videollamada, en qué minuto y cuánto estuvo, qué diría la regla de §9.5 (la misma `veredictoAsistencia` del cron) y los reportes de esa sesión. Tres botones, con nota obligatoria y auditados: "Se hizo" (completada + invitación a reseñar, como el cron), "La persona no vino" (completada sin invitación: el profesional cobra) y "No se hizo" (cancelada por el profesional: `trg_mark_refund_on_cancel` encola el reembolso, como `session-attendance`). El botón que coincide con la regla aparece resaltado. Acciones nuevas `list_unclosed_sessions` y `close_unclosed_session` en `admin-actions` v55 (verificado: arranca y rechaza sin sesión). Probado en producción con una reserva temporal dentro de una transacción deshecha: cancelar deja `reembolso_pendiente`, completar deja `aprobado`, y una completada no se puede reabrir; no quedó basura. "Necesita atención" ahora lleva a esa lista y la cuenta en Moderación. Hallazgo: las sesiones donde la persona no vino quedaban trabadas siempre (el cron exige dos personas en la sala) y el profesional internacional no podía cobrar; ahora se cierran desde acá. Sin cambios de base.
+
 **Pendiente para la próxima sesión:**
+- Andre: ver la lista en sere.ar/admin (hoy vacía) y, con la primera sesión trabada real, probar un cierre. Recién ahí cerrar la idea "Lista de sesiones sin cerrar" del tablero.
 - Probar Administración en el iPhone con la próxima compilación: pedir el código, entrar, y que al cerrar y abrir la app siga entrando (o vuelva a pedirlo) sin errores. Recién ahí cerrar la idea "Que Administración en la app pida el segundo factor" del tablero.
 - Cuando conteste la contadora: si se factura el total a quien reserva, sumar una vista por sesión (persona, fecha, total) para copiar en ARCA.
 - El contador del tope está solo en la web, y así queda: desde el 25/10 la administración en la app no anda (la base exige segundo factor y la app no lo pide hasta la próxima versión). Todo se hace desde sere.ar/admin. El arreglo del descuento en `lib/billing.ts` ya queda listo para cuando vuelva.
