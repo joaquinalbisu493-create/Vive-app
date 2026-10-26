@@ -725,7 +725,7 @@ export type CommissionReport = {
 export async function listCommissionReport(): Promise<CommissionReport> {
   const { data, error } = await supabase
     .from('bookings')
-    .select('scheduled_date, coach_id, coach_name, amount, platform_fee_pct, currency, payment_provider, payment_status')
+    .select('scheduled_date, coach_id, coach_name, amount, platform_fee_pct, currency, payment_provider, payment_status, referral_discount')
     // 'contracargo' entra igual que 'reembolsado': los dos revierten la comisión,
     // y dejarlo afuera haría que una sesión disputada desapareciera del material
     // que se le lleva al contador.

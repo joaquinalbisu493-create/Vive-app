@@ -1,3 +1,17 @@
+## 2026-10-26 — Andre (Claude · facturación: descuento y tope del monotributo)
+
+**Tocado:** `lib/billing.ts`, `lib/admin.ts`, `__tests__/billing.test.ts`, `web/admin/admin.js`, `web/admin/index.html`.
+
+**Resumen:**
+- Decisión de Andre: mientras sea monotributista hace las facturas él, a mano en ARCA. No se programa emisión automática; el sistema solo le da los números.
+- Arreglado el bug anotado en la pestaña de comisiones (app y sere.ar/admin): con descuento de referido mostraba más comisión que la real. Ahora resta `referral_discount` igual que `mp-create-payment`, y el "bruto" es lo que pagó la persona. En producción todavía no hay ninguna reserva con descuento, así que hoy no cambia ningún número. Tests nuevos en `billing.test.ts` (983 en verde).
+- Nuevo en sere.ar/admin, pestaña Plata: "Monotributo: últimos 12 meses". Suma lo cobrado por `paid_at` en los últimos 365 días (sin reembolsadas) de las dos formas en discusión: facturando la comisión (T&C actuales) o el total de cada sesión (lo que propuso la contadora), contra el tope de la categoría. El tope y el dólar para pasar USD a pesos los carga Andre y quedan en el navegador (no en la base). Avisa desde el 80%.
+- Sin cambios en la base; SCHEMA.md no se tocó.
+
+**Pendiente para la próxima sesión:**
+- Cuando conteste la contadora: si se factura el total a quien reserva, sumar una vista por sesión (persona, fecha, total) para copiar en ARCA.
+- La pestaña de la app no tiene el contador del tope (solo la web).
+
 ## 2026-10-25 — Andre (Claude · tablero: segundo factor activado)
 
 **Tocado:** `web/admin/admin.js`, `web/admin/index.html`, `supabase/migrations/20261025010000_mi_cuenta_es_admin.sql`, `20261025020000_ideas_y_pendientes.sql`, `SCHEMA.md` (+ aplicada `20261022060000`, desplegadas `admin-actions` y `guarantee-claim`).

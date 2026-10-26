@@ -21,6 +21,10 @@ export type BookingForBilling = {
   currency: string | null;
   payment_provider: string | null;
   payment_status: string;
+  /** Descuento del invitado (M7). Sale entero de la comisión de Sere: la
+   *  persona pagó `amount - referral_discount` y Mercado Pago retuvo la
+   *  comisión menos el descuento. Solo existe en el riel de Mercado Pago. */
+  referral_discount?: number | string | null;
 };
 
 export type CommissionGroup = {
@@ -34,17 +38,33 @@ export type CommissionGroup = {
    *  plata entró entera a VIVE y la comisión se descontó al pagarle al coach. */
   riel: 'mp' | 'internacional';
   sesiones: number;
+  /** Lo que pagaron las personas, ya con el descuento del invitado restado. */
   bruto: number;
   comision: number;
 };
 
-/** La comisión de una reserva. Redondea al centavo multiplicando antes de
- *  dividir, igual que `marketplaceFeeFor` del servidor. */
+function descuentoDe(b: BookingForBilling): number {
+  const d = Number(b.referral_discount ?? 0);
+  return Number.isFinite(d) && d > 0 ? d : 0;
+}
+
+/** La comisión que de verdad quedó de una reserva. Redondea al centavo
+ *  multiplicando antes de dividir, igual que `marketplaceFeeFor` del servidor, y
+ *  le resta el descuento del invitado igual que `mp-create-payment`: sin eso, una
+ *  reserva con descuento mostraba más comisión que la que retuvo Mercado Pago. */
 export function comisionDe(b: BookingForBilling): number {
   const amount = Number(b.amount ?? NaN);
   const pct = Number(b.platform_fee_pct ?? NaN);
   if (!Number.isFinite(amount) || !Number.isFinite(pct)) return 0;
-  return Math.round(amount * pct) / 100;
+  const base = Math.round(amount * pct) / 100;
+  return Math.max(0, Math.round((base - descuentoDe(b)) * 100) / 100);
+}
+
+/** Lo que pagó la persona: el precio menos el descuento del invitado. */
+export function cobradoDe(b: BookingForBilling): number {
+  const amount = Number(b.amount ?? NaN);
+  if (!Number.isFinite(amount)) return 0;
+  return Math.round((amount - descuentoDe(b)) * 100) / 100;
 }
 
 /**
@@ -79,7 +99,7 @@ export function agruparComisiones(bookings: BookingForBilling[]): CommissionGrou
       mapa.set(clave, g);
     }
     g.sesiones += 1;
-    g.bruto += Number(b.amount ?? 0);
+    g.bruto += cobradoDe(b);
     g.comision += comisionDe(b);
   }
 

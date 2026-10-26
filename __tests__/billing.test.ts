@@ -1,5 +1,6 @@
 import {
   comisionDe,
+  cobradoDe,
   agruparComisiones,
   totalPorMoneda,
   type BookingForBilling,
@@ -30,13 +31,38 @@ describe('comisionDe', () => {
     expect(comisionDe(reserva({ amount: '4500', platform_fee_pct: '15' }))).toBe(675);
   });
 
+  // El descuento del invitado sale entero de la comisión (mp-create-payment):
+  // 4500 al 20% son 900, menos 450 de descuento quedan 450.
+  it('le resta el descuento del invitado', () => {
+    expect(comisionDe(reserva({ platform_fee_pct: 20, referral_discount: 450 }))).toBe(450);
+    expect(comisionDe(reserva({ platform_fee_pct: 20, referral_discount: '450' }))).toBe(450);
+  });
+
+  it('nunca da una comisión negativa', () => {
+    expect(comisionDe(reserva({ platform_fee_pct: 0, referral_discount: 450 }))).toBe(0);
+  });
+
   it('devuelve 0 con datos ilegibles en vez de NaN', () => {
     expect(comisionDe(reserva({ amount: null }))).toBe(0);
     expect(comisionDe(reserva({ platform_fee_pct: null }))).toBe(0);
   });
 });
 
+describe('cobradoDe', () => {
+  it('es el precio menos el descuento del invitado', () => {
+    expect(cobradoDe(reserva())).toBe(4500);
+    expect(cobradoDe(reserva({ referral_discount: 450 }))).toBe(4050);
+  });
+});
+
 describe('agruparComisiones', () => {
+  it('el bruto es lo que pagó la persona, con el descuento restado', () => {
+    const [g] = agruparComisiones([reserva({ platform_fee_pct: 20, referral_discount: 450 }), reserva()]);
+    expect(g.bruto).toBe(8550);
+    expect(g.comision).toBe(1125);
+  });
+
+
   it('agrupa por mes y profesional', () => {
     const g = agruparComisiones([reserva(), reserva(), reserva({ scheduled_date: '2026-07-10' })]);
     expect(g).toHaveLength(2);

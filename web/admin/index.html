@@ -315,6 +315,20 @@
       <p class="error" id="errorPagos"></p>
       <div id="listaPagos"></div>
 
+      <!-- Tope del monotributo (26/10/2026): Andre factura a mano en ARCA mientras
+           sea monotributista; esto solo estima cuánto lleva contra el tope. El
+           tope y el dólar se guardan en este navegador, no en la base. -->
+      <h2 style="margin-top:32px">Monotributo: últimos 12 meses</h2>
+      <p class="suave" style="margin-top:-6px">Cuánto llevás cobrado contra el tope de tu categoría. Es una estimación con lo que registró Sere: el número que vale es el de las facturas que hiciste en ARCA. Las sesiones reembolsadas no cuentan.</p>
+      <div class="caja">
+        <label for="topeCategoria">Tope anual de tu categoría, en pesos</label>
+        <input id="topeCategoria" inputmode="numeric" autocomplete="off" placeholder="Por ejemplo 20.000.000">
+        <label for="dolarTope">Dólar para pasar a pesos lo cobrado en USD</label>
+        <input id="dolarTope" inputmode="decimal" autocomplete="off" placeholder="Por ejemplo 1.400">
+        <p class="suave" style="margin:8px 0 0">Los topes cambian dos veces por año: <a href="https://www.afip.gob.ar/monotributo/categorias.asp" target="_blank" rel="noopener">ver la tabla vigente en ARCA</a>. Los dos números quedan guardados solo en esta compu.</p>
+        <div id="resultadoTope"></div>
+      </div>
+
       <h2 style="margin-top:32px">Comisiones</h2>
       <p class="suave" style="margin-top:-6px">Comisión de Sere por mes y profesional. Es material para el contador, no una factura: qué corresponde facturar, a quién y cada cuánto todavía está sin definir.</p>
       <p class="error" id="errorComisiones"></p>
