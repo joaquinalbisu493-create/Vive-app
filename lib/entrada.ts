@@ -62,8 +62,9 @@ export async function destinoTrasEntrar(
  *  🔴 `ayuda` está y no se saca: las líneas de crisis no pueden depender de
  *  haber creado una cuenta. `legal` también: los Términos se tienen que poder
  *  leer antes de aceptarlos. `nueva-contrasena` y `verificar-mail` llegan por
- *  un link al mail, con la sesión a medio abrir. */
+ *  un link al mail, con la sesión a medio abrir. `c` es el link de un
+ *  profesional (`sere.ar/c/<slug>`): anota la llegada y manda sola al principio. */
 export const PANTALLAS_SIN_CUENTA = new Set([
   'index', 'onboarding-bifurcacion', 'login', 'register',
-  'coach-login', 'nueva-contrasena', 'verificar-mail', 'legal', 'ayuda',
+  'coach-login', 'nueva-contrasena', 'verificar-mail', 'legal', 'ayuda', 'c',
 ]);

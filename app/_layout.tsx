@@ -335,6 +335,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" options={{ headerShown: false, gestureEnabled: false }} />
           <Stack.Screen name="(coach)" options={{ headerShown: false, gestureEnabled: false }} />
           <Stack.Screen name="profesional" options={{ headerShown: false }} />
+          <Stack.Screen name="c/[slug]" options={{ headerShown: false, animation: 'none' }} />
           <Stack.Screen name="booking-calendar" options={{ headerShown: false }} />
           <Stack.Screen name="booking-time" options={{ headerShown: false }} />
           <Stack.Screen name="booking-confirm" options={{ headerShown: false }} />

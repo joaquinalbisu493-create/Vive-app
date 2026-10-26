@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["6FQ5R7KG58.com.andrealbisu.viveapp"],
+        "components": [
+          { "/": "/c/*", "comment": "Link del profesional: abre su perfil en la app (26/10/2026)" }
+        ]
+      }
+    ]
+  }
+}

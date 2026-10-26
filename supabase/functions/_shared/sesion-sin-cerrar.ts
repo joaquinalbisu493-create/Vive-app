@@ -15,6 +15,7 @@
 //
 // Sin imports de Deno a propósito: lo prueba Jest.
 
+// @ts-expect-error Deno exige la extensión; el tsc de la app (que lo ve por el test) no la acepta.
 import { veredictoAsistencia, type Participante, type Veredicto } from './asistencia.ts';
 
 export type ParteEnSala = {

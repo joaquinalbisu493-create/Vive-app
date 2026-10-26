@@ -36,6 +36,7 @@ import { ensureMeetingRoom } from '@/lib/meetingRoom';
 import { observedTz, enArgentina, localEquivalentLabel } from '@/lib/time';
 import { CoachAvatar } from '@/components/CoachAvatar';
 import { DESCUENTO_REFERIDO_PCT } from '@/lib/referidos';
+import { llegoPorLink } from '@/lib/llegadaPorLink';
 
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTH_NAMES = [
@@ -526,6 +527,7 @@ export default function BookingScreen_Confirm() {
       }
 
       // 3. Insertar booking — columnas reales verificadas en la base (SCHEMA.md)
+      const porLink = await llegoPorLink(coachId);
       const { data: booking, error: bookingError } = await supabase
         .from('bookings')
         .insert({
@@ -575,6 +577,10 @@ export default function BookingScreen_Confirm() {
           // `null` cuando no se sabe, nunca un valor inventado: lo lee un
           // profesional como algo que la persona declaró.
           ...(temaOrigen ? { tema_origen: temaOrigen } : {}),
+          // Por dónde entró (D13): 'link' si la persona abrió el link de ESTE
+          // profesional en los últimos 30 días, y su primera sesión va al 0% de
+          // comisión. La base solo acepta 'link' o 'app' desde la app.
+          origen: porLink ? 'link' : 'app',
         })
         .select('id')
         .single();
