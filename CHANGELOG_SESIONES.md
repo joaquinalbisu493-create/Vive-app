@@ -10,7 +10,7 @@
 
 **Pendiente para la próxima sesión:**
 - Cuando conteste la contadora: si se factura el total a quien reserva, sumar una vista por sesión (persona, fecha, total) para copiar en ARCA.
-- La pestaña de la app no tiene el contador del tope (solo la web).
+- El contador del tope está solo en la web, y así queda: desde el 25/10 la administración en la app no anda (la base exige segundo factor y la app no lo pide hasta la próxima versión). Todo se hace desde sere.ar/admin. El arreglo del descuento en `lib/billing.ts` ya queda listo para cuando vuelva.
 
 ## 2026-10-25 — Andre (Claude · tablero: segundo factor activado)
 
