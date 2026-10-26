@@ -1,14 +1,16 @@
 ## 2026-10-26 — Andre (Claude · facturación: descuento y tope del monotributo)
 
-**Tocado:** `lib/billing.ts`, `lib/admin.ts`, `__tests__/billing.test.ts`, `web/admin/admin.js`, `web/admin/index.html`.
+**Tocado:** `lib/billing.ts`, `lib/admin.ts`, `__tests__/billing.test.ts`, `web/admin/admin.js`, `web/admin/index.html`, `screens/AdminScreen.tsx`.
 
 **Resumen:**
 - Decisión de Andre: mientras sea monotributista hace las facturas él, a mano en ARCA. No se programa emisión automática; el sistema solo le da los números.
 - Arreglado el bug anotado en la pestaña de comisiones (app y sere.ar/admin): con descuento de referido mostraba más comisión que la real. Ahora resta `referral_discount` igual que `mp-create-payment`, y el "bruto" es lo que pagó la persona. En producción todavía no hay ninguna reserva con descuento, así que hoy no cambia ningún número. Tests nuevos en `billing.test.ts` (983 en verde).
 - Nuevo en sere.ar/admin, pestaña Plata: "Monotributo: últimos 12 meses". Suma lo cobrado por `paid_at` en los últimos 365 días (sin reembolsadas) de las dos formas en discusión: facturando la comisión (T&C actuales) o el total de cada sesión (lo que propuso la contadora), contra el tope de la categoría. El tope y el dólar para pasar USD a pesos los carga Andre y quedan en el navegador (no en la base). Avisa desde el 80%.
 - Sin cambios en la base; SCHEMA.md no se tocó.
+- Administración en la app pide el segundo factor (`screens/AdminScreen.tsx`, componente `SegundoFactor`): si la sesión es `aal1`, antes de cargar el panel pide los 6 dígitos y hace `mfa.challengeAndVerify`, que deja la sesión de la app en `aal2`. Solo verifica: el alta (QR) se hace en sere.ar/admin, porque el factor es de la cuenta y sirve en los dos lados. Sin factor registrado, manda a sere.ar/admin. tsc y lint limpios, 983 pruebas en verde. NO probado de punta a punta: vita-pruebas está pausado (INACTIVE) y no se reactivó. Llega con la próxima compilación (no hay actualizaciones a distancia).
 
 **Pendiente para la próxima sesión:**
+- Probar Administración en el iPhone con la próxima compilación: pedir el código, entrar, y que al cerrar y abrir la app siga entrando (o vuelva a pedirlo) sin errores. Recién ahí cerrar la idea "Que Administración en la app pida el segundo factor" del tablero.
 - Cuando conteste la contadora: si se factura el total a quien reserva, sumar una vista por sesión (persona, fecha, total) para copiar en ARCA.
 - El contador del tope está solo en la web, y así queda: desde el 25/10 la administración en la app no anda (la base exige segundo factor y la app no lo pide hasta la próxima versión). Todo se hace desde sere.ar/admin. El arreglo del descuento en `lib/billing.ts` ya queda listo para cuando vuelva.
 

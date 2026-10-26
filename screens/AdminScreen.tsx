@@ -148,7 +148,18 @@ export default function AdminScreen() {
     }
   }, []);
 
-  useEffect(() => { if (isAdmin) void load(); }, [isAdmin, load]);
+  // Segundo factor: desde el 25/10/2026 `is_admin()` exige una sesión `aal2`, así
+  // que con la sesión común (código por mail) el panel no lee nada. Antes de
+  // cargar se pide el código de la app de autenticación, igual que en sere.ar/admin.
+  const [nivel, setNivel] = useState<'cargando' | 'aal1' | 'aal2'>('cargando');
+  useEffect(() => {
+    if (!isAdmin) return;
+    void supabase.auth.mfa.getAuthenticatorAssuranceLevel().then(({ data }) => {
+      setNivel(data?.currentLevel === 'aal2' ? 'aal2' : 'aal1');
+    });
+  }, [isAdmin]);
+
+  useEffect(() => { if (isAdmin && nivel === 'aal2') void load(); }, [isAdmin, nivel, load]);
 
   // Defensa en profundidad: aunque la entrada esté oculta para quien no es
   // admin, alguien puede llegar por deep link. Lo que de verdad protege es la
@@ -167,6 +178,10 @@ export default function AdminScreen() {
         </SafeAreaView>
       </AppBg>
     );
+  }
+
+  if (isAdmin && nivel !== 'aal2') {
+    return <SegundoFactor esperando={nivel === 'cargando'} onListo={() => setNivel('aal2')} />;
   }
 
   async function act(key: string, fn: () => Promise<{ ok: boolean; error?: string }>, okMsg: string) {
@@ -1951,6 +1966,92 @@ function GuaranteePanel({ claims, onDone }: { claims: AdminClaim[]; onDone: () =
   );
 }
 
+// ─── Segundo factor ─────────────────────────────────────────────────────────
+//
+// Solo VERIFICA un factor que ya existe: el alta (el QR para la app de
+// autenticación) se hace en sere.ar/admin, que ya la tiene probada. El factor es
+// de la cuenta, no del dispositivo, así que el registrado en la web sirve acá.
+// `challengeAndVerify` deja la sesión de la app en `aal2` y la guarda sola.
+function SegundoFactor({ esperando, onListo }: { esperando: boolean; onListo: () => void }) {
+  const router = useRouter();
+  const [factorId, setFactorId] = useState<string | null | undefined>(undefined);
+  const [codigo, setCodigo] = useState('');
+  const [error, setError] = useState('');
+  const [verificando, setVerificando] = useState(false);
+
+  useEffect(() => {
+    if (esperando) return;
+    void supabase.auth.mfa.listFactors().then(({ data }) => {
+      setFactorId(data?.totp?.[0]?.id ?? null);
+    });
+  }, [esperando]);
+
+  async function verificar() {
+    const limpio = codigo.replace(/\D/g, '');
+    setError('');
+    if (limpio.length !== 6 || !factorId) { setError('Son 6 dígitos.'); return; }
+    setVerificando(true);
+    const { error: e } = await supabase.auth.mfa.challengeAndVerify({ factorId, code: limpio });
+    setVerificando(false);
+    if (e) { setError('Ese código no coincide. Fijate que sea el de Sere y que la hora del teléfono esté bien.'); return; }
+    setCodigo('');
+    onListo();
+  }
+
+  return (
+    <AppBg>
+      <SafeAreaView style={s.safe} edges={['top']}>
+        <View style={s.header}>
+          <TouchableOpacity style={s.backBtn} onPress={() => router.back()} hitSlop={8} activeOpacity={0.7}>
+            <MaterialCommunityIcons name="arrow-left" size={22} color="#565E32" />
+          </TouchableOpacity>
+          <Text style={s.headerTitle}>Administración</Text>
+          <View style={s.headerSpacer} />
+        </View>
+
+        {esperando || factorId === undefined ? (
+          <View style={s.denied}><ActivityIndicator color={OLIVE} /></View>
+        ) : factorId === null ? (
+          <View style={s.denied}>
+            <MaterialCommunityIcons name="shield-key-outline" size={40} color="rgba(135,131,92,0.45)" />
+            <Text style={s.deniedText}>
+              Para entrar hace falta tu app de autenticación. Registrala primero en sere.ar/admin y después volvé acá.
+            </Text>
+            <TouchableOpacity onPress={() => void Linking.openURL('https://sere.ar/admin')} activeOpacity={0.75}>
+              <Text style={s.deniedLink}>Abrir sere.ar/admin</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={s.denied}>
+            <MaterialCommunityIcons name="shield-key-outline" size={40} color="rgba(135,131,92,0.45)" />
+            <Text style={s.deniedText}>Escribí el código de 6 dígitos que muestra tu app de autenticación.</Text>
+            <TextInput
+              style={[s.input, s.codigoFactor]}
+              value={codigo}
+              onChangeText={setCodigo}
+              keyboardType="number-pad"
+              textContentType="oneTimeCode"
+              autoComplete="one-time-code"
+              maxLength={6}
+              autoFocus
+              onSubmitEditing={() => void verificar()}
+              accessibilityLabel="Código de 6 dígitos"
+            />
+            {!!error && <Text style={s.codigoError}>{error}</Text>}
+            <TouchableOpacity
+              style={[s.btn, s.btnPrimary, { alignSelf: 'stretch' }]}
+              onPress={() => void verificar()}
+              disabled={verificando}
+              activeOpacity={0.8}>
+              {verificando ? <ActivityIndicator color="#F7EFE4" /> : <Text style={s.btnPrimaryText}>Entrar</Text>}
+            </TouchableOpacity>
+          </View>
+        )}
+      </SafeAreaView>
+    </AppBg>
+  );
+}
+
 function Empty({ icon, text }: { icon: any; text: string }) {
   return (
     <View style={s.empty}>
@@ -2053,4 +2154,6 @@ const s = StyleSheet.create({
   denied: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 12, paddingHorizontal: 32 },
   deniedText: { fontFamily: ViveFonts.regular, fontSize: 14.5, color: OLIVE, textAlign: 'center', lineHeight: 21 },
   deniedLink: { fontFamily: ViveFonts.semibold, fontSize: 14.5, color: FOREST, marginTop: 4 },
+  codigoFactor: { alignSelf: 'stretch', textAlign: 'center', fontSize: 22, letterSpacing: 6 },
+  codigoError: { fontFamily: ViveFonts.regular, fontSize: 13, color: CLAY, textAlign: 'center', lineHeight: 19 },
 });
