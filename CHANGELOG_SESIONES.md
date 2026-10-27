@@ -9,7 +9,7 @@
 - Base: dos migraciones APLICADAS y PROBADAS con rollback en producción (6 casos). SCHEMA.md actualizado. Como las migraciones desde el 13/10, no están registradas en el historial remoto.
 
 **Pendiente para la próxima sesión:**
-- Andre, en el panel de Supabase: sacar el link de la plantilla Reset Password (y revisar Confirm signup, Invite y Change email) y sacar `viveapp://nueva-contrasena` de Redirect URLs. Sin eso, la recuperación por link sigue abierta aunque la app ya no la use.
+- ✅ Hecho por Andre en el panel el mismo día: Reset Password sin link (texto que manda a «¿Olvidaste tu contraseña?»), Invite sin link, Confirm signup con la plantilla de código de Sere. Redirect URLs: estaban `viveapp://` y `viveapp://**` (comodín: cualquier dirección del esquema); quedó solo `viveapp://auth/callback`. Change email queda con link (la app no ofrece cambiar el mail; si se agrega, pasarla a código y prender "Secure email change"). Falta probar Entrar con Google en el iPhone con la lista nueva.
 - Probar en el iPhone con la próxima compilación: reservar y ver la pantalla de confirmación; tocar la tarjeta de Inicio que manda al Diario y ver la pregunta.
 - Tanda 3 posible: los demás parámetros de link (búsqueda, formato, onboarding, conexiones, pagos, legales); el `label` de búsqueda termina en el tema que ve el profesional.
 
