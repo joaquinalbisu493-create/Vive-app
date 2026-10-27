@@ -408,6 +408,18 @@
       <p class="error" id="errorSanciones"></p>
       <div id="formSancion"></div>
       <div id="listaSanciones"></div>
+
+      <details class="caja" id="cajaMail" style="margin-top:32px">
+        <summary>Cambiar el mail de una cuenta</summary>
+        <p class="suave">La app no deja cambiar el mail: se pide a hola@sere.ar. Antes de cambiarlo, comprobá que es la persona: que te haya escrito desde el mail actual o, si lo perdió, que lo confirme por otra vía. Con el mail nuevo entra con código o contraseña; si entraba con Google o Apple, sigue igual.</p>
+        <label for="mailActual">Mail actual</label>
+        <input id="mailActual" type="email" maxlength="254" autocomplete="off">
+        <label for="mailNuevo">Mail nuevo</label>
+        <input id="mailNuevo" type="email" maxlength="254" autocomplete="off">
+        <label for="mailMotivo">Motivo y cómo comprobaste que es la persona (queda en la auditoría)</label>
+        <input id="mailMotivo" maxlength="300">
+        <div class="botonera"><button class="btn chico" id="btnCambiarMail">Cambiar mail</button></div>
+      </details>
     </div>
 
     <!-- ── Profesionales: postulaciones y credenciales ──

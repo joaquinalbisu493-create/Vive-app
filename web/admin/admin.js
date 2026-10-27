@@ -856,6 +856,22 @@ $('btnCorregirNombre').addEventListener('click', async () => {
   } catch (e) { alert(`No se pudo: ${e.message}`); }
 });
 
+// ── Cambiar el mail de una cuenta (27/10/2026) ──────────────────────────────
+$('btnCambiarMail').addEventListener('click', async () => {
+  const actual = $('mailActual').value.trim().toLowerCase();
+  const nuevo = $('mailNuevo').value.trim().toLowerCase();
+  const motivo = $('mailMotivo').value.trim();
+  if (!actual || !nuevo) return alert('Escribí los dos mails.');
+  if (actual === nuevo) return alert('Es el mismo mail.');
+  if (!motivo) return alert('Falta el motivo: queda en la auditoría.');
+  if (!confirm(`¿Cambiar el mail de la cuenta ${actual} a ${nuevo}?`)) return;
+  try {
+    const r = await accionAdmin({ action: 'change_user_email', current_email: actual, new_email: nuevo, reason: motivo });
+    alert(r?.warning ? `Mail cambiado, con un aviso: ${r.warning}` : 'Mail cambiado.');
+    $('mailActual').value = ''; $('mailNuevo').value = ''; $('mailMotivo').value = '';
+  } catch (e) { alert(`No se pudo: ${e.message}`); }
+});
+
 // ── Moderación ───────────────────────────────────────────────────────────────
 const MOTIVO_PROBLEMA = {
   no_puedo_entrar: 'No puede entrar a la llamada',
@@ -1616,6 +1632,7 @@ const ACCIONES = {
   record_coach_interview: 'registró una entrevista',
   reject_coach_application: 'rechazó una postulación',
   set_coach_name: 'corrigió el nombre de un profesional',
+  change_user_email: 'cambió el mail de una cuenta',
   identity_file_url: 'abrió una foto de identidad',
   verify_identity: 'verificó la identidad de un profesional',
   credential_file_url: 'abrió un título o matrícula',

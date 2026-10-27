@@ -28,6 +28,7 @@
 //   { action: 'list_coach_applications', status? }   // lee el mail del coach (A4)
 //   { action: 'record_coach_interview', coach_id, notes }
 //   { action: 'set_coach_name', coach_id, name, reason }
+//   { action: 'change_user_email', current_email, new_email, reason }
 //   { action: 'identity_file_url', coach_id, which: 'dni-frente'|'dni-dorso'|'selfie' }
 //   { action: 'verify_identity', coach_id }
 
@@ -288,6 +289,58 @@ serve(async (req) => {
       })
 
       return json({ result: 'ok', name, ...(auditErr ? { warning: `acción hecha, auditoría fallida: ${auditErr}` } : {}) })
+    }
+
+    // 27/10/2026: la app no deja cambiar el mail (es la puerta clásica para
+    // quedarse con una cuenta ajena: cambiás el mail y la recuperación te llega
+    // a vos). Quien lo necesita le escribe a hola@sere.ar y el cambio se hace
+    // acá, después de comprobar que es la persona: que escriba DESDE el mail
+    // actual, o que lo confirme por otra vía si lo perdió. Se busca por el mail
+    // actual y no por id porque es lo que el admin tiene en la mano.
+    // `email_confirm: true` porque la comprobación ya la hizo el admin; si no,
+    // Supabase mandaría el mail de "Change email" con link, que no usamos.
+    // Quien entra con Google o Apple sigue entrando igual (la identidad va por
+    // el proveedor); el mail nuevo sirve para el código y la contraseña.
+    case 'change_user_email': {
+      const normal = (v: unknown) => typeof v === 'string' ? v.trim().toLowerCase() : ''
+      const actual = normal(body.current_email)
+      const nuevo = normal(body.new_email)
+      const reason = typeof body.reason === 'string' ? body.reason.trim() : ''
+      const formaDeMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!formaDeMail.test(actual) || !formaDeMail.test(nuevo) || nuevo.length > 254) {
+        return json({ error: 'revisá los dos mails' }, 400)
+      }
+      if (actual === nuevo) return json({ error: 'es el mismo mail' }, 400)
+      if (!reason) return json({ error: 'hace falta un motivo: queda en la auditoría' }, 400)
+
+      // ilike para no depender de mayúsculas; `_` y `%` son comodines en ilike
+      // y `_` es común en un mail, así que se escapan.
+      const literal = (v: string) => v.replace(/[\\%_]/g, (m) => '\\' + m)
+      const { data: perfil, error: perfilErr } = await admin
+        .from('profiles').select('id').ilike('email', literal(actual)).maybeSingle()
+      if (perfilErr) return json({ error: perfilErr.message }, 500)
+      if (!perfil) return json({ error: 'no hay ninguna cuenta con ese mail' }, 404)
+      const { data: ocupado, error: ocupadoErr } = await admin
+        .from('profiles').select('id').ilike('email', literal(nuevo)).maybeSingle()
+      if (ocupadoErr) return json({ error: ocupadoErr.message }, 500)
+      if (ocupado) return json({ error: 'ya hay otra cuenta con el mail nuevo' }, 409)
+
+      const { error: authErr } = await admin.auth.admin.updateUserById(perfil.id, { email: nuevo, email_confirm: true })
+      if (authErr) return json({ error: authErr.message }, 500)
+      const { error: profErr } = await admin.from('profiles').update({ email: nuevo }).eq('id', perfil.id)
+
+      const auditErr = await audit(admin, {
+        ...actor,
+        action: 'change_user_email',
+        targetType: 'profile',
+        targetId: perfil.id,
+        details: { anterior: actual, nuevo, reason },
+      })
+      const avisos = [
+        profErr ? `cuenta cambiada, perfil sin actualizar: ${profErr.message}` : null,
+        auditErr ? `acción hecha, auditoría fallida: ${auditErr}` : null,
+      ].filter(Boolean)
+      return json({ result: 'ok', ...(avisos.length ? { warning: avisos.join(' · ') } : {}) })
     }
 
     // ── Verificación de identidad (01/10/2026) ──────────────────────────────

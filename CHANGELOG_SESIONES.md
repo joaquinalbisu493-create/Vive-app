@@ -1,3 +1,16 @@
+## 2026-10-27 — Andre (Claude · cambiar el mail, por soporte)
+
+**Tocado:** `supabase/functions/admin-actions/index.ts` (v56, desplegada), `web/admin/index.html`, `web/admin/admin.js`, `lib/contacto.ts`, `screens/ProfileOwnScreen.tsx`, `screens/CoachSettingsScreen.tsx`.
+
+**Resumen:**
+- Decisión de Andre: la app NO deja cambiar el mail (es la puerta clásica para quedarse con una cuenta ajena). "Cambiar mi mail" en el perfil del usuario y del profesional abre un aviso y un mail a hola@sere.ar con el mail actual ya escrito.
+- El cambio lo hace el equipo en sere.ar/admin → Moderación → "Cambiar el mail de una cuenta": mail actual, mail nuevo y motivo (cómo se comprobó que es la persona). Acción `change_user_email` en `admin-actions` (admin + segundo factor), cambia `auth.users` con `email_confirm: true` y `profiles.email` (no hay trigger que los sincronice), y queda en la auditoría. Rechaza si el mail nuevo ya es de otra cuenta.
+- Sin cambios en la base.
+
+**Pendiente para la próxima sesión:**
+- El tablero web se publica con el push a main; la línea del perfil llega con la próxima compilación.
+- Si los pedidos se vuelven frecuentes: flujo propio con código al mail nuevo y aviso al viejo, y prender "Secure email change" en Supabase (la plantilla Change email todavía tiene link).
+
 ## 2026-10-27 — Andre (Claude · auditoría de seguridad con la skill de Cloudflare, tanda 2)
 
 **Tocado:** `supabase/migrations/20261027020000_cancelar_con_propuesta_antes_de_empezar.sql` (nueva), `supabase/migrations/20261027030000_agenda_sin_reservas_colgadas_y_salas_con_profesional.sql` (nueva), `SCHEMA.md`, `lib/bookingCancel.ts`, `screens/BookingScreen_Success.tsx`, `screens/BookingScreen_Confirm.tsx`, `lib/preguntaDeSofia.ts` (nuevo), `app/diario.tsx`, `app/(tabs)/index.tsx`.
