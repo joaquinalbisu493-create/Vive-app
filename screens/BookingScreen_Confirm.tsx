@@ -109,8 +109,15 @@ export default function BookingScreen_Confirm() {
 
   const nombrePasarela = metodoPago === 'paypal' ? 'PayPal' : 'Mercado Pago';
 
-  const coachName = params.name ?? '';
-  const specialty = params.specialty ?? '';
+  // 🔒 Nombre y especialidad, igual que el precio: los params son solo un
+  // placeholder mientras carga, y valen los de `coaches`/`profiles` del
+  // `coachId`. Cualquier app o página puede abrir `viveapp://booking-confirm`
+  // con `name` de un profesional y `coachId` de otro: la tarjeta mostraba el
+  // nombre del link justo arriba del botón de pagar, mientras la reserva y el
+  // cobro iban al `coachId` (auditoría del 27/10/2026).
+  const [coachReal, setCoachReal] = useState<{ name: string; specialty: string } | null>(null);
+  const coachName = coachReal?.name ?? params.name ?? '';
+  const specialty = coachReal?.specialty ?? params.specialty ?? '';
 
   // 🔴 El precio de los params es SOLO un placeholder para no mostrar un hueco
   // mientras carga. El que vale es `precioReal`, leído de `coaches`.
@@ -140,10 +147,11 @@ export default function BookingScreen_Confirm() {
     (async () => {
       const { data } = await supabase
         .from('coaches')
-        .select('id, instant_booking, has_matricula, accepts_international, accepts_paypal, accepts_usdt, price_usd, price_per_session, profiles(avatar_url)')
+        .select('id, instant_booking, has_matricula, accepts_international, accepts_paypal, accepts_usdt, price_usd, price_per_session, specialty, profiles(avatar_url, name)')
         .eq('profile_id', coachProfileIdParam)
         .maybeSingle();
       setAvatarUrl((data as any)?.profiles?.avatar_url ?? null);
+      if (data) setCoachReal({ name: (data as any).profiles?.name ?? 'Profesional', specialty: (data as any).specialty ?? '' });
       setInstantBooking(!!data?.instant_booking);
       setHasMatricula(!!data?.has_matricula);
       // Los medios internacionales (USDT y PayPal) solo existen si el coach

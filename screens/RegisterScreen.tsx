@@ -76,10 +76,9 @@ export default function RegisterScreen() {
   // `modo=crear`: se llega desde "crear cuenta" del inicio de sesión, ya
   // sabiendo que no hay cuenta. Se abre directo en el alta.
   const { tono, modo } = useLocalSearchParams<{ tono?: string; modo?: string }>();
-  const { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple, resetPassword } = useAuth();
+  const { signInWithEmail, signUpWithEmail, signInWithGoogle, signInWithApple } = useAuth();
   const [etapa, setEtapa] = useState<Etapa>(modo === 'crear' ? 'crear' : 'entrar');
   const [showEmailForm, setShowEmailForm] = useState(modo === 'crear');
-  const [resetLoading, setResetLoading] = useState(false);
   const [resetMsg, setResetMsg] = useState<string | null>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -173,7 +172,7 @@ export default function RegisterScreen() {
 
   /** Recuperar la contraseña con el mail ya escrito. El mensaje NO confirma si
    *  la cuenta existe (mismo criterio que `LoginScreen`). */
-  async function handleForgot() {
+  function handleForgot() {
     setServerError(null);
     setResetMsg(null);
     const mail = email.trim();
@@ -182,10 +181,8 @@ export default function RegisterScreen() {
       setResetMsg('Escribí tu email arriba y volvé a tocar acá.');
       return;
     }
-    setResetLoading(true);
-    const err = await resetPassword(mail);
-    setResetLoading(false);
-    setResetMsg(err ?? `Si hay una cuenta con ${mail}, te llega un mail con el link. Abrilo en este mismo teléfono.`);
+    // Con un código por mail, no con un link: ver `esRecuperar` en VerificarMailScreen.
+    router.push({ pathname: '/verificar-mail', params: { email: mail, modo: 'recuperar' } } as any);
   }
 
   /** Entrar con un código por mail, sin contraseña: la puerta de quien reservó
@@ -619,11 +616,8 @@ export default function RegisterScreen() {
                     <TouchableOpacity
                       style={s.forgotWrap}
                       activeOpacity={0.7}
-                      onPress={handleForgot}
-                      disabled={resetLoading}>
-                      {resetLoading
-                        ? <ActivityIndicator size="small" color="#87835C" />
-                        : <Text style={s.forgotText}>¿Olvidaste tu contraseña?</Text>}
+                      onPress={handleForgot}>
+                      <Text style={s.forgotText}>¿Olvidaste tu contraseña?</Text>
                     </TouchableOpacity>
 
                     {resetMsg && <Text style={s.resetMsg}>{resetMsg}</Text>}

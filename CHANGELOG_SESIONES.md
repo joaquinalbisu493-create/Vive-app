@@ -1,3 +1,20 @@
+## 2026-10-27 — Andre (Claude · auditoría de links con la skill de Cloudflare, tanda 1)
+
+**Tocado:** `supabase/migrations/20261027010000_reembolso_solo_cliente.sql` (nueva), `SCHEMA.md`, `context/AuthContext.tsx`, `screens/LoginScreen.tsx`, `screens/RegisterScreen.tsx`, `screens/VerificarMailScreen.tsx`, `screens/NuevaContrasenaScreen.tsx`, `screens/BookingScreen_Confirm.tsx`, `app/coach-recurso.tsx`, `app/mis-recomendaciones.tsx`, `app/(tabs)/recursos.tsx`, comentarios en `app/_layout.tsx`, `lib/entrada.ts`, `lib/supabase.ts`, `components/CaptchaHost.tsx`, `screens/CoachLoginScreen.tsx`. **Base:** trigger nuevo en `bookings` (`trg_reembolso_solo_cliente`), aplicado y probado con rollback; SCHEMA.md actualizado.
+
+**Resumen:**
+- Instalada la skill `security-audit` de Cloudflare (`~/.claude/skills/security-audit`) y corrida la primera tanda, acotada a los links que abren la app. Informe fuera del repo: `~/security-audit-skill/vive-app/run-1/REPORT.md`.
+- 🔴 Arreglado: un profesional podía escribir la billetera de reembolso USDT del cliente en sus reservas canceladas y quedarse con el reembolso. Ahora solo la escribe el cliente (trigger nuevo). Antes del arreglo había 0 reservas USDT con reembolso pendiente.
+- Arreglado: "¿Olvidaste tu contraseña?" ya no manda un link que vuelve por `viveapp://` (otra app podía reclamar el esquema e interceptar el código). Ahora es "entrar con un código" y después elegir la contraseña nueva, con la plantilla Magic Link que ya tenía `{{ .Token }}`. Se sacó `resetPassword` de AuthContext y el canje de `?code=` de NuevaContrasenaScreen.
+- Arreglado: "Confirmar reserva" mostraba el nombre y la especialidad que venían en el link, y el recurso mostraba un "<profesional> te dijo" armado desde el link. Ahora los dos salen de la base (la recomendación se busca por id y tiene que ser de esa persona y de ese recurso).
+- Descartado como vulnerabilidad, queda como decisión de negocio: el 0% de comisión "por link" no tiene atribución en el servidor (D13).
+
+**Pendiente para la próxima sesión:**
+- 🔴 Andre, en el panel de Supabase: Authentication → URL Configuration → Redirect URLs, **sacar `viveapp://nueva-contrasena`**. Sin esto, alguien puede seguir pidiendo el mail viejo a nombre de otra persona con vuelta al esquema. Opcional: en Email Templates → Reset Password, cambiar el texto para que diga que se recupera con "¿Olvidaste tu contraseña?" en la app.
+- El ingreso con Google sigue volviendo por `viveapp://auth/callback`; el riesgo es mucho menor (el flujo propio se consume dentro de la sesión de autenticación). Se cierra del todo con los App Links de Android (L56, espera la cuenta de Play).
+- Los cambios de la app llegan con la próxima compilación. Probar en el iPhone: olvidé mi contraseña → código → contraseña nueva; abrir una recomendación desde "Mis recomendaciones".
+- 18:30: segunda tanda de la auditoría (reagendado, reserva web `/c`, login por código de la web).
+
 ## 2026-10-27 — Andre (Claude · Google Play: hace falta una sociedad)
 
 **Tocado:** `app.json`, `assets/images/notification-icon.png` (nuevo), `docs/etiquetas-privacidad-tiendas.md`, `web/tiendas.js` (solo un comentario), `scripts/add-app-version-gate.sql`, `docs/problemas-abiertos.md`, `SCHEMA.md`, `google-services.json` (nuevo). **Base:** una fila de datos (`app_version_gate.store_url` de android), sin cambios de estructura.

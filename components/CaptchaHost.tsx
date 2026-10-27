@@ -6,7 +6,7 @@
 // cuatro llamadas repartidas en tres archivos (alta, login, recuperar
 // contraseña y reenvío de OTP), y tres de ellas viven dentro de `AuthContext`,
 // que no dibuja nada. Poner un widget por pantalla obligaría a pasarle el token
-// a `signUpWithEmail`/`signInWithEmail`/`resetPassword` desde afuera y a
+// a `signUpWithEmail`/`signInWithEmail`/`signInWithOtp` desde afuera y a
 // cambiar cada llamador; el desafío quedaría además duplicado en pantallas que
 // se montan a la vez. Un host único con una función que devuelve una promesa
 // deja las firmas donde están.

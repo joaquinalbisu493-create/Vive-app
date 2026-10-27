@@ -22,34 +22,33 @@ import { AppBg } from '@/components/ui/AppBg';
 import { VitaWordmark } from '@/components/VitaWordmark';
 import { LARGO_MIN_CONTRASENA } from '@/lib/authErrores';
 
-// Segundo paso de la recuperación de contraseña: acá cae el link del mail que
-// manda `AuthContext.resetPassword`.
+// Elegir o cambiar la contraseña con la sesión ya abierta. Se llega desde los
+// ajustes, o al final de la recuperación: "¿Olvidaste tu contraseña?" abre
+// VerificarMailScreen en `modo: 'recuperar'`, que entra con un código por mail
+// y después trae acá con `recuperada=1` (solo cambia los textos).
 //
-// ⚠️ El link trae `?code=`, no tokens en el fragmento, porque el cliente usa
-// `flowType: 'pkce'` (ver lib/supabase.ts). Hay que canjearlo por sesión antes
-// de poder cambiar nada — y el canje SOLO funciona en el mismo dispositivo que
-// pidió el mail, porque el code verifier vive en su AsyncStorage.
+// 🔒 Antes acá caía el link de `resetPasswordForEmail` con `?code=` y se
+// canjeaba con `exchangeCodeForSession`. Se sacó el 27/10/2026: el link volvía
+// por `viveapp://`, que cualquier otra app instalada puede reclamar, y quien
+// pedía el mail a nombre de otra persona tenía el verificador PKCE para canjear
+// lo que interceptara. Un `?code=` que llegue igual por un link viejo se ignora.
 //
-// ⚠️ Al canjear, el usuario queda con sesión iniciada. `AuthRedirect`
-// (app/_layout.tsx) solo patea fuera de las pantallas de onboarding/auth, y
-// `nueva-contrasena` no está en esa lista, así que no nos expulsa antes de que
-// la persona ponga la contraseña nueva. Si algún día se agrega a
-// ONBOARDING_SCREENS, este flujo se rompe.
+// ⚠️ `nueva-contrasena` está en PANTALLAS_SIN_CUENTA (lib/entrada.ts) para que
+// `AuthRedirect` no la patee; sin sesión, la pantalla misma lo dice.
 
-type Estado = 'canjeando' | 'listo' | 'invalido' | 'guardado';
+type Estado = 'cargando' | 'listo' | 'sinSesion' | 'guardado';
 
 const MIN_PASS = LARGO_MIN_CONTRASENA;
 
 export default function NuevaContrasenaScreen() {
   const router = useRouter();
-  const { code } = useLocalSearchParams<{ code?: string }>();
-  // Sin `code` no se llega por el link de recuperación sino desde los ajustes,
-  // con una sesión abierta: "Crear o cambiar tu contraseña". Existe sobre todo
-  // para quien entró con un código (la cuenta nacida en la web no tiene
-  // contraseña), pero sirve para cualquiera.
-  const desdeAjustes = !code;
+  const { recuperada } = useLocalSearchParams<{ recuperada?: string }>();
+  // Desde los ajustes: "Crear o cambiar tu contraseña". Existe sobre todo para
+  // quien entró con un código (la cuenta nacida en la web no tiene contraseña),
+  // pero sirve para cualquiera.
+  const desdeAjustes = (Array.isArray(recuperada) ? recuperada[0] : recuperada) !== '1';
 
-  const [estado, setEstado] = useState<Estado>('canjeando');
+  const [estado, setEstado] = useState<Estado>('cargando');
   const [pass, setPass] = useState('');
   const [pass2, setPass2] = useState('');
   const [verPass, setVerPass] = useState(false);
@@ -57,17 +56,10 @@ export default function NuevaContrasenaScreen() {
   const [guardando, setGuardando] = useState(false);
 
   useEffect(() => {
-    if (!code) {
-      supabase.auth.getSession()
-        .then(({ data }) => setEstado(data.session ? 'listo' : 'invalido'))
-        .catch(() => setEstado('invalido'));
-      return;
-    }
-    supabase.auth
-      .exchangeCodeForSession(code)
-      .then(({ error: e }) => setEstado(e ? 'invalido' : 'listo'))
-      .catch(() => setEstado('invalido'));
-  }, [code]);
+    supabase.auth.getSession()
+      .then(({ data }) => setEstado(data.session ? 'listo' : 'sinSesion'))
+      .catch(() => setEstado('sinSesion'));
+  }, []);
 
   async function guardar() {
     setError(null);
@@ -104,17 +96,16 @@ export default function NuevaContrasenaScreen() {
               <VitaWordmark />
             </View>
 
-            {estado === 'canjeando' && (
+            {estado === 'cargando' && (
               <ActivityIndicator color={ViveColors.primary} />
             )}
 
-            {estado === 'invalido' && (
+            {estado === 'sinSesion' && (
               <View style={s.headingArea}>
-                <Text style={s.heading}>Ese link ya no sirve</Text>
+                <Text style={s.heading}>Primero entrá a tu cuenta</Text>
                 <Text style={s.subheading}>
-                  Los links de recuperación duran poco y se usan una sola vez. Además tenés que
-                  abrirlo en el mismo teléfono donde lo pediste. Pedí uno nuevo desde el inicio de
-                  sesión.
+                  Si no te acordás la contraseña, tocá «¿Olvidaste tu contraseña?» en el inicio de
+                  sesión: te mandamos un código por mail.
                 </Text>
                 <ScaleCard
                   style={s.enterBtn}

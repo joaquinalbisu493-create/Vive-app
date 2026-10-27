@@ -113,7 +113,7 @@ const fadeUp = (anim: Animated.Value) => ({
  *
  * 🔴 POR QUÉ EXISTE. Dos cosas que hasta ahora no se comprobaban:
  *   · quien se equivoca al tipear su dirección queda con una cuenta que **no
- *     puede recuperar nunca** —`resetPassword` manda el mail a una casilla que
+ *     puede recuperar nunca** —el código de recuperación va a una casilla que
  *     no existe— y sin forma de enterarse;
  *   · Sere aprueba profesionales sin haber comprobado que la casilla desde la
  *     que se postulan sea suya.
@@ -146,7 +146,14 @@ export default function VerificarMailScreen() {
   /** Entrar a la app con un código, SIN sesión. Es la puerta de quien reservó
    *  desde la web: esa cuenta nace de un código y no tiene contraseña, y la app
    *  solo dejaba entrar con contraseña, Google o Apple. Se llega desde el login. */
-  const esEntrar = cual === 'entrar';
+  const esEntrar = cual === 'entrar' || cual === 'recuperar';
+  /** "¿Olvidaste tu contraseña?": es `entrar` con otro título, y al final va a
+   *  elegir la contraseña nueva. 🔒 Reemplaza al link de recuperación (27/10/2026):
+   *  ese link volvía a la app por `viveapp://`, que cualquier otra app instalada
+   *  puede reclamar, y quien pedía el mail a nombre de otra persona tenía el
+   *  verificador PKCE para canjear el código que interceptara. Con un código
+   *  tipeado no viaja nada por el esquema. */
+  const esRecuperar = cual === 'recuperar';
   /** Los dos muros (alta de coach y alta de usuario) comparten todo el
    *  comportamiento de salida: irse sin confirmar cierra la sesión. Lo único
    *  que los separa es a dónde va quien confirma. `entrar` y `gate` no son
@@ -330,6 +337,7 @@ export default function VerificarMailScreen() {
     else if (esConfirmar) router.replace('/' as any);
     // Sin sesión previa, el rol todavía no se conoce en este instante: `/`
     // espera a que cargue y manda a cada uno a lo suyo (`app/index.tsx`).
+    else if (esRecuperar) router.replace({ pathname: '/nueva-contrasena', params: { recuperada: '1' } } as any);
     else if (esEntrar) router.replace('/' as any);
     // 🔴 Se mira el rol y no se manda derecho a `/(tabs)`: por este muro pasa
     // también un coach ya aprobado que nunca verificó, y `AuthRedirect` lo
@@ -355,7 +363,7 @@ export default function VerificarMailScreen() {
             </Animated.View>
 
             <Animated.View style={[s.headingArea, fadeUp(anim)]}>
-              <Text style={s.heading}>{esEntrar ? 'Entrá con un código' : 'Confirmá tu mail'}</Text>
+              <Text style={s.heading}>{esRecuperar ? 'Recuperá tu cuenta' : esEntrar ? 'Entrá con un código' : 'Confirmá tu mail'}</Text>
               <Text style={s.subheading}>
                 {/* Sin decir cuántos dígitos: lo decide un ajuste del panel y
                     prometer un número que después no coincide es peor que no

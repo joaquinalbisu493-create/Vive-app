@@ -85,7 +85,7 @@ export default function MisRecomendacionesScreen() {
     }
     router.push({
       pathname: '/coach-recurso',
-      params: { id: item.resource_id, note: item.note ?? '', fromCoachName: item.coaches?.profiles?.name ?? '' },
+      params: { id: item.resource_id, reco: item.id },
     } as any);
   }
 

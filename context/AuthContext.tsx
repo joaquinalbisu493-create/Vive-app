@@ -66,9 +66,6 @@ interface AuthContextType {
   /** Pasa a `profiles` la aceptación de T&C y edad guardada en la metadata del alta. */
   registrarAceptacionDelAlta: () => Promise<void>;
   signInWithGoogle: (acceptedTerms?: boolean, ageConfirmed?: boolean) => Promise<string | null>;
-  /** Manda el mail de recuperación. Devuelve `null` si salió bien, o el mensaje
-   *  de error traducido. Ver `resetPassword` para las dos trampas del flujo. */
-  resetPassword: (email: string) => Promise<string | null>;
   signInWithApple: (acceptedTerms?: boolean, ageConfirmed?: boolean) => Promise<string | null>;
   signOut: () => Promise<void>;
   /** ¿Esta persona todavía no probó que la casilla es suya?
@@ -98,7 +95,6 @@ const AuthContext = createContext<AuthContextType>({
   registrarAceptacionDelAlta: async () => {},
   signInWithGoogle: async () => null,
   signInWithApple: async () => null,
-  resetPassword: async () => null,
   signOut: async () => {},
   // `false` y no `undefined`: sin Provider no hay sesión que verificar, y
   // `undefined` significaría "esperá, estoy averiguando" — el layout se quedaría
@@ -437,34 +433,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // `acceptedTerms` / `ageConfirmed` los manda solo el registro (en el login no
   // se re-declara nada). Los flujos sociales no pasan por signUpWithEmail, así
   // que sin esto se creaba la cuenta sin dejar constancia de ninguna de las dos.
-  /** Mail de recuperación de contraseña.
-   *
-   *  ⚠️ El link vuelve con `?code=`, no con tokens en el fragmento: el cliente
-   *  usa `flowType: 'pkce'` (ver lib/supabase.ts). Lo canjea
-   *  `NuevaContrasenaScreen` con `exchangeCodeForSession`.
-   *
-   *  ⚠️ Y por lo mismo, **hay que terminar el cambio en el mismo dispositivo
-   *  donde se pidió**: el code verifier de PKCE queda en el AsyncStorage de esa
-   *  instalación. Abrir el mail en otro teléfono no funciona.
-   *
-   *  El redirect se arma igual que el de Google —`native` con path explícito,
-   *  ver el comentario largo en `signInWithGoogle`— y tiene que estar en la
-   *  allowlist de Supabase (Authentication → URL Configuration → Redirect URLs).
-   */
-  async function resetPassword(email: string): Promise<string | null> {
-    const redirectUrl = AuthSession.makeRedirectUri({ native: 'viveapp://nueva-contrasena' });
-    console.log('[auth] reset redirect URI:', redirectUrl);
-    // Manda un mail a una dirección que elige quien llama: sin portero es un
-    // cañón para bombardear casillas ajenas desde nuestro dominio, y quemar la
-    // reputación del SMTP propio.
-    const captchaToken = await pedirCaptchaToken();
-    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: redirectUrl,
-      captchaToken,
-    });
-    if (error) return translateError(error.message);
-    return null;
-  }
+  // 🔒 No hay `resetPassword` (27/10/2026): la recuperación es "entrar con un
+  // código" + elegir contraseña (`modo: 'recuperar'` en VerificarMailScreen).
+  // El link de `resetPasswordForEmail` volvía por `viveapp://`, que otra app
+  // puede reclamar, y quien pedía el mail a nombre de otra persona tenía el
+  // verificador PKCE del código interceptado.
 
   async function signInWithGoogle(acceptedTerms = false, ageConfirmed = false): Promise<string | null> {
     try {
@@ -699,7 +672,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider value={{
       user, loading, isLoggedIn, role, isAdmin, displayName, refreshProfile,
       requestAuth, signInWithEmail, signUpWithEmail, registrarAceptacionDelAlta, signInWithGoogle, signInWithApple, signOut,
-      resetPassword, mailPendiente, marcarMailVerificado,
+      mailPendiente, marcarMailVerificado,
     }}>
       {children}
       <AuthModal

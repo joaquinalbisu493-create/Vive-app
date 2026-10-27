@@ -46,7 +46,7 @@ const fadeUp = (anim: Animated.Value) => ({
 
 export default function LoginScreen() {
   const router = useRouter();
-  const { signInWithEmail, signInWithGoogle, signInWithApple, resetPassword } = useAuth();
+  const { signInWithEmail, signInWithGoogle, signInWithApple } = useAuth();
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -59,7 +59,6 @@ export default function LoginScreen() {
   const [appleLoading, setAppleLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [legalDoc, setLegalDoc] = useState<'terminos' | 'privacidad' | null>(null);
-  const [resetLoading, setResetLoading] = useState(false);
   const [resetMsg, setResetMsg] = useState<string | null>(null);
 
   /** Recuperación de contraseña. Usa el mail que ya está escrito arriba en vez
@@ -67,7 +66,7 @@ export default function LoginScreen() {
    *  lo tipeó. El mensaje de éxito NO confirma si la cuenta existe — decir "no
    *  hay cuenta con ese mail" convierte esta pantalla en un verificador de qué
    *  direcciones están registradas. Supabase responde igual en los dos casos. */
-  async function handleForgot() {
+  function handleForgot() {
     setServerError(null);
     setResetMsg(null);
     const mail = email.trim();
@@ -76,10 +75,8 @@ export default function LoginScreen() {
       setResetMsg('Escribí tu email arriba y volvé a tocar acá.');
       return;
     }
-    setResetLoading(true);
-    const err = await resetPassword(mail);
-    setResetLoading(false);
-    setResetMsg(err ?? `Si hay una cuenta con ${mail}, te llega un mail con el link. Abrilo en este mismo teléfono.`);
+    // Con un código por mail, no con un link: ver `esRecuperar` en VerificarMailScreen.
+    router.push({ pathname: '/verificar-mail', params: { email: mail, modo: 'recuperar' } } as any);
   }
 
   /** Entrar con un código por mail, sin contraseña.
@@ -332,11 +329,8 @@ export default function LoginScreen() {
                   <TouchableOpacity
                     style={s.forgotWrap}
                     activeOpacity={0.7}
-                    onPress={handleForgot}
-                    disabled={resetLoading}>
-                    {resetLoading
-                      ? <ActivityIndicator size="small" color="#87835C" />
-                      : <Text style={s.forgotText}>¿Olvidaste tu contraseña?</Text>}
+                    onPress={handleForgot}>
+                    <Text style={s.forgotText}>¿Olvidaste tu contraseña?</Text>
                   </TouchableOpacity>
 
                   {resetMsg && <Text style={s.resetMsg}>{resetMsg}</Text>}

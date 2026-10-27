@@ -61,8 +61,9 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     //
     // ⚠️ Cambiar esto afectaría también a los links por mail (confirmación,
     // recuperación de contraseña), que bajo PKCE viajan con `code`. Verificado
-    // que no aplica: `exchangeCodeForSession` se usa en un solo lugar de todo el
-    // proyecto y no hay ningún `emailRedirectTo` ni `resetPasswordForEmail`.
+    // que no aplica: no hay ningún `emailRedirectTo` ni `resetPasswordForEmail`
+    // (la recuperación es por código desde el 27/10/2026), y
+    // `exchangeCodeForSession` solo canjea el retorno de Google.
     flowType: 'pkce',
   },
 })

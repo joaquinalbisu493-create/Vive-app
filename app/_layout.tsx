@@ -173,7 +173,7 @@ function AuthRedirect() {
     // servidor antes de crear la cuenta (ver `lib/captcha.ts`)— sino por el
     // motivo que ya estaba escrito en `VerificarMailScreen`: quien se equivoca
     // al tipear su dirección queda con una cuenta que **no puede recuperar
-    // nunca**, porque `resetPassword` manda el mail a una casilla que no
+    // nunca**, porque el código de recuperación va a una casilla que no
     // existe, y sin forma de enterarse.
     //
     // ⚠️ Cuelga de `profiles.email_verified_at`, o sea del SERVIDOR, y no del

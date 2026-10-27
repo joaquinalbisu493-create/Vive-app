@@ -667,10 +667,35 @@ function Avatar({ url, name, size }: { url: string | null; name: string; size: n
 // ─── Screen ───────────────────────────────────────────────────────────────────
 export default function CoachRecursoScreen() {
   const router = useRouter();
-  const { id, note, fromCoachName } = useLocalSearchParams<{ id: string; note?: string; fromCoachName?: string }>();
-  const noteText = Array.isArray(note) ? note[0] : note;
-  const fromCoachNameText = Array.isArray(fromCoachName) ? fromCoachName[0] : fromCoachName;
+  const { id, reco } = useLocalSearchParams<{ id: string; reco?: string }>();
+  const recoId = Array.isArray(reco) ? reco[0] : reco;
   const { user } = useAuth();
+  // 🔒 La nota y quién la escribió se leen de `resource_recommendations` (RLS:
+  // solo la ven quien la recibe y quien la mandó). Antes llegaban como params
+  // `note`/`fromCoachName`, y cualquier app o página podía abrir
+  // `viveapp://coach-recurso?...` con un "<nombre> te dijo: <texto>" inventado
+  // encima de un recurso real, sin el tope de 200 caracteres ni los filtros de
+  // contacto de la sala (auditoría del 27/10/2026).
+  const [recoNota, setRecoNota] = useState<{ note: string; from: string } | null>(null);
+
+  useEffect(() => {
+    setRecoNota(null);
+    if (!recoId || !user) return;
+    let cancelled = false;
+    supabase
+      .from('resource_recommendations')
+      .select('note, resource_id, user_id, coaches(profiles(name))')
+      .eq('id', recoId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (cancelled || !data?.note) return;
+        // Tiene que ser una recomendación PARA esta persona y DE este recurso.
+        if (data.user_id !== user.id || data.resource_id !== id) return;
+        const from = (data as any).coaches?.profiles?.name;
+        if (from) setRecoNota({ note: data.note, from });
+      });
+    return () => { cancelled = true; };
+  }, [recoId, id, user?.id]);
   const [resource, setResource] = useState<Resource | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -851,10 +876,10 @@ export default function CoachRecursoScreen() {
           showsVerticalScrollIndicator={false}>
 
           {/* Nota del coach — solo si se llegó por una recomendación */}
-          {noteText && fromCoachNameText ? (
+          {recoNota ? (
             <View style={s.recoNoteBanner}>
               <Text style={s.recoNoteBannerText}>
-                <Text style={s.recoNoteBannerBold}>{fromCoachNameText}</Text> te dijo: “{noteText}”
+                <Text style={s.recoNoteBannerBold}>{recoNota.from}</Text> te dijo: “{recoNota.note}”
               </Text>
             </View>
           ) : null}
