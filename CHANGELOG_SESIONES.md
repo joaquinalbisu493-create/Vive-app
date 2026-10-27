@@ -1,16 +1,16 @@
 ## 2026-10-27 — Andre (Claude · Google Play: hace falta una sociedad)
 
-**Tocado:** `app.json`, `assets/images/notification-icon.png` (nuevo), `docs/etiquetas-privacidad-tiendas.md`. **Sin cambios en la base.**
+**Tocado:** `app.json`, `assets/images/notification-icon.png` (nuevo), `docs/etiquetas-privacidad-tiendas.md`, `web/tiendas.js` (solo un comentario), `scripts/add-app-version-gate.sql`, `docs/problemas-abiertos.md`, `SCHEMA.md`. **Base:** una fila de datos (`app_version_gate.store_url` de android), sin cambios de estructura.
 
 **Resumen:**
 - Al abrir Play Console, Google avisó que las apps médicas o de teleconsulta solo las publican organizaciones. Sere entra por los psicólogos por videollamada (Google pone la teleconsulta dentro de "Medical"). La cuenta de organización pide D-U-N-S, y un monotributista no califica (Apple lo dice explícito; Apple 5.1.1 ix pide lo mismo para salud). **Decisión de Andre: no sacar a los psicólogos y armar una SAS con Joaquín desde el inicio.** No se abrió la cuenta personal de Google (no se puede pasar a organización después).
 - Notificaciones en Android: ícono propio (el trébol en silueta, sacado de `android-icon-monochrome.png`) y color terracota, en lugar del ícono de la app con blanco. Se ve con la próxima compilación.
+- **Paquete de Android: `com.andrealbisu.app`** (antes `com.andrealbisu.viveapp`). Decisión de Andre: sin nombre de producto adentro, para que siga teniendo sentido si la app cambia de nombre (la marca está en consulta con la abogada). Es permanente desde la primera subida a Play. iOS queda `com.andrealbisu.viveapp`. Actualizado en producción `app_version_gate.store_url` (android), verificado. Las compilaciones viejas de demostración quedan con el paquete viejo: instalar una nueva no las reemplaza, hay que desinstalarlas.
 - La URL de borrado de cuenta para Google pasa a `https://sere.ar/legal/eliminar-cuenta` (ya responde).
 
 **Pendiente para la próxima sesión:**
 - Andre + contadora: costo mensual de la SAS como Responsable Inscripto, IVA sobre la comisión (24,2% o 20% con IVA incluido; cambiar a la vez `mp-create-payment`, el copy del profesional y T&C §8.4), plazo del Registro de Sociedades de Córdoba (IPJ). Después: D-U-N-S y cuentas de organización en Google y Apple.
 - 🔴 Android no recibe notificaciones push: falta el proyecto de Firebase (`google-services.json` + clave FCM cargada en EAS). Depende del nombre de paquete.
-- Decidir si el paquete de Android sigue siendo `com.andrealbisu.viveapp` (es permanente una vez publicado y se ve en el link de Play). El login con Google y Mercado Pago usan el esquema `viveapp://`, no el paquete.
 - L56 Android (`assetlinks.json` + `intentFilters`): necesita la huella de la firma de Google Play, que existe recién con la cuenta. Con la SAS cambia también el Team ID de Apple del AASA.
 
 ## 2026-10-26 — Andre (Claude · facturación: descuento y tope del monotributo)

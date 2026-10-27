@@ -8,7 +8,7 @@
   // tiendas y listo: se actualizan todos los botones de las dos páginas.
   var TIENDAS = {
     ios: '',      // https://apps.apple.com/ar/app/vita/id<número que da App Store Connect>
-    android: ''   // https://play.google.com/store/apps/details?id=com.andrealbisu.viveapp
+    android: ''   // https://play.google.com/store/apps/details?id=com.andrealbisu.app
   };
 
   var ICONOS = {

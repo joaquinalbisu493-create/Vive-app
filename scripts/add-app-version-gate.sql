@@ -60,7 +60,7 @@ create table if not exists public.app_version_gate (
 -- Arranca en 1.0.0, la versión de hoy: no bloquea a nadie hasta que se suba.
 insert into public.app_version_gate (platform, min_version, store_url) values
   ('ios', '1.0.0', null),
-  ('android', '1.0.0', 'https://play.google.com/store/apps/details?id=com.andrealbisu.viveapp')
+  ('android', '1.0.0', 'https://play.google.com/store/apps/details?id=com.andrealbisu.app')
 on conflict (platform) do nothing;
 
 create or replace function public.touch_app_version_gate()
