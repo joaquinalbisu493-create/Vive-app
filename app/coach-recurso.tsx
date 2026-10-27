@@ -37,6 +37,7 @@ import { anotarSensible } from '@/lib/analytics';
 import { useAuth } from '@/context/AuthContext';
 import { logResourceEvent } from '@/lib/resourceEvents';
 import { BotonGuardar } from '@/components/ui/BotonGuardar';
+import { ReminderBell } from '@/components/ReminderBell';
 
 // ─── Constantes de formato ────────────────────────────────────────────────────
 const FOREST = '#3A4F2A';
@@ -851,12 +852,15 @@ export default function CoachRecursoScreen() {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={s.safe} edges={['top']}>
 
-        {/* Header: atrás | guardar + compartir */}
+        {/* Header: atrás | recordatorio + guardar + compartir. La campana volvió
+            el 27/10/2026 (decisión de Andre): el rediseño del 02/09 la había
+            sacado y los recursos de profesionales quedaron sin recordatorios. */}
         <View style={s.header}>
           <TouchableOpacity style={s.headerBtn} onPress={() => router.back()} hitSlop={8}>
             <Ionicons name="arrow-back" size={22} color={ViveColors.accent} />
           </TouchableOpacity>
           <View style={s.headerRight}>
+            {resource && <ReminderBell kind="coach_resource" resourceRef={resource.id} title={displayTitle(resource.title)} />}
             <BotonGuardar activo={saved} style={s.headerBtn} onPress={toggleSave} hitSlop={8}>
               <Ionicons
                 name={saved ? 'bookmark' : 'bookmark-outline'}

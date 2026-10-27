@@ -71,6 +71,18 @@
 - 🔴 Android push: proyecto de Firebase `sere-c9891` creado por Andre y `google-services.json` conectado en `app.json` (no es secreto; repo privado). Clave FCM V1 cargada en EAS por Andre (verificado: proyecto `sere-c9891`; no está en el repo; Andre la borra de Descargas). Firma de Android nueva generada en EAS (`sere`, default) para `com.andrealbisu.app`. FALTA: probar una notificación en Android con una compilación nueva. Ojo: `eas credentials` es interactivo, Andre lo corre en la Terminal (no con `!`).
 - L56 Android (`assetlinks.json` + `intentFilters`): necesita la huella de la firma de Google Play, que existe recién con la cuenta. Con la SAS cambia también el Team ID de Apple del AASA.
 
+## 2026-10-27 — Andre (Claude · recordatorios de vuelta)
+
+**Tocado:** `screens/RespiracionScreen.tsx`, `app/coach-recurso.tsx`.
+
+**Resumen:**
+- La campana de recordatorios volvió a Respiración (la sacó el rediseño del 22/10, `ea7473e8`) y al reproductor de recursos de profesionales (la sacó el rediseño del 02/09, `2b20a28c`, "fuera campana y pin"). Andre: "fue sin querer, hay que volverlo a poner". El pin del reproductor NO se repuso, solo la campana.
+- Los recordatorios ya programados nunca dejaron de sonar; lo que faltaba era poder crear nuevos en esas dos pantallas. Sin cambios de base. tsc limpio, 995 pruebas en verde.
+
+**Pendiente para la próxima sesión:**
+- Avisarle a Joaquín: el del 02/09 estaba escrito como decisión de diseño (de 4 íconos a 2). Si prefiere otro lugar para la campana, se mueve; lo que no puede pasar es que la pantalla se quede sin recordatorios.
+- Llega con la próxima compilación (no hay actualizaciones a distancia).
+
 ## 2026-10-26 — Andre (Claude · facturación: descuento y tope del monotributo)
 
 **Tocado:** `lib/billing.ts`, `lib/admin.ts`, `__tests__/billing.test.ts`, `web/admin/admin.js`, `web/admin/index.html`, `screens/AdminScreen.tsx`, `supabase/functions/admin-actions/index.ts` (desplegada v55), `supabase/functions/_shared/sesion-sin-cerrar.ts` y `__tests__/sesion-sin-cerrar.test.ts` (nuevos), `app.json`, `vercel.json`, `app/_layout.tsx`, `lib/entrada.ts`, `screens/BookingScreen_Confirm.tsx`, `SCHEMA.md`, `docs/problemas-abiertos.md`, y nuevos `app/c/[slug].tsx`, `lib/llegadaPorLink.ts`, `web/.well-known/apple-app-site-association`, `supabase/migrations/20261026010000_origen_desde_la_app.sql`, `__tests__/llegadaPorLink.test.ts`.

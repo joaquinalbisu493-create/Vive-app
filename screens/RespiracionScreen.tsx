@@ -15,6 +15,7 @@ import { ViveFonts } from '@/constants/theme';
 import { mixHex } from '@/constants/theme';
 import { PASTEL_SALVIA } from '@/constants/tools';
 import { PinButton } from '@/components/PinButton';
+import { ReminderBell } from '@/components/ReminderBell';
 import { ToolHeader } from '@/components/ui/ToolHeader';
 import { usuarioActualId, supabase, registrarEvento } from '@/lib/supabase';
 import { recordCompletion } from '@/lib/resourceCompletions';
@@ -428,7 +429,14 @@ export default function RespiracionScreen() {
         <ToolHeader
           title="Respiración"
           onBack={() => { stopTimer(); router.back(); }}
-          right={<PinButton resourceId="respiracion" inline />}
+          right={
+            // La campana volvió el 27/10/2026: el rediseño del 22/10 la había
+            // sacado sin querer y Respiración quedó sin forma de programar recordatorios.
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 14 }}>
+              <ReminderBell kind="tool" resourceRef="respiracion" title="Respiración" />
+              <PinButton resourceId="respiracion" inline />
+            </View>
+          }
         />
         <View style={s.headerDivider} />
 
