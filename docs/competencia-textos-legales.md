@@ -23,7 +23,7 @@ no publica sus términos en el sitio.
 1. **Los textos argentinos son más pobres que los nuestros.** TuTerapia usa una plantilla
    genérica y su Política cita la ley uruguaya; nadie tiene un consentimiento específico para
    datos de salud; dos fijan jurisdicción exclusiva en contra del consumidor.
-2. **Nadie resolvió públicamente las preguntas difíciles** (A.2 consentimiento de datos de
+2. **Ninguno de los leídos resolvió públicamente las preguntas difíciles** (A.2 consentimiento de datos de
    salud, B.4 notas como historia clínica, cobro por cuenta y orden). No hay un antecedente
    local para copiar: por eso sigue haciendo falta la opinión de la abogada en esos puntos.
 3. **Hay cuatro ideas concretas para tomar** (abajo, "Para adoptar").
@@ -36,7 +36,7 @@ no publica sus términos en el sitio.
 | **Notas / historia clínica** (B.4) | T&C §16: el profesional es responsable del uso; las notas se borran al borrar la cuenta (Política §10) | **Selia: la herramienta es de Selia, pero el responsable legal de la historia clínica es el profesional, que mantiene indemne a Selia ante multas.** TuTerapia: la terapia es "de total responsabilidad del Licenciado". MiPsico no guarda nada | Tomar el modelo de Selia (ver abajo). El borrado inmediato sigue siendo pregunta para la abogada |
 | **Cobro y rol de la plataforma** | T&C §4 intermediaria; §8 "por cuenta y orden" en dólares | TuTerapia cobra todo por la plataforma y fija tarifas, sin decir en nombre de quién. MiPsico no toca plata ("no es intermediario"). Selia: la comisión va en una propuesta privada, no en los términos | Lo nuestro es más explícito que el mercado. Ninguno resuelve el USDT ni PayPal |
 | **Cancelaciones** | 24 h con reembolso total; garantía de primera sesión; arrepentimiento §9.4 | TuTerapia: menos de 48 h = sesión realizada, sin reembolso; 10 días de arrepentimiento por compra, paquetes sin reembolso. CPP: 48 h hábiles. PSICOlinea: 24 h | Sere es más generosa que el mercado; el estándar es 24 a 48 h |
-| **Matrícula y entre provincias** (B.12) | T&C §5.2: el profesional responde por su matrícula | **CPP: "el lugar de prestación será el del lugar en el cual el profesional lleve a cabo la asistencia online y se encuentre matriculado".** MiPsico: verifica que la matrícula exista, sin garantizar aptitud ni vigencia futura | Tomar la cláusula de CPP (ver abajo) |
+| **Matrícula y entre provincias** (B.12) | T&C §5.2: el profesional responde por su matrícula | **CPP: "el lugar de prestación será el del lugar en el cual el profesional lleve a cabo la asistencia online y se encuentre matriculado".** MiPsico: verifica que la matrícula exista, sin garantizar aptitud ni vigencia futura | **No copiar** (ver abajo): queda como pregunta para la abogada |
 | **Verificación de credenciales** | T&C §6.1 "Perfil revisado por Sere" con alcance acotado | TuTerapia promete verificar título en los colegios y "evaluaciones periódicas" (promesa riesgosa). MiPsico acota el alcance, como nosotros | Lo nuestro está bien; no prometer de más como TuTerapia |
 | **Jurisdicción** | §22.2 consumidor: su domicilio (art. 1109 CCyC); profesionales: Córdoba | TuTerapia: Mar del Plata para todos. CPP: CABA "con expresa exclusión de cualquier otro fuero". MiPsico: CABA, renuncia a otro fuero | La nuestra es la correcta; las de ellos probablemente son abusivas frente a consumidores |
 | **Transferencia internacional** (A.3) | Política §7: detalle por proveedor, Supabase en San Pablo, acuerdo de tratamiento | MiPsico: Supabase en EEUU, invoca "salvaguardas contractuales" y la excepción de ejecución del contrato. TuTerapia: nada | La de MiPsico sugiere una base adicional (ejecución del contrato); confirmar con la abogada si aplica a datos sensibles |
@@ -51,22 +51,23 @@ no publica sus términos en el sitio.
    llevarla según su ley profesional; las notas de Sere no la reemplazan; el profesional
    mantiene indemne a Sere. Idea de producto: que el profesional pueda **exportar sus notas**
    antes de que se borren por la baja de un cliente.
-2. **Lugar de prestación (modelo CPP).** En T&C §5.2 y en el acuerdo con profesionales:
-   la sesión se considera prestada en el lugar donde el profesional atiende y está
-   matriculado. Ayuda con la atención entre provincias (B.12); confirmar con la abogada.
-3. **Aviso de emergencias visible** en la app y la web, no solo en los Términos.
+2. **Aviso de emergencias visible** en la app y la web, no solo en los Términos.
    Antes, verificar el horario del 135 y el 0800 en la fuente oficial
    (casbuenosaires.com.ar no respondió el 27/10/2026).
-4. **Indemnidad por el servicio profesional.** Hoy §19 cubre el incumplimiento, el contenido
+3. **Indemnidad por el servicio profesional.** Hoy §19 cubre el incumplimiento, el contenido
    y la conducta del Usuario, pero no nombra la prestación. Sumar (modelo MiPsico §14) que el
    Profesional mantiene indemne a Sere por el servicio que presta a sus Clientes; va también
    en el acuerdo con profesionales.
-5. **Cláusula de datos anonimizados** (modelo TuTerapia §2 bis), solo si se van a usar
+4. **Cláusula de datos anonimizados** (modelo TuTerapia §2 bis), solo si se van a usar
    estadísticas agregadas.
 
-## Para la abogada (sin cambios)
+## Para la abogada
 
 A.2 (base legal y consentimiento de datos de salud), B.4 (notas como historia clínica),
+B.12 (atención entre provincias: la cláusula de CPP "el lugar de prestación es donde el
+profesional está matriculado" no se copia porque un contrato no cambia qué ley provincial
+regula el ejercicio profesional, y puede chocar con T&C §22.2, que lleva los reclamos del
+consumidor al lugar donde recibió la prestación según el art. 1109 CCyC; sirve como ejemplo),
 y el cobro en dólares con SAS (USDT ante la CNV, PayPal). Ningún competidor local los
 resuelve.
 
