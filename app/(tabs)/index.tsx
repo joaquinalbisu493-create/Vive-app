@@ -32,6 +32,7 @@ import { detectarPisoSeguridad } from '@/lib/pisoSeguridad';
 import { SAFETY_FLOOR_ENABLED } from '@/constants/features';
 import { buildReflection, esPregunta, type Reflection } from '@/lib/weeklyReflection';
 import { useDailyReflection } from '@/hooks/useDailyReflection';
+import { dejarPreguntaParaElDiario } from '@/lib/preguntaDeSofia';
 import { localDayKey, localDayKeyMinus, diasEntreDias } from '@/lib/dates';
 import { useWeeklySignals } from '@/hooks/useWeeklySignals';
 import { sessionHasEnded } from '@/lib/time';
@@ -365,7 +366,8 @@ export default function InicioScreen() {
         && cardReflection.signal !== 'recurso-del-coach'
         && esPregunta(cardReflection)) {
       registrarEvento('reflexion_vista', { origen: 'pregunta_al_diario' });
-      router.push({ pathname: '/diario', params: { pregunta: preguntaDeLaCard(cardReflection) } });
+      dejarPreguntaParaElDiario(preguntaDeLaCard(cardReflection));
+      router.push('/diario');
       return;
     }
     if (cardReflection.signal === 'piso-seguridad') {

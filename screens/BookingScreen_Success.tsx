@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Animated,
   Easing,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -19,6 +20,8 @@ import { vibrarLogro } from '@/lib/vibracion';
 import { sonarReservaConfirmada } from '@/lib/sonido';
 import { ScaleCard } from '@/components/ScaleCard';
 import { LogoATilde } from '@/components/LogoATilde';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/context/AuthContext';
 
 const DAY_NAMES = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
 const MONTH_NAMES = [
@@ -33,26 +36,79 @@ function formatDate(dateStr: string): string {
   return `${DAY_NAMES[date.getDay()]}, ${day} de ${MONTH_NAMES[month - 1]}`;
 }
 
-type Params = {
-  name?: string;
-  specialty?: string;
-  date?: string;
-  time?: string;
-  salaId?: string;
-  instant?: string;
-  avatar?: string;
+// 🔔 Todo lo que se muestra sale de la reserva en la base, buscada por
+// `bookingId` y solo si es de quien mira. Antes salía de los parámetros de la
+// ruta, y cualquier link `viveapp://booking-success?instant=1&name=…` armaba una
+// "¡Sesión confirmada!" falsa con el nombre, la foto (bajada de cualquier sitio)
+// y el horario que quisiera, con sonido y todo (auditoría de seguridad,
+// 27/10/2026, corrida 2). Sin reserva propia no se muestra nada y se vuelve a
+// Inicio.
+type Reserva = {
+  coachName: string;
+  specialty: string;
+  date: string;
+  time: string;
+  salaId: string;
+  confirmada: boolean;
+  avatar: string | null;
 };
 
 export default function BookingScreen_Success() {
   const router = useRouter();
-  const params = useLocalSearchParams<Params>();
+  const { user } = useAuth();
+  const { bookingId } = useLocalSearchParams<{ bookingId?: string }>();
+  const [reserva, setReserva] = useState<Reserva | null>(null);
 
-  const coachName = params.name ?? '';
-  const specialty = params.specialty ?? '';
-  const dateStr = params.date ?? '';
-  const time = params.time ?? '';
-  const salaId = params.salaId ?? '';
-  const isInstant = params.instant === '1';
+  useEffect(() => {
+    if (!user || !bookingId) { router.replace('/(tabs)'); return; }
+    let vivo = true;
+    (async () => {
+      const { data } = await supabase
+        .from('bookings')
+        .select('user_id, status, coach_id, coach_name, coach_specialty, scheduled_date, scheduled_time, sala_id')
+        .eq('id', bookingId)
+        .maybeSingle();
+      if (!vivo) return;
+      if (!data || data.user_id !== user.id || !['pendiente', 'confirmada'].includes(data.status)) {
+        router.replace('/(tabs)');
+        return;
+      }
+      const { data: coach } = await supabase
+        .from('coaches')
+        .select('profiles(avatar_url)')
+        .eq('id', data.coach_id)
+        .maybeSingle();
+      if (!vivo) return;
+      setReserva({
+        coachName: data.coach_name ?? '',
+        specialty: data.coach_specialty ?? '',
+        date: data.scheduled_date ?? '',
+        time: (data.scheduled_time ?? '').slice(0, 5),
+        salaId: data.sala_id ?? '',
+        confirmada: data.status === 'confirmada',
+        avatar: (coach as any)?.profiles?.avatar_url ?? null,
+      });
+    })();
+    return () => { vivo = false; };
+  }, [user, bookingId, router]);
+
+  if (!reserva) {
+    return (
+      <AppBg>
+        <View style={s.cargando}>
+          <ActivityIndicator color={ViveColors.primary} />
+        </View>
+      </AppBg>
+    );
+  }
+  return <Confirmacion reserva={reserva} />;
+}
+
+function Confirmacion({ reserva }: { reserva: Reserva }) {
+  const router = useRouter();
+  const { coachName, specialty, time, salaId } = reserva;
+  const dateStr = reserva.date;
+  const isInstant = reserva.confirmada;
 
   // Salir de acá tiene que DESARMAR la pila de la reserva, no apilarse encima.
   //
@@ -138,7 +194,7 @@ export default function BookingScreen_Success() {
           {/* Tarjeta resumen */}
           <Animated.View style={[s.card, { opacity: contentOpacity }]}>
             <View style={s.coachRow}>
-              <CoachAvatar uri={params.avatar} size={44} style={s.avatar} />
+              <CoachAvatar uri={reserva.avatar} size={44} style={s.avatar} />
               <View style={s.coachInfo}>
                 <Text style={s.coachName}>{coachName}</Text>
                 {specialty ? <Text style={s.coachSpecialty}>{specialty}</Text> : null}
@@ -203,6 +259,7 @@ const cardShadow = Platform.select({
 });
 
 const s = StyleSheet.create({
+  cargando: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   root: {
     flex: 1,
     backgroundColor: 'transparent',

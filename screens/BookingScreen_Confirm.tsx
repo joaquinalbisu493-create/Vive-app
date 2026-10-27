@@ -522,7 +522,7 @@ export default function BookingScreen_Confirm() {
         limpiarIntentoAnterior(),
         resolverPrecio(),
       ]);
-      const { salaId, roomUrl } = sala;
+      const { salaId } = sala;
 
       // Se lee ACÁ y no al montar la pantalla: lo que importa es dónde estaba
       // en el momento de reservar, no cuándo abrió la app.
@@ -969,22 +969,13 @@ export default function BookingScreen_Confirm() {
       // la sala y dos cancelaciones a cada competidor del horario.
       if (!initPoint) await applyBookingEffects(confirmedNow);
 
+      // Solo el id: la pantalla lee todo lo demás de la reserva en la base
+      // ('Confirmada' sale de su `status`), así un link de afuera no puede
+      // armar una confirmación falsa. A esta pantalla no se llega sin el pago
+      // hecho.
       router.replace({
         pathname: '/booking-success',
-        params: {
-          name: coachName,
-          specialty,
-          date: dateStr,
-          time,
-          ...(avatarUrl && { avatar: avatarUrl }),
-          bookingId: booking.id,
-          roomUrl,
-          salaId,
-          // Lo que se le muestra tiene que ser lo que de verdad pasó: 'Confirmada'
-          // solo si el coach tiene reserva instantánea. Ya no existe un
-          // `paymentPending`: a esta pantalla no se llega sin el pago hecho.
-          instant: confirmedNow ? '1' : '0',
-        },
+        params: { bookingId: booking.id },
       });
     } catch (e: any) {
       await logError('BookingConfirm: onConfirm failed', e);

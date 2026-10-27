@@ -12,7 +12,7 @@ import {
   Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts, ViveMoodColors, ViveMoods } from '@/constants/theme';
 import { useAuth } from '@/context/AuthContext';
@@ -33,6 +33,7 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { anotar } from '@/lib/analytics';
 import { PASTEL_SALVIA } from '@/constants/tools';
 import { localDayKey } from '@/lib/dates';
+import { tomarPreguntaParaElDiario } from '@/lib/preguntaDeSofia';
 import { semanaDeEscritura } from '@/lib/semanaDiario';
 import { MOOD_PROMPTS, PROMPT_BIENVENIDA, CIERRE_DEFAULT, type Prompt } from '@/lib/vozCompartida';
 import ParaQueSirve from '@/components/ParaQueSirve';
@@ -169,7 +170,6 @@ export default function DiarioScreen() {
   // Se congela apenas hay algo escrito: que la pregunta se reescriba sola
   // mientras escribís —porque moviste el ánimo a mitad de una frase— es
   // insoportable. Se fija la primera vez que hay texto y se suelta al vaciarse.
-  const params = useLocalSearchParams<{ pregunta?: string }>();
   const promptFijado = useRef<Prompt | null>(null);
   // 🔴 Si Sofía preguntó algo en Inicio, ESA es la pregunta — no la del ánimo.
   //
@@ -181,7 +181,10 @@ export default function DiarioScreen() {
   // ⚠️ Le gana incluso a la bienvenida de la primera vez: si alguien llegó acá
   // desde una pregunta concreta, explicarle qué es el Diario sería cambiarle el
   // tema.
-  const preguntaDeSofia = Array.isArray(params.pregunta) ? params.pregunta[0] : params.pregunta;
+  //
+  // 🔔 La pregunta llega por `lib/preguntaDeSofia.ts`, no por la ruta: así un
+  // link de afuera no puede hablar con la voz de Sofía.
+  const [preguntaDeSofia] = useState(tomarPreguntaParaElDiario);
   const promptBase: Prompt = preguntaDeSofia
     ? { lead: 'Sofía te preguntó esto.', pregunta: preguntaDeSofia, cierre: 'Contestalo acá si querés.' }
     : entries.length === 0

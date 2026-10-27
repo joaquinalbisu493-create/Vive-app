@@ -73,6 +73,12 @@ export async function cancelBookingFlow(p: CancelBookingParams): Promise<CancelR
   // Postgrest no devuelve error cuando RLS bloquea: devuelve 0 filas. Sin este
   // chequeo, la pantalla diría "cancelada" con la reserva intacta.
   if (error || !data || data.length === 0) {
+    // 'ya_empezo': con una propuesta de horario del profesional abierta, la base
+    // no deja cancelar una sesión que ya empezó (migración 20261027020000); lo
+    // que pasó ahí lo resuelve la asistencia. Mostrar el código crudo no sirve.
+    if (error?.message?.includes('ya_empezo')) {
+      return { ok: false, error: 'Esta sesión ya empezó, así que no se puede cancelar. Si hubo un problema, escribinos desde la sala.' };
+    }
     return { ok: false, error: error?.message ?? 'No se pudo cancelar. Probá de nuevo' };
   }
 

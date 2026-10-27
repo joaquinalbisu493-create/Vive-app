@@ -1,3 +1,18 @@
+## 2026-10-27 — Andre (Claude · auditoría de seguridad con la skill de Cloudflare, tanda 2)
+
+**Tocado:** `supabase/migrations/20261027020000_cancelar_con_propuesta_antes_de_empezar.sql` (nueva), `supabase/migrations/20261027030000_agenda_sin_reservas_colgadas_y_salas_con_profesional.sql` (nueva), `SCHEMA.md`, `lib/bookingCancel.ts`, `screens/BookingScreen_Success.tsx`, `screens/BookingScreen_Confirm.tsx`, `lib/preguntaDeSofia.ts` (nuevo), `app/diario.tsx`, `app/(tabs)/index.tsx`.
+
+**Resumen:**
+- Segunda tanda de la skill (informe fuera del repo: `~/security-audit-skill/vive-app/run-2/REPORT.md`): reagendado, reserva web `/c`, ingreso por código de la web, lo que el profesional puede editar de una reserva, salas, y revalidación de los arreglos de la tanda 1. Sin problemas en la web `/c` ni en el ingreso por código.
+- 🔴 Arreglado (pagos, funciones de Codex del 24/09): con una propuesta de horario del profesional sin retirar, el cliente podía cancelar una sesión ya empezada o hecha y cobrar reembolso completo anotado al profesional. Ahora se rechaza con `ya_empezo`.
+- Arreglado: las reservas que nunca pasaron a pagar se cancelan a los 60 minutos (antes tapaban la agenda pública 24 horas); las salas solo se crean con un profesional verificado del otro lado; "¡Sesión confirmada!" lee la reserva de la base por id y la pregunta de Sofía viaja dentro de la app, no por el link.
+- Base: dos migraciones APLICADAS y PROBADAS con rollback en producción (6 casos). SCHEMA.md actualizado. Como las migraciones desde el 13/10, no están registradas en el historial remoto.
+
+**Pendiente para la próxima sesión:**
+- Andre, en el panel de Supabase: sacar el link de la plantilla Reset Password (y revisar Confirm signup, Invite y Change email) y sacar `viveapp://nueva-contrasena` de Redirect URLs. Sin eso, la recuperación por link sigue abierta aunque la app ya no la use.
+- Probar en el iPhone con la próxima compilación: reservar y ver la pantalla de confirmación; tocar la tarjeta de Inicio que manda al Diario y ver la pregunta.
+- Tanda 3 posible: los demás parámetros de link (búsqueda, formato, onboarding, conexiones, pagos, legales); el `label` de búsqueda termina en el tema que ve el profesional.
+
 ## 2026-10-27 — Andre (Claude · textos legales de la competencia)
 
 **Tocado:** `docs/competencia-textos-legales.md` (nuevo).
