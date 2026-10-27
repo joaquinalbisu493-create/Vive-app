@@ -1,3 +1,16 @@
+## 2026-10-27 — Andre (Claude · textos legales de la competencia)
+
+**Tocado:** `docs/competencia-textos-legales.md` (nuevo).
+
+**Resumen:**
+- Comparados los Términos y Políticas de TuTerapia (marketplace argentino, ~20% de comisión), MiPsico (directorio) y el Centro Privado de Psicoterapias con los de Sere, más lo ya leído de Selia. Los argentinos son más pobres que los nuestros y ninguno resuelve el consentimiento de datos de salud, las notas como historia clínica ni el cobro por cuenta y orden: siguen siendo preguntas para la abogada.
+- Cinco ideas para redactar nosotros: notas de sesión con el modelo de Selia (el profesional es responsable de su historia clínica e indemniza), lugar de prestación donde el profesional está matriculado (CPP), aviso de emergencias visible, indemnidad por el servicio profesional en §19, y cláusula de datos anonimizados (opcional).
+- Contexto de la sesión (fuera del repo): Sere necesita una SAS para publicar (Apple 5.1.1(ix) y Google Play, salud mental es categoría médica); la contadora recomendó intermediación por cuenta y orden. Registro completo en el Escritorio: "Sere - Registro sociedad, legal y fiscal.txt".
+
+**Pendiente para la próxima sesión:**
+- Verificar el horario del 135 y el 0800 del CAS en la fuente oficial antes de tocar T&C §5.3.
+- Aplicar las ideas a los Términos cuando la SAS esté constituida (cambia el titular de los textos).
+
 ## 2026-10-27 — Andre (Claude · auditoría de links con la skill de Cloudflare, tanda 1)
 
 **Tocado:** `supabase/migrations/20261027010000_reembolso_solo_cliente.sql` (nueva), `SCHEMA.md`, `context/AuthContext.tsx`, `screens/LoginScreen.tsx`, `screens/RegisterScreen.tsx`, `screens/VerificarMailScreen.tsx`, `screens/NuevaContrasenaScreen.tsx`, `screens/BookingScreen_Confirm.tsx`, `app/coach-recurso.tsx`, `app/mis-recomendaciones.tsx`, `app/(tabs)/recursos.tsx`, comentarios en `app/_layout.tsx`, `lib/entrada.ts`, `lib/supabase.ts`, `components/CaptchaHost.tsx`, `screens/CoachLoginScreen.tsx`. **Base:** trigger nuevo en `bookings` (`trg_reembolso_solo_cliente`), aplicado y probado con rollback; SCHEMA.md actualizado.
