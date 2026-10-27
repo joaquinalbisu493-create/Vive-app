@@ -92,14 +92,14 @@ ser la misma que la de Política §6.
 
 ### Prácticas de seguridad
 - **¿Se cifran los datos en tránsito?** **Sí** — todo va por HTTPS (Supabase, Mercado Pago, Daily.co, Expo).
-- **¿El usuario puede pedir la eliminación de sus datos?** **Sí** — desde la app (Perfil → Eliminar mi cuenta), escribiendo a `hola@sere.ar` (Política §9), o desde la URL que exige Google: **`https://vitaapp.com.ar/legal/eliminar-cuenta`** (escrita el 13/08/2026, pendiente de publicar).
+- **¿El usuario puede pedir la eliminación de sus datos?** **Sí** — desde la app (Perfil → Eliminar mi cuenta), escribiendo a `hola@sere.ar` (Política §9), o desde la URL que exige Google: **`https://sere.ar/legal/eliminar-cuenta`** (publicada; verificado el 27/10/2026).
 - **¿Se siguió el programa Play Families?** No aplica: la app es para mayores de 18 (T&C §3.1).
 
 ---
 
 ## Pendientes antes de completar los formularios
 
-- [x] ~~**URL de eliminación de cuenta (Google).**~~ Página escrita y generada el 13/08/2026 (`docs/eliminar-cuenta.md` → `web/legal/eliminar-cuenta.html`): declara qué se borra y qué se conserva con su plazo, siguiendo Política §10. Queda cargar `https://vitaapp.com.ar/legal/eliminar-cuenta` en Play Console **cuando el sitio esté publicado** — ver `docs/hosting.md`.
+- [x] ~~**URL de eliminación de cuenta (Google).**~~ Página escrita y generada el 13/08/2026 (`docs/eliminar-cuenta.md` → `web/legal/eliminar-cuenta.html`): declara qué se borra y qué se conserva con su plazo, siguiendo Política §10. Queda cargar `https://sere.ar/legal/eliminar-cuenta` (ya publicada) en Play Console al armar la ficha.
 - [x] ~~**Borrado de cuenta dentro de la app.**~~ Existe desde el 06/08/2026 (Perfil → Eliminar mi cuenta, función `delete-account`); revisado de punta a punta el 03 y 04/10/2026.
 - [ ] **Revisar si el video de presentación puede considerarse dato biométrico**; en principio no, es contenido subido voluntariamente y público en el perfil.
 - [ ] Confirmar que las respuestas coinciden con la Política antes de enviar.
