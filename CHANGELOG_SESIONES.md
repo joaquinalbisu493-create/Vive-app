@@ -10,7 +10,7 @@
 
 **Pendiente para la próxima sesión:**
 - Andre + contadora: costo mensual de la SAS como Responsable Inscripto, IVA sobre la comisión (24,2% o 20% con IVA incluido; cambiar a la vez `mp-create-payment`, el copy del profesional y T&C §8.4), plazo del Registro de Sociedades de Córdoba (IPJ). Después: D-U-N-S y cuentas de organización en Google y Apple.
-- 🔴 Android push: proyecto de Firebase `sere-c9891` creado por Andre y `google-services.json` conectado en `app.json` (no es secreto; repo privado). FALTA: Andre carga en EAS la clave de cuenta de servicio (FCM V1) con `eas credentials -p android` (no va al repo), y probar con una compilación nueva.
+- 🔴 Android push: proyecto de Firebase `sere-c9891` creado por Andre y `google-services.json` conectado en `app.json` (no es secreto; repo privado). Clave FCM V1 cargada en EAS por Andre (verificado: proyecto `sere-c9891`; no está en el repo; Andre la borra de Descargas). Firma de Android nueva generada en EAS (`sere`, default) para `com.andrealbisu.app`. FALTA: probar una notificación en Android con una compilación nueva. Ojo: `eas credentials` es interactivo, Andre lo corre en la Terminal (no con `!`).
 - L56 Android (`assetlinks.json` + `intentFilters`): necesita la huella de la firma de Google Play, que existe recién con la cuenta. Con la SAS cambia también el Team ID de Apple del AASA.
 
 ## 2026-10-26 — Andre (Claude · facturación: descuento y tope del monotributo)
