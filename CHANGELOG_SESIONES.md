@@ -1,6 +1,6 @@
 ## 2026-10-27 — Andre (Claude · Google Play: hace falta una sociedad)
 
-**Tocado:** `app.json`, `assets/images/notification-icon.png` (nuevo), `docs/etiquetas-privacidad-tiendas.md`, `web/tiendas.js` (solo un comentario), `scripts/add-app-version-gate.sql`, `docs/problemas-abiertos.md`, `SCHEMA.md`. **Base:** una fila de datos (`app_version_gate.store_url` de android), sin cambios de estructura.
+**Tocado:** `app.json`, `assets/images/notification-icon.png` (nuevo), `docs/etiquetas-privacidad-tiendas.md`, `web/tiendas.js` (solo un comentario), `scripts/add-app-version-gate.sql`, `docs/problemas-abiertos.md`, `SCHEMA.md`, `google-services.json` (nuevo). **Base:** una fila de datos (`app_version_gate.store_url` de android), sin cambios de estructura.
 
 **Resumen:**
 - Al abrir Play Console, Google avisó que las apps médicas o de teleconsulta solo las publican organizaciones. Sere entra por los psicólogos por videollamada (Google pone la teleconsulta dentro de "Medical"). La cuenta de organización pide D-U-N-S, y un monotributista no califica (Apple lo dice explícito; Apple 5.1.1 ix pide lo mismo para salud). **Decisión de Andre: no sacar a los psicólogos y armar una SAS con Joaquín desde el inicio.** No se abrió la cuenta personal de Google (no se puede pasar a organización después).
@@ -10,7 +10,7 @@
 
 **Pendiente para la próxima sesión:**
 - Andre + contadora: costo mensual de la SAS como Responsable Inscripto, IVA sobre la comisión (24,2% o 20% con IVA incluido; cambiar a la vez `mp-create-payment`, el copy del profesional y T&C §8.4), plazo del Registro de Sociedades de Córdoba (IPJ). Después: D-U-N-S y cuentas de organización en Google y Apple.
-- 🔴 Android no recibe notificaciones push: falta el proyecto de Firebase (`google-services.json` + clave FCM cargada en EAS). Depende del nombre de paquete.
+- 🔴 Android push: proyecto de Firebase `sere-c9891` creado por Andre y `google-services.json` conectado en `app.json` (no es secreto; repo privado). FALTA: Andre carga en EAS la clave de cuenta de servicio (FCM V1) con `eas credentials -p android` (no va al repo), y probar con una compilación nueva.
 - L56 Android (`assetlinks.json` + `intentFilters`): necesita la huella de la firma de Google Play, que existe recién con la cuenta. Con la SAS cambia también el Team ID de Apple del AASA.
 
 ## 2026-10-26 — Andre (Claude · facturación: descuento y tope del monotributo)

@@ -29,6 +29,7 @@
         "backgroundColor": "#FBF6EF"
       },
       "package": "com.andrealbisu.app",
+      "googleServicesFile": "./google-services.json",
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.READ_CALENDAR",

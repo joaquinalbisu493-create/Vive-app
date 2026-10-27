@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1073371939074",
+    "project_id": "sere-c9891",
+    "storage_bucket": "sere-c9891.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073371939074:android:a49eb313afa83af63fc21b",
+        "android_client_info": {
+          "package_name": "com.andrealbisu.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD628k609E5e_G6pZ3UZwIKJnVWzkkkvZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
