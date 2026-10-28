@@ -19,7 +19,6 @@ import { AppBg } from '@/components/ui/AppBg';
 import { CoachHeader } from '@/components/ui/CoachHeader';
 import { deleteMyAccount } from '@/lib/accountDeletion';
 import { FRASE_BORRAR, coincideBorrado } from '@/lib/confirmarBorrado';
-import { pedirCambioDeMail } from '@/lib/contacto';
 
 /**
  * Ajustes de la APP para el coach — lo que no es "ser profesional en VIVE".
@@ -118,7 +117,7 @@ export default function CoachSettingsScreen() {
     // que no se puede abrir. Mismo criterio que en la pantalla del usuario.
     // Crear o cambiar la contraseña (ver el mismo ítem en ProfileOwnScreen).
     { id: 'password', icon: 'key-outline', label: 'Contraseña', onPress: () => router.push('/nueva-contrasena' as any) },
-    { id: 'mail', icon: 'email-edit-outline', label: 'Cambiar mi mail', onPress: () => pedirCambioDeMail(user?.email ?? '') },
+    { id: 'mail', icon: 'email-edit-outline', label: 'Cambiar mi mail', onPress: () => router.push('/cambiar-mail' as any) },
     ...(isAdmin ? [{ id: 'admin', icon: 'shield-account-outline' as const, label: 'Administración', onPress: () => router.push('/admin') }] : []),
   ];
 

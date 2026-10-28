@@ -312,6 +312,7 @@ export default function RootLayout() {
             })}
           />
           <Stack.Screen name="nueva-contrasena" options={{ headerShown: false }} />
+          <Stack.Screen name="cambiar-mail" options={{ headerShown: false }} />
           {/* 🔴 `none`, ni slide ni fade. Se llega desde la bifurcación con la
               pantalla ENTERA tapada por el color del ala (ver
               `EntradaDesdeColor`), así que cualquier transición es tiempo de

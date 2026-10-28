@@ -1,3 +1,16 @@
+## 2026-10-28 — Andre (Claude · cambiar el mail desde la app)
+
+**Tocado:** `screens/CambiarMailScreen.tsx` (nueva), `app/cambiar-mail.tsx` (nueva), `app/_layout.tsx`, `screens/ProfileOwnScreen.tsx`, `screens/CoachSettingsScreen.tsx`, `lib/contacto.ts`, `supabase/migrations/20261028020000_sync_profile_email.sql` (nueva), `SCHEMA.md`.
+
+**Resumen:**
+- Decisión de Andre (después de ver cómo lo resuelven otras apps): "Cambiar mi mail" ya no va por soporte. La persona escribe el mail nuevo y recibe un código en el actual y otro en el nuevo; con los dos, se cambia. Sin acceso al mail actual no se puede (eso frena a quien robe una sesión); para ese caso hay un "No tengo acceso" que escribe a soporte pidiendo el comprobante de un pago.
+- Base: trigger que copia el mail nuevo a `profiles.email` (antes solo lo copiaba el alta). APLICADO y PROBADO con rollback. SCHEMA.md actualizado.
+- Teléfono como respaldo: descartado por ahora (costo por SMS, dato personal extra, fricción). Revisar si con usuarios reales se pierde seguido el acceso al mail.
+
+**Pendiente para la próxima sesión:**
+- ⚠️ ANTES de la próxima compilación, Andre en Supabase: prender "Secure email change" (Authentication → Sign In / Providers → Email) y cambiar la plantilla "Change email address" a código (`{{ .Token }}`), sin link. Sin eso no llega el código al mail actual y la pantalla no puede terminar.
+- Probar en el iPhone con una cuenta de prueba: cambiar el mail, que lleguen los dos códigos, y entrar con el nuevo.
+
 ## 2026-10-28 — Andre (Claude · auditoría de seguridad, tanda 3)
 
 **Tocado:** `supabase/migrations/20261028010000_tope_reservas_sin_pagar.sql` (nueva), `supabase/functions/web-book/index.ts` (desplegada), `screens/BookingScreen_Confirm.tsx`, `app/formato.tsx`, `screens/CoachChatsScreen.tsx`, `SCHEMA.md`.

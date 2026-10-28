@@ -26,7 +26,6 @@ import { AppBg } from '@/components/ui/AppBg';
 import { deleteMyAccount } from '@/lib/accountDeletion';
 import { DESCUENTO_REFERIDO_PCT } from '@/lib/referidos';
 import { useConsent } from '@/hooks/useConsent';
-import { pedirCambioDeMail } from '@/lib/contacto';
 type Profesional = {
   id: string;
   name: string;
@@ -201,8 +200,8 @@ export default function ProfileOwnScreen() {
     // Crear o cambiar la contraseña. Sobre todo para quien entró con un código
     // (la cuenta nacida en la web no tiene), pero sirve para cualquiera.
     { id: 'password', icon: 'key-outline', label: 'Contraseña', onPress: () => router.push('/nueva-contrasena' as any) },
-    // El mail se pide por soporte (ver `pedirCambioDeMail`).
-    { id: 'mail', icon: 'email-edit-outline', label: 'Cambiar mi mail', onPress: () => pedirCambioDeMail(displayEmail) },
+    // Con código al mail actual y al nuevo (CambiarMailScreen).
+    { id: 'mail', icon: 'email-edit-outline', label: 'Cambiar mi mail', onPress: () => router.push('/cambiar-mail' as any) },
     // Solo visible para admins. Ocultarlo no es la protección — `admin-actions`
     // revalida contra el JWT en cada escritura — pero no tiene sentido mostrarle
     // a nadie una puerta que no puede abrir.

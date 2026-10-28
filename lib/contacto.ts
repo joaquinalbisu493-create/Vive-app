@@ -28,27 +28,3 @@ export async function escribirnos(asunto: string, cuerpo = ''): Promise<boolean>
     return false;
   }
 }
-
-/**
- * "Cambiar mi mail" (perfil del usuario y del profesional). El mail no se
- * cambia desde la app: es la puerta clásica para quedarse con una cuenta ajena
- * (cambiás el mail y la recuperación te llega a vos). Se pide por mail y lo
- * hace el equipo desde el panel, después de comprobar que es la persona
- * (`admin-actions` → `change_user_email`, 27/10/2026).
- */
-export function pedirCambioDeMail(mailActual: string): void {
-  Alert.alert(
-    'Cambiar tu mail',
-    'Escribinos desde el mail que usás ahora y decinos cuál querés usar. Lo cambiamos nosotros, así nadie más puede hacerlo por vos.',
-    [
-      { text: 'Ahora no', style: 'cancel' },
-      {
-        text: 'Escribir',
-        onPress: async () => {
-          const ok = await escribirnos('Quiero cambiar el mail de mi cuenta', `Mail actual: ${mailActual}\nMail nuevo: \n\n`);
-          if (!ok) Alert.alert('Escribinos a', EMAIL_CONTACTO);
-        },
-      },
-    ],
-  );
-}
