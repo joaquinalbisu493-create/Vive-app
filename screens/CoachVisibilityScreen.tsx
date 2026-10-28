@@ -18,6 +18,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
 import { CoachHeader } from '@/components/ui/CoachHeader';
+import { CoachCard } from '@/components/ui/CoachCard';
 import { useAuth } from '@/context/AuthContext';
 import { type CachedCoach } from '@/lib/coachesCache';
 import { loadVisibilitySelf } from '@/lib/coachVisibilityData';
@@ -185,7 +186,7 @@ export default function CoachVisibilityScreen() {
 
           {/* Puertas */}
           {doors.length === 0 ? (
-            <View style={s.emptyCard}>
+            <CoachCard bg="#F7F2E7" radius={20} wrapStyle={s.emptyWrap} innerStyle={s.emptyCard}>
               <Text style={s.emptyCardTitle}>No elegiste temas todavía</Text>
               <Text style={s.emptyCardTxt}>
                 Los temas deciden dónde competís. Es lo que más te conviene resolver primero: podés
@@ -194,7 +195,7 @@ export default function CoachVisibilityScreen() {
               <TouchableOpacity style={s.emptyCardBtn} activeOpacity={0.85} onPress={() => router.push('/coach-topics')}>
                 <Text style={s.emptyCardBtnTxt}>Elegir temas</Text>
               </TouchableOpacity>
-            </View>
+            </CoachCard>
           ) : (
             <>
               <Text style={s.sectionTitle}>Tus temas</Text>
@@ -202,7 +203,7 @@ export default function CoachVisibilityScreen() {
                 const expanded = openDoor === d.door.id;
                 const badge = d.best ? STATUS_STYLE[d.best.status] : null;
                 return (
-                  <View key={d.door.id} style={s.doorCard}>
+                  <CoachCard key={d.door.id} bg="#F7F2E7" radius={20} wrapStyle={s.doorWrap}>
                     <TouchableOpacity
                       style={s.doorHead}
                       activeOpacity={0.8}
@@ -261,7 +262,7 @@ export default function CoachVisibilityScreen() {
                         })}
                       </View>
                     )}
-                  </View>
+                  </CoachCard>
                 );
               })}
             </>
@@ -271,7 +272,7 @@ export default function CoachVisibilityScreen() {
           <Text style={s.sectionTitle}>
             Lo que depende de vos{pending.length > 0 ? ` · ${pending.length} pendiente${pending.length === 1 ? '' : 's'}` : ''}
           </Text>
-          <View style={s.list}>
+            <CoachCard bg="#F7F2E7" radius={20} innerStyle={s.list}>
             {checklist.map((item, i) => (
               <TouchableOpacity
                 key={item.key}
@@ -289,13 +290,10 @@ export default function CoachVisibilityScreen() {
                 {!item.done && item.route && <Feather name="chevron-right" size={16} color={FOREST_SOFT} />}
               </TouchableOpacity>
             ))}
-          </View>
+          </CoachCard>
 
           {/* Recursos — el carril que no pasa por el deck */}
-          <TouchableOpacity
-            style={s.altCard}
-            activeOpacity={0.85}
-            onPress={() => router.push({ pathname: '/coach-recurso-nuevo', params: { coach_id: self.coachId } } as any)}>
+          <CoachCard bg="#F7F2E7" radius={20} wrapStyle={s.altWrap} innerStyle={s.altCard} onPress={() => router.push({ pathname: '/coach-recurso-nuevo', params: { coach_id: self.coachId } } as any)}>
             <Feather name="book-open" size={16} color={TERRA} />
             <View style={{ flex: 1 }}>
               <Text style={s.altTitle}>Publicar un recurso</Text>
@@ -305,7 +303,7 @@ export default function CoachVisibilityScreen() {
               </Text>
             </View>
             <Feather name="chevron-right" size={16} color={FOREST_SOFT} />
-          </TouchableOpacity>
+          </CoachCard>
 
           {isNewCoach(self) && (
             <Text style={s.footNote}>
@@ -355,7 +353,7 @@ const s = StyleSheet.create({
   },
 
   // Puertas
-  doorCard: { backgroundColor: CARD, borderWidth: 1, borderColor: LINE, borderRadius: 20, marginBottom: 10, overflow: 'hidden' },
+  doorWrap: { marginBottom: 10 },
   doorHead: { flexDirection: 'row', alignItems: 'center', gap: 11, padding: 14 },
   doorIcon: { width: 30, height: 30, borderRadius: 15, alignItems: 'center', justifyContent: 'center' },
   doorLabel: { fontFamily: ViveFonts.semibold, fontSize: 14, color: FOREST },
@@ -378,14 +376,15 @@ const s = StyleSheet.create({
   slotDetailOff: { color: '#566245' },
 
   // Empty (sin temas)
-  emptyCard: { backgroundColor: CARD, borderWidth: 1, borderColor: LINE, borderRadius: 20, padding: 18, marginTop: 16 },
+  emptyCard: { padding: 18 },
+  emptyWrap: { marginTop: 16 },
   emptyCardTitle: { fontFamily: ViveFonts.semibold, fontSize: 14.5, color: FOREST },
   emptyCardTxt: { fontFamily: ViveFonts.regular, fontSize: 12, color: FOREST_SOFT, lineHeight: 19, marginTop: 7 },
   emptyCardBtn: { backgroundColor: FOREST, borderRadius: 15, paddingVertical: 11, alignItems: 'center', marginTop: 14 },
   emptyCardBtnTxt: { color: GREEN_TXT, fontSize: 12.5, fontFamily: ViveFonts.semibold },
 
   // Checklist
-  list: { backgroundColor: CARD, borderWidth: 1, borderColor: LINE, borderRadius: 20, paddingHorizontal: 14 },
+  list: { paddingHorizontal: 14 },
   item: { flexDirection: 'row', alignItems: 'flex-start', gap: 11, paddingVertical: 13 },
   itemBorder: { borderTopWidth: 1, borderTopColor: LINE },
   check: {
@@ -400,9 +399,9 @@ const s = StyleSheet.create({
 
   // Recursos
   altCard: {
-    flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 14, padding: 15,
-    backgroundColor: CARD, borderWidth: 1, borderColor: LINE, borderRadius: 20,
+    flexDirection: 'row', alignItems: 'center', gap: 12, padding: 15,
   },
+  altWrap: { marginTop: 14 },
   altTitle: { fontFamily: ViveFonts.semibold, fontSize: 13, color: FOREST },
   altTxt: { fontFamily: ViveFonts.regular, fontSize: 11.5, color: FOREST_SOFT, lineHeight: 17, marginTop: 3 },
 
