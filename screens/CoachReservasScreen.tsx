@@ -27,6 +27,7 @@ import { confirmBooking, rejectBooking, MOTIVO_RECHAZO_MAX } from '@/lib/coachBo
 import { detectContactInfo, hasDatosDeCobro } from '@/lib/contactInfoGuard';
 import { responderReagendado, retirarPropuestas } from '@/lib/reagendarApi';
 import { AppBg } from '@/components/ui/AppBg';
+import { ToolWash } from '@/components/ui/ToolWash';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 
 // ── Paleta del mockup (docs/coach-app-interactivo.html) ──────────────────────
@@ -145,7 +146,10 @@ function groupAvailability(blocks: WeeklyBlock[]): AvailabilityRow[] {
       : end === day + 1
         ? `${DAY_ABBR_BY_ISO[day]} y ${DAY_ABBR_BY_ISO[end]}`
         : `${DAY_ABBR_BY_ISO[day]} a ${DAY_ABBR_BY_ISO[end]}`;
-    rows.push(sig ? { label, hours: sig.replace(/–/g, ' – '), off: false } : { label, hours: '', off: true });
+    // "00:00 – 23:00" (un solo bloque de día completo) se lee más rápido como
+    // "Todo el día".
+    const todoElDia = /^00:00[–-]23:(00|59)$/.test(sig) || sig === '00:00–24:00';
+    rows.push(sig ? { label, hours: todoElDia ? 'Todo el día' : sig.replace(/–/g, ' – '), off: false } : { label, hours: '', off: true });
 
     day = end + 1;
   }
@@ -525,6 +529,7 @@ export default function CoachReservasScreen() {
 
   return (
     <AppBg>
+      <ToolWash color="#DBC8A2" opacity={0.5} height={200} />
       <SafeAreaView style={s.safe} edges={['top']}>
         {/* Header */}
         <View style={s.header}>
@@ -580,11 +585,24 @@ export default function CoachReservasScreen() {
                   <Text style={s.quietTxt}>Te avisamos apenas llegue la primera</Text>
                 </View>
 
-                <Text style={s.sec}>Cuándo estás disponible</Text>
+                <View style={s.eyebrowRow}>
+                  <Text style={s.eyebrow}>CUÁNDO ESTÁS DISPONIBLE</Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      registrarEvento('disponibilidad_editada', {}).catch(() => {});
+                      router.push('/coach-weekly-pattern');
+                    }}
+                    hitSlop={8}
+                    activeOpacity={0.7}>
+                    <Text style={s.eyebrowAction}>Editar</Text>
+                  </TouchableOpacity>
+                </View>
                 <SurfaceCard variant="elevated" tone="light" style={s.availCard}>
                   <View style={s.availInner}>
                     {availabilityRows.map((row, i) => (
                       <View key={row.label} style={[s.slot, i < availabilityRows.length - 1 && s.slotDivider]}>
+                        {/* Barra salvia por día: de un vistazo se ven los días libres (apagada). */}
+                        <View style={[s.slotBar, row.off && s.slotBarOff]} />
                         <Text style={s.slotDay}>{row.label}</Text>
                         {row.off ? (
                           <Text style={s.slotOff}>Sin atención</Text>
@@ -595,15 +613,6 @@ export default function CoachReservasScreen() {
                     ))}
                   </View>
                 </SurfaceCard>
-                <TouchableOpacity
-                  style={s.editAvailBtn}
-                  activeOpacity={0.85}
-                  onPress={() => {
-                    registrarEvento('disponibilidad_editada', {}).catch(() => {});
-                    router.push('/coach-weekly-pattern');
-                  }}>
-                  <Text style={s.editAvailBtnTxt}>Editar disponibilidad</Text>
-                </TouchableOpacity>
               </>
             )}
 
@@ -826,8 +835,12 @@ export default function CoachReservasScreen() {
               </>
             )}
 
-            <TouchableOpacity style={s.histLink} activeOpacity={0.7} onPress={() => router.push('/coach-agenda')}>
-              <Text style={s.histLinkTxt}>Ver agenda e historial →</Text>
+            <TouchableOpacity style={s.histRow} activeOpacity={0.8} onPress={() => router.push('/coach-agenda')}>
+              <View style={s.histIcon}>
+                <Feather name="calendar" size={16} color={FOREST} />
+              </View>
+              <Text style={s.histRowTxt}>Ver agenda e historial</Text>
+              <Feather name="chevron-right" size={16} color={FOREST_SOFT} />
             </TouchableOpacity>
 
             <View style={{ height: TAB_BAR_CLEARANCE }} />
@@ -998,6 +1011,14 @@ const s = StyleSheet.create({
 
   histLink: { alignItems: 'center', paddingVertical: 16, marginTop: 8 },
   histLinkTxt: { fontSize: 12.5, fontFamily: ViveFonts.medium, color: TERRA },
+  eyebrowRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 22, marginBottom: 10 },
+  eyebrow: { fontFamily: ViveFonts.semibold, fontSize: 9.5, letterSpacing: 1.4, textTransform: 'uppercase', color: FOREST_SOFT },
+  eyebrowAction: { fontFamily: ViveFonts.semibold, fontSize: 12.5, color: TERRA },
+  slotBar: { alignSelf: 'stretch', width: 3, borderRadius: 2, backgroundColor: '#A7BE95' },
+  slotBarOff: { backgroundColor: 'transparent' },
+  histRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, marginTop: 8 },
+  histIcon: { width: 32, height: 32, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: CREAM },
+  histRowTxt: { flex: 1, fontFamily: ViveFonts.semibold, fontSize: 13.5, color: FOREST },
 });
 
 const rm = StyleSheet.create({
