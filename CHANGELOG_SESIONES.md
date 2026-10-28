@@ -53,6 +53,29 @@
 - ✅ Decidido por Andre: la lista de chats del profesional muestra solo a quien tuvo una reserva confirmada, hecha o pagada (mismo criterio que para escribir). Las salas vacías se siguen creando (la reserva necesita la sala antes), pero no se ven. Llega con la próxima compilación.
 - Mejoras opcionales anotadas en el informe (tema solo de la lista de puertas, nombre del paquete desde la base, etc.).
 
+## 2026-10-28 — Joaquín (Claude · rediseño de presentación de las 4 pantallas del coach)
+
+**Tocado:** `screens/CoachChatsScreen.tsx`, `CoachHomeScreen.tsx`, `CoachResourcesScreen.tsx`, `CoachReservasScreen.tsx`; nuevo `lib/avatarColor.ts`. Solo presentación — no cambia el modelo de datos.
+
+**Parte 0 (lo crítico):**
+- **0.1 PRIVACIDAD (Tus personas):** la fila ya NO muestra el contenido del último mensaje. Antes `armarPreview` desencriptaba el texto del mensaje y el motivo de la reserva (legible de reojo). Se eliminó `armarPreview` y el import de `decryptMessage` — ni se desencripta en memoria. Cada fila muestra solo gestión: nombre, "N sesiones · última hace X", próxima sesión, y badge de sin-leer (no hay count por sala, solo booleano → badge). `decryptMessage` solo vivía en esta pantalla (verificado).
+- **0.2 data de prueba:** recursos `[SEED] …` filtrados en Tus recursos; cuentas borradas ("Usuario eliminado") no se listan en Tus personas.
+
+**Color (vivo pero ordenado — pedido de Joaquín):**
+- Nuevo **`lib/avatarColor.ts`**: tono determinístico por persona, 5 gradientes (terracota/verde/azulado/violáceo/arena) derivados de la paleta. Avatares sin foto pasan de gris a color. Usado en Inicio y Tus personas.
+- **Lavados por pantalla** (`ToolWash`): se probaron (Inicio salvia, Recursos durazno, Personas azulado, Reservas arena) pero **Joaquín pidió sacarlos** — mareaban. Se quitó `ToolWash` de las 4 del coach Y de Diario/Gratitud/Respiración (usuario): toda la app queda con un solo fondo (`AppBg`). El color vive en avatares/stats/íconos, no en el fondo.
+- **Inicio:** stats "Lo que construiste" → dos bloques con lavado y número en color (terracota/verde); "hoy" en la tira → círculo terracota sólido; "Proponer horario" → texto terracota con flecha; íconos de nav tintados (visibilidad azulado, cómo funciona durazno).
+- **Recursos:** ícono de formato 34px con el gradiente del formato; mancha durazno en "Este mes".
+- **Reservas:** barra salvia de 3px por día (apagada en días sin atención).
+
+**Estructura (las 4):** títulos de sección → eyebrow (9.5px uppercase apagado); listas (personas/recursos) → filas con línea de pelo en vez de card-por-ítem; un solo relleno fuerte por pantalla. En Reservas: "Editar disponibilidad" → "Editar" en el eyebrow; "00:00 – 23:00" → "Todo el día"; link del final → fila con ícono. En Recursos: "Recomendar" sale de cada fila; badge solo en revisión.
+
+**Analítica:** `coach_propuso_horario {dias_desde_ultima_sesion}` (Inicio), `coach_abrio_persona` (Tus personas). `coach_subio_recurso` ya existía como `recurso_subido {formato}` — no se duplicó.
+
+**Confirmaciones:** (1) no queda ningún preview de contenido de mensajes (solo gestión); (2) no se ven datos de prueba ([SEED] ni "Usuario eliminado"); (3) todos los colores salen de tokens/paleta existente (arena derivado del tono arena del avatar). tsc 0 en todo.
+
+**Pendiente:** verlo en device las 4 (Joaquín ya aprobó el nivel de color en Tus personas). La tipografía es la misma constante compartida (`ViveFonts`), sin tamaños nuevos.
+
 ## 2026-10-27 — Andre (Claude · cambiar el mail, por soporte)
 
 **Tocado:** `supabase/functions/admin-actions/index.ts` (v56, desplegada), `web/admin/index.html`, `web/admin/admin.js`, `lib/contacto.ts`, `screens/ProfileOwnScreen.tsx`, `screens/CoachSettingsScreen.tsx`.
@@ -205,8 +228,12 @@
 
 - **CoachProfile — SurfaceCard completo (con grano):** Joaquín pidió la conversión estructural real. Se convirtieron las **13 cards** del perfil a `<SurfaceCard>` de verdad (grano 3% + sombra + borde) vía un componente local **`PCard`** (SurfaceCard subtle; padding/layout en `innerStyle`, margen en `wrapStyle`; las 2 pulsables envueltas en `ScaleCard`). Reemplaza la sombra-vía-estilo anterior (se removió `CARD_SHADOW`). Para ubicar los cierres que matcheaban cada apertura se usó un contador de profundidad de tags. tsc 0 errores.
 
+- **SurfaceCard en las pantallas frecuentes + componente compartido `CoachCard`:** se generalizó el `PCard` de Profile en `components/ui/CoachCard.tsx` (SurfaceCard subtle con `bg`/`radius`/`onPress`). Se convirtieron las **cards de contenido** de: `CoachNotifications` (item), `CoachAvailability` (slotsCard), `CoachWeeklyPattern` (dayCard), `CoachVisibility` (doorCard, emptyCard, list, altCard pulsable), `CoachPayout` (desgloseCard). 
+  - **Hallazgo:** la mayoría de las "cards" de estas pantallas en realidad son **chips / opciones seleccionables / inputs / filas con estado** (Topics, Enfoque, y los method/net rows de Payout) — NO son cards de contenido y NO se tocaron (quedan planas con el borde olivo, que es lo correcto). `CoachCalendario` no tenía cards (solo botones).
+  - **Se dejaron con color propio a propósito:** `warnCard` de Payout (alerta ámbar) y `hero` de Visibility (verde oscuro con glow) — neutralizarlas a SurfaceCard habría borrado su identidad.
+
 **Pendiente / opcional:**
-- Nada grande abierto en la modernización del coach. (Reservas quedó con su header condicional a propósito.)
+- Nada grande abierto en la modernización del coach. (Reservas quedó con su header condicional a propósito; chips/inputs/filas seleccionables quedan planos por diseño.)
 
 ## 2026-10-22 — Andre (Claude · tablero de administración en sere.ar/admin)
 

@@ -14,11 +14,9 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { ViveColors, ViveFonts } from '@/constants/theme';
-import { PASTEL_DURAZNO } from '@/constants/tools';
 import { ToolHeader } from '@/components/ui/ToolHeader';
 import { PinButton } from '@/components/PinButton';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
-import { ToolWash } from '@/components/ui/ToolWash';
 import { RachaPill } from '@/components/ui/RachaPill';
 import { NumberBadge } from '@/components/ui/NumberBadge';
 import { SaveScreen } from '@/components/ui/SaveScreen';
@@ -251,7 +249,6 @@ export default function GratitudScreen() {
 
   return (
     <SafeAreaView style={s.safe} edges={['top']}>
-      <ToolWash color={PASTEL_DURAZNO} opacity={0.55} />
 
       {/* ── Header ──────────────────────────────────────────────── */}
       <ToolHeader

@@ -31,6 +31,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
 import { CoachHeader } from '@/components/ui/CoachHeader';
+import { CoachCard } from '@/components/ui/CoachCard';
 import { COMMISSION_INTL_FIRST, COMMISSION_INTL_RECURRING, COMMISSION_LOCAL_FIRST, COMMISSION_LOCAL_RECURRING, MP_FEE_PCT_OBSERVED } from '@/lib/pricing';
 import { desglose, type Riel } from '@/lib/desglosePago';
 import { supabase } from '@/lib/supabase';
@@ -234,7 +235,7 @@ export default function CoachPayoutScreen() {
                 const d = desglose(precio, riel, 'primera');
                 const fmt = (n: number) => `${moneda}${n.toLocaleString('es-AR', { maximumFractionDigits: 2 })}`;
                 return (
-                  <View key={riel} style={s.desgloseCard}>
+                  <CoachCard key={riel} bg="rgba(255,255,255,0.55)" radius={14} wrapStyle={s.desgloseWrap} innerStyle={s.desgloseCard}>
                     <View style={s.desgloseHead}>
                       <Text style={s.desgloseTitulo}>{titulo}</Text>
                       {!suyo && <Text style={s.desgloseEjemplo}>ejemplo</Text>}
@@ -264,7 +265,7 @@ export default function CoachPayoutScreen() {
                         ? `Lo cobrás vos, directo a tu Mercado Pago. Esa tarifa de ≈${String(MP_FEE_PCT_OBSERVED).replace('.', ',')}% te la cobra Mercado Pago a vos, no nosotros: en este riel el que vende sos vos y le pagás a tu propio procesador, como cualquiera que cobre con MP. El número exacto depende del medio de pago que use la persona y del plazo de acreditación que tengas configurado.`
                         : 'Estas no te entran por Mercado Pago: las cobra Sere y te las transferimos cada semana, por sesiones ya realizadas. Acá el procesador nos cobra a nosotros, así que sale de nuestra parte y a vos te llega limpio. Por eso retenemos 5 puntos más que en Argentina.'}
                     </Text>
-                  </View>
+                  </CoachCard>
                 );
               })}
 
@@ -460,10 +461,8 @@ const s = StyleSheet.create({
     color: 'rgba(135,131,92,0.80)', marginBottom: 22,
   },
   bloqueTitulo: { fontFamily: ViveFonts.semibold, fontSize: 16, color: '#565E32', marginBottom: 6 },
-  desgloseCard: {
-    backgroundColor: 'rgba(255,255,255,0.55)', borderRadius: 14, padding: 14,
-    borderWidth: 1, borderColor: 'rgba(135,131,92,0.18)', marginBottom: 12,
-  },
+  desgloseCard: { padding: 14 },
+  desgloseWrap: { marginBottom: 12 },
   desgloseHead: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 10 },
   desgloseTitulo: { fontFamily: ViveFonts.semibold, fontSize: 14, color: '#565E32' },
   desgloseEjemplo: {

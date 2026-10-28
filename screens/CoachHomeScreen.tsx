@@ -31,6 +31,7 @@ import { confirmBooking } from '@/lib/coachBookingActions';
 import { proximosHuecos } from '@/lib/coachProposeData';
 import { AppBg } from '@/components/ui/AppBg';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
+import { avatarTono } from '@/lib/avatarColor';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CoachBienvenida, { BIENVENIDA_COACH_KEY } from '@/components/CoachBienvenida';
 import { FirstTimeTooltip } from '@/components/FirstTimeTooltip';
@@ -805,6 +806,7 @@ export default function CoachHomeScreen() {
   const [proponiendo, setProponiendo] = useState<string | null>(null);
   const proponerHorario = useCallback(async (p: PersonaCayendo) => {
     if (!p.salaId || !coachId) return;
+    registrarEvento('coach_propuso_horario', { dias_desde_ultima_sesion: p.diasSinVerse });
     setProponiendo(p.userId);
     try {
       // Se buscan los huecos ACÁ y no al cargar la Home: son varias filas por
@@ -1040,7 +1042,12 @@ export default function CoachHomeScreen() {
                 {next.avatarUrl ? (
                   <Image source={{ uri: next.avatarUrl }} style={s.whoAv} />
                 ) : (
-                  <View style={[s.whoAv, s.whoAvFallback]}><Text style={s.whoAvTxt}>{next.initials}</Text></View>
+                  <LinearGradient
+                    colors={avatarTono(next.userId).grad}
+                    start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                    style={[s.whoAv, s.whoAvFallback]}>
+                    <Text style={[s.whoAvTxt, { color: avatarTono(next.userId).ink }]}>{next.initials}</Text>
+                  </LinearGradient>
                 )}
                 <View style={{ flex: 1 }}>
                   <Text style={s.whoName}>{next.userName}</Text>
@@ -1464,9 +1471,12 @@ export default function CoachHomeScreen() {
                   {p.avatarUrl ? (
                     <Image source={{ uri: p.avatarUrl }} style={s.caenAv} />
                   ) : (
-                    <View style={[s.caenAv, s.caenAvFallback]}>
-                      <Text style={s.caenInitials}>{getInitials(p.name)}</Text>
-                    </View>
+                    <LinearGradient
+                      colors={avatarTono(p.userId).grad}
+                      start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                      style={[s.caenAv, s.caenAvFallback]}>
+                      <Text style={[s.caenInitials, { color: avatarTono(p.userId).ink }]}>{getInitials(p.name)}</Text>
+                    </LinearGradient>
                   )}
                   <View style={s.caenTexto}>
                     <Text style={s.caenName} numberOfLines={1}>{p.name}</Text>
@@ -1480,13 +1490,14 @@ export default function CoachHomeScreen() {
                       reserva, así que si no existe no se ofrece un botón muerto. */}
                   {p.salaId && (
                     <TouchableOpacity
-                      style={[s.caenBtn, letraGrande && s.caenBtnGrande]}
-                      activeOpacity={0.85}
+                      style={s.caenLink}
+                      activeOpacity={0.7}
                       disabled={proponiendo === p.userId}
                       onPress={() => proponerHorario(p)}>
-                      <Text style={s.caenBtnTxt}>
-                        {proponiendo === p.userId ? 'Buscando…' : 'Proponer horario'}
+                      <Text style={s.caenLinkTxt}>
+                        {proponiendo === p.userId ? 'Buscando…' : 'Proponer'}
                       </Text>
+                      {proponiendo !== p.userId && <Feather name="arrow-right" size={13} color={TERRA} />}
                     </TouchableOpacity>
                   )}
                 </View>
@@ -1499,8 +1510,8 @@ export default function CoachHomeScreen() {
               arriba (`s.newCoachCard`). */}
           {visibility && !esCoachNuevo && (
             <TouchableOpacity style={s.vis} activeOpacity={0.85} onPress={() => router.push('/coach-visibilidad')}>
-              <View style={[s.visIcon, visibility.blocked && s.visIconWarn]}>
-                <Feather name={visibility.blocked ? 'alert-circle' : 'compass'} size={16} color={visibility.blocked ? TERRA : FOREST} />
+              <View style={[s.visIcon, visibility.blocked ? s.visIconWarn : s.visIconAzul]}>
+                <Feather name={visibility.blocked ? 'alert-circle' : 'compass'} size={16} color={visibility.blocked ? TERRA : '#5C6A86'} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={s.visTitle}>
@@ -1537,15 +1548,15 @@ export default function CoachHomeScreen() {
             <View style={s.repuWrap}>
               <Text style={s.repuEyebrow}>LO QUE CONSTRUISTE ACÁ</Text>
               <View style={s.repuRow}>
-                <View style={s.repuItem}>
-                  <Text style={s.repuNum}>{repu.completadas}</Text>
+                <View style={[s.repuItem, s.repuItemTerra]}>
+                  <Text style={[s.repuNum, s.repuNumTerra]}>{repu.completadas}</Text>
                   <Text style={s.repuLbl}>
                     {repu.completadas === 1 ? 'sesión cumplida' : 'sesiones cumplidas'}
                   </Text>
                 </View>
                 {repu.vuelvenPct != null && (
-                  <View style={s.repuItem}>
-                    <Text style={s.repuNum}>{repu.vuelvenPct}%</Text>
+                  <View style={[s.repuItem, s.repuItemVerde]}>
+                    <Text style={[s.repuNum, s.repuNumVerde]}>{repu.vuelvenPct}%</Text>
                     <Text style={s.repuLbl}>de tus personas vuelve</Text>
                   </View>
                 )}
@@ -1556,7 +1567,7 @@ export default function CoachHomeScreen() {
           {/* "Cómo funciona" también desde acá (24/09/2026): solo vivía en
               Ajustes, donde un profesional nuevo no lo va a buscar. */}
           <TouchableOpacity style={s.vis} activeOpacity={0.85} onPress={() => router.push('/coach-como-funciona')}>
-            <View style={s.visIcon}>
+            <View style={[s.visIcon, s.visIconDurazno]}>
               <Feather name="book-open" size={16} color={FOREST} />
             </View>
             <View style={{ flex: 1 }}>
@@ -1624,7 +1635,7 @@ const s = StyleSheet.create({
     alignItems: 'center', justifyContent: 'center', backgroundColor: CREAM_DEEP,
   },
   wdCircleHas: { backgroundColor: TERRA_INK },
-  wdCircleToday: { borderWidth: 1.5, borderColor: FOREST },
+  wdCircleToday: { backgroundColor: TERRA_INK },
   wdCount: { fontSize: 12, fontFamily: ViveFonts.semibold, color: '#FFF6EC' },
 
   // Próxima sesión (verde)
@@ -1739,9 +1750,13 @@ const s = StyleSheet.create({
     letterSpacing: 1.1,
     color: FOREST_SOFT,
   },
-  repuRow: { flexDirection: 'row', gap: 24 },
-  repuItem: { flexShrink: 1 },
+  repuRow: { flexDirection: 'row', gap: 10 },
+  repuItem: { flex: 1, borderRadius: 16, paddingVertical: 12, paddingHorizontal: 14 },
+  repuItemTerra: { backgroundColor: 'rgba(192,107,74,0.10)' },
+  repuItemVerde: { backgroundColor: 'rgba(74,122,90,0.12)' },
   repuNum: { fontFamily: ViveFonts.title, fontSize: 26, color: FOREST },
+  repuNumTerra: { color: TERRA_INK },
+  repuNumVerde: { color: '#3F512F' },
   repuLbl: { fontFamily: ViveFonts.regular, fontSize: 12, color: FOREST_SOFT, marginTop: 2 },
   // Reservas esperando respuesta — el bloque más urgente de la pantalla, así
   // que es el único con el borde en terracota.
@@ -1806,8 +1821,10 @@ const s = StyleSheet.create({
   },
   caenTitle: {
     fontFamily: ViveFonts.semibold,
-    fontSize: 14,
-    color: FOREST,
+    fontSize: 9.5,
+    letterSpacing: 1.4,
+    textTransform: 'uppercase',
+    color: FOREST_SOFT,
   },
   // 02/10/2026, visto en el simulador con letra grande: el botón no se achica
   // y dejaba los nombres en "J." y "H.". Con letra grande la fila pasa a
@@ -1828,6 +1845,8 @@ const s = StyleSheet.create({
     paddingVertical: 8,
   },
   caenBtnTxt: { fontFamily: ViveFonts.semibold, fontSize: 13, color: ViveColors.onPrimaryInk },
+  caenLink: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 4, paddingVertical: 6 },
+  caenLinkTxt: { fontFamily: ViveFonts.semibold, fontSize: 13, color: TERRA },
 
   vis: {
     flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 12, padding: 15,
@@ -1838,6 +1857,8 @@ const s = StyleSheet.create({
     backgroundColor: CREAM_DEEP,
   },
   visIconWarn: { backgroundColor: TERRA_SOFT },
+  visIconAzul: { backgroundColor: 'rgba(126,140,168,0.18)' },
+  visIconDurazno: { backgroundColor: 'rgba(242,220,207,0.55)' },
   visTitle: { fontFamily: ViveFonts.semibold, fontSize: 13, color: FOREST },
   visTxt: { fontFamily: ViveFonts.regular, fontSize: 11.5, color: FOREST_SOFT, lineHeight: 17, marginTop: 3 },
 });

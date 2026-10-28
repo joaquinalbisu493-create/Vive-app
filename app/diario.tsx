@@ -26,12 +26,10 @@ import { ToolHeader } from '@/components/ui/ToolHeader';
 import { PinButton } from '@/components/PinButton';
 import { useRecursoAbierto } from '@/hooks/useRecursoAbierto';
 import { AppBg } from '@/components/ui/AppBg';
-import { ToolWash } from '@/components/ui/ToolWash';
 import { RachaPill } from '@/components/ui/RachaPill';
 import { SaveScreen } from '@/components/ui/SaveScreen';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { anotar } from '@/lib/analytics';
-import { PASTEL_SALVIA } from '@/constants/tools';
 import { localDayKey } from '@/lib/dates';
 import { tomarPreguntaParaElDiario } from '@/lib/preguntaDeSofia';
 import { semanaDeEscritura } from '@/lib/semanaDiario';
@@ -473,7 +471,6 @@ export default function DiarioScreen() {
   return (
     <AppBg>
       <SafeAreaView style={s.safe} edges={['top']}>
-        <ToolWash color={PASTEL_SALVIA} opacity={0.45} />
         {/* ── Header ──────────────────────────────────────────────── */}
         <ToolHeader
           title="Diario"
