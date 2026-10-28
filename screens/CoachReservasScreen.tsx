@@ -923,7 +923,7 @@ const s = StyleSheet.create({
   // cajas punteadas de "sin nada" que había antes (`aldia`/`aldiaTxt`) se
   // sacaron: esta es la única superficie que se muestra cuando no hay ninguna
   // reserva, ni pendiente ni confirmada.
-  emptyCard: { marginTop: 18 },
+  emptyCard: { marginTop: 6 },
   emptyCardInner: { padding: 20 },
   emptyIcon: {
     width: 46, height: 46, borderRadius: 23, backgroundColor: '#DCE5CB',
