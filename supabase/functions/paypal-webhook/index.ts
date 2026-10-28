@@ -194,14 +194,29 @@ serve(async (req) => {
   // reserva equivocada como disputada es peor que no marcar ninguna, porque
   // dispara una investigación sobre alguien que no tuvo nada que ver.
   if (tipo.startsWith('CUSTOMER.DISPUTE.')) {
-    const capturas: string[] = (recurso.disputed_transactions ?? [])
+    // 🔒 La disputa se lee de la API con nuestras credenciales y el cuerpo solo
+    // aporta su id (auditoría 28/10/2026: antes motivo, estado y capturas salían
+    // del cuerpo, que la firma sola no garantiza). Si no se puede leer, no se
+    // anota nada: PayPal igual avisa las disputas por mail a la cuenta.
+    const disputeId: string = recurso.dispute_id ?? ''
+    const resDisputa = disputeId
+      ? await fetch(`${PAYPAL_API}/v1/customer/disputes/${encodeURIComponent(disputeId)}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      : null
+    if (!resDisputa?.ok) {
+      console.error('[paypal-webhook] 🔴 DISPUTA que no se pudo leer de PayPal, no se anota:', disputeId || 's/id', resDisputa?.status ?? '', resDisputa ? await resDisputa.text() : '')
+      return new Response('dispute not confirmed', { status: 200 })
+    }
+    const disputa = await resDisputa.json()
+    const capturas: string[] = (disputa.disputed_transactions ?? [])
       .map((t: { seller_transaction_id?: string }) => t?.seller_transaction_id)
       .filter(Boolean)
-    const motivo = recurso.reason ?? recurso.dispute_state ?? tipo
-    const estado = recurso.status ?? ''
+    const motivo = disputa.reason ?? disputa.dispute_state ?? tipo
+    const estado = disputa.status ?? ''
 
     if (!capturas.length) {
-      console.error('[paypal-webhook] 🔴 DISPUTA sin transacción identificable:', JSON.stringify(recurso).slice(0, 800))
+      console.error('[paypal-webhook] 🔴 DISPUTA sin transacción identificable:', JSON.stringify(disputa).slice(0, 800))
       return new Response('dispute without capture', { status: 200 })
     }
 
@@ -254,7 +269,7 @@ serve(async (req) => {
       // de la lista justo cuando más hay que mirarla.
       if (estado === 'RESOLVED') {
         if (!b.dispute_resolved_at) patch.dispute_resolved_at = new Date().toISOString()
-        const outcome = recurso.dispute_outcome?.outcome_code
+        const outcome = disputa.dispute_outcome?.outcome_code
         if (outcome) patch.dispute_outcome = String(outcome)
       } else if (b.dispute_resolved_at) {
         patch.dispute_resolved_at = null
@@ -269,7 +284,7 @@ serve(async (req) => {
       const log = cerrada ? console.log : console.error
       log(
         `[paypal-webhook] ${cerrada ? '✅' : '🔴'} DISPUTA ${estado || 'abierta'} sobre booking ${b.id} — motivo: ${motivo}` +
-        (cerrada ? ` — outcome: ${recurso.dispute_outcome?.outcome_code ?? 's/outcome'}.` : '.') +
+        (cerrada ? ` — outcome: ${disputa.dispute_outcome?.outcome_code ?? 's/outcome'}.` : '.') +
         (b.paid_out_at
           ? ` ⚠️ La sesión YA se le transfirió al coach el ${b.paid_out_at} (ref ${b.payout_reference ?? 's/ref'}).`
           : ''),
@@ -312,11 +327,32 @@ serve(async (req) => {
       return new Response('unknown capture', { status: 200 })
     }
 
+    // 🔒 Igual que en COMPLETED: el cuerpo es solo un disparador. Antes esta
+    // rama anotaba el contracargo con el id del cuerpo, sin leer la captura, y
+    // la firma sola no alcanza (ver `leerCaptura`): un evento inventado con el
+    // `payment_id` de una reserva, que el cliente y el profesional pueden leer,
+    // la dejaba en 'contracargo' y el profesional no cobraba esa sesión
+    // (auditoría 28/10/2026). Ahora la captura tiene que existir en NUESTRA
+    // cuenta, ser de esta reserva y ya no estar cobrada.
+    const leida = await leerCaptura(token, captureId)
+    if (!leida || leida.customId !== b.id) {
+      console.error('[paypal-webhook] 🔴 REVERSIÓN que no se pudo confirmar con PayPal, no se anota:', captureId, leida?.customId ?? 's/captura')
+      return new Response('reversal not confirmed', { status: 200 })
+    }
+    if (['COMPLETED', 'PENDING', 'DECLINED', 'FAILED'].includes(leida.status)) {
+      // No se adivina: si PayPal dice que la plata sigue cobrada, no hay
+      // contracargo que anotar. Queda el log para revisarlo a mano.
+      console.error(`[paypal-webhook] 🔴 REVERSIÓN con la captura en ${leida.status}, no se anota. Revisar a mano: booking ${b.id}, captura ${captureId}`)
+      return new Response('reversal not confirmed', { status: 200 })
+    }
+
     await admin
       .from('bookings')
       .update({ payment_status: 'contracargo', refunded_at: new Date().toISOString() })
       .eq('id', b.id)
       .neq('payment_status', 'contracargo')
+      // Una reserva que ya le devolvimos nosotros no pasa a contracargo.
+      .neq('payment_status', 'reembolsado')
 
     console.error(
       `[paypal-webhook] 🔴 CONTRACARGO en booking ${b.id} (${tipo}).` +

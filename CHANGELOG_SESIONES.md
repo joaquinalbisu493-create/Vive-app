@@ -1,3 +1,17 @@
+## 2026-10-28 — Andre (Claude · auditoría de seguridad, tanda 4: funciones del servidor)
+
+**Tocado:** `supabase/functions/paypal-webhook/index.ts` (desplegada), `supabase/functions/mp-oauth-callback/index.ts` (desplegada), `supabase/migrations/20261028030000_mp_una_cuenta_por_profesional.sql` (nueva), `SCHEMA.md`.
+
+**Resumen:**
+- Cuarta tanda de la skill (informe fuera del repo: `~/security-audit-skill/vive-app/run-4/REPORT.md`): todas las edge functions menos `admin-actions`. Bien: avisos de MP, precios, USDT, reembolsos, arrepentimiento, push, calendario, videollamada, asistencia, baja, consentimiento, clave del diario.
+- Arreglado (pagos): `paypal-webhook` anotaba contracargos y disputas con lo que decía el aviso, sin preguntarle a PayPal, y la firma sola no alcanza (en sandbox aceptó un aviso inventado). Ahora lee la captura o la disputa de la API antes de escribir. Si la API de disputas no responde (por permisos), la disputa no se anota y queda en el log; PayPal igual avisa por mail.
+- Arreglado (pagos): una cuenta de Mercado Pago queda conectada a un solo profesional (índice único + mensaje en la conexión). Con dos en la misma cuenta, los pagos de ninguno se acreditaban.
+- Descartado: la garantía sobre una sesión cancelada no da más plata que la garantía normal (la aprueba un admin). Mejora anotada: mostrar el estado de la sesión en el panel.
+
+**Pendiente para la próxima sesión:**
+- Tanda 5: `admin-actions`, sobre todo `resolve_usdt_claim` (el reclamo USDT no comprueba que quien reclama sea quien transfirió). Hasta entonces, al aprobar un reclamo, que monto y fecha coincidan con la reserva.
+- Confirmar que la app de PayPal live tiene permiso de disputas: con la próxima disputa real, ver que quede anotada en la reserva.
+
 ## 2026-10-28 — Andre (Claude · cambiar el mail desde la app)
 
 **Tocado:** `screens/CambiarMailScreen.tsx` (nueva), `app/cambiar-mail.tsx` (nueva), `app/_layout.tsx`, `screens/ProfileOwnScreen.tsx`, `screens/CoachSettingsScreen.tsx`, `lib/contacto.ts`, `supabase/migrations/20261028020000_sync_profile_email.sql` (nueva), `SCHEMA.md`.

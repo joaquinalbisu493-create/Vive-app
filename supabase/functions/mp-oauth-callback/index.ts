@@ -71,10 +71,32 @@ serve(async (req) => {
       return new Response('No se pudo conectar Mercado Pago', { status: 502 })
     }
 
+    // 🔒 Una cuenta de MP cobra para UN solo profesional (auditoría 28/10/2026).
+    // El state ata el flujo al coach que lo empezó, no a quien autoriza en MP:
+    // un coach podía hacer que otro abriera su link y dejar la cuenta de MP del
+    // otro conectada a la suya. Y con dos coaches en la misma cuenta,
+    // `mp-webhook` no sabe con qué token leer el pago y no acredita ninguno de
+    // los dos. El índice único de la migración 20261028030000 lo garantiza;
+    // esto es para contestar algo entendible.
+    const mpUserId = String(token.user_id)
+    const { data: otro } = await supabase
+      .from('coach_mp_accounts')
+      .select('coach_id')
+      .eq('mp_user_id', mpUserId)
+      .neq('coach_id', coachId)
+      .maybeSingle()
+    if (otro) {
+      console.error('[mp-oauth] cuenta de MP ya conectada a otro coach:', mpUserId, '→ pedido de', coachId)
+      return new Response(
+        'Esa cuenta de Mercado Pago ya está conectada a otro profesional de Sere. Si es tuya, escribinos a hola@sere.ar.',
+        { status: 409, headers: { 'Content-Type': 'text/plain; charset=utf-8' } },
+      )
+    }
+
     // coachId ya viene verificado del state firmado (arriba).
-    await supabase.from('coach_mp_accounts').upsert({
+    const { error: errGuardar } = await supabase.from('coach_mp_accounts').upsert({
       coach_id: coachId,
-      mp_user_id: String(token.user_id),
+      mp_user_id: mpUserId,
       access_token: token.access_token,
       refresh_token: token.refresh_token ?? null,
       public_key: token.public_key ?? null,
@@ -83,6 +105,11 @@ serve(async (req) => {
         : null,
       updated_at: new Date().toISOString(),
     })
+    // Antes el error se ignoraba y el coach quedaba "conectado" sin cuenta.
+    if (errGuardar) {
+      console.error('[mp-oauth] no se pudo guardar la cuenta:', errGuardar.message)
+      return new Response('No se pudo conectar Mercado Pago', { status: 502 })
+    }
     await supabase.from('coaches').update({ mp_connected: true }).eq('id', coachId)
 
     // Volver a la app
