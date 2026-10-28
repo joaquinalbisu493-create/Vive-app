@@ -15,7 +15,7 @@ import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { ViveFonts, TAB_BAR_CLEARANCE } from '@/constants/theme';
-import { supabase } from '@/lib/supabase';
+import { supabase, registrarEvento } from '@/lib/supabase';
 import { haceCuanto } from '@/lib/coachContinuity';
 import { todayInAr } from '@/lib/time';
 import { agruparRoster, chipProxima, filtrarRoster, textoHistoria, type FiltroRoster } from '@/lib/coachRoster';
@@ -379,7 +379,10 @@ export default function CoachChatsScreen() {
       <TouchableOpacity
         key={room.salaId}
         style={[s.chat, opts?.plana && s.chatPlana, opts?.dimmed && s.chatDimmed]}
-        onPress={() => router.push({ pathname: '/sala', params: { sala_id: room.salaId } })}
+        onPress={() => {
+          registrarEvento('coach_abrio_persona', {}).catch(() => {});
+          router.push({ pathname: '/sala', params: { sala_id: room.salaId } });
+        }}
         onLongPress={() => preguntarArchivar(room)}
         delayLongPress={350}
         activeOpacity={0.8}>
