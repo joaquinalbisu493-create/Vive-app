@@ -8,7 +8,6 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AppBg } from '@/components/ui/AppBg';
-import { ToolWash } from '@/components/ui/ToolWash';
 import { RachaPill } from '@/components/ui/RachaPill';
 import { SaveScreen } from '@/components/ui/SaveScreen';
 import { ViveFonts } from '@/constants/theme';
@@ -424,7 +423,6 @@ export default function RespiracionScreen() {
   return (
     <AppBg>
       <StatusBar barStyle="dark-content" />
-      <ToolWash color={PASTEL_SALVIA} opacity={0.5} />
       <SafeAreaView style={s.safe} edges={['top']}>
         <ToolHeader
           title="Respiración"

@@ -22,7 +22,6 @@ import { agruparRoster, chipProxima, filtrarRoster, textoHistoria, type FiltroRo
 import { useAuth } from '@/context/AuthContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { AppBg } from '@/components/ui/AppBg';
-import { ToolWash } from '@/components/ui/ToolWash';
 import { avatarTono } from '@/lib/avatarColor';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import { useUnreadSalas } from '@/hooks/useUnreadSalas';
@@ -432,7 +431,6 @@ export default function CoachChatsScreen() {
 
   return (
     <AppBg>
-      <ToolWash color="#7E8CA8" opacity={0.42} height={200} />
       <SafeAreaView style={s.safe} edges={['top']}>
         <View style={s.header}>
           <Text style={s.title}>Tus personas</Text>

@@ -31,8 +31,6 @@ import { confirmBooking } from '@/lib/coachBookingActions';
 import { proximosHuecos } from '@/lib/coachProposeData';
 import { AppBg } from '@/components/ui/AppBg';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
-import { ToolWash } from '@/components/ui/ToolWash';
-import { PASTEL_SALVIA } from '@/constants/tools';
 import { avatarTono } from '@/lib/avatarColor';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CoachBienvenida, { BIENVENIDA_COACH_KEY } from '@/components/CoachBienvenida';
@@ -930,7 +928,6 @@ export default function CoachHomeScreen() {
 
   return (
     <AppBg>
-      <ToolWash color={PASTEL_SALVIA} opacity={0.5} height={200} />
       <SafeAreaView style={s.safe} edges={['top']}>
         <CoachBienvenida visible={bienvenida === 'mostrar'} onCerrar={cerrarBienvenida} />
         {ayuda && (

@@ -27,7 +27,6 @@ import { confirmBooking, rejectBooking, MOTIVO_RECHAZO_MAX } from '@/lib/coachBo
 import { detectContactInfo, hasDatosDeCobro } from '@/lib/contactInfoGuard';
 import { responderReagendado, retirarPropuestas } from '@/lib/reagendarApi';
 import { AppBg } from '@/components/ui/AppBg';
-import { ToolWash } from '@/components/ui/ToolWash';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 
 // ── Paleta del mockup (docs/coach-app-interactivo.html) ──────────────────────
@@ -529,7 +528,6 @@ export default function CoachReservasScreen() {
 
   return (
     <AppBg>
-      <ToolWash color="#DBC8A2" opacity={0.5} height={200} />
       <SafeAreaView style={s.safe} edges={['top']}>
         {/* Header */}
         <View style={s.header}>

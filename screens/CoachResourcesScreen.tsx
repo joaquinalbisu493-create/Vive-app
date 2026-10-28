@@ -14,8 +14,6 @@ import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ViveColors, ViveFonts, TAB_BAR_CLEARANCE, resourceFormatGradient } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
-import { ToolWash } from '@/components/ui/ToolWash';
-import { PASTEL_DURAZNO } from '@/constants/tools';
 import { ScaleCard } from '@/components/ScaleCard';
 import { screenHeader } from '@/constants/screenHeader';
 import { useAuth } from '@/context/AuthContext';
@@ -129,7 +127,6 @@ export default function CoachResourcesScreen() {
 
   return (
     <AppBg>
-      <ToolWash color={PASTEL_DURAZNO} opacity={0.5} height={200} />
       <SafeAreaView style={s.safe} edges={['top']}>
         <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
 
