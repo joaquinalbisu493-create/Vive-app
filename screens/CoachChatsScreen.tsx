@@ -20,8 +20,10 @@ import { haceCuanto } from '@/lib/coachContinuity';
 import { todayInAr } from '@/lib/time';
 import { agruparRoster, chipProxima, filtrarRoster, textoHistoria, type FiltroRoster } from '@/lib/coachRoster';
 import { useAuth } from '@/context/AuthContext';
-import { decryptMessage } from '@/lib/encryption';
+import { LinearGradient } from 'expo-linear-gradient';
 import { AppBg } from '@/components/ui/AppBg';
+import { ToolWash } from '@/components/ui/ToolWash';
+import { avatarTono } from '@/lib/avatarColor';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import { useUnreadSalas } from '@/hooks/useUnreadSalas';
 
@@ -37,8 +39,6 @@ const OK_INK = '#3F512F';
 // se usa en ningún lado. `RES_INK` sobrevive como color del punto.
 const RES_INK = '#8F4A2E';
 
-type Tag = 'accepted' | 'resource' | null;
-
 /** El orden es de más amplio a más acotado. "No leídas" va segunda —y solo
  *  aparece si hay alguna— porque es la única que responde a algo que pasó
  *  recién; las otras dos describen el estado de la relación. */
@@ -51,11 +51,10 @@ const FILTROS: { id: FiltroRoster; label: string }[] = [
 
 type ChatRoom = {
   salaId: string;
+  userId: string;
   userName: string;
   initials: string;
   avatarUrl: string | null;
-  tag: Tag;
-  preview: string;
   lastMessageAt: string | null;
   hasUnread: boolean;
   archived: boolean;
@@ -81,34 +80,10 @@ type ResourceMeta = { type?: string; resource_title?: string; recommendation_id?
  *  devuelve `get_last_messages_per_sala` Y con lo que llega por realtime. */
 type UltimoMsg = { content: string; sender_type: string; metadata: unknown; created_at: string };
 
-/**
- * Etiqueta y preview de una fila a partir de su último mensaje.
- *
- * 🔴 Vive acá afuera porque la usan DOS caminos: la carga inicial y el parche en
- * vivo cuando entra un mensaje con la pantalla abierta. Duplicada, los dos
- * podrían pintar la misma conversación distinto según cómo te enteraste.
- */
-function armarPreview(m: UltimoMsg | null, abierto: boolean): { tag: Tag; preview: string } {
-  if (!m) return { tag: null, preview: 'Sin mensajes aún' };
-
-  const meta = (m.metadata as ResourceMeta | null) ?? null;
-  if (meta?.type === 'resource') {
-    return { tag: 'resource', preview: `Vos: ${meta.resource_title ?? 'recurso'} · ${abierto ? 'abierto ✓' : 'sin abrir'}` };
-  }
-
-  if (m.sender_type === 'system_confirmed') {
-    // El content es "Sesión reservada · fecha · hora\n{motivo}". Mostramos el motivo si hay.
-    const motivo = decryptMessage(m.content).split('\n')[1]?.trim();
-    return { tag: 'accepted', preview: motivo ? `«${motivo}»` : 'Sesión aceptada' };
-  }
-
-  // 🔴 "Vos:" cuando el último mensaje es del coach. Sin esto, "dale, nos vemos
-  // el jueves" se ve igual lo haya dicho él o la otra persona — y son dos
-  // situaciones opuestas: una está cerrada y la otra lo está esperando. Hoy hay
-  // que abrir la sala para saber cuál es. El caso del recurso ya lo hacía.
-  const texto = decryptMessage(m.content);
-  return { tag: null, preview: m.sender_type === 'coach' ? `Vos: ${texto}` : texto };
-}
+// 🔒 Privacidad: esta pantalla ya NO muestra el contenido del último mensaje
+// (antes `armarPreview` desencriptaba el texto y el motivo de la reserva, legible
+// de reojo). La fila muestra solo gestión: nombre, sesiones/última, próxima y un
+// badge de "sin leer". Por eso tampoco se importa `decryptMessage` acá.
 
 /** Regla automática de archivado: murió en un mensaje del sistema y ya pasó un
  *  mes. Acá afuera por lo mismo que `armarPreview` — la evalúan los dos caminos. */
@@ -248,16 +223,6 @@ export default function CoachChatsScreen() {
       decidido: (sala as { coach_archived?: boolean | null }).coach_archived ?? null,
     }));
 
-    // Estado abierto/sin abrir de los recursos recomendados (batch por recommendation_id).
-    const recIds = lasts
-      .map(l => (l.lastMsg?.metadata as ResourceMeta | null)?.recommendation_id)
-      .filter((x): x is string => !!x);
-    const openedMap: Record<string, boolean> = {};
-    if (recIds.length > 0) {
-      const { data: recs } = await supabase.from('resource_recommendations').select('id, opened_at').in('id', recIds);
-      (recs ?? []).forEach(r => { openedMap[r.id as string] = !!r.opened_at; });
-    }
-
     // Estado de la relación con cada persona. Una sola consulta para todas:
     // ⚠️ `bookings.coach_id` es `coaches.id`, mientras que `salas.coach_id` es
     // `profiles.id` — dos ids con nombres parecidos, la trampa recurrente de
@@ -291,28 +256,25 @@ export default function CoachChatsScreen() {
 
     const thirtyDaysAgo = Date.now() - 30 * 86400000;
 
-    const results: ChatRoom[] = lasts.map(l => {
+    const results: ChatRoom[] = lasts
+      // 0.2: las cuentas borradas (lápida "Usuario eliminado") no se muestran —
+      // el coach ya no puede hacer nada con esa persona.
+      .filter(l => (profileMap[l.userId]?.name ?? '') !== 'Usuario eliminado')
+      .map(l => {
       const name = profileMap[l.userId]?.name ?? 'Usuario';
       const m = (l.lastMsg as UltimoMsg | null) ?? null;
-      const meta = (m?.metadata as ResourceMeta | null) ?? null;
       const at = m ? m.created_at : null;
-
-      const abierto = meta?.recommendation_id ? openedMap[meta.recommendation_id] : false;
-      const { tag, preview } = armarPreview(m, abierto);
-      const porRegla = archivadoPorRegla(m, thirtyDaysAgo);
       // 🔴 Lo que el coach decidió GANA, en las dos direcciones: archivar algo
       // vivo y rescatar algo que la regla se llevó. Por eso `decidido` es de
-      // tres estados y no un booleano — con dos, "todavía no opinó" y "quiere
-      // verlo activo" serían lo mismo y la regla no correría nunca.
-      const archived = l.decidido ?? porRegla;
+      // tres estados y no un booleano.
+      const archived = l.decidido ?? archivadoPorRegla(m, thirtyDaysAgo);
 
       return {
         salaId: l.salaId,
+        userId: l.userId,
         userName: capitalizar(name),
         initials: getInitials(name),
         avatarUrl: profileMap[l.userId]?.avatarUrl ?? null,
-        tag,
-        preview,
         lastMessageAt: at,
         hasUnread: unreadSalaIds.has(l.salaId),
         archived,
@@ -365,11 +327,8 @@ export default function CoachChatsScreen() {
           const corte = Date.now() - 30 * 24 * 60 * 60 * 1000;
           const parcheadas = prev.map(r => {
             if (r.salaId !== nuevo.sala_id) return r;
-            const { tag, preview } = armarPreview(nuevo, false);
             return {
               ...r,
-              tag,
-              preview,
               lastMessageAt: nuevo.created_at,
               // 📝 Se marca acá y no vía `useUnreadSalas`, que solo refresca al
               // enfocar. Un mensaje propio (mandado desde otro lado) no lo
@@ -427,7 +386,12 @@ export default function CoachChatsScreen() {
         {room.avatarUrl ? (
           <Image source={{ uri: room.avatarUrl }} style={s.avatar} />
         ) : (
-          <View style={[s.avatar, s.avatarFallback]}><Text style={s.avatarTxt}>{room.initials}</Text></View>
+          <LinearGradient
+            colors={avatarTono(room.userId).grad}
+            start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+            style={[s.avatar, s.avatarFallback]}>
+            <Text style={[s.avatarTxt, { color: avatarTono(room.userId).ink }]}>{room.initials}</Text>
+          </LinearGradient>
         )}
 
         <View style={s.chatInfo}>
@@ -438,17 +402,11 @@ export default function CoachChatsScreen() {
             {room.hasUnread && <View style={s.unread} />}
           </View>
 
-          {!!historia && <Text style={s.relTxt} numberOfLines={1}>{historia}</Text>}
-
-          <View style={s.prev}>
-            {/* 🔴 Antes acá iban las pastillas "✓ SESIÓN ACEPTADA" y "RECURSO".
-                Las dos repetían lo que el preview ya decía —y la primera dejaba
-                el texto cortado a mitad de palabra, "Sesión acepta…"— a cambio
-                de media fila. Queda un punto de 6px: mismo aviso, sin robar
-                ancho ni decir dos veces lo mismo. */}
-            {room.tag && <View style={[s.seed, room.tag === 'resource' && s.seedRes]} />}
-            <Text style={[s.prevTxt, room.hasUnread && s.prevTxtUnread]} numberOfLines={1}>{room.preview}</Text>
-          </View>
+          {/* 🔒 Solo gestión, nunca el contenido del mensaje (ver nota de privacidad
+              arriba): sesiones + última. El "sin leer" ya es el punto junto al nombre. */}
+          <Text style={[s.relTxt, room.hasUnread && s.prevTxtUnread]} numberOfLines={1}>
+            {historia || 'Sin sesiones aún'}
+          </Text>
         </View>
 
         {/* Que la pastilla EXISTA ya es el dato: si está, esa persona está
@@ -471,6 +429,7 @@ export default function CoachChatsScreen() {
 
   return (
     <AppBg>
+      <ToolWash color="#7E8CA8" opacity={0.42} height={200} />
       <SafeAreaView style={s.safe} edges={['top']}>
         <View style={s.header}>
           <Text style={s.title}>Tus personas</Text>
@@ -697,37 +656,16 @@ const s = StyleSheet.create({
   },
   grupoSegundo: { marginTop: 22 },
 
+  // Fila con línea de pelo, sin fondo propio — lista homogénea para ESCANEAR
+  // (mismo criterio que la biblioteca del usuario). Antes cada fila era una card
+  // con sombra: N rectángulos compitiendo. El color ahora vive en el avatar.
   chat: {
     flexDirection: 'row', alignItems: 'center', gap: 13,
-    backgroundColor: CARD, borderRadius: 20,
-    // 🔴 14 → 11 de padding y 9 → 7 de separación (14/09/2026). Con tres líneas
-    // de texto adentro, cada fila medía 97 puntos y entraban pocas personas en
-    // pantalla — y esta es una lista para ESCANEAR, no para leer de a una.
-    //
-    // 📌 Se apretó el aire, NO el contenido: la línea de historia ("32 sesiones ·
-    // última hace 2 semanas") es lo que distingue Tus personas de una lista de
-    // chats. Sacarla para ganar alto la convertiría en Mensajes.
-    //
-    // ⚠️ El piso táctil lo marca el avatar (44) y no se tocó: la fila sigue muy
-    // por encima del mínimo, aun con el padding más chico.
-    paddingVertical: 11, paddingHorizontal: 15, marginBottom: 7,
-    // Sombra de una capa, con los valores de `shadow.subtle.light` de
-    // theme/tokens.ts. El borde al 14% que había antes era invisible sobre el
-    // fondo crema: la tarjeta no se leía como objeto, y con dos filas en media
-    // pantalla vacía eso es justo lo que se sentía insulso.
-    shadowColor: '#2E261A',
-    shadowOpacity: 0.14,
-    shadowOffset: { width: 0, height: 8 },
-    shadowRadius: 12,
-    elevation: 3,
+    paddingVertical: 12, paddingHorizontal: 15,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: LINE,
   },
-  // Sin próxima sesión: plana y con borde. La jerarquía la lleva la superficie,
-  // así no hace falta un segundo color ni una segunda tipografía.
-  chatPlana: {
-    backgroundColor: 'rgba(247,242,231,0.55)',
-    borderWidth: 1, borderColor: LINE,
-    shadowOpacity: 0, elevation: 0,
-  },
+  chatPlana: {},
   chatDimmed: { opacity: 0.62 },
   avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: 'rgba(63,81,47,0.1)' },
   avatarFallback: { alignItems: 'center', justifyContent: 'center' },
