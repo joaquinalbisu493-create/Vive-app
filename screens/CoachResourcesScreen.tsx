@@ -12,9 +12,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useFocusEffect } from 'expo-router';
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { ViveColors, ViveFonts, TAB_BAR_CLEARANCE } from '@/constants/theme';
+import { ViveColors, ViveFonts, TAB_BAR_CLEARANCE, resourceFormatGradient } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
-import { SurfaceCard } from '@/components/ui/SurfaceCard';
+import { ToolWash } from '@/components/ui/ToolWash';
+import { PASTEL_DURAZNO } from '@/constants/tools';
 import { ScaleCard } from '@/components/ScaleCard';
 import { screenHeader } from '@/constants/screenHeader';
 import { useAuth } from '@/context/AuthContext';
@@ -89,7 +90,8 @@ export default function CoachResourcesScreen() {
     ]);
     if (errRecursos) { setCargaFallo(true); setLoading(false); return; }
     setCargaFallo(false);
-    setResources((data as CoachResource[]) ?? []);
+    // 0.2: los recursos semilla ([SEED] …) no se muestran en producción.
+    setResources(((data as CoachResource[]) ?? []).filter(r => !r.title.startsWith('[SEED]')));
     if (monthData) {
       setMonthStats({
         plays: Number((monthData as any).plays ?? 0),
@@ -127,6 +129,7 @@ export default function CoachResourcesScreen() {
 
   return (
     <AppBg>
+      <ToolWash color={PASTEL_DURAZNO} opacity={0.5} height={200} />
       <SafeAreaView style={s.safe} edges={['top']}>
         <ScrollView contentContainerStyle={s.container} showsVerticalScrollIndicator={false}>
 
@@ -198,45 +201,45 @@ export default function CoachResourcesScreen() {
               return (
                 <ScaleCard
                   key={r.id}
-                  style={s.resWrap}
-                  activeOpacity={0.85}
+                  style={s.resRow}
+                  activeOpacity={0.7}
                   onPress={() => router.push({ pathname: '/coach-recurso', params: { id: r.id } } as any)}>
-                  <SurfaceCard variant="subtle" backgroundColor={CARD} borderRadius={20}>
-                    <View style={s.resInner}>
-                      <View style={s.resTop}>
-                        <View style={[s.cover, { backgroundColor: fmt.color }]}>
-                          <Feather name={fmt.icon} size={16} color="#FFF6EC" />
-                        </View>
-                        <View style={{ flex: 1, minWidth: 0 }}>
-                          <Text style={s.resTitle} numberOfLines={2}>{r.title}</Text>
-                          <Text style={s.resMeta}>{metaLine}</Text>
-                        </View>
-                        <View style={[s.badge, { backgroundColor: st.bg }]}>
-                          <Text style={[s.badgeTxt, { color: st.ink }]}>{st.label}</Text>
-                        </View>
-                      </View>
-                      {r.status === 'published' && (
-                        <View style={s.line2}>
-                          {/* Íconos de verdad y no ▶ / ◈ de texto: "◈" para guardados
-                              no se entendía. */}
-                          <View style={s.line2Item} accessible accessibilityLabel={`${counts[r.id]?.plays ?? 0} reproducciones`}>
-                            <Feather name="play" size={12} color={FOREST_SOFT} />
-                            <Text style={s.line2StatN}>{counts[r.id]?.plays ?? 0}</Text>
-                          </View>
-                          <View style={s.line2Item} accessible accessibilityLabel={`${counts[r.id]?.saves ?? 0} guardados`}>
-                            <Feather name="bookmark" size={12} color={FOREST_SOFT} />
-                            <Text style={s.line2StatN}>{counts[r.id]?.saves ?? 0}</Text>
-                          </View>
-                          <TouchableOpacity style={s.recBtn} activeOpacity={0.8} onPress={() => recommend(r)}>
-                            <Text style={s.recBtnTxt}>Recomendar</Text>
-                          </TouchableOpacity>
-                        </View>
-                      )}
-                      {r.status === 'rejected' && r.rejection_rule ? (
-                        <Text style={s.rejectNote}>Rechazado por la regla {r.rejection_rule}. Editá y volvé a enviar.</Text>
-                      ) : null}
+                  <View style={s.resTop}>
+                    {/* Ícono de formato con el gradiente de ese formato (2.1). */}
+                    <LinearGradient
+                      colors={resourceFormatGradient(r.format)}
+                      start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }}
+                      style={s.cover}>
+                      <Feather name={fmt.icon} size={15} color="#FFF6EC" />
+                    </LinearGradient>
+                    <View style={{ flex: 1, minWidth: 0 }}>
+                      <Text style={s.resTitle} numberOfLines={2}>{r.title}</Text>
+                      <Text style={s.resMeta}>{metaLine}</Text>
                     </View>
-                  </SurfaceCard>
+                    {/* Badge SOLO en revisión/rechazado; los publicados muestran sus números. */}
+                    {r.status !== 'published' && (
+                      <View style={[s.badge, { backgroundColor: st.bg }]}>
+                        <Text style={[s.badgeTxt, { color: st.ink }]}>{st.label}</Text>
+                      </View>
+                    )}
+                  </View>
+                  {r.status === 'published' && (
+                    <View style={s.line2}>
+                      {/* "Recomendar" se mudó al detalle del recurso (era lo más pesado
+                          repetido en cada fila). Acá quedan los números. */}
+                      <View style={s.line2Item} accessible accessibilityLabel={`${counts[r.id]?.plays ?? 0} reproducciones`}>
+                        <Feather name="play" size={12} color={FOREST_SOFT} />
+                        <Text style={s.line2StatN}>{counts[r.id]?.plays ?? 0}</Text>
+                      </View>
+                      <View style={s.line2Item} accessible accessibilityLabel={`${counts[r.id]?.saves ?? 0} guardados`}>
+                        <Feather name="bookmark" size={12} color={FOREST_SOFT} />
+                        <Text style={s.line2StatN}>{counts[r.id]?.saves ?? 0}</Text>
+                      </View>
+                    </View>
+                  )}
+                  {r.status === 'rejected' && r.rejection_rule ? (
+                    <Text style={s.rejectNote}>Rechazado por la regla {r.rejection_rule}. Editá y volvé a enviar.</Text>
+                  ) : null}
                 </ScaleCard>
               );
             })
@@ -267,7 +270,7 @@ const s = StyleSheet.create({
 
   // Stats verde
   stats: { marginTop: 12, borderRadius: 22, padding: 16, overflow: 'hidden' },
-  statsGlow: { position: 'absolute', right: -40, top: -46, width: 140, height: 140, borderRadius: 70, backgroundColor: 'rgba(234,211,198,0.10)' },
+  statsGlow: { position: 'absolute', right: -40, top: -46, width: 140, height: 140, borderRadius: 70, backgroundColor: 'rgba(242,220,207,0.16)' },
   eyebrow: { fontSize: 10.5, letterSpacing: 0.8, textTransform: 'uppercase', color: GREEN_EYEBROW, fontFamily: ViveFonts.medium },
   statsRow: { flexDirection: 'row', gap: 8, marginTop: 9 },
   stat: { flex: 1, backgroundColor: 'rgba(255,255,255,0.09)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.15)', borderRadius: 14, paddingVertical: 8, alignItems: 'center' },
@@ -285,16 +288,15 @@ const s = StyleSheet.create({
   ctaRecTxt: { fontSize: 12.5, fontFamily: ViveFonts.semibold, color: '#8F4A2E' },
 
   stitle: { flexDirection: 'row', alignItems: 'baseline', justifyContent: 'space-between', marginTop: 22, marginBottom: 10 },
-  stitleB: { fontFamily: ViveFonts.title, fontSize: 17, color: FOREST },
+  stitleB: { fontFamily: ViveFonts.semibold, fontSize: 9.5, letterSpacing: 1.4, textTransform: 'uppercase', color: FOREST_SOFT },
   stitleSpan: { fontSize: 11, color: FOREST_SOFT, fontFamily: ViveFonts.regular },
   loadingBox: { paddingVertical: 24, alignItems: 'center' },
   empty: { padding: 18, borderWidth: 1.5, borderColor: LINE, borderRadius: 20, borderStyle: 'dashed', alignItems: 'center' },
   emptyTxt: { textAlign: 'center', fontSize: 12.5, color: FOREST_SOFT, lineHeight: 18, fontFamily: ViveFonts.regular },
 
-  resWrap: { marginBottom: 8 },
-  resInner: { padding: 13 },
+  resRow: { paddingVertical: 13, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: LINE },
   resTop: { flexDirection: 'row', alignItems: 'flex-start', gap: 10 },
-  cover: { width: 40, height: 40, borderRadius: 13, alignItems: 'center', justifyContent: 'center' },
+  cover: { width: 34, height: 34, borderRadius: 11, alignItems: 'center', justifyContent: 'center' },
   resTitle: { fontSize: 12.5, fontFamily: ViveFonts.semibold, color: FOREST, lineHeight: 17 },
   resMeta: { fontSize: 10, color: FOREST_SOFT, marginTop: 1, fontFamily: ViveFonts.regular },
   badge: { borderRadius: 10, paddingVertical: 4, paddingHorizontal: 8 },
