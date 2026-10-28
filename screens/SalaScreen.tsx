@@ -37,7 +37,7 @@ import SessionNotesSheet from '@/components/SessionNotesSheet';
 import SessionIssueSheet from '@/components/SessionIssueSheet';
 import OpcionesSheet, { type Opcion } from '@/components/OpcionesSheet';
 import { getProblemaSesion } from '@/lib/sessionIssues';
-import { getRelationshipNotes, type SessionNote } from '@/lib/sessionNotes';
+import { abrir as abrirNota, getRelationshipNotes, type SessionNote } from '@/lib/sessionNotes';
 import { AppBg } from '@/components/ui/AppBg';
 import { OfrecerPaqueteBanner } from '@/components/OfrecerPaqueteBanner';
 import { notifyViaServer } from '@/lib/notifications';
@@ -799,19 +799,22 @@ export default function SalaScreen() {
             return;
           }
 
-          const nota: SessionNote = {
-            id,
-            bookingId: row.booking_id as string,
-            content:   row.content as string,
-            shared:    row.shared as boolean,
-            createdAt: row.created_at as string,
-          };
-          setNotes(prev => {
-            const i = prev.findIndex(n => n.id === id);
-            if (i === -1) return [...prev, nota];
-            const copia = [...prev];
-            copia[i] = nota;
-            return copia;
+          // Llega cifrada (28/10/2026): se abre antes de mostrarla.
+          void abrirNota(row.content as string, row.user_id as string, row.coach_id as string).then(content => {
+            const nota: SessionNote = {
+              id,
+              bookingId: row.booking_id as string,
+              content,
+              shared:    row.shared as boolean,
+              createdAt: row.created_at as string,
+            };
+            setNotes(prev => {
+              const i = prev.findIndex(n => n.id === id);
+              if (i === -1) return [...prev, nota];
+              const copia = [...prev];
+              copia[i] = nota;
+              return copia;
+            });
           });
         },
       )

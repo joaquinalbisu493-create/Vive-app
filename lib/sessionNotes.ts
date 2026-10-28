@@ -3,6 +3,18 @@
 // suyas, el usuario solo lee las compartidas. Ver project_vive_anti_disintermediation.
 
 import { supabase } from '@/lib/supabase';
+import { aadDeNotas, cifrar, claveDeNotas, claveDeNotasSiSePuede, descifrar } from '@/lib/wellbeingCrypto';
+
+// 🔒 Cifradas desde el 28/10/2026, con la clave del par (cliente, profesional)
+// que da `wellbeing-key`: son información clínica y antes estaban en texto
+// plano en la base, protegidas solo por RLS. Mismo modelo que el diario
+// (protege contra quien lea la base, no es E2E). Las notas viejas sin cifrar se
+// leen igual y se cifran la próxima vez que el profesional las edite.
+export async function abrir(content: string | null, userId: string, coachId: string): Promise<string> {
+  if (!content) return '';
+  const clave = await claveDeNotasSiSePuede(userId, coachId);
+  return descifrar(content, clave, aadDeNotas(userId, coachId));
+}
 
 export type NotasDeSesion = { privateNote: string; sharedNote: string };
 
@@ -16,16 +28,18 @@ export type NotasDeSesion = { privateNote: string; sharedNote: string };
 export async function getSessionNotes(bookingId: string): Promise<NotasDeSesion | null> {
   const { data, error } = await supabase
     .from('session_notes')
-    .select('content, shared')
+    .select('content, shared, user_id, coach_id')
     .eq('booking_id', bookingId);
   if (error) {
     console.error('[sessionNotes] get:', error.message);
     return null;
   }
   const rows = data ?? [];
+  const privada = rows.find(r => !r.shared);
+  const compartida = rows.find(r => r.shared);
   return {
-    privateNote: rows.find(r => !r.shared)?.content ?? '',
-    sharedNote: rows.find(r => r.shared)?.content ?? '',
+    privateNote: privada ? await abrir(privada.content as string, privada.user_id as string, privada.coach_id as string) : '',
+    sharedNote: compartida ? await abrir(compartida.content as string, compartida.user_id as string, compartida.coach_id as string) : '',
   };
 }
 
@@ -74,13 +88,13 @@ export async function getRelationshipNotes(
   if (!asCoach) q = q.eq('shared', true);
 
   const { data } = await q;
-  return (data ?? []).map(r => ({
+  return Promise.all((data ?? []).map(async r => ({
     id: r.id as string,
     bookingId: r.booking_id as string,
-    content: r.content as string,
+    content: await abrir(r.content as string, userId, coachId),
     shared: r.shared as boolean,
     createdAt: r.created_at as string,
-  }));
+  })));
 }
 
 /**
@@ -117,6 +131,7 @@ export async function getLatestSharedNotesByCoach(
     // Vienen ordenadas desc: la primera de cada coach es la última.
     if (!ultima[cid]) ultima[cid] = { content: r.content as string, createdAt: r.created_at as string };
   }
+  for (const cid of Object.keys(ultima)) ultima[cid].content = await abrir(ultima[cid].content, userId, cid);
   return ultima;
 }
 
@@ -124,11 +139,11 @@ export async function getLatestSharedNotesByCoach(
 export async function getSharedNote(bookingId: string): Promise<string | null> {
   const { data } = await supabase
     .from('session_notes')
-    .select('content')
+    .select('content, user_id, coach_id')
     .eq('booking_id', bookingId)
     .eq('shared', true)
     .maybeSingle();
-  return data?.content ?? null;
+  return data ? abrir(data.content as string, data.user_id as string, data.coach_id as string) : null;
 }
 
 interface SaveNoteInput {
@@ -152,6 +167,14 @@ export async function saveSessionNote(input: SaveNoteInput): Promise<boolean> {
       .eq('shared', input.shared);
     return !error;
   }
+  // Falla cerrado: sin clave no se guarda en texto plano.
+  let cifrada: string;
+  try {
+    cifrada = cifrar(content, await claveDeNotas(input.userId, input.coachId), aadDeNotas(input.userId, input.coachId));
+  } catch (e) {
+    console.error('[sessionNotes] no se pudo cifrar:', (e as Error)?.message ?? e);
+    return false;
+  }
   const { error } = await supabase
     .from('session_notes')
     .upsert(
@@ -160,7 +183,7 @@ export async function saveSessionNote(input: SaveNoteInput): Promise<boolean> {
         coach_id: input.coachId,
         user_id: input.userId,
         shared: input.shared,
-        content,
+        content: cifrada,
         updated_at: new Date().toISOString(),
       },
       { onConflict: 'booking_id,shared' },

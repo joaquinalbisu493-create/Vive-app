@@ -45,6 +45,10 @@ app: las builds antiguas que leen campos privados directamente necesitan actuali
 
 🔴 **Cinco tablas están publicadas en `supabase_realtime`: `messages`, `bookings`, `salas`, `notifications`** (`scripts/habilitar-realtime.sql`, ✅ **CORRIDO y VERIFICADO el 28/08/2026**) **y `session_notes`** (`scripts/publicar-notas-en-realtime.sql`, ✅ **CORRIDO el 16/09/2026**), las cinco con `REPLICA IDENTITY FULL`.
 
+🔒 **`session_notes.content` va cifrado desde el 28/10/2026** (sin cambio de schema): AES-256-GCM-SIV como el diario (`lib/wellbeingCrypto.ts`), con la clave del PAR cliente-profesional que da `wellbeing-key` con `{ par: { user_id, coach_id } }` solo a una de las dos personas y si tienen una reserva en común (etiqueta `sere:notas:v1:`, AAD `notas:<user_id>:<coach_id>`). Las 16 notas anteriores siguen en texto plano y se leen igual (lectura tolerante); se cifran al editarlas. Realtime trae el texto cifrado: `SalaScreen` lo abre antes de mostrarlo. Mismo modelo que el diario: protege contra quien lea la base, no es E2E.
+
+🔒 **Storage `identity-docs` y `coach-credentials`** (migración `20261028070000`, aplicada y probada 28/10/2026): el dueño ya no puede reemplazar ni borrar el DNI/selfie si su identidad está `verificada`, ni el archivo de una credencial `verificada`. Subir archivos nuevos sigue igual.
+
 📝 **Hasta ese día la publicación estaba VACÍA** y ninguna de las ocho suscripciones de la app recibía un solo evento — el chat no se actualizaba solo (`SalaScreen` no hace polling de mensajes), los puntitos de las dos barras no se movían, y el badge de Reservas del coach no se apagaba al aceptar. El código del cliente siempre estuvo bien: escuchaba un canal por el que no pasaba nada.
 
 ⚠️ **Publicar no saltea RLS.** Realtime evalúa las políticas del usuario suscripto antes de entregarle una fila. Lo que se habilita es el transporte, no el permiso.

@@ -39,6 +39,9 @@ const MASTER = Deno.env.get('WELLBEING_MASTER_KEY') ?? ''
 // ⚠️ Esta etiqueta es parte de la clave. Cambiar una letra equivale a cambiar el
 // secreto maestro. `scripts/decodificar-export.mjs` usa la misma.
 const ETIQUETA = 'vita:bienestar:v1:'
+// Notas de sesión: otra etiqueta, así la clave de un par nunca coincide con la
+// del diario de nadie. También es parte de la clave: no cambiarla.
+const ETIQUETA_NOTAS = 'sere:notas:v1:'
 
 const cors = {
   'Access-Control-Allow-Origin': WEB_ORIGIN,
@@ -82,7 +85,33 @@ Deno.serve(async (req) => {
   const hmacKey = await crypto.subtle.importKey(
     'raw', enc.encode(MASTER), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'],
   )
+
+  // Notas de sesión (28/10/2026): clave del PAR cliente-profesional, para que
+  // las puedan abrir los dos (la compartida) y nadie más. Mismo modelo que el
+  // diario: protege contra quien lea la base, no es E2E. Se entrega solo a una
+  // de las dos personas y solo si hay al menos una reserva entre ellas.
+  // `coach_id` es el profile id del profesional (como en `session_notes`).
+  let body: { par?: { user_id?: unknown; coach_id?: unknown } } = {}
+  try { body = await req.json() } catch { /* sin body: clave del diario */ }
+  if (body?.par) {
+    const clienteId = typeof body.par.user_id === 'string' ? body.par.user_id : ''
+    const coachId = typeof body.par.coach_id === 'string' ? body.par.coach_id : ''
+    if (!clienteId || !coachId || (user.id !== clienteId && user.id !== coachId)) {
+      return json({ error: 'no autorizado' }, 403)
+    }
+    const admin = createClient(SUPABASE_URL, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!)
+    const { data: coach } = await admin.from('coaches').select('id').eq('profile_id', coachId).maybeSingle()
+    const { data: reserva } = coach
+      ? await admin.from('bookings').select('id').eq('user_id', clienteId).eq('coach_id', coach.id).limit(1)
+      : { data: null }
+    if (!reserva?.length) return json({ error: 'no autorizado' }, 403)
+    const macPar = await crypto.subtle.sign('HMAC', hmacKey, enc.encode(ETIQUETA_NOTAS + clienteId + ':' + coachId))
+    return json({ v: 1, key: base64(new Uint8Array(macPar)) })
+  }
+
   const mac = await crypto.subtle.sign('HMAC', hmacKey, enc.encode(ETIQUETA + user.id))
 
-  return json({ v: 1, key: base64(new Uint8Array(mac)) })
+  // `uid`: para que la app no guarde esta clave a nombre de otra cuenta si
+  // cambió de sesión mientras la pedía.
+  return json({ v: 1, key: base64(new Uint8Array(mac)), uid: user.id })
 })

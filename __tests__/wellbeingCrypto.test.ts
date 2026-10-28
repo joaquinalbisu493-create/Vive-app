@@ -17,6 +17,7 @@ jest.mock('expo-secure-store', () => {
 
 import {
   cifrar, descifrar, estaCifrado, obtenerClave, olvidarClave, NO_SE_PUDO_ABRIR, _internals,
+  aadDeNotas, claveDeNotas, olvidarClavesDeNotas,
 } from '@/lib/wellbeingCrypto';
 import { supabase } from '@/lib/supabase';
 
@@ -173,5 +174,28 @@ describe('el script del pedido de datos abre lo que cifra la app', () => {
     const { datos } = JSON.parse(r.stdout.toString());
     expect(datos.diario.map((e: { content: string }) => e.content)).toEqual(['lo que no le digo a nadie 🌧', 'vieja en claro']);
     expect(datos.gratitud[0].item_1).toBe('el mate con mamá');
+  });
+});
+
+describe('notas de sesión (clave del par)', () => {
+  beforeEach(() => { invoke.mockReset(); olvidarClavesDeNotas(); });
+
+  it('pide la clave del par y la reutiliza en memoria', async () => {
+    invoke.mockResolvedValue({ data: { v: 1, key: b64(CLAVE) }, error: null });
+    await claveDeNotas(ANA, BETO);
+    await claveDeNotas(ANA, BETO);
+    expect(invoke).toHaveBeenCalledTimes(1);
+    expect(invoke).toHaveBeenCalledWith('wellbeing-key', { body: { par: { user_id: ANA, coach_id: BETO } } });
+  });
+
+  it('una nota no abre con los datos de otro par', () => {
+    const c = cifrar('nota clínica', CLAVE, aadDeNotas(ANA, BETO));
+    expect(descifrar(c, CLAVE, aadDeNotas(ANA, BETO))).toBe('nota clínica');
+    expect(descifrar(c, CLAVE, aadDeNotas(BETO, ANA))).toBe(NO_SE_PUDO_ABRIR);
+  });
+
+  it('si el servidor no la da, tira (guardar falla cerrado)', async () => {
+    invoke.mockResolvedValue({ data: null, error: new Error('403') });
+    await expect(claveDeNotas(ANA, BETO)).rejects.toThrow();
   });
 });

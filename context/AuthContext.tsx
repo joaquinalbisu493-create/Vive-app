@@ -1,4 +1,3 @@
-import { Alert } from 'react-native';
 import React, { createContext, useCallback, useContext, useRef, useState, useEffect } from 'react';
 import { User } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
@@ -6,7 +5,7 @@ import { pedirCaptchaToken } from '@/lib/captcha';
 import { necesitaVerificarMail } from '@/lib/emailVerificado';
 import { cancelAllResourceReminders } from '@/lib/resourceReminders';
 import { clearBlockedCache } from '@/lib/blocking';
-import { olvidarClave } from '@/lib/wellbeingCrypto';
+import { olvidarClave, olvidarClavesDeNotas } from '@/lib/wellbeingCrypto';
 import { LEGAL_VERSION } from '@/constants/legal';
 import { AuthModal } from '@/components/AuthModal';
 import { ERR_MAIL_SIN_CONFIRMAR, LARGO_MIN_CONTRASENA } from '@/lib/authErrores';
@@ -160,6 +159,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Cada consulta lleva un número de turno, y marcar como verificado también
   // gasta uno: una respuesta que vuelve cuando ya pasó otro turno se descarta.
   const turnoMail = useRef(0);
+  // La cuenta con sesión, para limpiar el teléfono si la sesión se cierra sola.
+  const ultimaCuenta = useRef<string | null>(null);
   const resolverMailPendiente = useCallback((u: User | null) => {
     const turno = ++turnoMail.current;
     if (!u) { setMailPendiente(false); return; }
@@ -267,12 +268,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       seguirSinSesion();
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      // 🔒 La sesión también se cierra sola (se venció o la revocaron en el
+      // servidor), sin pasar por `signOut()`. Antes la limpieza del teléfono
+      // corría solo en el cierre a mano y en ese caso quedaban la clave del
+      // diario y las respuestas pendientes (auditoría 28/10/2026).
+      if (event === 'SIGNED_OUT' && ultimaCuenta.current) {
+        void limpiarDispositivo(ultimaCuenta.current);
+      }
       const bruto = session?.user ?? null;
       // ⚠️ Una sesión anónima entra por acá igual que una real —la abre
       // `ensureAnonSession()` al abrir cualquier herramienta— y todo lo de
       // abajo asume que "apareció la cuenta". Ver `esSesionAnonima`.
       const u = esSesionAnonima(bruto) ? null : bruto;
+      ultimaCuenta.current = u?.id ?? null;
       setUser(u);
       resolverMailPendiente(u);
       if (u) {
@@ -642,13 +651,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function signOut() {
     // Retirar el destino push mientras todavía hay una sesión válida.
+    //
+    // 🔒 Sin conexión NO se frena el cierre (28/10/2026): antes volvía sin
+    // cerrar, y en un teléfono compartido la persona creía que había salido y
+    // seguía adentro. Lo peor que queda es que este teléfono reciba el aviso
+    // genérico ("Tenés novedades en Sere") hasta que alguien vuelva a entrar:
+    // `register_push_token` le saca el token a la cuenta anterior.
     if (user) {
       const { error } = await supabase.from('profiles').update({ push_token: null }).eq('id', user.id);
-      if (error) {
-        Alert.alert('No se pudo cerrar sesión', 'Necesitamos conexión para desactivar las notificaciones. Volvé a intentarlo.');
-        return;
-      }
+      if (error) console.warn('[auth] no se pudo retirar el push token al cerrar sesión:', error.message);
     }
+    if (user) await limpiarDispositivo(user.id);
+    await supabase.auth.signOut();
+    setUser(null);
+    applyProfile({ role: "user", isAdmin: false, name: null });
+  }
+
+  /** Lo que la cuenta que se va deja en el teléfono. Corre al cerrar sesión a
+   *  mano y cuando la sesión se cierra sola. */
+  async function limpiarDispositivo(userId: string) {
     // Apagar las notis locales de recordatorios del usuario que se va (si no,
     // siguen firmando aunque nadie esté logueado en el dispositivo).
     await cancelAllResourceReminders().catch(() => {});
@@ -660,10 +681,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // la próxima cuenta que entre lo hereda (auditoría del 26/09/2026, C1).
     await Promise.all([borrarPendienteLocal(), borrarRespuestasLocales()]).catch(() => {});
     // La clave del diario del que se va no queda en el teléfono.
-    if (user) await olvidarClave(user.id);
-    await supabase.auth.signOut();
-    setUser(null);
-    applyProfile({ role: "user", isAdmin: false, name: null });
+    await olvidarClave(userId);
+    olvidarClavesDeNotas();
   }
 
   const isLoggedIn = !!user;

@@ -1,3 +1,17 @@
+## 2026-10-28 — Andre (Claude · notas de sesión cifradas y mejoras de la auditoría)
+
+**Tocado:** `lib/sessionNotes.ts`, `lib/wellbeingCrypto.ts`, `screens/SalaScreen.tsx`, `supabase/functions/wellbeing-key/index.ts` (desplegada), `context/AuthContext.tsx`, `web/sala/index.html`, `supabase/migrations/20261028070000_documentos_aprobados_no_se_reemplazan.sql` (nueva, aplicada), `__tests__/wellbeingCrypto.test.ts`, `SCHEMA.md`.
+
+**Resumen:**
+- Tanda 7 de la auditoría (datos en el teléfono y web pública): sin hallazgos. Informe en `~/security-audit-skill/vive-app/run-7/REPORT.md`.
+- Decisión de Andre: las notas de sesión (información clínica) se cifran como el diario, con una clave por par cliente-profesional que solo se les da a esas dos personas. Las 16 existentes quedan legibles y se cifran al editarlas.
+- Cerrar sesión ya no se frena sin conexión (antes la persona quedaba adentro en un teléfono compartido), y la limpieza del teléfono corre también cuando la sesión se cierra sola.
+- El DNI, la selfie y la matrícula aprobados ya no se pueden reemplazar ni borrar (probado en producción con rollback). "Olvidar mi sesión" en la sala web también la cierra en el servidor.
+
+**Pendiente para la próxima sesión:**
+- Probar en el iPhone: escribir una nota privada y una compartida como profesional, verla del lado del cliente (en la sala y en Sesiones), y editar una nota vieja.
+- Preguntarle a la abogada si la ley pide algo más para las notas clínicas (plazo de guarda, acceso del paciente).
+
 ## 2026-10-28 — Andre (Claude · auditoría de seguridad, tanda 6: permisos de la base)
 
 **Tocado:** `supabase/migrations/20261028050000_reservas_sin_datos_de_pago_ajenos.sql` y `20261028060000_matriculas_publicas_solo_de_publicados.sql` (nuevas, aplicadas), `lib/pagos.ts`, `lib/admin.ts`, `screens/RefundAddressScreen.tsx`, `screens/SessionsScreen.tsx`, `screens/CoachReservasScreen.tsx`, `web/admin/admin.js`, `SCHEMA.md`. Además: merge de los cambios de Joaquín que había quedado a medias (conflictos en `CoachChatsScreen.tsx` y este archivo, se conservaron los dos lados).

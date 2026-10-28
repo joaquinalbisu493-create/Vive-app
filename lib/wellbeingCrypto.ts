@@ -194,6 +194,9 @@ async function pedirAlServidor(userId: string): Promise<Uint8Array> {
   const { data, error } = await supabase.functions.invoke('wellbeing-key');
   const clave = error ? null : claveValida(data?.key);
   if (!clave) throw new Error('No se pudo obtener la clave de bienestar.');
+  // Si la sesión cambió de cuenta mientras se pedía, la clave es de otra
+  // persona: no se guarda a nombre de esta (28/10/2026).
+  if (typeof data?.uid === 'string' && data.uid !== userId) throw new Error('La sesión cambió mientras se pedía la clave.');
   try {
     await llavero()?.setItemAsync(claveLlavero(userId), aBase64(clave), opciones());
   } catch (e) {
@@ -250,6 +253,43 @@ export async function olvidarClave(userId: string): Promise<void> {
   } catch {
     // Sin llavero no había nada guardado.
   }
+}
+
+// ─── Notas de sesión ──────────────────────────────────────────────────────────
+// Clave del par (cliente, profesional), la da `wellbeing-key` solo a una de las
+// dos personas y si tienen una reserva en común. Queda solo en memoria: las
+// notas se abren con conexión (vienen de la base), así que no hace falta
+// guardarla en el llavero.
+
+const notasEnMemoria = new Map<string, Uint8Array>();
+
+/** Los datos asociados al cifrar: atan la nota a ese par. */
+export const aadDeNotas = (userId: string, coachId: string) => `notas:${userId}:${coachId}`;
+
+/** Tira si no se puede conseguir. */
+export async function claveDeNotas(userId: string, coachId: string): Promise<Uint8Array> {
+  const id = aadDeNotas(userId, coachId);
+  const yaEsta = notasEnMemoria.get(id);
+  if (yaEsta) return yaEsta;
+  const { data, error } = await supabase.functions.invoke('wellbeing-key', { body: { par: { user_id: userId, coach_id: coachId } } });
+  const clave = error ? null : claveValida(data?.key);
+  if (!clave) throw new Error('No se pudo obtener la clave de las notas.');
+  notasEnMemoria.set(id, clave);
+  return clave;
+}
+
+export async function claveDeNotasSiSePuede(userId: string, coachId: string): Promise<Uint8Array | null> {
+  try {
+    return await claveDeNotas(userId, coachId);
+  } catch (e) {
+    console.warn('[notas]', (e as Error)?.message ?? e);
+    return null;
+  }
+}
+
+/** Al cerrar sesión. */
+export function olvidarClavesDeNotas(): void {
+  notasEnMemoria.clear();
 }
 
 /** Solo para los tests. */

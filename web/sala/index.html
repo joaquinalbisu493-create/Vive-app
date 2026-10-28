@@ -508,7 +508,20 @@ async function marcarMailVerificado(accessToken) {
 
 $('btnCodigo').addEventListener('click', pedirCodigo);
 $('btnConfirmar').addEventListener('click', confirmarCodigo);
-$('olvidar').addEventListener('click', () => {
+$('olvidar').addEventListener('click', async () => {
+  // Además de borrarla de esta computadora, se cierra en el servidor: así una
+  // copia que haya quedado (otra pestaña, una copia del navegador) tampoco
+  // sirve más (28/10/2026). Si falla, igual se olvida acá.
+  try {
+    // Se renueva antes: con un token de acceso vencido el cierre no llegaría.
+    const guardada = leerSesion() ? ((await renovarSesion()) ?? leerSesion()) : null;
+    if (guardada?.access_token) {
+      await fetch(`${SUPABASE_URL}/auth/v1/logout?scope=local`, {
+        method: 'POST',
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${guardada.access_token}` },
+      });
+    }
+  } catch (e) {}
   olvidarSesion();
   location.reload();
 });
