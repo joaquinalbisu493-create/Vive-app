@@ -8,7 +8,7 @@
 - Teléfono como respaldo: descartado por ahora (costo por SMS, dato personal extra, fricción). Revisar si con usuarios reales se pierde seguido el acceso al mail.
 
 **Pendiente para la próxima sesión:**
-- ⚠️ ANTES de la próxima compilación, Andre en Supabase: prender "Secure email change" (Authentication → Sign In / Providers → Email) y cambiar la plantilla "Change email address" a código (`{{ .Token }}`), sin link. Sin eso no llega el código al mail actual y la pantalla no puede terminar.
+- ✅ Hecho por Andre el 28/10: "Secure email change" prendido y plantilla "Change email address" con código.
 - Probar en el iPhone con una cuenta de prueba: cambiar el mail, que lleguen los dos códigos, y entrar con el nuevo.
 
 ## 2026-10-28 — Andre (Claude · auditoría de seguridad, tanda 3)
