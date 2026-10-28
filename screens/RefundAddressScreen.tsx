@@ -19,6 +19,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { ViveColors, ViveFonts } from '@/constants/theme';
 import { AppBg } from '@/components/ui/AppBg';
 import { supabase } from '@/lib/supabase';
+import { datosDeReintegro } from '@/lib/pagos';
 import { walletError, type PayoutNetwork } from '@/lib/payout';
 
 const NETWORKS: { id: PayoutNetwork; label: string }[] = [
@@ -43,14 +44,15 @@ export default function RefundAddressScreen() {
     (async () => {
       const { data } = await supabase
         .from('bookings')
-        .select('usdt_amount, refund_address, refund_network, payment_status')
+        .select('usdt_amount, payment_status')
         .eq('id', booking_id)
         .maybeSingle();
       if (data) {
         setMonto(data.usdt_amount != null ? Number(data.usdt_amount) : null);
-        if (data.refund_address) {
-          setWallet(data.refund_address);
-          setNetwork((data.refund_network as PayoutNetwork) ?? 'TRC20');
+        const guardada = (await datosDeReintegro([booking_id])).get(booking_id);
+        if (guardada?.refund_address) {
+          setWallet(guardada.refund_address);
+          setNetwork((guardada.refund_network as PayoutNetwork) ?? 'TRC20');
           setYaCargada(true);
         }
       }

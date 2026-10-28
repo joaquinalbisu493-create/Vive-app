@@ -16,6 +16,7 @@ import { supabase } from '@/lib/supabase';
 import { REPORT_REASONS, type ReportReason } from '@/lib/reports';
 import { coachNetFor, platformDeliveryCost, type PayoutRail } from '@/lib/payout';
 import { agruparComisiones, totalPorMoneda, type BookingForBilling, type CommissionGroup } from '@/lib/billing';
+import { datosDeReintegro } from '@/lib/pagos';
 
 const FUNCTIONS_URL = `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1`;
 
@@ -460,7 +461,7 @@ export type UsdtRefund = {
 export async function listUsdtRefunds(): Promise<UsdtRefund[]> {
   const { data, error } = await supabase
     .from('bookings')
-    .select('id, usdt_amount, charged_amount, scheduled_date, scheduled_time, coach_name, refund_address, refund_network')
+    .select('id, usdt_amount, charged_amount, scheduled_date, scheduled_time, coach_name')
     .eq('payment_provider', 'usdt')
     .eq('payment_status', 'reembolso_pendiente')
     .order('scheduled_date', { ascending: true })
@@ -470,6 +471,7 @@ export async function listUsdtRefunds(): Promise<UsdtRefund[]> {
     console.warn('[admin] no se pudieron leer los reembolsos:', error.message);
     return [];
   }
+  const reintegro = await datosDeReintegro((data ?? []).map(b => b.id));
   return (data ?? []).map(b => ({
     bookingId: b.id,
     // Lo que efectivamente llegó, si se acreditó por comprobante con un monto distinto.
@@ -477,8 +479,8 @@ export async function listUsdtRefunds(): Promise<UsdtRefund[]> {
     fecha: b.scheduled_date,
     hora: String(b.scheduled_time ?? '').slice(0, 5),
     coachName: b.coach_name ?? null,
-    address: b.refund_address ?? null,
-    network: b.refund_network ?? null,
+    address: reintegro.get(b.id)?.refund_address ?? null,
+    network: reintegro.get(b.id)?.refund_network ?? null,
   }));
 }
 

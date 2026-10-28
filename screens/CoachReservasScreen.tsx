@@ -63,6 +63,11 @@ interface Booking {
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
+// 🔒 Lista explícita y no '*' (28/10/2026): de `bookings` ya no se pueden leer
+// los datos de pago del cliente (billetera de reintegro, huella de pago) ni
+// dónde estaba al reservar, y '*' los pedía.
+const COLUMNAS_RESERVA_COACH = 'id, user_id, coach_id, coach_name, coach_specialty, sala_id, scheduled_date, scheduled_time, duration_minutes, status, amount, charged_amount, currency, usdt_amount, payment_provider, payment_status, paid_at, refunded_at, requires_payment, cancelled_by, cancelled_late, movida_tarde, origen, tema_origen, user_message, meeting_url, room_url, platform_fee_pct, referral_discount, created_at, paid_out_at, disputed_at, dispute_reason, dispute_resolved_at, dispute_outcome';
+
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 const DAYS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
@@ -324,7 +329,7 @@ export default function CoachReservasScreen() {
     void cargarCambios(coachId);
 
     const [{ data: rows, error }, { data: completed }, { data: pattern }] = await Promise.all([
-      supabase.from('bookings').select('*').eq('coach_id', coachId)
+      supabase.from('bookings').select(COLUMNAS_RESERVA_COACH).eq('coach_id', coachId)
         .in('status', ['pendiente', 'confirmada']).order('created_at', { ascending: false }),
       supabase.from('bookings').select('user_id').eq('coach_id', coachId).eq('status', 'completada'),
       // Solo se usa para el estado vacío (sección "Cuándo estás disponible"),

@@ -1374,7 +1374,15 @@ async function cargarUsdt() {
 async function cargarReembolsos() {
   $('errorReembolsos').textContent = '';
   try {
-    const filas = await api('bookings?payment_status=eq.reembolso_pendiente&select=id,payment_provider,usdt_amount,charged_amount,amount,currency,scheduled_date,scheduled_time,coach_name,refund_address,refund_network,refund_attempts,created_at&order=scheduled_date.asc&limit=100');
+    const filas = await api('bookings?payment_status=eq.reembolso_pendiente&select=id,payment_provider,usdt_amount,charged_amount,amount,currency,scheduled_date,scheduled_time,coach_name,refund_attempts,created_at&order=scheduled_date.asc&limit=100');
+    // La billetera de reintegro ya no se lee de `bookings` (28/10/2026): la da
+    // `datos_de_reintegro`, al dueño de la reserva o a un admin.
+    const usdtIds = filas.filter((b) => b.payment_provider === 'usdt').map((b) => b.id);
+    if (usdtIds.length) {
+      const extra = await api('rpc/datos_de_reintegro', { method: 'POST', body: { p_ids: usdtIds } });
+      const porId = new Map((extra ?? []).map((x) => [x.id, x]));
+      for (const b of filas) Object.assign(b, porId.get(b.id) ?? {});
+    }
     const deUsdt = filas.filter((b) => b.payment_provider === 'usdt');
     const automaticos = filas.filter((b) => b.payment_provider !== 'usdt');
     const html = deUsdt.map((r) => {

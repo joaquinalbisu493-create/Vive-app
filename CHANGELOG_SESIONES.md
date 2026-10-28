@@ -1,3 +1,16 @@
+## 2026-10-28 — Andre (Claude · auditoría de seguridad, tanda 6: permisos de la base)
+
+**Tocado:** `supabase/migrations/20261028050000_reservas_sin_datos_de_pago_ajenos.sql` y `20261028060000_matriculas_publicas_solo_de_publicados.sql` (nuevas, aplicadas), `lib/pagos.ts`, `lib/admin.ts`, `screens/RefundAddressScreen.tsx`, `screens/SessionsScreen.tsx`, `screens/CoachReservasScreen.tsx`, `web/admin/admin.js`, `SCHEMA.md`. Además: merge de los cambios de Joaquín que había quedado a medias (conflictos en `CoachChatsScreen.tsx` y este archivo, se conservaron los dos lados).
+
+**Resumen:**
+- Sexta tanda (informe: `~/security-audit-skill/vive-app/run-6/REPORT.md`), sobre una foto real de los permisos de producción. Bien: todas las tablas con reglas activas, notas/mensajes/diario/ánimo solo del dueño o su par, sin cuenta no se ve nada privado, funciones de la base siempre sobre la cuenta propia, archivos privados solo del dueño, reseñas no se pueden mover de profesional.
+- Arreglado: cada parte de una reserva leía datos de pago de la otra (el cliente, el hash del pago al profesional; el profesional, la billetera de reintegro y la huella de pago del cliente). Esas columnas ya no se leen desde `bookings`; la billetera la pide su dueño con `datos_de_reintegro`. La pantalla de reservas del profesional pide columnas explícitas.
+- Arreglado: las matrículas verificadas de postulantes no publicados se veían sin cuenta.
+
+**Pendiente para la próxima sesión:**
+- Probar en el iPhone: Mis pagos (USDT con reintegro), la pantalla de dirección de reintegro, el aviso de reintegro en Sesiones, y Reservas del profesional (con el diseño nuevo de Joaquín).
+- Mejora anotada: que el profesional no pueda reemplazar su DNI o matrícula después de aprobados.
+
 ## 2026-10-28 — Andre (Claude · auditoría de seguridad, tanda 5: panel de admin)
 
 **Tocado:** `supabase/migrations/20261028040000_admin_con_factor_habilitado.sql` (nueva), `supabase/functions/admin-actions/index.ts`, `supabase/functions/guarantee-claim/index.ts`, `supabase/functions/usdt-claim/index.ts` (las tres desplegadas), `web/admin/admin.js`, `SCHEMA.md`.

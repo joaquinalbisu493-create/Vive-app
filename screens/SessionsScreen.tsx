@@ -24,6 +24,7 @@ import { ViveColors, ViveFonts, TAB_BAR_CLEARANCE } from '@/constants/theme';
 import { screenHeader } from '@/constants/screenHeader';
 import { ordenarSalas } from '@/lib/salaOrder';
 import { supabase } from '@/lib/supabase';
+import { datosDeReintegro } from '@/lib/pagos';
 import { decryptMessage } from '@/lib/encryption';
 import { hayReembolsoAlCancelar } from '@/lib/bookingHelpers';
 import { scheduledAtMs, daysFromTodayAr, localEquivalentLabel, todayInAr, sessionHasEnded } from '@/lib/time';
@@ -273,9 +274,7 @@ export default function SessionsScreen() {
         .eq('user_id', user.id)
         .eq('payment_provider', 'usdt')
         .eq('payment_status', 'reembolso_pendiente')
-        .is('refund_address', null)
-        .limit(1)
-        .maybeSingle(),
+        .limit(10),
     ]);
 
     // 🔴 Si falla cualquiera de las dos consultas principales, NO se pisa lo
@@ -291,9 +290,14 @@ export default function SessionsScreen() {
     setLoadError(false);
 
     if (!refundRes.error) {
+      // La billetera ya no se filtra en la consulta (la columna no es legible
+      // desde `bookings`, 28/10/2026): se pregunta aparte cuáles ya la tienen.
+      const pendientes = (refundRes.data ?? []) as { id: string; usdt_amount: number | null }[];
+      const conDireccion = await datosDeReintegro(pendientes.map(p => p.id));
+      const sinDireccion = pendientes.find(p => !conDireccion.get(p.id)?.refund_address);
       setRefundPendiente(
-        refundRes.data
-          ? { id: refundRes.data.id, monto: refundRes.data.usdt_amount != null ? Number(refundRes.data.usdt_amount) : null }
+        sinDireccion
+          ? { id: sinDireccion.id, monto: sinDireccion.usdt_amount != null ? Number(sinDireccion.usdt_amount) : null }
           : null,
       );
     }

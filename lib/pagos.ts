@@ -201,7 +201,7 @@ export function estadoDelPago(r: PagoRow): EstadoPago {
 export async function listMisPagos(userId: string): Promise<PagoRow[]> {
   const { data, error } = await supabase
     .from('bookings')
-    .select('id, sala_id, coach_name, scheduled_date, scheduled_time, status, amount, charged_amount, referral_discount, currency, usdt_amount, payment_provider, payment_status, paid_at, refunded_at, refund_attempts, refund_address, refund_tx_id, cancelled_late')
+    .select('id, sala_id, coach_name, scheduled_date, scheduled_time, status, amount, charged_amount, referral_discount, currency, usdt_amount, payment_provider, payment_status, paid_at, refunded_at, refund_attempts, cancelled_late')
     .eq('user_id', userId)
     .neq('payment_status', 'no_iniciado')
     .order('scheduled_date', { ascending: false })
@@ -211,5 +211,30 @@ export async function listMisPagos(userId: string): Promise<PagoRow[]> {
     console.warn('[pagos] no se pudieron leer:', error.message);
     throw error;
   }
-  return (data ?? []) as PagoRow[];
+  const filas = (data ?? []) as Omit<PagoRow, 'refund_address' | 'refund_tx_id'>[];
+  const reintegro = await datosDeReintegro(filas.filter(f => f.payment_provider === 'usdt').map(f => f.id));
+  return filas.map(f => ({
+    ...f,
+    refund_address: reintegro.get(f.id)?.refund_address ?? null,
+    refund_tx_id: reintegro.get(f.id)?.refund_tx_id ?? null,
+  }));
+}
+
+export type DatosDeReintegro = { refund_address: string | null; refund_network: string | null; refund_tx_id: string | null };
+
+/** 🔒 La billetera de reintegro no se lee de `bookings` (28/10/2026): esa
+ *  columna la veía también el profesional. La da `datos_de_reintegro`, solo al
+ *  dueño de la reserva o a un admin. */
+export async function datosDeReintegro(ids: string[]): Promise<Map<string, DatosDeReintegro>> {
+  const mapa = new Map<string, DatosDeReintegro>();
+  if (ids.length === 0) return mapa;
+  const { data, error } = await supabase.rpc('datos_de_reintegro', { p_ids: ids });
+  if (error) {
+    console.warn('[pagos] no se pudieron leer los datos de reintegro:', error.message);
+    return mapa;
+  }
+  for (const r of (data ?? []) as ({ id: string } & DatosDeReintegro)[]) {
+    mapa.set(r.id, { refund_address: r.refund_address, refund_network: r.refund_network, refund_tx_id: r.refund_tx_id });
+  }
+  return mapa;
 }
