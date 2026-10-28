@@ -8,7 +8,7 @@
 
 **Color (vivo pero ordenado — pedido de Joaquín):**
 - Nuevo **`lib/avatarColor.ts`**: tono determinístico por persona, 5 gradientes (terracota/verde/azulado/violáceo/arena) derivados de la paleta. Avatares sin foto pasan de gris a color. Usado en Inicio y Tus personas.
-- **Lavados por pantalla** (`ToolWash`): Inicio salvia, Recursos durazno, Personas azulado, Reservas arena.
+- **Lavados por pantalla** (`ToolWash`): se probaron (Inicio salvia, Recursos durazno, Personas azulado, Reservas arena) pero **Joaquín pidió sacarlos** — mareaban. Se quitó `ToolWash` de las 4 del coach Y de Diario/Gratitud/Respiración (usuario): toda la app queda con un solo fondo (`AppBg`). El color vive en avatares/stats/íconos, no en el fondo.
 - **Inicio:** stats "Lo que construiste" → dos bloques con lavado y número en color (terracota/verde); "hoy" en la tira → círculo terracota sólido; "Proponer horario" → texto terracota con flecha; íconos de nav tintados (visibilidad azulado, cómo funciona durazno).
 - **Recursos:** ícono de formato 34px con el gradiente del formato; mancha durazno en "Este mes".
 - **Reservas:** barra salvia de 3px por día (apagada en días sin atención).
