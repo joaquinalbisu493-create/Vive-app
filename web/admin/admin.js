@@ -273,6 +273,14 @@ async function verificarFactor(campo, error, boton) {
     if (!c.access_token) throw new Error('sin sesión');
     guardarSesion(desdeRespuestaAuth(c));
     $(campo).value = '';
+    // 28/10/2026: un factor recién registrado no da permisos de admin hasta que
+    // otro admin lo habilita por SQL (`profiles.admin_factor_id`).
+    let habilitado = false;
+    try { habilitado = (await api('rpc/is_admin', { method: 'POST', body: {} })) === true; } catch { /* queda en false */ }
+    if (!habilitado) {
+      $(error).textContent = 'Tu app de autenticación quedó registrada, pero todavía no está habilitada para el panel. Avisale a otro admin para que la habilite.';
+      return;
+    }
     await abrirTablero();
   } catch (e) {
     $(error).textContent = 'Ese código no coincide. Fijate que sea el de Sere y que la hora del teléfono esté bien.';
@@ -1338,6 +1346,8 @@ async function cargarUsdt() {
       <div class="suave datos">${c.esperado != null ? `Se esperaban ${esc(dinero(c.esperado))}` : 'Monto esperado desconocido'}${c.fecha ? ` · sesión del ${esc(fechaIso(c.fecha))} ${esc(String(c.hora ?? '').slice(0, 5))} hs` : ''}${c.coachName ? ` · ${esc(c.coachName)}` : ''}</div>
       <p>${esc(situacion)}</p>
       <div class="suave"><code>${esc(c.txId)}</code><br>desde <code>${esc(c.desde)}</code></div>
+      <div class="suave datos">Transferencia: ${c.fechaTransferencia ? esc(new Date(c.fechaTransferencia).toLocaleString('es-AR')) : 'sin fecha'} · reserva creada: ${c.reservaCreada ? esc(new Date(c.reservaCreada).toLocaleString('es-AR')) : 'sin fecha'}</div>
+      ${c.otraReserva ? `<p class="error">⚠️ Por los centavos, esta transferencia corresponde a OTRA reserva. No la apruebes.</p>` : ''}
       <div class="formulario-linea">
         <input id="nota-${c.id}" placeholder="Motivo (obligatorio para rechazar)">
         <div class="botonera">

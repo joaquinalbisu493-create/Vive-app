@@ -88,6 +88,10 @@ async function authorize(authHeader: string): Promise<{ ok: boolean; identity: s
   // factor (misma regla que `admin-actions` e `is_admin()`). El cliente que pide
   // su propia garantía (`solicitar`) no entra por acá y no lo necesita.
   if (!tieneSegundoFactor(authHeader)) return { ok: false, identity: null }
+  // 28/10/2026: y con el factor HABILITADO para esa cuenta, no uno registrado
+  // después desde el mail (`is_admin()`, migración 20261028040000).
+  const { data: esAdmin } = await asCaller.rpc('is_admin')
+  if (esAdmin !== true) return { ok: false, identity: null }
   return { ok: true, identity: user.email ?? user.id }
 }
 

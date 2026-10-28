@@ -1,3 +1,16 @@
+## 2026-10-28 — Andre (Claude · auditoría de seguridad, tanda 5: panel de admin)
+
+**Tocado:** `supabase/migrations/20261028040000_admin_con_factor_habilitado.sql` (nueva), `supabase/functions/admin-actions/index.ts`, `supabase/functions/guarantee-claim/index.ts`, `supabase/functions/usdt-claim/index.ts` (las tres desplegadas), `web/admin/admin.js`, `SCHEMA.md`.
+
+**Resumen:**
+- Quinta tanda de la skill (informe: `~/security-audit-skill/vive-app/run-5/REPORT.md`): `admin-actions` entero y los paneles. Bien: la puerta (admin + segundo factor) en todos lados, sin código inyectable en el panel, links a documentos acotados, pagos a profesionales y reembolsos bien controlados.
+- 🔴 Arreglado: el segundo factor de admin se podía registrar por primera vez con solo el código del mail, y una cuenta admin de Joaquín no tenía factor (quien entrara a ese mail quedaba admin). Ahora cada admin opera solo con el factor habilitado para su cuenta (`profiles.admin_factor_id`, se habilita por SQL). Habilitados los de Andre y la cuenta de Joaquín que usa; la otra quedó sin poderes de admin.
+- Arreglado (pagos): un reclamo USDT ya no puede quedarse con la transferencia de otra reserva. Se rechaza si el cron la asoció por los centavos a otra reserva o fue descartada, y una reserva vencida sirve para reclamar 7 días. El panel muestra la fecha de la transferencia, la de la reserva y un aviso si es de otra reserva.
+
+**Pendiente para la próxima sesión:**
+- Push para que el panel nuevo llegue a sere.ar (las funciones ya están desplegadas). Entrar al panel y ver que todo cargue.
+- Si un admin cambia de teléfono: borrar su factor, que registre uno nuevo en sere.ar/admin, y habilitarlo por SQL después de confirmar con la persona.
+
 ## 2026-10-28 — Andre (Claude · auditoría de seguridad, tanda 4: funciones del servidor)
 
 **Tocado:** `supabase/functions/paypal-webhook/index.ts` (desplegada), `supabase/functions/mp-oauth-callback/index.ts` (desplegada), `supabase/migrations/20261028030000_mp_una_cuenta_por_profesional.sql` (nueva), `SCHEMA.md`.

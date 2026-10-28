@@ -86,6 +86,22 @@ serve(async (req) => {
       : json({ error: 'Ese comprobante ya fue presentado' }, 409)
   }
 
+  // 🔒 Auditoría 28/10/2026: las transferencias a la billetera son públicas, y el
+  // primer comprobante que nombra una se queda con ella. Sin estos cortes,
+  // alguien con una reserva vieja podía reclamar la transferencia de otra
+  // persona antes que ella.
+  //   · Una reserva vencida sirve para reclamar solo durante 7 días.
+  //   · Si el cron ya asoció la transferencia a OTRA reserva por los centavos
+  //     (`booking_sugerida`), o el equipo la descartó, no se acepta.
+  if (booking.status === 'cancelada' && Date.parse(booking.created_at as string) < Date.now() - 7 * 86400000) {
+    return json({ error: 'Esta reserva venció hace más de una semana. Escribinos a hola@sere.ar con el comprobante.' }, 409)
+  }
+  const { data: vista } = await admin
+    .from('usdt_transfers').select('booking_sugerida, estado').eq('tx_id', txId).maybeSingle()
+  if (vista?.estado === 'descartada' || (vista?.booking_sugerida && vista.booking_sugerida !== booking.id)) {
+    return json({ error: 'Esa transferencia corresponde a otra reserva. Si es tuya, escribinos a hola@sere.ar.' }, 409)
+  }
+
   // ¿Existe esa transferencia, confirmada, en USDT de verdad y hacia nuestra billetera?
   const desde = Date.parse(booking.created_at as string) - 5 * 60 * 1000
   const url = `https://api.trongrid.io/v1/accounts/${USDT_WALLET}/transactions/trc20`

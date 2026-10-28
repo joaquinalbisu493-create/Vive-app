@@ -242,6 +242,17 @@ serve(async (req) => {
     return json({ error: 'falta el segundo factor: entrá a sere.ar/admin y confirmá el código de tu app de autenticación', code: 'aal2_requerido' }, 403)
   }
 
+  // 4) ¿Con el factor HABILITADO para esta cuenta? (28/10/2026) El primer
+  //    factor se registra desde una sesión que solo pasó por el mail, así que
+  //    aal2 solo no prueba nada. `is_admin()` exige que la sesión haya subido
+  //    con `profiles.admin_factor_id`, que se habilita por SQL (migración
+  //    20261028040000). Se pregunta con el token de quien llama.
+  const { data: esAdmin } = await asCaller.rpc('is_admin')
+  if (esAdmin !== true) {
+    console.warn(`[admin-actions] admin sin factor habilitado: ${user.id}`)
+    return json({ error: 'tu segundo factor todavía no está habilitado como admin: pedíselo a otro admin', code: 'factor_no_habilitado' }, 403)
+  }
+
   const actor = { adminId: user.id, adminEmail: user.email ?? null }
 
   let body: any
@@ -1267,7 +1278,7 @@ serve(async (req) => {
     case 'list_usdt_review': {
       const { data: claims, error: claimsErr } = await admin
         .from('usdt_claims')
-        .select('id, booking_id, user_id, tx_id, amount, from_address, block_time, created_at, bookings!inner(id, coach_id, usdt_amount, status, payment_status, coach_name, scheduled_date, scheduled_time, refund_address, refund_network)')
+        .select('id, booking_id, user_id, tx_id, amount, from_address, block_time, created_at, bookings!inner(id, coach_id, usdt_amount, status, payment_status, coach_name, scheduled_date, scheduled_time, refund_address, refund_network, created_at)')
         .eq('estado', 'pendiente')
         .order('created_at', { ascending: true })
         .limit(100)
@@ -1302,6 +1313,10 @@ serve(async (req) => {
             reservaVencida: b?.status === 'cancelada',
             coachName: b?.coach_name ?? null, fecha: b?.scheduled_date ?? null, hora: b?.scheduled_time ?? null,
             refundAddress: b?.refund_address ?? null,
+            // Para comparar: una transferencia muy posterior a la reserva es
+            // sospechosa (auditoría 28/10/2026).
+            reservaCreada: b?.created_at ?? null,
+            otraReserva: (transfers ?? []).find((t: any) => t.tx_id === c.tx_id && t.booking_sugerida && t.booking_sugerida !== c.booking_id)?.booking_sugerida ?? null,
           }
         }),
         // Una transferencia que ya tiene un comprobante en revisión se resuelve
@@ -1348,6 +1363,13 @@ serve(async (req) => {
       // Una transferencia paga una sola reserva.
       const { data: usada } = await admin.from('bookings').select('id').eq('payment_id', claim.tx_id).limit(1)
       if (usada?.length) return json({ error: 'esa transferencia ya pagó otra reserva' }, 409)
+      // 🔒 28/10/2026: si el cron la asoció por los centavos a OTRA reserva, es
+      // de esa persona y no de quien la reclamó (las transferencias son públicas).
+      const { data: vista } = await admin
+        .from('usdt_transfers').select('booking_sugerida, estado').eq('tx_id', claim.tx_id).maybeSingle()
+      if (vista?.estado === 'descartada' || (vista?.booking_sugerida && vista.booking_sugerida !== claim.booking_id)) {
+        return json({ error: 'esa transferencia está asociada a otra reserva (o fue descartada): rechazá el comprobante' }, 409)
+      }
 
       const { data: booking, error: bookingErr } = await admin
         .from('bookings').select('*').eq('id', claim.booking_id).maybeSingle()
