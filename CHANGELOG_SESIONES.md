@@ -1,3 +1,26 @@
+## 2026-10-28 — Joaquín (Claude · rediseño de presentación de las 4 pantallas del coach)
+
+**Tocado:** `screens/CoachChatsScreen.tsx`, `CoachHomeScreen.tsx`, `CoachResourcesScreen.tsx`, `CoachReservasScreen.tsx`; nuevo `lib/avatarColor.ts`. Solo presentación — no cambia el modelo de datos.
+
+**Parte 0 (lo crítico):**
+- **0.1 PRIVACIDAD (Tus personas):** la fila ya NO muestra el contenido del último mensaje. Antes `armarPreview` desencriptaba el texto del mensaje y el motivo de la reserva (legible de reojo). Se eliminó `armarPreview` y el import de `decryptMessage` — ni se desencripta en memoria. Cada fila muestra solo gestión: nombre, "N sesiones · última hace X", próxima sesión, y badge de sin-leer (no hay count por sala, solo booleano → badge). `decryptMessage` solo vivía en esta pantalla (verificado).
+- **0.2 data de prueba:** recursos `[SEED] …` filtrados en Tus recursos; cuentas borradas ("Usuario eliminado") no se listan en Tus personas.
+
+**Color (vivo pero ordenado — pedido de Joaquín):**
+- Nuevo **`lib/avatarColor.ts`**: tono determinístico por persona, 5 gradientes (terracota/verde/azulado/violáceo/arena) derivados de la paleta. Avatares sin foto pasan de gris a color. Usado en Inicio y Tus personas.
+- **Lavados por pantalla** (`ToolWash`): Inicio salvia, Recursos durazno, Personas azulado, Reservas arena.
+- **Inicio:** stats "Lo que construiste" → dos bloques con lavado y número en color (terracota/verde); "hoy" en la tira → círculo terracota sólido; "Proponer horario" → texto terracota con flecha; íconos de nav tintados (visibilidad azulado, cómo funciona durazno).
+- **Recursos:** ícono de formato 34px con el gradiente del formato; mancha durazno en "Este mes".
+- **Reservas:** barra salvia de 3px por día (apagada en días sin atención).
+
+**Estructura (las 4):** títulos de sección → eyebrow (9.5px uppercase apagado); listas (personas/recursos) → filas con línea de pelo en vez de card-por-ítem; un solo relleno fuerte por pantalla. En Reservas: "Editar disponibilidad" → "Editar" en el eyebrow; "00:00 – 23:00" → "Todo el día"; link del final → fila con ícono. En Recursos: "Recomendar" sale de cada fila; badge solo en revisión.
+
+**Analítica:** `coach_propuso_horario {dias_desde_ultima_sesion}` (Inicio), `coach_abrio_persona` (Tus personas). `coach_subio_recurso` ya existía como `recurso_subido {formato}` — no se duplicó.
+
+**Confirmaciones:** (1) no queda ningún preview de contenido de mensajes (solo gestión); (2) no se ven datos de prueba ([SEED] ni "Usuario eliminado"); (3) todos los colores salen de tokens/paleta existente (arena derivado del tono arena del avatar). tsc 0 en todo.
+
+**Pendiente:** verlo en device las 4 (Joaquín ya aprobó el nivel de color en Tus personas). La tipografía es la misma constante compartida (`ViveFonts`), sin tamaños nuevos.
+
 ## 2026-10-27 — Andre (Claude · cambiar el mail, por soporte)
 
 **Tocado:** `supabase/functions/admin-actions/index.ts` (v56, desplegada), `web/admin/index.html`, `web/admin/admin.js`, `lib/contacto.ts`, `screens/ProfileOwnScreen.tsx`, `screens/CoachSettingsScreen.tsx`.
