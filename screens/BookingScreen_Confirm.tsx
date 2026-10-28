@@ -611,6 +611,10 @@ export default function BookingScreen_Confirm() {
         }
         // Tope de reservas por hora (`scripts/add-rate-limits.sql`): no es una falla.
         if (esTopeDeIntentos(bookingError)) throw new Error(TEXTO_TOPE);
+        // Tope de 3 reservas sin pagar a la vez (20261028010000).
+        if (bookingError?.message?.includes('reservas_sin_pagar')) {
+          throw new Error('Tenés reservas sin pagar. Terminá de pagar una o esperá una hora para reservar otra.');
+        }
         await logError('BookingConfirm: insert booking failed', bookingError);
         throw new Error('No se pudo guardar la reserva. Intentalo de nuevo');
       }

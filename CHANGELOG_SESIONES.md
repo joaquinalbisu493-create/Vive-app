@@ -1,3 +1,18 @@
+## 2026-10-28 — Andre (Claude · auditoría de seguridad, tanda 3)
+
+**Tocado:** `supabase/migrations/20261028010000_tope_reservas_sin_pagar.sql` (nueva), `supabase/functions/web-book/index.ts` (desplegada), `screens/BookingScreen_Confirm.tsx`, `app/formato.tsx`, `SCHEMA.md`.
+
+**Resumen:**
+- Tercera tanda de la skill (informe fuera del repo: `~/security-audit-skill/vive-app/run-3/REPORT.md`): los parámetros de link que faltaban (búsqueda → tema que ve el profesional, paquete, onboarding, conexiones, pagos, legales, inicio del profesional, registro, recursos) y revalidación de los arreglos de la tanda 2 y del cambio de mail por el panel. Todo eso dio bien salvo dos cosas.
+- Arreglado: el vencimiento de 60 minutos de la tanda 2 no alcanzaba, porque una cuenta gratis volvía a reservar cada hora y tapaba ~12 horarios del link público. Ahora una cuenta puede tener como máximo 3 reservas sin pagar a la vez (app y web).
+- Arreglado: `viveapp://formato?formato=<texto>` mostraba cualquier texto como título de la biblioteca; ahora solo acepta audio, podcast, video y lectura.
+- Base: una migración APLICADA y PROBADA con rollback en producción. SCHEMA.md actualizado.
+
+**Pendiente para la próxima sesión:**
+- Proceso de soporte para cambiar el mail: antes de cambiarlo, escribir al mail VIEJO y esperar respuesta desde ahí (el remitente de un mail se falsifica). El cambio deja vivas las sesiones abiertas y el ingreso con Google/Apple.
+- Decisión de producto: hoy una persona sin reservas puede abrir una sala vacía con cualquier profesional verificado (no puede escribir, pero aparece en su lista de chats). ¿Exigir una reserva?
+- Mejoras opcionales anotadas en el informe (tema solo de la lista de puertas, nombre del paquete desde la base, etc.).
+
 ## 2026-10-27 — Andre (Claude · cambiar el mail, por soporte)
 
 **Tocado:** `supabase/functions/admin-actions/index.ts` (v56, desplegada), `web/admin/index.html`, `web/admin/admin.js`, `lib/contacto.ts`, `screens/ProfileOwnScreen.tsx`, `screens/CoachSettingsScreen.tsx`.

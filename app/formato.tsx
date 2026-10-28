@@ -89,10 +89,14 @@ export default function FormatoScreen() {
   // auto-scroll, así que no hay transición que gatear — se respeta por
   // construcción. Si se sumara alguna animación, gatearla con useReducedMotion.
   const params = useLocalSearchParams<{ formato?: string }>();
-  const formato = (Array.isArray(params.formato) ? params.formato[0] : params.formato) ?? 'audio';
+  const pedido = Array.isArray(params.formato) ? params.formato[0] : params.formato;
+  // 🔒 Solo los cuatro formatos conocidos: cualquier link `viveapp://formato`
+  // elige el parámetro, y antes un valor desconocido se mostraba tal cual como
+  // título de la pantalla (auditoría 28/10/2026). Lo demás cae en audio.
+  const formato = pedido && Object.hasOwn(ResourceFormatLabels, pedido) ? pedido : 'audio';
 
   const color = ResourceFormatColors[formato] ?? TERRACOTTA;
-  const label = ResourceFormatLabels[formato] ?? formato;
+  const label = ResourceFormatLabels[formato];
 
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);

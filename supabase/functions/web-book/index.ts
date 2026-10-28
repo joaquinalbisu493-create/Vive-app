@@ -205,6 +205,11 @@ serve(async (req) => {
     .single()
 
   if (errBooking || !booking) {
+    // Tope de 3 reservas sin pagar a la vez (migración 20261028010000). 409 para
+    // que la página muestre el texto en vez de un error genérico.
+    if (errBooking?.message?.includes('reservas_sin_pagar')) {
+      return json({ error: 'Tenés reservas sin pagar. Terminá de pagar una o esperá una hora para reservar otra.' }, 409)
+    }
     console.error('[web-book] no se pudo crear la reserva:', errBooking?.message)
     return json({ error: 'no se pudo crear la reserva' }, 500)
   }
