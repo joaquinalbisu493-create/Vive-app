@@ -150,8 +150,12 @@
 
 - **CoachProfile — SurfaceCard completo (con grano):** Joaquín pidió la conversión estructural real. Se convirtieron las **13 cards** del perfil a `<SurfaceCard>` de verdad (grano 3% + sombra + borde) vía un componente local **`PCard`** (SurfaceCard subtle; padding/layout en `innerStyle`, margen en `wrapStyle`; las 2 pulsables envueltas en `ScaleCard`). Reemplaza la sombra-vía-estilo anterior (se removió `CARD_SHADOW`). Para ubicar los cierres que matcheaban cada apertura se usó un contador de profundidad de tags. tsc 0 errores.
 
+- **SurfaceCard en las pantallas frecuentes + componente compartido `CoachCard`:** se generalizó el `PCard` de Profile en `components/ui/CoachCard.tsx` (SurfaceCard subtle con `bg`/`radius`/`onPress`). Se convirtieron las **cards de contenido** de: `CoachNotifications` (item), `CoachAvailability` (slotsCard), `CoachWeeklyPattern` (dayCard), `CoachVisibility` (doorCard, emptyCard, list, altCard pulsable), `CoachPayout` (desgloseCard). 
+  - **Hallazgo:** la mayoría de las "cards" de estas pantallas en realidad son **chips / opciones seleccionables / inputs / filas con estado** (Topics, Enfoque, y los method/net rows de Payout) — NO son cards de contenido y NO se tocaron (quedan planas con el borde olivo, que es lo correcto). `CoachCalendario` no tenía cards (solo botones).
+  - **Se dejaron con color propio a propósito:** `warnCard` de Payout (alerta ámbar) y `hero` de Visibility (verde oscuro con glow) — neutralizarlas a SurfaceCard habría borrado su identidad.
+
 **Pendiente / opcional:**
-- Nada grande abierto en la modernización del coach. (Reservas quedó con su header condicional a propósito.)
+- Nada grande abierto en la modernización del coach. (Reservas quedó con su header condicional a propósito; chips/inputs/filas seleccionables quedan planos por diseño.)
 
 ## 2026-10-22 — Andre (Claude · tablero de administración en sere.ar/admin)
 
