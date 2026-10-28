@@ -1,6 +1,6 @@
 ## 2026-10-28 — Andre (Claude · auditoría de seguridad, tanda 3)
 
-**Tocado:** `supabase/migrations/20261028010000_tope_reservas_sin_pagar.sql` (nueva), `supabase/functions/web-book/index.ts` (desplegada), `screens/BookingScreen_Confirm.tsx`, `app/formato.tsx`, `SCHEMA.md`.
+**Tocado:** `supabase/migrations/20261028010000_tope_reservas_sin_pagar.sql` (nueva), `supabase/functions/web-book/index.ts` (desplegada), `screens/BookingScreen_Confirm.tsx`, `app/formato.tsx`, `screens/CoachChatsScreen.tsx`, `SCHEMA.md`.
 
 **Resumen:**
 - Tercera tanda de la skill (informe fuera del repo: `~/security-audit-skill/vive-app/run-3/REPORT.md`): los parámetros de link que faltaban (búsqueda → tema que ve el profesional, paquete, onboarding, conexiones, pagos, legales, inicio del profesional, registro, recursos) y revalidación de los arreglos de la tanda 2 y del cambio de mail por el panel. Todo eso dio bien salvo dos cosas.
@@ -10,7 +10,7 @@
 
 **Pendiente para la próxima sesión:**
 - Proceso de soporte para cambiar el mail: antes de cambiarlo, escribir al mail VIEJO y esperar respuesta desde ahí (el remitente de un mail se falsifica). El cambio deja vivas las sesiones abiertas y el ingreso con Google/Apple.
-- Decisión de producto: hoy una persona sin reservas puede abrir una sala vacía con cualquier profesional verificado (no puede escribir, pero aparece en su lista de chats). ¿Exigir una reserva?
+- ✅ Decidido por Andre: la lista de chats del profesional muestra solo a quien tuvo una reserva confirmada, hecha o pagada (mismo criterio que para escribir). Las salas vacías se siguen creando (la reserva necesita la sala antes), pero no se ven. Llega con la próxima compilación.
 - Mejoras opcionales anotadas en el informe (tema solo de la lista de puertas, nombre del paquete desde la base, etc.).
 
 ## 2026-10-27 — Andre (Claude · cambiar el mail, por soporte)

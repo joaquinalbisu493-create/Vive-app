@@ -266,16 +266,27 @@ export default function CoachChatsScreen() {
       .from('coaches').select('id').eq('profile_id', user.id).maybeSingle();
 
     const rel = new Map<string, { sesiones: number; ultimaIso: string | null; proximaIso: string | null }>();
+    // 🔒 Quién llegó a reservar de verdad (confirmada, hecha o pagada). La sala
+    // se crea antes que la reserva (la reserva guarda `sala_id`), así que
+    // cualquiera puede abrir una vacía desde un perfil o reservar sin pagar;
+    // esas no se listan, para que nadie le llene la lista al profesional con
+    // nombres o fotos a elección (auditoría 28/10/2026). Mismo criterio que
+    // `messages_insert_participantes` para poder escribir.
+    const conReservaReal = new Set<string>();
     if (coachRow?.id) {
       const hoy = todayInAr();
       const { data: bks } = await supabase
         .from('bookings')
-        .select('user_id, scheduled_date, status')
+        .select('user_id, scheduled_date, status, payment_status')
         .eq('coach_id', coachRow.id)
         .in('user_id', userIds);
 
       for (const b of bks ?? []) {
         const uid = b.user_id as string;
+        if (b.status === 'confirmada' || b.status === 'completada'
+            || ['aprobado', 'reembolso_pendiente', 'reembolsado', 'contracargo'].includes(b.payment_status as string)) {
+          conReservaReal.add(uid);
+        }
         const fecha = b.scheduled_date as string;
         const cur = rel.get(uid) ?? { sesiones: 0, ultimaIso: null, proximaIso: null };
         if (b.status === 'completada') {
@@ -291,7 +302,7 @@ export default function CoachChatsScreen() {
 
     const thirtyDaysAgo = Date.now() - 30 * 86400000;
 
-    const results: ChatRoom[] = lasts.map(l => {
+    const results: ChatRoom[] = lasts.filter(l => conReservaReal.has(l.userId)).map(l => {
       const name = profileMap[l.userId]?.name ?? 'Usuario';
       const m = (l.lastMsg as UltimoMsg | null) ?? null;
       const meta = (m?.metadata as ResourceMeta | null) ?? null;
