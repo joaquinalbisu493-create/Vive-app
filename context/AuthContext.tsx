@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useRef, useState, useEffect } from 'react';
 import { User } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
+import { borrarSesionLocal, supabase } from '@/lib/supabase';
 import { pedirCaptchaToken } from '@/lib/captcha';
 import { necesitaVerificarMail } from '@/lib/emailVerificado';
 import { cancelAllResourceReminders } from '@/lib/resourceReminders';
@@ -662,7 +662,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error) console.warn('[auth] no se pudo retirar el push token al cerrar sesión:', error.message);
     }
     if (user) await limpiarDispositivo(user.id);
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+    // Sin red, el SDK no borra la sesión guardada: se borra a mano.
+    if (error) {
+      console.warn('[auth] signOut sin servidor, se borra la sesión local:', error.message);
+      await borrarSesionLocal();
+    }
     setUser(null);
     applyProfile({ role: "user", isAdmin: false, name: null });
   }

@@ -1300,6 +1300,29 @@ serve(async (req) => {
         if (b?.status === 'cancelada') reactivables.set(c.id, (await turnoSigueLibre(admin, b)).libre)
       }
 
+      // 🔒 29/10/2026: una transferencia pública sin dueño claro la puede reclamar
+      // cualquiera con una reserva USDT. No hay forma de atar la billetera de
+      // origen a una persona, así que se le muestra al admin con qué reservas
+      // coincide el monto (exacto o menos 1 a 3 USDT, la comisión fija de los
+      // exchanges): si coincide con la de OTRA persona y no con la de quien
+      // reclama, casi seguro no es suya.
+      const coincide = (recibido: number, esperado: number | null) =>
+        esperado != null && [0, 1, 2, 3].some(k => Math.abs(esperado - k - recibido) < 0.005)
+      const coincidencias = new Map<string, { propia: boolean; otras: number }>()
+      for (const c of (claims ?? []) as any[]) {
+        const b = Array.isArray(c.bookings) ? c.bookings[0] : c.bookings
+        const recibido = Number(c.amount)
+        const desde = new Date(Date.parse(c.block_time) - 14 * 86400000).toISOString()
+        const { data: candidatas } = await admin.from('bookings')
+          .select('id, usdt_amount').eq('payment_provider', 'usdt').neq('id', c.booking_id)
+          .gte('created_at', desde).lte('created_at', c.block_time)
+          .gte('usdt_amount', recibido - 0.005).lte('usdt_amount', recibido + 3.005).limit(20)
+        coincidencias.set(c.id, {
+          propia: coincide(recibido, b?.usdt_amount != null ? Number(b.usdt_amount) : null),
+          otras: (candidatas ?? []).filter((x: any) => coincide(recibido, Number(x.usdt_amount))).length,
+        })
+      }
+
       return json({
         result: 'ok',
         claims: (claims ?? []).map((c: any) => {
@@ -1316,6 +1339,8 @@ serve(async (req) => {
             // Para comparar: una transferencia muy posterior a la reserva es
             // sospechosa (auditoría 28/10/2026).
             reservaCreada: b?.created_at ?? null,
+            montoCoincidePropia: coincidencias.get(c.id)?.propia ?? false,
+            montoCoincideOtras: coincidencias.get(c.id)?.otras ?? 0,
             otraReserva: (transfers ?? []).find((t: any) => t.tx_id === c.tx_id && t.booking_sugerida && t.booking_sugerida !== c.booking_id)?.booking_sugerida ?? null,
           }
         }),

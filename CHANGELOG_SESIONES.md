@@ -1,3 +1,19 @@
+## 2026-10-29 — Andre (Claude · auditoría de seguridad, tanda 8: revalidación de los arreglos del 28/10)
+
+**Tocado:** `lib/supabase.ts`, `context/AuthContext.tsx`, `lib/sessionNotes.ts`, `supabase/migrations/20261029010000_rechazadas_cuentan_como_sin_pagar.sql` (nueva, aplicada), `supabase/functions/admin-actions/index.ts` (desplegada), `web/admin/admin.js`, `SCHEMA.md`.
+
+**Resumen:**
+- Revisión de los arreglos de ayer (informe: `~/security-audit-skill/vive-app/run-8/REPORT.md`, parcial por el límite de uso). La mayoría se sostiene; tres quedaron incompletos y se corrigieron:
+- 🔴 Cerrar sesión sin conexión (arreglo de ayer): la pantalla decía "cerrada" pero auth-js no borra la sesión si no llega al servidor, y al reabrir la app la persona seguía adentro. Ahora se borra la sesión del teléfono a mano (`borrarSesionLocal`).
+- Agenda pública: una reserva con el pago rechazado por MP escapaba del tope de 3 y del vencimiento de 60 minutos. Ahora cuenta y vence (probado con rollback).
+- Reclamos USDT de transferencias "sin dueño": no hay forma de saber de quién es una transferencia pública. El panel ahora avisa si el monto coincide con la reserva de quien reclama o con la de otra persona, y pide la captura del retiro antes de aprobar.
+- Además: una nota de sesión que no se puede abrir ya no se muestra editable (guardar pisaba la nota real). Librerías: las vulnerabilidades conocidas están casi todas en herramientas de compilación que no viajan en la app.
+
+**Pendiente para la próxima sesión:**
+- Probar en el iPhone: modo avión, cerrar sesión, cerrar la app del todo y reabrir: tiene que pedir entrar.
+- Confirmar que la app de PayPal tiene el permiso de disputas (si no, las disputas no se anotan).
+- El exportador de datos de una persona (pedido por ley) todavía no descifra las notas de sesión.
+
 ## 2026-10-28 — Andre (Claude · notas de sesión cifradas y mejoras de la auditoría)
 
 **Tocado:** `lib/sessionNotes.ts`, `lib/wellbeingCrypto.ts`, `screens/SalaScreen.tsx`, `supabase/functions/wellbeing-key/index.ts` (desplegada), `context/AuthContext.tsx`, `web/sala/index.html`, `supabase/migrations/20261028070000_documentos_aprobados_no_se_reemplazan.sql` (nueva, aplicada), `__tests__/wellbeingCrypto.test.ts`, `SCHEMA.md`.

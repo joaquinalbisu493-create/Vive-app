@@ -1348,6 +1348,8 @@ async function cargarUsdt() {
       <div class="suave"><code>${esc(c.txId)}</code><br>desde <code>${esc(c.desde)}</code></div>
       <div class="suave datos">Transferencia: ${c.fechaTransferencia ? esc(new Date(c.fechaTransferencia).toLocaleString('es-AR')) : 'sin fecha'} · reserva creada: ${c.reservaCreada ? esc(new Date(c.reservaCreada).toLocaleString('es-AR')) : 'sin fecha'}</div>
       ${c.otraReserva ? `<p class="error">⚠️ Por los centavos, esta transferencia corresponde a OTRA reserva. No la apruebes.</p>` : ''}
+      ${!c.montoCoincidePropia && c.montoCoincideOtras > 0 ? `<p class="error">⚠️ El monto no coincide con la reserva de quien reclama y sí con ${esc(String(c.montoCoincideOtras))} reserva(s) de otras personas. Antes de aprobar, pedile a quien reclama la captura del retiro desde su billetera o exchange con este código de transacción.</p>` : ''}
+      ${!c.montoCoincidePropia && !c.montoCoincideOtras ? `<p class="suave">El monto no coincide con ninguna reserva. Antes de aprobar, pedile la captura del retiro con este código de transacción.</p>` : ''}
       <div class="formulario-linea">
         <input id="nota-${c.id}" placeholder="Motivo (obligatorio para rechazar)">
         <div class="botonera">

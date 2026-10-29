@@ -108,3 +108,17 @@ export async function usuarioActualId(): Promise<string | null> {
   const { data: { session } } = await supabase.auth.getSession();
   return session?.user?.id ?? null;
 }
+/**
+ * 🔒 Borra la sesión guardada en ESTE teléfono sin depender de la red
+ * (29/10/2026). `supabase.auth.signOut()` primero avisa al servidor y, si no
+ * hay conexión, vuelve con error SIN borrar nada (auth-js `_signOut`, cualquier
+ * `scope`): la pantalla mostraba la sesión cerrada y al reabrir la app la
+ * persona seguía adentro. La clave es la que arma supabase-js por defecto.
+ */
+export async function borrarSesionLocal(): Promise<void> {
+  const clave = `sb-${new URL(supabaseUrl).hostname.split('.')[0]}-auth-token`;
+  await Promise.all([
+    Promise.resolve(authStorage.removeItem(clave)),
+    Promise.resolve(authStorage.removeItem(`${clave}-code-verifier`)),
+  ]).catch(() => {});
+}

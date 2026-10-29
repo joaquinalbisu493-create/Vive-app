@@ -3,7 +3,7 @@
 // suyas, el usuario solo lee las compartidas. Ver project_vive_anti_disintermediation.
 
 import { supabase } from '@/lib/supabase';
-import { aadDeNotas, cifrar, claveDeNotas, claveDeNotasSiSePuede, descifrar } from '@/lib/wellbeingCrypto';
+import { aadDeNotas, cifrar, claveDeNotas, claveDeNotasSiSePuede, descifrar, NO_SE_PUDO_ABRIR } from '@/lib/wellbeingCrypto';
 
 // 🔒 Cifradas desde el 28/10/2026, con la clave del par (cliente, profesional)
 // que da `wellbeing-key`: son información clínica y antes estaban en texto
@@ -37,10 +37,14 @@ export async function getSessionNotes(bookingId: string): Promise<NotasDeSesion 
   const rows = data ?? [];
   const privada = rows.find(r => !r.shared);
   const compartida = rows.find(r => r.shared);
-  return {
+  const notas = {
     privateNote: privada ? await abrir(privada.content as string, privada.user_id as string, privada.coach_id as string) : '',
     sharedNote: compartida ? await abrir(compartida.content as string, compartida.user_id as string, compartida.coach_id as string) : '',
   };
+  // Una nota que no se pudo abrir NO va al formulario como texto: guardar
+  // pisaría la nota real con el aviso de error. Mismo trato que un error de red.
+  if (notas.privateNote === NO_SE_PUDO_ABRIR || notas.sharedNote === NO_SE_PUDO_ABRIR) return null;
+  return notas;
 }
 
 /** Qué notas hay que escribir: solo las que el coach cambió respecto de lo que
