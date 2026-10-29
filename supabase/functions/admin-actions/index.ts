@@ -203,6 +203,31 @@ async function notifyProfile(
   }
 }
 
+// Con qué reservas USDT coincide el monto de una transferencia: exacto o menos
+// 1 a 3 USDT (la comisión fija de los exchanges). `propia` es la de quien
+// reclama; `otras`, reservas de los 14 días previos de cualquier otra persona.
+async function coincidenciasDeMonto(
+  admin: ReturnType<typeof createClient>,
+  claim: { booking_id: string; user_id: string; amount: number | string; block_time: string },
+  esperadoPropio: number | string | null,
+): Promise<{ propia: boolean; otras: number }> {
+  const recibido = Number(claim.amount)
+  const coincide = (esperado: number | string | null) =>
+    esperado != null && [0, 1, 2, 3].some(k => Math.abs(Number(esperado) - k - recibido) < 0.005)
+  const desde = new Date(Date.parse(claim.block_time) - 14 * 86400000).toISOString()
+  const { data: candidatas } = await admin.from('bookings')
+    // De OTRAS personas y todavía sin un pago acreditado (una reserva ya pagada
+    // no puede ser la dueña de esta transferencia).
+    .select('id, usdt_amount').eq('payment_provider', 'usdt').neq('id', claim.booking_id)
+    .neq('user_id', claim.user_id).is('payment_id', null)
+    .gte('created_at', desde).lte('created_at', claim.block_time)
+    .gte('usdt_amount', recibido - 0.005).lte('usdt_amount', recibido + 3.005).limit(20)
+  return {
+    propia: coincide(esperadoPropio),
+    otras: (candidatas ?? []).filter((x: { usdt_amount: number | null }) => coincide(x.usdt_amount)).length,
+  }
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: cors })
 
@@ -1306,21 +1331,10 @@ serve(async (req) => {
       // coincide el monto (exacto o menos 1 a 3 USDT, la comisión fija de los
       // exchanges): si coincide con la de OTRA persona y no con la de quien
       // reclama, casi seguro no es suya.
-      const coincide = (recibido: number, esperado: number | null) =>
-        esperado != null && [0, 1, 2, 3].some(k => Math.abs(esperado - k - recibido) < 0.005)
       const coincidencias = new Map<string, { propia: boolean; otras: number }>()
       for (const c of (claims ?? []) as any[]) {
         const b = Array.isArray(c.bookings) ? c.bookings[0] : c.bookings
-        const recibido = Number(c.amount)
-        const desde = new Date(Date.parse(c.block_time) - 14 * 86400000).toISOString()
-        const { data: candidatas } = await admin.from('bookings')
-          .select('id, usdt_amount').eq('payment_provider', 'usdt').neq('id', c.booking_id)
-          .gte('created_at', desde).lte('created_at', c.block_time)
-          .gte('usdt_amount', recibido - 0.005).lte('usdt_amount', recibido + 3.005).limit(20)
-        coincidencias.set(c.id, {
-          propia: coincide(recibido, b?.usdt_amount != null ? Number(b.usdt_amount) : null),
-          otras: (candidatas ?? []).filter((x: any) => coincide(recibido, Number(x.usdt_amount))).length,
-        })
+        coincidencias.set(c.id, await coincidenciasDeMonto(admin, c, b?.usdt_amount ?? null))
       }
 
       return json({
@@ -1367,7 +1381,7 @@ serve(async (req) => {
       if (!body.approve && !motivo) return json({ error: 'hace falta un motivo para rechazar' }, 400)
 
       const { data: claim, error: claimErr } = await admin
-        .from('usdt_claims').select('id, booking_id, tx_id, amount, block_time, estado').eq('id', body.claim_id).maybeSingle()
+        .from('usdt_claims').select('id, booking_id, user_id, tx_id, amount, block_time, estado').eq('id', body.claim_id).maybeSingle()
       if (claimErr) return json({ error: claimErr.message }, 500)
       if (!claim || claim.estado !== 'pendiente') return json({ error: 'ese comprobante no está pendiente' }, 404)
 
@@ -1401,6 +1415,14 @@ serve(async (req) => {
       if (bookingErr) return json({ error: bookingErr.message }, 500)
       if (!booking || booking.payment_provider !== 'usdt' || booking.payment_status !== 'pendiente') {
         return json({ error: 'la reserva ya no está esperando un pago en USDT' }, 409)
+      }
+      // 🔒 29/10/2026 (revalidación): si el monto no coincide con la reserva de
+      // quien reclama, o coincide TAMBIÉN con la de otra persona, no se aprueba
+      // sin que el admin confirme que vio la captura del retiro con este código.
+      // Antes el aviso era solo visual, y se ocultaba si coincidían las dos.
+      const coinc = await coincidenciasDeMonto(admin, claim, booking.usdt_amount)
+      if ((!coinc.propia || coinc.otras > 0) && body.comprobante_verificado !== true) {
+        return json({ error: 'confirmá que viste la captura del retiro con este código de transacción', code: 'falta_comprobante' }, 409)
       }
 
       const vencida = booking.status === 'cancelada'

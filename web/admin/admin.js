@@ -1348,7 +1348,7 @@ async function cargarUsdt() {
       <div class="suave"><code>${esc(c.txId)}</code><br>desde <code>${esc(c.desde)}</code></div>
       <div class="suave datos">Transferencia: ${c.fechaTransferencia ? esc(new Date(c.fechaTransferencia).toLocaleString('es-AR')) : 'sin fecha'} · reserva creada: ${c.reservaCreada ? esc(new Date(c.reservaCreada).toLocaleString('es-AR')) : 'sin fecha'}</div>
       ${c.otraReserva ? `<p class="error">⚠️ Por los centavos, esta transferencia corresponde a OTRA reserva. No la apruebes.</p>` : ''}
-      ${!c.montoCoincidePropia && c.montoCoincideOtras > 0 ? `<p class="error">⚠️ El monto no coincide con la reserva de quien reclama y sí con ${esc(String(c.montoCoincideOtras))} reserva(s) de otras personas. Antes de aprobar, pedile a quien reclama la captura del retiro desde su billetera o exchange con este código de transacción.</p>` : ''}
+      ${c.montoCoincideOtras > 0 ? `<p class="error">⚠️ El monto ${c.montoCoincidePropia ? 'coincide con esta reserva pero TAMBIÉN' : 'no coincide con la reserva de quien reclama y sí'} con ${esc(String(c.montoCoincideOtras))} reserva(s) de otras personas. Antes de aprobar, pedile a quien reclama la captura del retiro desde su billetera o exchange con este código de transacción.</p>` : ''}
       ${!c.montoCoincidePropia && !c.montoCoincideOtras ? `<p class="suave">El monto no coincide con ninguna reserva. Antes de aprobar, pedile la captura del retiro con este código de transacción.</p>` : ''}
       <div class="formulario-linea">
         <input id="nota-${c.id}" placeholder="Motivo (obligatorio para rechazar)">
@@ -1604,9 +1604,12 @@ $('vistaPlata').addEventListener('click', async (e) => {
       : c.reservaVencida ? '¿Aprobar para reintegro?\n\nLa reserva venció esperando el pago. No se reactiva: queda en reembolsos pendientes para que le devuelvas el dinero.'
       : `¿Acreditar el pago?\n\nSe confirma la sesión y se avisa al profesional.${diferencia}`;
     if (!confirm(pregunta)) return;
+    // Sin coincidencia clara, el servidor pide confirmar que se vio la captura.
+    const dudoso = !c.montoCoincidePropia || c.montoCoincideOtras > 0;
+    if (d.modo !== 'rechazar' && dudoso && !confirm(`¿Viste la captura del retiro, desde la billetera o el exchange de quien reclama, con este código de transacción?\n\n${c.txId}`)) return;
     t.disabled = true;
     try {
-      const r = await accionAdmin({ action: 'resolve_usdt_claim', claim_id: c.id, approve: d.modo !== 'rechazar', motivo: motivo || undefined, reactivar: d.modo === 'reactivar' || undefined });
+      const r = await accionAdmin({ action: 'resolve_usdt_claim', claim_id: c.id, approve: d.modo !== 'rechazar', motivo: motivo || undefined, reactivar: d.modo === 'reactivar' || undefined, comprobante_verificado: (d.modo !== 'rechazar' && dudoso) || undefined });
       await Promise.all([cargarUsdt(), cargarReembolsos(), cargarPendientes()]);
     } catch (err) { alert(`No se pudo: ${err.message}`); t.disabled = false; }
     return;

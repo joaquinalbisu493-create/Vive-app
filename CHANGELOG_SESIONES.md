@@ -3,10 +3,10 @@
 **Tocado:** `lib/supabase.ts`, `context/AuthContext.tsx`, `lib/sessionNotes.ts`, `supabase/migrations/20261029010000_rechazadas_cuentan_como_sin_pagar.sql` (nueva, aplicada), `supabase/functions/admin-actions/index.ts` (desplegada), `web/admin/admin.js`, `SCHEMA.md`.
 
 **Resumen:**
-- Revisión de los arreglos de ayer (informe: `~/security-audit-skill/vive-app/run-8/REPORT.md`, parcial por el límite de uso). La mayoría se sostiene; tres quedaron incompletos y se corrigieron:
+- Revisión de los arreglos de ayer (informe: `~/security-audit-skill/vive-app/run-8/REPORT.md`; completada con crítico y verificadores en una segunda pasada). La mayoría se sostiene; tres quedaron incompletos y se corrigieron:
 - 🔴 Cerrar sesión sin conexión (arreglo de ayer): la pantalla decía "cerrada" pero auth-js no borra la sesión si no llega al servidor, y al reabrir la app la persona seguía adentro. Ahora se borra la sesión del teléfono a mano (`borrarSesionLocal`).
 - Agenda pública: una reserva con el pago rechazado por MP escapaba del tope de 3 y del vencimiento de 60 minutos. Ahora cuenta y vence (probado con rollback).
-- Reclamos USDT de transferencias "sin dueño": no hay forma de saber de quién es una transferencia pública. El panel ahora avisa si el monto coincide con la reserva de quien reclama o con la de otra persona, y pide la captura del retiro antes de aprobar.
+- Reclamos USDT de transferencias "sin dueño": no hay forma de saber de quién es una transferencia pública. El panel ahora avisa si el monto coincide con la reserva de quien reclama o con la de otra persona, y pide la captura del retiro antes de aprobar. Segunda pasada (verificador): el aviso era solo visual y se ocultaba si coincidían las dos; ahora el servidor no aprueba sin que el admin confirme que vio la captura cuando el monto no coincide o coincide también con la reserva (sin pagar) de otra persona.
 - Además: una nota de sesión que no se puede abrir ya no se muestra editable (guardar pisaba la nota real). Librerías: las vulnerabilidades conocidas están casi todas en herramientas de compilación que no viajan en la app.
 
 **Pendiente para la próxima sesión:**
