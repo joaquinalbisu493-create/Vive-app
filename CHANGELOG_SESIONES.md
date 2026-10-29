@@ -12,7 +12,7 @@
 **Pendiente para la próxima sesión:**
 - Probar en el iPhone: modo avión, cerrar sesión, cerrar la app del todo y reabrir: tiene que pedir entrar.
 - Confirmar que la app de PayPal tiene el permiso de disputas (si no, las disputas no se anotan).
-- El exportador de datos de una persona (pedido por ley) todavía no descifra las notas de sesión.
+- ✅ Hecho el 29/10: el exportador de datos (`scripts/exportar-datos-de-usuario.sql` + `scripts/decodificar-export.mjs`) ahora abre las notas de sesión cifradas con la clave del par; probado con un export de prueba (nota cifrada y nota vieja en texto plano).
 
 ## 2026-10-28 — Andre (Claude · notas de sesión cifradas y mejoras de la auditoría)
 

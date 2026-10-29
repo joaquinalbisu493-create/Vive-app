@@ -84,4 +84,34 @@ for (const e of datos.diario ?? []) e.content = abrir(e.content);
 for (const e of datos.gratitud ?? []) {
   for (const c of ['item_1', 'item_2', 'item_3', 'content']) e[c] = abrir(e[c]);
 }
+// ── Notas de sesión ──────────────────────────────────────────────────────────
+// Cifradas desde el 28/10/2026 con la clave del PAR (cliente, profesional).
+// ⚠️ Etiqueta y datos asociados iguales a `wellbeing-key` (ETIQUETA_NOTAS) y a
+// `aadDeNotas` en lib/wellbeingCrypto.ts. Las de antes vienen en texto plano.
+const ETIQUETA_NOTAS = 'sere:notas:v1:';
+function abrirNota(n) {
+  const valor = n.contenido;
+  const cliente = n._cliente;
+  const profesional = n._profesional;
+  delete n._cliente;
+  delete n._profesional;
+  if (typeof valor !== 'string' || !valor.startsWith(PREFIJO)) return;
+  const maestro = secretoMaestro();
+  if (!maestro || !cliente || !profesional) {
+    console.error('El export trae notas cifradas y falta WELLBEING_MASTER_KEY (o los ids del par). No se entrega nada.');
+    process.exit(1);
+  }
+  const clave = createHmac('sha256', maestro).update(ETIQUETA_NOTAS + cliente + ':' + profesional).digest();
+  const junto = Buffer.from(valor.slice(PREFIJO.length), 'base64');
+  try {
+    const claro = gcmsiv(clave, junto.subarray(0, 12), Buffer.from(`notas:${cliente}:${profesional}`, 'utf8')).decrypt(junto.subarray(12));
+    n.contenido = Buffer.from(claro).toString('utf8');
+  } catch {
+    console.error('Una nota cifrada no abrió: el secreto no es el de este proyecto, o la fila está dañada. No se entrega nada.');
+    process.exit(1);
+  }
+}
+for (const n of datos.notas_compartidas_recibidas ?? []) abrirNota(n);
+for (const n of datos.notas_que_escribio ?? []) abrirNota(n);
+
 process.stdout.write(JSON.stringify({ generado: fila.generado ?? null, datos }, null, 2) + '\n');

@@ -40,7 +40,9 @@ f as (select
   (select jsonb_agg(to_jsonb(x) - 'contexto_tecnico') from public.session_issues x join objetivo o on o.id = x.reporter_id) as problemas_informados,
   (select jsonb_agg(to_jsonb(x) - 'resolved_by') from public.guarantee_claims x join objetivo o on o.id = x.user_id) as garantias,
   (select jsonb_agg(to_jsonb(x)) from public.session_call_feedback x join objetivo o on o.id = x.user_id) as calidad_de_llamadas,
-  (select jsonb_agg(jsonb_build_object('fecha', x.created_at, 'contenido', x.content))
+  -- `_cliente` y `_profesional`: los usa decodificar-export.mjs para abrir las
+  -- notas (cifradas desde el 28/10/2026 con la clave del par) y los borra.
+  (select jsonb_agg(jsonb_build_object('fecha', x.created_at, 'contenido', x.content, '_cliente', x.user_id, '_profesional', x.coach_id))
      from public.session_notes x join objetivo o on o.id = x.user_id where x.shared) as notas_compartidas_recibidas,
   (select jsonb_agg(jsonb_build_object('fecha', x.created_at, 'tipo', x.type, 'titulo', x.title, 'cuerpo', x.body) order by x.created_at)
      from public.notifications x join objetivo o on o.id = x.recipient_id) as notificaciones,
@@ -56,7 +58,7 @@ f as (select
   (select jsonb_agg(jsonb_build_object('nivel', x.nivel, 'motivo', x.motivo, 'desde', x.created_at, 'hasta', x.hasta, 'levantada', x.revocada_at))
      from public.coach_sanctions x join coach k on k.id = x.coach_id) as medidas_aplicadas,
   (select count(*) from public.bookings x join coach k on k.id = x.coach_id) as cantidad_de_sesiones_como_profesional,
-  (select jsonb_agg(jsonb_build_object('fecha', x.created_at, 'compartida', x.shared, 'contenido', x.content))
+  (select jsonb_agg(jsonb_build_object('fecha', x.created_at, 'compartida', x.shared, 'contenido', x.content, '_cliente', x.user_id, '_profesional', x.coach_id))
      from public.session_notes x join objetivo o on o.id = x.coach_id) as notas_que_escribio
 )
 select jsonb_strip_nulls(to_jsonb(f)) as datos, now() as generado from f;
