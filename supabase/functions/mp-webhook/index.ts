@@ -19,6 +19,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { verifyWebhookSignature, getFreshCoachToken } from '../_shared/mp.ts'
 import { processPaidBookingEffects } from '../_shared/paid-effects-recovery.ts'
+import { anotarAlerta } from '../_shared/alerta.ts'
 
 /**
  * `sha256(sal + id del pagador)`, o `null` si no se puede.
@@ -223,6 +224,9 @@ serve(async (req) => {
         .select('paid_out_at, payout_reference')
         .eq('id', bookingId)
         .maybeSingle()
+      if (newStatus === 'contracargo') {
+        await anotarAlerta(supabase, 'contracargo', { riel: 'mp', booking_id: bookingId, ya_pagada_al_profesional: !!b?.paid_out_at })
+      }
       if (b?.paid_out_at) {
         console.error(
           `[mp-webhook] 🔴 REVERSIÓN SOBRE SESIÓN YA PAGADA AL COACH — booking ${bookingId}, ` +

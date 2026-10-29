@@ -43,6 +43,7 @@ import { WEB_ORIGIN } from '../_shared/cors.ts'
 import { tieneSegundoFactor } from '../_shared/aal.ts'
 import { scheduledAtMs } from '../_shared/guarantee.ts'
 import { evidenciaDeSesion, terminoHaceMasDe24h } from '../_shared/sesion-sin-cerrar.ts'
+import { anotarAlerta } from '../_shared/alerta.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!
@@ -257,6 +258,7 @@ serve(async (req) => {
 
   if (!profile?.is_admin) {
     console.warn(`[admin-actions] intento no autorizado de ${user.id}`)
+    await anotarAlerta(admin, 'panel_sin_permiso', { user_id: user.id })
     return json({ error: 'no autorizado' }, 403)
   }
 
@@ -275,6 +277,7 @@ serve(async (req) => {
   const { data: esAdmin } = await asCaller.rpc('is_admin')
   if (esAdmin !== true) {
     console.warn(`[admin-actions] admin sin factor habilitado: ${user.id}`)
+    await anotarAlerta(admin, 'admin_sin_factor_habilitado', { user_id: user.id })
     return json({ error: 'tu segundo factor todavía no está habilitado como admin: pedíselo a otro admin', code: 'factor_no_habilitado' }, 403)
   }
 

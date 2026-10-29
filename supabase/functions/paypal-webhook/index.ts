@@ -22,6 +22,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { processPaidBookingEffects } from '../_shared/paid-effects-recovery.ts'
+import { anotarAlerta } from '../_shared/alerta.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -206,6 +207,7 @@ serve(async (req) => {
       : null
     if (!resDisputa?.ok) {
       console.error('[paypal-webhook] 🔴 DISPUTA que no se pudo leer de PayPal, no se anota:', disputeId || 's/id', resDisputa?.status ?? '', resDisputa ? await resDisputa.text() : '')
+      await anotarAlerta(admin, 'paypal_disputa_sin_leer', { dispute_id: disputeId || null, status: resDisputa?.status ?? null })
       return new Response('dispute not confirmed', { status: 200 })
     }
     const disputa = await resDisputa.json()
@@ -337,6 +339,7 @@ serve(async (req) => {
     const leida = await leerCaptura(token, captureId)
     if (!leida || leida.customId !== b.id) {
       console.error('[paypal-webhook] 🔴 REVERSIÓN que no se pudo confirmar con PayPal, no se anota:', captureId, leida?.customId ?? 's/captura')
+      await anotarAlerta(admin, 'paypal_reversion_sin_confirmar', { capture_id: captureId, booking_id: b.id })
       return new Response('reversal not confirmed', { status: 200 })
     }
     if (['COMPLETED', 'PENDING', 'DECLINED', 'FAILED'].includes(leida.status)) {
@@ -354,6 +357,7 @@ serve(async (req) => {
       // Una reserva que ya le devolvimos nosotros no pasa a contracargo.
       .neq('payment_status', 'reembolsado')
 
+    await anotarAlerta(admin, 'contracargo', { riel: 'paypal', booking_id: b.id, ya_pagada_al_profesional: !!b.paid_out_at })
     console.error(
       `[paypal-webhook] 🔴 CONTRACARGO en booking ${b.id} (${tipo}).` +
       (b.paid_out_at

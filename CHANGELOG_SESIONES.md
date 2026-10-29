@@ -1,3 +1,18 @@
+## 2026-10-29 — Andre (Claude · alertas por mail, backups y alertas de Supabase)
+
+**Tocado:** `supabase/migrations/20261029020000_alertas_y_resumen_diario.sql` (nueva, aplicada), `supabase/functions/_shared/alerta.ts` (nuevo), `supabase/functions/resumen-diario/index.ts` (nueva), `supabase/functions/_shared/email.ts`, `paypal-webhook`, `mp-webhook`, `admin-actions`, `mp-oauth-callback` (todas desplegadas), `SCHEMA.md`.
+
+**Resumen:**
+- Resumen diario por mail a hola@sere.ar (8:00 AR) con lo grave del último día: disputas de PayPal sin leer, contracargos, intentos de usar el panel sin permiso o sin el factor habilitado, cuentas de MP de otro profesional, reembolsos trabados y colas del panel de más de 2 días. Si no hay nada, no manda.
+- 🔴 Al probarlo apareció que Resend rechaza los mails desde sere.ar ("This API key is not authorized to send emails from sere.ar"). Afecta a TODOS los mails transaccionales que mandan las funciones (no a los códigos de entrada, que manda Supabase Auth), probablemente desde el cambio de nombre (19/10).
+- Alertas de Supabase: sin nada nuevo (las 4 vistas y las funciones expuestas son las ya revisadas y a propósito). Pendiente: prender "Leaked password protection" en Auth.
+- Backups: el proyecto no tiene backups descargables ni recuperación a un momento exacto (`pitr_enabled: false`, lista vacía).
+
+**Pendiente para la próxima sesión:**
+- 🔴 Andre en Resend: verificar el dominio sere.ar (registros DNS) y crear una API key con permiso para sere.ar; Claude actualiza el secreto `RESEND_API_KEY` y prueba el resumen.
+- Decidir backups antes de tener usuarios reales: plan Pro de Supabase (backups diarios de 7 días) y, si se puede, recuperación a un momento exacto.
+- Auth → prender "Leaked password protection".
+
 ## 2026-10-29 — Andre (Claude · auditoría de seguridad, tanda 8: revalidación de los arreglos del 28/10)
 
 **Tocado:** `lib/supabase.ts`, `context/AuthContext.tsx`, `lib/sessionNotes.ts`, `supabase/migrations/20261029010000_rechazadas_cuentan_como_sin_pagar.sql` (nueva, aplicada), `supabase/functions/admin-actions/index.ts` (desplegada), `web/admin/admin.js`, `SCHEMA.md`.

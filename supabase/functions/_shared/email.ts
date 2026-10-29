@@ -88,6 +88,9 @@ function armarTexto(titulo: string, lineas: string[], pie?: string): string {
   return [titulo, '', ...lineas.map(limpio), pie ? `\n${limpio(pie)}` : ''].join('\n')
 }
 
+/** El motivo del último rechazo de Resend, para que quien llama lo pueda reportar. */
+export let ultimoErrorDeMail: string | null = null
+
 export type Mail = { para: string; asunto: string; titulo: string; lineas: string[]; pie?: string; idempotencyKey?: string }
 
 /**
@@ -124,6 +127,7 @@ export async function enviarMail(m: Mail): Promise<boolean> {
     if (!r.ok) {
       const cuerpo = await r.text().catch(() => '')
       console.error('[email] Resend rechazó', r.status, cuerpo.slice(0, 300))
+      ultimoErrorDeMail = `${r.status} ${cuerpo.slice(0, 300)}`
       return false
     }
     return true

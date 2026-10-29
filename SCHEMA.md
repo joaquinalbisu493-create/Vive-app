@@ -49,6 +49,8 @@ app: las builds antiguas que leen campos privados directamente necesitan actuali
 
 🔒 **Storage `identity-docs` y `coach-credentials`** (migración `20261028070000`, aplicada y probada 28/10/2026): el dueño ya no puede reemplazar ni borrar el DNI/selfie si su identidad está `verificada`, ni el archivo de una credencial `verificada`. Subir archivos nuevos sigue igual.
 
+🔔 **`alertas_del_sistema`** (migración `20261029020000`, aplicada 29/10/2026): `id`, `created_at`, `tipo`, `detalle jsonb`. La escriben las funciones (`_shared/alerta.ts`: paypal-webhook, mp-webhook, admin-actions, mp-oauth-callback) cuando pasa algo grave; RLS sin policies y sin grants para la app. Cron `resumen-diario` (11:00 UTC = 8:00 AR) llama a la función `resumen-diario`, que manda un mail a hola@sere.ar (o `ALERTAS_MAIL`) con las alertas de 24 h, reembolsos trabados y colas de más de 2 días; si no hay nada, no manda. Cron `purge-alertas` borra lo de más de 90 días.
+
 📝 **Hasta ese día la publicación estaba VACÍA** y ninguna de las ocho suscripciones de la app recibía un solo evento — el chat no se actualizaba solo (`SalaScreen` no hace polling de mensajes), los puntitos de las dos barras no se movían, y el badge de Reservas del coach no se apagaba al aceptar. El código del cliente siempre estuvo bien: escuchaba un canal por el que no pasaba nada.
 
 ⚠️ **Publicar no saltea RLS.** Realtime evalúa las políticas del usuario suscripto antes de entregarle una fila. Lo que se habilita es el transporte, no el permiso.

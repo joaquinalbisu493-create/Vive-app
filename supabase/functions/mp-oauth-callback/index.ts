@@ -15,6 +15,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { verifyOauthState, deriveCodeVerifier } from '../_shared/mp.ts'
+import { anotarAlerta } from '../_shared/alerta.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -87,6 +88,7 @@ serve(async (req) => {
       .maybeSingle()
     if (otro) {
       console.error('[mp-oauth] cuenta de MP ya conectada a otro coach:', mpUserId, '→ pedido de', coachId)
+      await anotarAlerta(supabase, 'mp_cuenta_de_otro_profesional', { coach_id: coachId, coach_que_ya_la_tiene: otro.coach_id })
       return new Response(
         'Esa cuenta de Mercado Pago ya está conectada a otro profesional de Sere. Si es tuya, escribinos a hola@sere.ar.',
         { status: 409, headers: { 'Content-Type': 'text/plain; charset=utf-8' } },
