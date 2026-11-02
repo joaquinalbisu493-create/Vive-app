@@ -1,3 +1,16 @@
+## 2026-11-02 — Andre (Claude · mails de Resend desde sere.ar)
+
+**Tocado:** `CHANGELOG_SESIONES.md` (solo configuración: secreto `RESEND_API_KEY` en Supabase).
+
+**Resumen:**
+- Resend rechazaba los mails desde sere.ar porque la API key era de antes del cambio de nombre (limitada a vitaapp.com.ar). El dominio sere.ar ya estaba verificado en Resend; Andre creó una key con permiso de envío para sere.ar y la cargó en los secretos de Supabase.
+- Probado: alerta de prueba + llamada a `resumen-diario` → `{"enviado":true}`. La alerta de prueba se borró.
+- Decisión de Andre: el plan Pro de Supabase (copias diarias de 7 días + "Leaked password protection", que solo existe en Pro) queda para antes del lanzamiento, no ahora.
+
+**Pendiente para la próxima sesión:**
+- 🔴 ANTES DE LANZAR: pasar Supabase al plan Pro (~USD 25/mes), confirmar que aparecen las copias diarias y prender Auth → "Leaked password protection". Hoy no hay ninguna copia de la base.
+- Opcional: la key nueva de Resend quedó escrita en la conversación local; se puede rotar. Borrar la key vieja si la web de vitaapp ya no la usa.
+
 ## 2026-10-29 — Andre (Claude · alertas por mail, backups y alertas de Supabase)
 
 **Tocado:** `supabase/migrations/20261029020000_alertas_y_resumen_diario.sql` (nueva, aplicada), `supabase/functions/_shared/alerta.ts` (nuevo), `supabase/functions/resumen-diario/index.ts` (nueva), `supabase/functions/_shared/email.ts`, `paypal-webhook`, `mp-webhook`, `admin-actions`, `mp-oauth-callback` (todas desplegadas), `SCHEMA.md`.
