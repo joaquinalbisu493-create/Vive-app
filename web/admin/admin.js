@@ -1502,9 +1502,6 @@ async function cargarComisiones() {
   try {
     const filas = await api('bookings?payment_status=in.(aprobado,reembolsado,contracargo)&select=scheduled_date,coach_id,coach_name,amount,platform_fee_pct,currency,payment_provider,payment_status,referral_discount,paid_at&order=scheduled_date.desc&limit=2000');
     const cobradas = agrupar(filas.filter((b) => b.payment_status === 'aprobado'));
-    cobradasTope = filas.filter((b) => b.payment_status === 'aprobado');
-    topeIncompleto = filas.length >= 2000;
-    pintarTope();
     const reembolsadas = agrupar(filas.filter((b) => b.payment_status !== 'aprobado'));
     const totales = {};
     for (const g of cobradas) totales[g.moneda] = Math.round(((totales[g.moneda] ?? 0) + g.comision) * 100) / 100;
@@ -1520,73 +1517,7 @@ async function cargarComisiones() {
   }
 }
 
-// ── Tope del monotributo ─────────────────────────────────────────────────────
-// Andre factura a mano en ARCA mientras sea monotributista (26/10/2026). Esto
-// estima lo cobrado en los últimos 12 meses contra el tope de su categoría, de
-// las dos formas que siguen en discusión con la contadora: facturando solo la
-// comisión (lo que dicen hoy los T&C) o el total de cada sesión. Cuenta por
-// `paid_at`, la fecha del cobro, que es la más cercana a la de la factura.
-let cobradasTope = [];
-let topeIncompleto = false;
-const CLAVE_TOPE = 'sere-admin-tope';
-
-// Acepta "20.000.000", "1.400,50" o "1400.5".
-function numeroEscrito(v) {
-  const t = String(v ?? '').trim().replace(/\s|\$/g, '');
-  if (!t) return null;
-  const normal = t.includes(',') ? t.replace(/\./g, '').replace(',', '.') : (/^\d{1,3}(\.\d{3})+$/.test(t) ? t.replace(/\./g, '') : t);
-  const n = Number(normal);
-  return Number.isFinite(n) && n > 0 ? n : null;
-}
-const pesos = (n) => `$ ${Math.round(n).toLocaleString('es-AR')}`;
-
-function pintarTope() {
-  const tope = numeroEscrito($('topeCategoria').value), dolar = numeroEscrito($('dolarTope').value);
-  try { localStorage.setItem(CLAVE_TOPE, JSON.stringify({ tope: $('topeCategoria').value, dolar: $('dolarTope').value })); } catch (e) { /* sin almacenamiento */ }
-
-  const desde = Date.now() - 365 * 864e5;
-  const comision = { ARS: 0, USD: 0 }, total = { ARS: 0, USD: 0 };
-  for (const b of cobradasTope) {
-    if (!b.paid_at || Date.parse(b.paid_at) < desde) continue;
-    const m = b.currency === 'USD' ? 'USD' : 'ARS';
-    comision[m] += comisionDe(b); total[m] += cobradoDe(b);
-  }
-  const hayUsd = comision.USD > 0 || total.USD > 0;
-
-  const bloque = (titulo, sumas) => {
-    const enPesos = sumas.ARS + (dolar ? sumas.USD * dolar : 0);
-    const partes = [`ARS ${dinero(sumas.ARS)}`];
-    if (sumas.USD > 0) partes.push(`USD ${dinero(sumas.USD)}`);
-    const falta = hayUsd && sumas.USD > 0 && !dolar;
-    let barra = '';
-    if (tope && !falta) {
-      const pct = Math.round((enPesos / tope) * 100);
-      barra = `<div class="progreso"><i style="width:${Math.min(100, pct)}%"></i></div>
-        <div class="suave">El ${pct}% del tope (${esc(pesos(enPesos))} de ${esc(pesos(tope))})</div>
-        ${pct >= 80 ? `<div class="aviso">${pct >= 100 ? 'Pasaste el tope de tu categoría.' : 'Te estás acercando al tope.'} Hablalo con la contadora para ver si hay que recategorizarse.</div>` : ''}`;
-    }
-    return `<div style="margin-top:16px">
-      <h3 style="margin-bottom:4px">${esc(titulo)}</h3>
-      <div style="font-size:20px;font-weight:700">${esc(falta || !(hayUsd && dolar) ? partes.join(' · ') : pesos(enPesos))}</div>
-      ${hayUsd && dolar && sumas.USD > 0 ? `<div class="suave">${esc(partes.join(' + '))}, con el dólar a ${esc(pesos(dolar))}</div>` : ''}
-      ${barra}
-    </div>`;
-  };
-
-  $('resultadoTope').innerHTML = `
-    ${topeIncompleto ? '<div class="aviso"><b>Número incompleto:</b> hay más de 2000 reservas y no se trajeron todas.</div>' : ''}
-    ${hayUsd && !dolar ? '<div class="aviso">Hay cobros en dólares: cargá el dólar para sumarlos al tope.</div>' : ''}
-    ${!tope ? '<div class="suave" style="margin-top:12px">Cargá el tope de tu categoría para ver cuánto te queda.</div>' : ''}
-    ${bloque('Si facturás la comisión (lo que dicen hoy los términos)', comision)}
-    ${bloque('Si facturás el total de cada sesión (lo que propuso la contadora)', total)}`;
-}
-
-try {
-  const guardado = JSON.parse(localStorage.getItem(CLAVE_TOPE) || 'null');
-  if (guardado) { $('topeCategoria').value = guardado.tope ?? ''; $('dolarTope').value = guardado.dolar ?? ''; }
-} catch (e) { /* sin almacenamiento */ }
-$('topeCategoria').addEventListener('input', pintarTope);
-$('dolarTope').addEventListener('input', pintarTope);
+// El tope del monotributo se sacó el 03/11/2026: con la SAS ya no aplica.
 
 $('vistaPlata').addEventListener('click', async (e) => {
   const t = e.target.closest('button');
