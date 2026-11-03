@@ -1892,8 +1892,9 @@ function cargarRegistroFiltrado() {
 // recarga la que se está mirando. Antes se cargaban una sola vez y "Actualizar"
 // solo tocaba el Resumen: se podía hacer una transferencia mirando una lista
 // que otra persona ya había resuelto (auditoría del 22/10/2026, hallazgo 1).
-const VISTAS = { resumen: 'vistaResumen', ideas: 'vistaIdeas', profesionales: 'vistaProfesionales', moderacion: 'vistaModeracion', plata: 'vistaPlata', registro: 'vistaRegistro' };
-const CARGAS = { ideas: () => cargarIdeas(), profesionales: () => cargarProfesionales(), moderacion: () => cargarModeracion(), plata: () => cargarPlata(), registro: () => cargarRegistro(true) };
+const VISTAS = { resumen: 'vistaResumen', ideas: 'vistaIdeas', profesionales: 'vistaProfesionales', moderacion: 'vistaModeracion', plata: 'vistaPlata', facturacion: 'vistaFacturacion', registro: 'vistaRegistro' };
+// `cargarFacturacion` vive en facturacion.js, que se carga después: se llama recién al abrir la pestaña.
+const CARGAS = { ideas: () => cargarIdeas(), profesionales: () => cargarProfesionales(), moderacion: () => cargarModeracion(), plata: () => cargarPlata(), facturacion: () => cargarFacturacion(), registro: () => cargarRegistro(true) };
 let pestanaActual = 'resumen';
 
 async function cargarPestana(nombre) {

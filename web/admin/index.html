@@ -193,6 +193,15 @@
   .obj-pie { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
   .obj-pie select { width: auto; padding: 5px 10px; font-size: 13px; }
   .vacio { color: var(--soft); font-size: 14px; margin: 0; }
+  .factura { margin-top: 12px; }
+  .factura h3 { margin: 0 0 4px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .dato { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .dato:last-of-type { border-bottom: 0; }
+  .dato span:first-child { color: var(--soft); }
+  .dato b { font-variant-numeric: tabular-nums; }
+  .dato .copiar { margin-left: 8px; }
+  .tutorial ol { padding-left: 20px; } .tutorial li { margin: 8px 0; line-height: 1.45; }
+  .anotar { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-top: 12px; }
 
   /* Formulario de objetivo */
   dialog { border: 0; border-radius: 22px; padding: 26px; width: min(540px, calc(100vw - 32px)); background: var(--paper); color: var(--forest); box-shadow: 0 24px 60px rgba(45, 74, 62, .25); }
@@ -289,6 +298,7 @@
       <button role="tab" id="tab-profesionales" aria-controls="vistaProfesionales" data-pestana="profesionales" aria-selected="false">Profesionales <span class="contador" id="contProfesionales"></span></button>
       <button role="tab" id="tab-moderacion" aria-controls="vistaModeracion" data-pestana="moderacion" aria-selected="false">Moderación <span class="contador" id="contModeracion"></span></button>
       <button role="tab" id="tab-plata" aria-controls="vistaPlata" data-pestana="plata" aria-selected="false">Plata <span class="contador" id="contPlata"></span></button>
+      <button role="tab" id="tab-facturacion" aria-controls="vistaFacturacion" data-pestana="facturacion" aria-selected="false">Facturación <span class="contador" id="contFacturacion"></span></button>
       <button role="tab" id="tab-registro" aria-controls="vistaRegistro" data-pestana="registro" aria-selected="false">Registro</button>
     </nav>
     </div>
@@ -356,6 +366,62 @@
 
     <!-- ── Registro ── `admin_audit_log`: se escribe solo con service role y
          nadie lo puede editar, ni siendo admin. -->
+    <!-- ── Facturación (03/11/2026) ── la comisión de Sere a cada profesional,
+         una factura por mes. Andre la hace a mano en ARCA; acá se arma con los
+         números listos y se anota. Tabla `facturas_comision`, RLS `is_admin()`,
+         cada alta o baja queda en el Registro. Cálculos en facturacion-calculo.js. -->
+    <div id="vistaFacturacion" role="tabpanel" aria-labelledby="tab-facturacion" hidden>
+      <h2>Facturas del mes</h2>
+      <p class="suave" style="margin-top:-6px">Una factura por profesional y por mes, por la comisión que retuvo Sere en ese mes. El IVA va adentro: durante el lanzamiento lo pagamos nosotros, así que el total de la factura es exactamente lo que se retuvo.</p>
+      <div class="botonera" style="margin-top:0">
+        <label for="mesFactura" style="margin:0">Mes a facturar</label>
+        <select id="mesFactura" style="width:auto"></select>
+      </div>
+      <p class="error" id="errorFacturacion"></p>
+      <div id="resumenFacturacion"></div>
+
+      <details class="caja" id="tutorialArca" style="margin:12px 0">
+        <summary><b>Cómo hacer la factura en ARCA, paso a paso</b></summary>
+        <div class="tutorial">
+          <p class="aviso" style="margin-top:12px">La primera la hacemos con Emilse mirando, para confirmar que cada campo está bien. Si un botón de ARCA no se llama igual que acá, no adivines: avisame y corrijo el paso.</p>
+          <ol>
+            <li><b>Entrá a ARCA</b> (arca.gob.ar) con tu CUIT y tu clave fiscal.</li>
+            <li>Abrí el servicio <b>Comprobantes en línea</b> y elegí a quién representás: <b>la SAS</b>, no vos.</li>
+            <li><b>Generar Comprobantes.</b> Punto de venta: el de la SAS. Tipo: <b>Factura A</b> o <b>Factura B</b>, la letra que dice la tarjeta.</li>
+            <li><b>Datos de emisión.</b> Fecha: hoy. Concepto: <b>Servicios</b>. Período facturado: desde el primer día hasta el último del mes de la tarjeta. Vencimiento para el pago: la misma fecha de hoy (ya está cobrado).</li>
+            <li><b>Datos del receptor.</b> Condición frente al IVA: la de la tarjeta. Tipo de documento: <b>CUIT</b>, y pegá el número: el nombre y el domicilio los completa ARCA solo. Fijate que el nombre sea el del profesional de la tarjeta. Condición de venta: <b>Otra</b> (se cobró por Mercado Pago).</li>
+            <li><b>Datos de la operación.</b> Descripción: pegá el concepto de la tarjeta. Cantidad: 1. Alícuota de IVA: <b>21%</b>. En el precio:
+              <ul>
+                <li><b>Factura A:</b> pegá el <b>neto</b>. ARCA suma el IVA.</li>
+                <li><b>Factura B:</b> pegá el <b>total</b> (el IVA va adentro).</li>
+              </ul>
+            </li>
+            <li>Los botones <b>Copiar</b> copian el número con coma decimal (por ejemplo 5123,97). Si ARCA no lo acepta, cambiá la coma por un punto.</li>
+            <li><b>Antes de confirmar, compará:</b> el total que muestra ARCA tiene que ser igual al total de la tarjeta, al centavo. Si no da, no confirmes.</li>
+            <li><b>Confirmar.</b> ARCA te da el número de comprobante (por ejemplo 00001-00000023) y el PDF. Mandale el PDF al profesional por mail.</li>
+            <li><b>Volvé acá</b> y en la tarjeta tocá <b>Ya la hice</b> con el punto de venta, el número y la fecha. Esa tarjeta queda cerrada y no se puede facturar dos veces.</li>
+          </ol>
+          <p><b>En dólares</b> (sesiones del exterior): mismo camino, pero en moneda elegí <b>Dólar</b> y cargá la cotización que te pide ARCA (la del Banco Nación del día hábil anterior).</p>
+          <p><b>Nota de crédito</b> (cuando una sesión ya facturada se reembolsa): igual que una factura, pero tipo <b>Nota de Crédito A o B</b> (la misma letra de la factura), asociada a esa factura (ARCA te pide su número), y con los importes de la tarjeta de nota de crédito.</p>
+        </div>
+      </details>
+
+      <div id="listaFacturas"></div>
+
+      <h2 style="margin-top:32px">Notas de crédito por hacer</h2>
+      <p class="suave" style="margin-top:-6px">Sesiones que ya estaban facturadas y después se reembolsaron. Hay que anular su comisión con una nota de crédito.</p>
+      <div id="listaNotas"></div>
+
+      <h2 style="margin-top:32px">Para Emilse</h2>
+      <p class="suave" style="margin-top:-6px">Todo lo que emitiste en un mes, para la declaración de IVA. Copialo y mandáselo.</p>
+      <div class="botonera" style="margin-top:0">
+        <label for="mesEmision" style="margin:0">Emitidas en</label>
+        <select id="mesEmision" style="width:auto"></select>
+        <button class="btn sec chico" id="copiarEmilse">Copiar</button>
+      </div>
+      <textarea id="textoEmilse" rows="8" readonly style="margin-top:8px;font-family:ui-monospace,monospace;font-size:12.5px"></textarea>
+    </div>
+
     <div id="vistaRegistro" role="tabpanel" aria-labelledby="tab-registro" hidden>
       <h2>Registro de acciones</h2>
       <p class="suave" style="margin-top:-6px">Quién hizo qué desde la administración, en la app o en la web. Las últimas 200.</p>
@@ -596,5 +662,7 @@
 
 <script src="/captcha.js"></script>
 <script src="/admin/admin.js"></script>
+<script src="/admin/facturacion-calculo.js"></script>
+<script src="/admin/facturacion.js"></script>
 </body>
 </html>

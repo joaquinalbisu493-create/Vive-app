@@ -518,6 +518,14 @@ Migración `20261103010000_coach_datos_fiscales.sql`, ✅ **APLICADA y PROBADA c
 - **Tabla aparte y no columnas en `coaches`** porque el SELECT de `coaches` es público (`using (true)`). RLS: el dueño lee, inserta y edita lo suyo (vía `coaches.profile_id = auth.uid()`); los admins (`is_admin()`) leen. Grants por columna, sin DELETE.
 - Opcional: quien vive afuera sin CUIT no carga nada. La validación está duplicada en `lib/datosFiscales.ts` (con test). Pantalla `CoachDatosFiscalesScreen` (`/coach-datos-fiscales`), con acceso desde el Perfil del profesional debajo de Mercado Pago.
 
+### `facturas_comision` (03/11/2026)
+Migración `20261103020000_facturas_comision.sql`, ✅ **APLICADA y PROBADA con rollback el 03/11/2026** (6 de 6: quien no es admin no escribe ni ve, alta válida, segunda factura del mismo profesional/mes/moneda rebota, total ≠ neto + IVA rebota, el alta queda en `admin_audit_log`; 0 filas de prueba).
+- Registro de las facturas y notas de crédito de la comisión de Sere a cada profesional, que Andre emite **a mano en ARCA** y anota desde sere.ar/admin → Facturación. No emite nada ante ARCA.
+- Columnas: `coach_id`, `periodo` (día 1 del mes facturado), `moneda` (ARS/USD), `comprobante` (factura/nota_credito), `letra` (A/B), copia de `cuit` y `condicion` al facturar, `neto`, `iva`, `total` (CHECK total = neto + iva), `punto_venta`, `numero`, `fecha`, `booking_ids` (reservas que cubre o anula), `factura_id` (la que anula una nota de crédito; CHECK: solo y siempre en notas), `creado_por`, `created_at`.
+- Únicos: (punto_venta, letra, comprobante, numero) y **una factura por (coach, periodo, moneda)**. FK `factura_id` con `on delete restrict`: no se borra una factura con nota asociada.
+- RLS `is_admin()` para select, insert (por columnas) y delete; sin update (una factura emitida no se edita: se anula con nota de crédito). Trigger `trg_auditar_facturas_comision` → `admin_audit_log` (`factura_anotada` / `factura_desanotada`).
+- Reglas de cálculo en `web/admin/facturacion-calculo.js` (con test): mes = mes del cobro (`paid_at`, hora AR); total = comisión retenida con IVA adentro (`IVA_INCLUIDO`, mientras Sere absorbe el IVA); A al RI, B al monotributista/exento; sesión reembolsada después de facturar → nota de crédito.
+
 ### `coach_topics`
 - `id` (uuid, PK)
 - `coach_id` (uuid, FK → `coaches.id`) ⚠️ — mismo criterio que `coach_availability`/`coach_weekly_pattern`, no `profile_id`
