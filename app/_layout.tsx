@@ -394,6 +394,7 @@ export default function RootLayout() {
           <Stack.Screen name="coach-weekly-pattern" options={{ headerShown: false }} />
           <Stack.Screen name="coach-visibilidad" options={{ headerShown: false }} />
           <Stack.Screen name="coach-datos-cobro" options={{ headerShown: false }} />
+          <Stack.Screen name="coach-datos-fiscales" options={{ headerShown: false }} />
           <Stack.Screen name="coach-credenciales" options={{ headerShown: false }} />
           <Stack.Screen name="coach-ajustes" options={{ headerShown: false }} />
           {/* M14 (sesión 259): las dos nuevas del profesional traían el mismo

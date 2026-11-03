@@ -1,3 +1,18 @@
+## 2026-11-03 — Andre (Claude · la SAS y el cobro: datos fiscales del profesional y análisis del IVA)
+
+**Tocado:** `supabase/migrations/20261103010000_coach_datos_fiscales.sql` (nueva, aplicada), `lib/datosFiscales.ts` (nuevo), `__tests__/datosFiscales.test.ts` (nuevo), `screens/CoachDatosFiscalesScreen.tsx` (nueva), `app/coach-datos-fiscales.tsx`, `app/_layout.tsx`, `screens/CoachProfileScreen.tsx`, `SCHEMA.md`. En la base: un pendiente nuevo en la tabla `ideas` (tablero de admin).
+
+**Resumen:**
+- Nueva tabla `coach_datos_fiscales` (CUIT validado + condición frente al IVA) para que la SAS le facture la comisión a cada profesional (A o B). Probada por rol con rollback. El profesional la carga desde Perfil → "Datos para tu factura". SCHEMA.md actualizado.
+- Pendiente cargado en sere.ar/admin: pasar las cuentas de cobro (Mercado Pago, PayPal, USDT) a la SAS apenas salga el CUIT, antes de sumar profesionales reales (la app de MP hoy es de la cuenta personal de Andre y todos los profesionales tienen que reconectar).
+- Análisis de IVA sobre la comisión (incluido vs. sumado) con comisiones de la competencia: se lo pasé a Andre para decidir con Joaquín. Nada cambiado en el cálculo de la comisión todavía.
+
+**Pendiente para la próxima sesión:**
+- Decidir con Joaquín IVA incluido o sumado; después cambiar a la vez `_shared/commission.ts`, `lib/pricing.ts`/desglose, Perfil y Cobros del profesional, sere.ar/profesionales y T&C 8.4 (hoy dice Monotributo y factura C: con la SAS deja de ser cierto).
+- Mostrar los datos fiscales en el tablero de admin cuando se arme la liquidación mensual.
+- Probar en el iPhone la pantalla nueva (cargar CUIT, volver al Perfil y ver el CUIT en la tarjeta).
+- USDT: esperar el análisis de Nadia (6 a 11/11).
+
 ## 2026-11-02 — Andre (Claude · mails de Resend desde sere.ar)
 
 **Tocado:** `CHANGELOG_SESIONES.md` (solo configuración: secreto `RESEND_API_KEY` en Supabase).

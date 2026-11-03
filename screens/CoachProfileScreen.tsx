@@ -31,6 +31,7 @@ import { hasContactInfo } from '@/lib/contactInfoGuard';
 import { ViveColors, ViveFonts, TAB_BAR_CLEARANCE } from '@/constants/theme';
 import { priceUsdError } from '@/lib/pricing';
 import { faltaParaInternacional, rielesTexto } from '@/lib/payout';
+import { formatearCuit } from '@/lib/datosFiscales';
 import { AppBg } from '@/components/ui/AppBg';
 import { SurfaceCard } from '@/components/ui/SurfaceCard';
 import { ScaleCard } from '@/components/ScaleCard';
@@ -161,6 +162,8 @@ export default function CoachProfileScreen() {
   const { seccion } = useLocalSearchParams<{ seccion?: string }>();
   const scrollRef = useRef<ScrollView>(null);
   const [cobroY, setCobroY] = useState<number | null>(null);
+  // CUIT cargado; `undefined` mientras carga, `null` si todavía no lo cargó.
+  const [datosFiscales, setDatosFiscales] = useState<string | null | undefined>(undefined);
   const yaBajo = useRef(false);
   useEffect(() => {
     if (seccion !== 'cobro' || yaBajo.current || loadingProfile || cobroY === null) return;
@@ -248,6 +251,14 @@ export default function CoachProfileScreen() {
         .select('topic')
         .eq('coach_id', coachId)
         .then(({ data }) => setTopics((data ?? []).map(t => t.topic as string)));
+
+      // Y al volver de /coach-datos-fiscales, para que la tarjeta muestre el CUIT.
+      supabase
+        .from('coach_datos_fiscales')
+        .select('cuit')
+        .eq('coach_id', coachId)
+        .maybeSingle()
+        .then(({ data }) => setDatosFiscales((data?.cuit as string | undefined) ?? null));
 
       supabase
         .from('coaches')
@@ -1071,6 +1082,22 @@ export default function CoachProfileScreen() {
               )}
             </TouchableOpacity>
           )}
+        </PCard>
+
+        {/* Datos para la factura de la comisión (03/11/2026): Sere (SAS) le
+            factura a cada profesional, A o B según su condición frente al IVA. */}
+        <PCard wrapStyle={[s.cardMx, s.stackedCard]} innerStyle={s.toggleCard} onPress={() => router.push('/coach-datos-fiscales')}>
+          <View style={s.toggleInfo}>
+            <Text style={s.toggleTitle}>Datos para tu factura</Text>
+            <Text style={s.toggleDesc}>
+              {datosFiscales === undefined
+                ? ' '
+                : datosFiscales
+                  ? `CUIT ${formatearCuit(datosFiscales)}`
+                  : 'Falta tu CUIT y tu situación frente al IVA'}
+            </Text>
+          </View>
+          <MaterialIcons name="arrow-forward-ios" size={16} color="rgba(135,131,92,0.6)" />
         </PCard>
 
         {/* Comisión decreciente — incentiva sostener la relación en la app (anti-fuga).
