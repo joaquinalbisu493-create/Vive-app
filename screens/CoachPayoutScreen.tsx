@@ -255,6 +255,17 @@ export default function CoachPayoutScreen() {
                       <Text style={s.desgloseLbl}>Sere</Text>
                       <Text style={s.desgloseVal}>−{fmt(d.vive)}</Text>
                     </View>
+                    {/* IVA de la comisión (03/11/2026): durante el lanzamiento
+                        lo absorbe Sere, y se muestra tachado a propósito: un
+                        beneficio que no se ve no suma, y el día que termine
+                        tiene que ser algo que ya sabía. */}
+                    <View style={s.desgloseFila}>
+                      <Text style={[s.desgloseLbl, d.iva.absorbido && s.tachado]}>IVA de la comisión</Text>
+                      <Text style={[s.desgloseVal, d.iva.absorbido && s.tachado]}>−{fmt(d.iva.monto)}</Text>
+                    </View>
+                    {d.iva.absorbido && (
+                      <Text style={s.ivaRegalo}>El IVA lo pagamos nosotros durante el lanzamiento</Text>
+                    )}
                     <View style={[s.desgloseFila, s.desgloseTotal]}>
                       <Text style={s.desgloseLblFuerte}>Te queda</Text>
                       <Text style={s.desgloseValFuerte}>{fmt(d.coach)}</Text>
@@ -289,6 +300,11 @@ export default function CoachPayoutScreen() {
                   Son los mismos dos tramos más 5 puntos, y esos 5 puntos no son margen: es lo que
                   cuesta cobrar afuera y transferirte, que ahí lo pagamos nosotros y en Argentina lo
                   pagás vos. Por eso, al final, te queda casi lo mismo por los dos caminos.
+                </Text>
+                <Text style={s.porqueItem}>
+                  <Text style={s.porqueB}>El IVA de la comisión, por ahora, lo pagamos nosotros. </Text>
+                  Nuestra comisión lleva IVA. Durante el lanzamiento lo absorbemos: vos pagás solo el
+                  porcentaje de arriba. Cuando termine este beneficio te avisamos con al menos 60 días.
                 </Text>
                 <Text style={s.porqueItem}>
                   <Text style={s.porqueB}>Nada más. </Text>
@@ -472,6 +488,11 @@ const s = StyleSheet.create({
   desgloseFila: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 3 },
   desgloseLbl: { fontFamily: ViveFonts.regular, fontSize: 13, color: 'rgba(135,131,92,0.90)' },
   desgloseVal: { fontFamily: ViveFonts.regular, fontSize: 13, color: 'rgba(135,131,92,0.90)' },
+  tachado: { textDecorationLine: 'line-through', color: 'rgba(135,131,92,0.55)' },
+  ivaRegalo: {
+    fontFamily: ViveFonts.semibold, fontSize: 11.5, color: ViveColors.accent,
+    textAlign: 'right', marginTop: 1, marginBottom: 2,
+  },
   desgloseTotal: { borderTopWidth: 1, borderTopColor: 'rgba(135,131,92,0.18)', marginTop: 6, paddingTop: 8 },
   desgloseLblFuerte: { fontFamily: ViveFonts.semibold, fontSize: 14, color: '#565E32' },
   desgloseValFuerte: { fontFamily: ViveFonts.semibold, fontSize: 16, color: '#565E32' },

@@ -1101,7 +1101,7 @@ export default function CoachProfileScreen() {
         </PCard>
 
         {/* Comisión decreciente — incentiva sostener la relación en la app (anti-fuga).
-            Sin IVA a propósito (depende de la figura fiscal, TBD). */}
+            IVA (03/11/2026): durante el lanzamiento lo absorbe Sere, y se dice. */}
         <View style={s.commissionCard}>
           <MaterialCommunityIcons name="trending-down" size={18} color={ViveColors.accent} />
           <Text style={s.commissionText}>
@@ -1110,6 +1110,8 @@ export default function CoachProfileScreen() {
             presentarte a alguien nuevo, no por la relación que construís después: el contador es por
             persona y nunca se reinicia. Por eso, si la persona llega por{' '}
             <Text style={s.commissionStrong}>tu link</Text>, la primera sesión no paga comisión.
+            Y durante el lanzamiento, <Text style={s.commissionStrong}>el IVA de la comisión lo pagamos
+            nosotros</Text>.
           </Text>
         </View>
 

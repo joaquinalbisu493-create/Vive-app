@@ -98,7 +98,7 @@ const BLOQUES: Bloque[] = [
     titulo: 'Cuándo y cuánto cobrás',
     resumen: '20% de comisión en la primera sesión con cada persona, 15% después.',
     parrafos: [
-      'La comisión es 20% en la primera sesión con cada persona y 15% de la segunda en adelante, para siempre. Si la persona llegó por tu link, la primera no paga comisión.',
+      'La comisión es 20% en la primera sesión con cada persona y 15% de la segunda en adelante, para siempre. Si la persona llegó por tu link, la primera no paga comisión. Nuestra comisión lleva IVA: durante el lanzamiento lo pagamos nosotros, y te avisamos con al menos 60 días antes de que termine.',
       'En las sesiones de Argentina la plata va directo a tu cuenta de Mercado Pago cuando la persona reserva; Sere nunca la toca. Las del exterior, por PayPal o USDT, las cobra Sere y te las transferimos cada semana, por las sesiones que ya ocurrieron. Ahí la comisión es 25% y 20%, porque cobrar desde afuera cuesta más.',
       'Los comprobantes de la sesión se los emitís vos a la persona: Sere solo factura su comisión.',
       'No hay costo de alta, ni mensualidad, ni cargo por cancelar.',

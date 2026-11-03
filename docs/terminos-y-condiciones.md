@@ -9,7 +9,7 @@
 
 # Términos y Condiciones de Uso de Sere
 
-**Última actualización:** 21 de octubre de 2026
+**Última actualización:** 3 de noviembre de 2026
 **Vigencia a partir de:** 21 de octubre de 2026
 
 ## 1. Aceptación de los Términos
@@ -96,7 +96,7 @@ El Profesional puede, por su parte, proponer al Cliente horarios alternativos, q
 - **Sesiones cobradas en dólares a través de los medios internacionales** (ver 8.2): **25%** sobre la primera Sesión completada del vínculo y **20%** a partir de la segunda. La diferencia responde al mayor costo de procesamiento y transferencia de esos medios.
  **Excepción:** cuando el Cliente llega a la Plataforma a través del enlace propio del Profesional, la primera Sesión de ese vínculo no tiene comisión; a partir de la segunda rige la comisión de la segunda Sesión en adelante que corresponda al medio de cobro (15% en Mercado Pago, 20% en los medios internacionales). Sere puede ofrecer promociones (por ejemplo, comisión reducida por tiempo limitado), que se informarán oportunamente. Sere puede modificar sus comisiones a futuro, notificando con antelación razonable.
 
-8.4. **Impuestos.** Sere opera bajo el **Régimen Simplificado para Pequeños Contribuyentes (Monotributo)**. En consecuencia, los comprobantes que emite son **facturas tipo C, que no discriminan IVA**, y la comisión indicada en 8.3 es el importe total que percibe Sere por su servicio de intermediación, sin adicionales impositivos.
+8.4. **Impuestos.** La comisión indicada en 8.3 **no incluye el Impuesto al Valor Agregado (IVA)**, que corresponde sobre ella desde que Sere esté inscripta como responsable del impuesto, y que Sere discrimina en la factura que emite al Profesional según su condición fiscal. **Durante el período de lanzamiento, Sere absorbe ese IVA**: el Profesional paga únicamente la comisión indicada en 8.3, sin adicionales impositivos. Sere comunicará el fin de este beneficio con **al menos sesenta (60) días de anticipación**; hasta entonces, no se modifica.
 
 8.5. **Situación fiscal del Profesional.** Cada Profesional es el único responsable de su propia situación fiscal y de emitir al Cliente los comprobantes que correspondan por la Sesión. Sere no emite comprobantes por la Sesión, que es una prestación del Profesional al Cliente, sino únicamente por su comisión, y no actúa como agente de retención o percepción. Las retenciones e impuestos que aplique el procesador de pagos sobre los fondos del Profesional se rigen por las condiciones de dicho procesador y por la normativa aplicable.
 

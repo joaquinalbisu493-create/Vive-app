@@ -1,14 +1,14 @@
 ## 2026-11-03 — Andre (Claude · la SAS y el cobro: datos fiscales del profesional y análisis del IVA)
 
-**Tocado:** `supabase/migrations/20261103010000_coach_datos_fiscales.sql` (nueva, aplicada), `lib/datosFiscales.ts` (nuevo), `__tests__/datosFiscales.test.ts` (nuevo), `screens/CoachDatosFiscalesScreen.tsx` (nueva), `app/coach-datos-fiscales.tsx`, `app/_layout.tsx`, `screens/CoachProfileScreen.tsx`, `SCHEMA.md`. En la base: un pendiente nuevo en la tabla `ideas` (tablero de admin).
+**Tocado:** `supabase/migrations/20261103010000_coach_datos_fiscales.sql` (nueva, aplicada), `lib/pricing.ts`, `lib/desglosePago.ts`, `__tests__/desglosePago.test.ts`, `screens/CoachPayoutScreen.tsx`, `screens/CoachComoFuncionaScreen.tsx`, `web/profesionales.html`, `docs/terminos-y-condiciones.md` + `npm run sync:legal`, `supabase/functions/_shared/commission.ts` (solo comentario), `lib/datosFiscales.ts` (nuevo), `__tests__/datosFiscales.test.ts` (nuevo), `screens/CoachDatosFiscalesScreen.tsx` (nueva), `app/coach-datos-fiscales.tsx`, `app/_layout.tsx`, `screens/CoachProfileScreen.tsx`, `SCHEMA.md`. En la base: un pendiente nuevo en la tabla `ideas` (tablero de admin).
 
 **Resumen:**
 - Nueva tabla `coach_datos_fiscales` (CUIT validado + condición frente al IVA) para que la SAS le facture la comisión a cada profesional (A o B). Probada por rol con rollback. El profesional la carga desde Perfil → "Datos para tu factura". SCHEMA.md actualizado.
 - Pendiente cargado en sere.ar/admin: pasar las cuentas de cobro (Mercado Pago, PayPal, USDT) a la SAS apenas salga el CUIT, antes de sumar profesionales reales (la app de MP hoy es de la cuenta personal de Andre y todos los profesionales tienen que reconectar).
-- Análisis de IVA sobre la comisión (incluido vs. sumado) con comisiones de la competencia: se lo pasé a Andre para decidir con Joaquín. Nada cambiado en el cálculo de la comisión todavía.
+- IVA sobre la comisión, DECIDIDO por Andre (después de análisis, competencia y consejo): la comisión sigue 20%/15% y el IVA va aparte, pero **durante el lanzamiento lo absorbe Sere y se le MUESTRA al profesional** como beneficio (línea tachada "IVA de la comisión" en Cobros, texto en Perfil, Cómo funciona y sere.ar/profesionales; T&C 8.4 reescrita: IVA aparte, absorbido en el lanzamiento, aviso de 60 días antes de terminar). El código de cobro no cambia. Interruptor: `IVA_COMISION_ABSORBIDO` en `lib/pricing.ts` (con test); traspasarlo exige cambiar a la vez `mp-create-payment`, textos y 8.4.
 
 **Pendiente para la próxima sesión:**
-- Decidir con Joaquín IVA incluido o sumado; después cambiar a la vez `_shared/commission.ts`, `lib/pricing.ts`/desglose, Perfil y Cobros del profesional, sere.ar/profesionales y T&C 8.4 (hoy dice Monotributo y factura C: con la SAS deja de ser cierto).
+- Contarle a Joaquín lo del IVA absorbido (es argumento de captación). Que Nadia revise la 8.4 nueva. Falta fijar si el beneficio tiene fecha (hoy: aviso de 60 días).
 - Mostrar los datos fiscales en el tablero de admin cuando se arme la liquidación mensual.
 - Probar en el iPhone la pantalla nueva (cargar CUIT, volver al Perfil y ver el CUIT en la tarjeta).
 - USDT: esperar el análisis de Nadia (6 a 11/11).

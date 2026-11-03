@@ -6,6 +6,8 @@ import {
   MP_FEE_PCT_OBSERVED,
   PAYPAL_PCT,
   PAYPAL_FIXED_USD,
+  IVA_COMISION_PCT,
+  IVA_COMISION_ABSORBIDO,
 } from './pricing';
 
 /**
@@ -35,6 +37,9 @@ export type Desglose = {
   vive: number;
   /** Costo del procesador y quién lo paga. `null` si no hay (USDT no tiene). */
   procesador: { monto: number; loPaga: 'coach' | 'vive' } | null;
+  /** IVA sobre la comisión de Sere. Si `absorbido`, lo paga Sere y no se le
+   *  descuenta al coach: se muestra tachado, como beneficio de lanzamiento. */
+  iva: { monto: number; absorbido: boolean };
   /** Lo que efectivamente le queda al coach. */
   coach: number;
   /** `coach` como porcentaje de lo que paga el cliente, redondeado. */
@@ -61,24 +66,31 @@ const round2 = (n: number) => Math.round(n * 100) / 100;
  * precio: mostrarle un número que no es el suyo confundiría más de lo que
  * aclara.
  */
-export function desglose(precio: number, riel: Riel, tramo: Tramo): Desglose {
+export function desglose(
+  precio: number,
+  riel: Riel,
+  tramo: Tramo,
+  ivaAbsorbido: boolean = IVA_COMISION_ABSORBIDO,
+): Desglose {
   const pct = comisionPct(riel, tramo);
   const vive = round2((precio * pct) / 100);
+  const iva = { monto: round2((vive * IVA_COMISION_PCT) / 100), absorbido: ivaAbsorbido };
+  const ivaACargoDelCoach = ivaAbsorbido ? 0 : iva.monto;
 
   if (riel === 'mp') {
     // La tarifa de Mercado Pago se la cobran a la cuenta DEL COACH: en el split
     // él es el `collector`. Verificado en un pago real — `fee_details` trae
     // `fee_payer: "collector"`.
     const procesador = round2((precio * MP_FEE_PCT_OBSERVED) / 100);
-    const coach = round2(precio - vive - procesador);
-    return { cliente: precio, vive, procesador: { monto: procesador, loPaga: 'coach' }, coach, coachPct: Math.round((coach / precio) * 100) };
+    const coach = round2(precio - vive - ivaACargoDelCoach - procesador);
+    return { cliente: precio, vive, procesador: { monto: procesador, loPaga: 'coach' }, iva, coach, coachPct: Math.round((coach / precio) * 100) };
   }
 
   // PayPal y USDT: el comerciante es VIVE, así que el costo sale de su comisión
   // y al coach le llega el precio menos la comisión, limpio.
-  const coach = round2(precio - vive);
+  const coach = round2(precio - vive - ivaACargoDelCoach);
   const procesador = riel === 'paypal'
     ? { monto: round2(precio * PAYPAL_PCT + PAYPAL_FIXED_USD), loPaga: 'vive' as const }
     : null;
-  return { cliente: precio, vive, procesador, coach, coachPct: Math.round((coach / precio) * 100) };
+  return { cliente: precio, vive, procesador, iva, coach, coachPct: Math.round((coach / precio) * 100) };
 }

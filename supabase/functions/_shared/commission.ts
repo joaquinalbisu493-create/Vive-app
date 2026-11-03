@@ -197,9 +197,11 @@ export function commissionPctFor(
  * El redondeo va sobre `amount * pct` y recién después divide por 100, para no
  * arrastrar el error de coma flotante de calcular el porcentaje primero.
  *
- * ⚠️ Comisión PURA, sin IVA — y así se queda mientras Sere sea Monotributo
- * (decisión del 06/08/2026): factura C sin IVA discriminado, o sea que lo que
- * se retiene acá es exactamente lo que percibe Sere.
+ * ⚠️ Comisión PURA, sin IVA. Con la SAS (Responsable Inscripto) la comisión
+ * lleva IVA, pero durante el lanzamiento lo absorbe Sere (decisión del
+ * 03/11/2026, T&C 8.4): se retiene solo el porcentaje y el IVA sale de ahí.
+ * Si se traspasa al profesional, el fee tiene que sumar el 21% acá, a la vez
+ * que `IVA_COMISION_ABSORBIDO` en `lib/pricing.ts`, los textos y la 8.4.
  */
 export function marketplaceFeeFor(amount: number, pct: number): number {
   return Math.round(amount * pct) / 100;

@@ -46,6 +46,18 @@ export const COMMISSION_LOCAL_RECURRING = 15;
 export const COMMISSION_INTL_FIRST = 25;
 export const COMMISSION_INTL_RECURRING = 20;
 
+/**
+ * IVA sobre la comisión de Sere (03/11/2026). Con la SAS, Sere es Responsable
+ * Inscripto y su comisión lleva 21% de IVA. Decisión de Andre: durante el
+ * lanzamiento **lo absorbe Sere** (el profesional paga solo 20% / 15%) y se lo
+ * MOSTRAMOS, para que sepa que es un beneficio y no se sorprenda el día que
+ * termine (T&C 8.4: aviso con al menos 60 días). Para traspasarlo, poner
+ * `IVA_COMISION_ABSORBIDO = false` y cambiar a la vez `mp-create-payment`
+ * (el `marketplace_fee` tendría que sumar el IVA), los textos y la cláusula 8.4.
+ */
+export const IVA_COMISION_PCT = 21;
+export const IVA_COMISION_ABSORBIDO = true;
+
 export const MIN_PRICE_USD = 20;
 export const MAX_PRICE_USD = 10000;
 

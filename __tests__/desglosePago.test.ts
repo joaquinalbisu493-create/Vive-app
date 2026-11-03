@@ -59,3 +59,20 @@ describe('desglose', () => {
     expect(Math.abs(local - intl)).toBeLessThanOrEqual(1);
   });
 });
+
+describe('IVA de la comisión', () => {
+  it('absorbido (lanzamiento): se informa pero no se le descuenta al coach', () => {
+    const d = desglose(31000, 'mp', 'primera', true);
+    expect(d.vive).toBe(6200);
+    expect(d.iva).toEqual({ monto: 1302, absorbido: true });
+    expect(d.coach).toBe(31000 - 6200 - 1333);
+  });
+
+  it('traspasado: se le descuenta al coach, en los dos rieles', () => {
+    const mp = desglose(31000, 'mp', 'primera', false);
+    expect(mp.coach).toBe(31000 - 6200 - 1302 - 1333);
+    const pp = desglose(100, 'paypal', 'recurrente', false);
+    expect(pp.iva.monto).toBe(4.2);
+    expect(pp.coach).toBe(75.8);
+  });
+});
