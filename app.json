@@ -15,6 +15,7 @@
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "UIBackgroundModes": [
+          "audio",
           "audio"
         ]
       },
@@ -31,6 +32,10 @@
       "package": "com.andrealbisu.app",
       "googleServicesFile": "./google-services.json",
       "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
         "android.permission.RECORD_AUDIO",
         "android.permission.READ_CALENDAR",
         "android.permission.WRITE_CALENDAR",
@@ -101,6 +106,12 @@
         "projectId": "d295d41b-9b35-4376-8b28-3997ad01cbf9"
       }
     },
-    "owner": "vita-wellness-app"
+    "owner": "vita-wellness-app",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d295d41b-9b35-4376-8b28-3997ad01cbf9"
+    }
   }
 }
