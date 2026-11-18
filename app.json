@@ -15,7 +15,6 @@
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "UIBackgroundModes": [
-          "audio",
           "audio"
         ]
       },
